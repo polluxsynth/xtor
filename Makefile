@@ -8,7 +8,7 @@ DISTFILES=midicontroller.c Makefile controller.glade controller.gladep huge.glad
 all: $(PROGNAME)
 
 $(PROGNAME): midicontroller.c
-	gcc -ansi -pedantic -Werror -o $(PROGNAME) midicontroller.c `pkg-config --cflags --libs libglade-2.0 alsa` -DPREFIX=\"$(PREFIX)\" -g -O2
+	gcc -ansi -pedantic -Werror -o $(PROGNAME) midicontroller.c `pkg-config --cflags --libs libglade-2.0 gmodule-2.0 alsa` -DPREFIX=\"$(PREFIX)\" -g -O2
 
 clean:
 	rm -f $(PROGNAME) *.bak *~

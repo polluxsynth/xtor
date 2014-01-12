@@ -5,6 +5,7 @@
   <object class="GtkWindow" id="winMain">
     <property name="visible">True</property>
     <property name="title" translatable="yes">MIDI Controller</property>
+    <signal name="destroy" handler="on_winMain_destroy"/>
     <child>
       <object class="GtkTable" id="table1">
         <property name="visible">True</property>
@@ -276,24 +277,6 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
           <object class="GtkComboBox" id="combobox1">
             <property name="visible">True</property>
             <property name="model">liststore1</property>
@@ -311,6 +294,24 @@
             <property name="top_attach">3</property>
             <property name="bottom_attach">4</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
     </child>
@@ -391,7 +392,7 @@
   </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
-      <!-- column-name item text -->
+      <!-- column-name item -->
       <column type="gchararray"/>
     </columns>
     <data>

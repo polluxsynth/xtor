@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 
 void 
-on_window_destroy (GtkObject *object, gpointer user_data)
+on_winMain_destroy (GtkObject *object, gpointer user_data)
 {
   gtk_main_quit();
 }
@@ -18,7 +18,10 @@ main (int argc, char *argv[])
   gtk_builder_add_from_file (builder, "controller-rw.glade", NULL);
 
   window = GTK_WIDGET (gtk_builder_get_object (builder, "winMain"));
-  gtk_builder_connect_signals (builder, NULL);          
+  gtk_builder_connect_signals (builder, NULL);
+#if 0 /* example of explicit signal connection */
+  g_signal_connect (window, "destroy", G_CALLBACK (on_winMain_destroy), NULL);
+#endif
   g_object_unref (G_OBJECT (builder));
   
   gtk_widget_show (window);       
