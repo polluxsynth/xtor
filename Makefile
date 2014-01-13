@@ -6,10 +6,11 @@ PREFIX=./
 DISTFILES=midicontroller.c Makefile controller.glade controller.gladep huge.glade huge.gladep README COPYING mkinstalldirs
 
 OBJS = midicontroller.o blofeld_params.o
+INCS = blofeld_params.h
 
 all: $(PROGNAME)
 
-%.o: %.c
+%.o: %.c $(INCS)
 	gcc -ansi -pedantic -Werror -c -o $@ $< `pkg-config --cflags libglade-2.0 gmodule-2.0 alsa` -DPREFIX=\"$(PREFIX)\" -g -O2
 
 $(PROGNAME): $(OBJS)
