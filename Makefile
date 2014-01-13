@@ -5,13 +5,19 @@ VERSION=$(TODAY)
 PREFIX=./
 DISTFILES=midicontroller.c Makefile controller.glade controller.gladep huge.glade huge.gladep README COPYING mkinstalldirs
 
+OBJS = midicontroller.o
+
 all: $(PROGNAME)
 
-$(PROGNAME): midicontroller.c
-	gcc -ansi -pedantic -Werror -o $(PROGNAME) midicontroller.c `pkg-config --cflags --libs libglade-2.0 gmodule-2.0 alsa` -DPREFIX=\"$(PREFIX)\" -g -O2
+%.o: %.c
+	gcc -ansi -pedantic -Werror -c -o $@ $< `pkg-config --cflags libglade-2.0 gmodule-2.0 alsa` -DPREFIX=\"$(PREFIX)\" -g -O2
+
+$(PROGNAME): $(OBJS)
+	@echo $(OBJS)
+	gcc -ansi -pedantic -Werror -o $@ $^ `pkg-config --libs libglade-2.0 gmodule-2.0 alsa`
 
 clean:
-	rm -f $(PROGNAME) *.bak *~
+	rm -f $(PROGNAME) $(OBJS) *.bak *~
 
 dist: $(DISTFILES)
 	mkdir $(PROGNAME)-$(VERSION)
