@@ -1,3 +1,4 @@
+#include <string.h>
 #include "blofeld_params.h"
 
 struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
@@ -131,3 +132,19 @@ struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
   { "reserved" }
   /* More to come ... */
 };
+
+int blofeld_find_index(const char *param_name)
+{
+  int idx = -1; /* not found */
+  int i;
+
+  if (!param_name) return idx;
+
+  for (i = 0; i < 128 /* TODO: BLOFELD_PARAMS */; i++) {
+    if (!strcmp(blofeld_params[i].name, param_name)) {
+      idx = i;
+      break;
+    }
+  }
+  return idx;
+}

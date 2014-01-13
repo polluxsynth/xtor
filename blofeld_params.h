@@ -6,3 +6,6 @@ struct blofeld_param {
 };
 
 struct blofeld_param blofeld_params[BLOFELD_PARAMS];
+
+/* Find parameter index from parameter name */
+int blofeld_find_index(const char *param_name);

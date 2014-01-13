@@ -64,7 +64,7 @@ void create_adjustment (gpointer data, gpointer user_data)
 
   printf("Widget: %s, id %s\n", gtk_widget_get_name(this), id ? id : "none");
 
-  if (id && strncmp(id, "mcw", 3) == 0) {
+  if (id && blofeld_find_index(id) >= 0) {
     GObject *adjobj;
     struct adjustor *adjustor = g_new(struct adjustor, 1);
     g_object_get(this, "adjustment", &adjobj, NULL);
