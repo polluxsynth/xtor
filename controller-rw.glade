@@ -13,7 +13,6 @@
         <property name="n_rows">5</property>
         <property name="n_columns">5</property>
         <property name="column_spacing">2</property>
-        <property name="row_spacing">2</property>
         <child>
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
@@ -70,36 +69,6 @@
             <property name="top_attach">1</property>
             <property name="bottom_attach">2</property>
             <property name="y_options"></property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkVScale" id="mcwc1p1">
-            <property name="height_request">90</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="orientation">vertical</property>
-            <property name="adjustment">adjustment10</property>
-            <property name="digits">0</property>
-          </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="right_attach">3</property>
-            <property name="y_options">GTK_FILL</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkVScale" id="mcwc2p2">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="orientation">vertical</property>
-            <property name="adjustment">adjustment9</property>
-            <property name="inverted">True</property>
-            <property name="digits">0</property>
-          </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="right_attach">4</property>
-            <property name="y_options">GTK_FILL</property>
           </packing>
         </child>
         <child>
@@ -193,34 +162,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkVScale" id="mcwc0p0">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="orientation">vertical</property>
-            <property name="adjustment">adjustment2</property>
-            <property name="inverted">True</property>
-            <property name="digits">0</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="right_attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkVScale" id="mcwc3p3">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="orientation">vertical</property>
-            <property name="adjustment">adjustment1</property>
-            <property name="inverted">True</property>
-            <property name="digits">0</property>
-          </object>
-          <packing>
-            <property name="left_attach">4</property>
-            <property name="right_attach">5</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkToggleButton" id="togglebutton1">
             <property name="label" translatable="yes">Sync</property>
             <property name="visible">True</property>
@@ -240,6 +181,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <signal name="pressed" handler="on_button_pressed"/>
           </object>
           <packing>
             <property name="left_attach">3</property>
@@ -277,10 +219,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkComboBox" id="combobox1">
+          <object class="GtkComboBox" id="Osc 1 Wave">
             <property name="visible">True</property>
             <property name="model">liststore1</property>
             <property name="active">0</property>
+            <signal name="changed" handler="on_combobox_changed"/>
             <child>
               <object class="GtkCellRendererText" id="cellrenderertext1"/>
               <attributes>
@@ -293,6 +236,66 @@
             <property name="right_attach">2</property>
             <property name="top_attach">3</property>
             <property name="bottom_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkVScale" id="Filter 1 Cutoff">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="orientation">vertical</property>
+            <property name="adjustment">adjustment13</property>
+            <property name="inverted">True</property>
+            <property name="digits">0</property>
+            <signal name="value_changed" handler="on_value_changed"/>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkVScale" id="Filter 1 Resonance">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="orientation">vertical</property>
+            <property name="adjustment">adjustment14</property>
+            <property name="inverted">True</property>
+            <property name="digits">0</property>
+            <signal name="value_changed" handler="on_value_changed"/>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="right_attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkVScale" id="Filter 1 Drive">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="orientation">vertical</property>
+            <property name="adjustment">adjustment15</property>
+            <property name="inverted">True</property>
+            <property name="digits">0</property>
+            <signal name="value_changed" handler="on_value_changed"/>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="right_attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkVScale" id="Filter 1 Keytrack">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="orientation">vertical</property>
+            <property name="adjustment">adjustment16</property>
+            <property name="inverted">True</property>
+            <property name="digits">0</property>
+            <signal name="value_changed" handler="on_value_changed"/>
+          </object>
+          <packing>
+            <property name="left_attach">4</property>
+            <property name="right_attach">5</property>
           </packing>
         </child>
         <child>
@@ -311,7 +314,16 @@
           <placeholder/>
         </child>
         <child>
-          <placeholder/>
+          <object class="GtkLabel" id="label3">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">
+
+
+
+
+
+</property>
+          </object>
         </child>
       </object>
     </child>
@@ -320,6 +332,7 @@
     <property name="upper">127</property>
     <property name="step_increment">1</property>
     <property name="page_increment">8</property>
+    <signal name="value_changed" handler="on_adjustment_value_changed"/>
   </object>
   <object class="GtkAdjustment" id="adjustment2">
     <property name="value">52</property>
@@ -409,5 +422,35 @@
         <col id="0" translatable="yes">Square</col>
       </row>
     </data>
+  </object>
+  <object class="GtkAdjustment" id="adjustment13">
+    <property name="upper">127</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment14">
+    <property name="upper">127</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment15">
+    <property name="upper">127</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment16">
+    <property name="upper">127</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment17">
+    <property name="upper">127</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment18">
+    <property name="upper">127</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
   </object>
 </interface>
