@@ -2,7 +2,7 @@
 
 struct adjustor {
   const char *id;
-  GtkAdjustment *adj;
+  GtkWidget *adj;
 };
 
 void 
@@ -59,21 +59,19 @@ void create_adjustment (gpointer data, gpointer user_data)
 {
   GtkWidget *this = data;
   GList **adj_list = user_data;
+  int param;
 
   const char *id = gtk_buildable_get_name(GTK_BUILDABLE(this));
 
   printf("Widget: %s, id %s\n", gtk_widget_get_name(this), id ? id : "none");
 
-  if (id && blofeld_find_index(id) >= 0) {
-    GObject *adjobj;
+  if (id && (param = blofeld_find_index(id)) >= 0) {
     struct adjustor *adjustor = g_new(struct adjustor, 1);
-    g_object_get(this, "adjustment", &adjobj, NULL);
-    if (adjobj && GTK_IS_ADJUSTMENT(adjobj)) {
-      printf("has adjustment\n");
-      adjustor->id = id;
-      adjustor->adj = GTK_ADJUSTMENT (adjobj);
-      *adj_list = g_list_append(*adj_list, adjustor);
-    }
+/*    g_object_get(this, "adjustment", &adjobj, NULL); */
+    printf("has parameter\n");
+    adjustor->id = id;
+    adjustor->adj = this;
+    *adj_list = g_list_append(*adj_list, adjustor);
   }
 
   if (GTK_IS_CONTAINER(this)) {
@@ -90,9 +88,19 @@ void add_adjustments (GList *widget_list, GList **adj_list)
 void display_adjustment(gpointer data, gpointer user_data)
 {
   struct adjustor *adjustor = data;
+  GtkWidget *adj = adjustor->adj;
   
-  if (GTK_IS_ADJUSTMENT(adjustor->adj)) {
-    printf("Id %s (%p): value %d\n", adjustor->id, adjustor->adj, gtk_adjustment_get_value(adjustor->adj));
+  if (GTK_IS_RANGE(adj)) {
+    GtkRange *range = GTK_RANGE (adj);
+    printf("Slider %p: name %s, value %d\n",
+           range, gtk_buildable_get_name(GTK_BUILDABLE(range)),
+           (int) gtk_range_get_value(range));
+  }
+  if (GTK_IS_COMBO_BOX(adj)) {
+    GtkComboBox *cb = GTK_COMBO_BOX (adj);
+    printf("Combobox %p: name %s, value %d\n",
+           cb, gtk_buildable_get_name(GTK_BUILDABLE(cb)),
+           gtk_combo_box_get_active(cb));
   }
 }
 
