@@ -60,18 +60,19 @@ void create_adjustment (gpointer data, gpointer user_data)
 {
   GtkWidget *this = data;
   GList **adj_list = user_data;
-  int param;
+  int parnum;
 
   const char *id = gtk_buildable_get_name(GTK_BUILDABLE(this));
 
   printf("Widget: %s, id %s\n", gtk_widget_get_name(this), id ? id : "none");
 
-  if (id && (param = blofeld_find_index(id)) >= 0) {
+  if (id && (parnum = blofeld_find_index(id)) >= 0) {
     struct adjustor *adjustor = g_new(struct adjustor, 1);
 /*    g_object_get(this, "adjustment", &adjobj, NULL); */
     printf("has parameter\n");
     adjustor->id = id;
     adjustor->adj = this;
+    adjustor->parnum = parnum;
     *adj_list = g_list_append(*adj_list, adjustor);
     if (GTK_IS_RANGE(this))
       g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), NULL);
