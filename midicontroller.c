@@ -1,4 +1,6 @@
 #include <gtk/gtk.h>
+#include "blofeld_params.h"
+#include "midi.h"
 
 struct adjustor {
   const char *id; /* name of parameter, e.g. "Filter 1 Cutoff" */
@@ -6,10 +8,28 @@ struct adjustor {
   int parnum;  /* parameter number */
 };
 
+GList *adjustment_list = NULL;
+
 void 
 on_winMain_destroy (GtkObject *object, gpointer user_data)
 {
   gtk_main_quit();
+}
+
+gint adjuster_object_compare(gconstpointer val1, gconstpointer val2)
+{
+  const struct adjustor *adjustor = val1;
+  return (adjustor->adj != val2);
+}
+
+static void update_parameter(GtkObject *object, int value)
+{
+  /* Find element in adjustment_list containing our object pointer */
+  GList *found = g_list_find_custom(adjustment_list, object, adjuster_object_compare);
+  if (found) {
+    struct adjustor *adjustor = found->data;
+    blofeld_update_parameter(adjustor->parnum, 0, value);
+  }
 }
 
 void
@@ -27,10 +47,12 @@ void
 on_value_changed (GtkObject *object, gpointer user_data)
 {
   GtkRange *range = GTK_RANGE (object);
-  if (range)
+  if (range) {
     printf("Slider %p: name %s, value %d, user_data %p\n",
            range, gtk_buildable_get_name(GTK_BUILDABLE(range)),
            (int) gtk_range_get_value(range), user_data);
+    update_parameter(object, (int) gtk_range_get_value(range));
+  }
 }
 
 
@@ -38,10 +60,12 @@ void
 on_combobox_changed (GtkObject *object, gpointer user_data)
 {
   GtkComboBox *cb = GTK_COMBO_BOX (object);
-  if (cb)
+  if (cb) {
     printf("Combobox %p: name %s, value %d, user_data %p\n",
            cb, gtk_buildable_get_name(GTK_BUILDABLE(cb)),
            gtk_combo_box_get_active(cb), user_data);
+    update_parameter(object, (int) gtk_combo_box_get_active(cb));
+  }
 }
 
 void
@@ -113,7 +137,6 @@ void display_adjustment(gpointer data, gpointer user_data)
 void
 create_adjustments_list (GtkWidget *top_widget)
 {
-  GList *adjustment_list = NULL;
   create_adjustment(top_widget, &adjustment_list);
 
   g_list_foreach (adjustment_list, display_adjustment, 0);

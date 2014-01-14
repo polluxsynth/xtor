@@ -1,5 +1,15 @@
+#include <stdio.h>
 #include <string.h>
 #include "blofeld_params.h"
+#include "midi.h"
+
+#define SYSEX_ID_WALDORF 0x3E
+#define EQUIPMENT_ID_BLOFELD 0x13
+#define SNDR 0x00 /* Sound Request */
+#define SNDD 0x10 /* Sound Dump */
+#define SNDP 0x20 /* Sound Parameter Change */
+#define GLBR 0x04 /* Global Request */
+#define GLBD 0x14 /* Global Dump */
 
 struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
   { "reserved" }, /* 0 */
@@ -133,6 +143,8 @@ struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
   /* More to come ... */
 };
 
+int parameter_list[BLOFELD_PARAMS];
+
 int blofeld_find_index(const char *param_name)
 {
   int idx = -1; /* not found */
@@ -147,4 +159,43 @@ int blofeld_find_index(const char *param_name)
     }
   }
   return idx;
+}
+
+static void send_parameter_update(int parnum, int buffer, int devno, int value)
+{
+  unsigned char sndp[] = { SYSEX,
+                           SYSEX_ID_WALDORF,
+                           EQUIPMENT_ID_BLOFELD,
+                           0x00, /* device number */
+                           SNDP,
+			   0,    /* buffer number */
+			   0, 0, /* parameter number, big endian */
+			   0,    /* value */
+                           EOX };
+  if (parnum < BLOFELD_PARAMS) {
+    sndp[3] = devno;
+    sndp[5] = buffer;
+    sndp[6] = parnum >> 7;
+    sndp[7] = parnum & 127;
+    sndp[8] = value;
+
+    printf("Blofeld parameter update: buffer %d, parnum %d, value %d\n",
+           buffer, parnum, value);
+
+    midi_send_sysex(sndp, sizeof(sndp));
+  }
+}
+
+void blofeld_update_parameter(int parnum, int parlist, int value)
+{
+  if (parnum < BLOFELD_PARAMS)
+    parameter_list[parnum] = value;
+  send_parameter_update(parnum, 0, 0, value);
+}
+
+int blofeld_fetch_parameter(int parnum, int parlist)
+{
+  if (parnum < BLOFELD_PARAMS)
+    return parameter_list[parnum];
+  return -1;
 }
