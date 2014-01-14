@@ -11,11 +11,11 @@ INCS = blofeld_params.h midi.h
 all: $(PROGNAME)
 
 %.o: %.c $(INCS)
-	gcc -ansi -pedantic -Werror -c -o $@ $< `pkg-config --cflags libglade-2.0 gmodule-2.0 alsa` -DPREFIX=\"$(PREFIX)\" -g -O2
+	gcc -ansi -Werror -c -o $@ $< `pkg-config --cflags libglade-2.0 gmodule-2.0 alsa` -DPREFIX=\"$(PREFIX)\" -g -O2
 
 $(PROGNAME): $(OBJS)
 	@echo $(OBJS)
-	gcc -ansi -pedantic -Werror -o $@ $^ `pkg-config --libs libglade-2.0 gmodule-2.0 alsa`
+	gcc -ansi -Werror -o $@ $^ `pkg-config --libs libglade-2.0 gmodule-2.0 alsa`
 
 clean:
 	rm -f $(PROGNAME) $(OBJS) *.bak *~
