@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <poll.h>
 #include <gtk/gtk.h>
 #include "blofeld_params.h"
 #include "midi.h"
@@ -30,6 +32,13 @@ static void update_parameter(GtkObject *object, int value)
     struct adjustor *adjustor = found->data;
     blofeld_update_parameter(adjustor->parnum, 0, value);
   }
+}
+
+void
+on_midi_input (gpointer data, gint fd, GdkInputCondition condition)
+{
+  printf("Received MIDI data on fd %d\n", fd);
+  midi_input();
 }
 
 void
@@ -147,6 +156,8 @@ main (int argc, char *argv[])
 {
   GtkBuilder *builder;
   GtkWidget *window;
+  struct polls *polls;
+  int poll_tag;
   
   gtk_init (&argc, &argv);
   
@@ -162,8 +173,12 @@ main (int argc, char *argv[])
 
   create_adjustments_list(window);
 
-  if (midi_init_alsa() < 0)
-    return 1;
+  polls = midi_init_alsa();
+  if (!polls)
+    return 2;
+
+  /* TODO: Should really loop over all potential fds */
+  poll_tag = gdk_input_add (polls->pollfds[0].fd, GDK_INPUT_READ, on_midi_input, NULL);
   
   gtk_widget_show (window);       
   gtk_main ();
