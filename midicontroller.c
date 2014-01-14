@@ -18,20 +18,9 @@ on_winMain_destroy (GtkObject *object, gpointer user_data)
   gtk_main_quit();
 }
 
-gint adjuster_object_compare(gconstpointer val1, gconstpointer val2)
+static void update_parameter(struct adjustor *adjustor, int value)
 {
-  const struct adjustor *adjustor = val1;
-  return (adjustor->adj != val2);
-}
-
-static void update_parameter(GtkObject *object, int value)
-{
-  /* Find element in adjustment_list containing our object pointer */
-  GList *found = g_list_find_custom(adjustment_list, object, adjuster_object_compare);
-  if (found) {
-    struct adjustor *adjustor = found->data;
-    blofeld_update_parameter(adjustor->parnum, 0, value);
-  }
+  blofeld_update_parameter(adjustor->parnum, 0, value);
 }
 
 void
@@ -56,11 +45,12 @@ void
 on_value_changed (GtkObject *object, gpointer user_data)
 {
   GtkRange *range = GTK_RANGE (object);
+  struct adjustor *adjustor = user_data;
   if (range) {
-    printf("Slider %p: name %s, value %d, user_data %p\n",
+    printf("Slider %p: name %s, value %d, parnum %d\n",
            range, gtk_buildable_get_name(GTK_BUILDABLE(range)),
-           (int) gtk_range_get_value(range), user_data);
-    update_parameter(object, (int) gtk_range_get_value(range));
+           (int) gtk_range_get_value(range), adjustor->parnum);
+    update_parameter(adjustor, (int) gtk_range_get_value(range));
   }
 }
 
@@ -69,11 +59,12 @@ void
 on_combobox_changed (GtkObject *object, gpointer user_data)
 {
   GtkComboBox *cb = GTK_COMBO_BOX (object);
+  struct adjustor *adjustor = user_data;
   if (cb) {
-    printf("Combobox %p: name %s, value %d, user_data %p\n",
+    printf("Combobox %p: name %s, value %d, parnum %d\n",
            cb, gtk_buildable_get_name(GTK_BUILDABLE(cb)),
-           gtk_combo_box_get_active(cb), user_data);
-    update_parameter(object, (int) gtk_combo_box_get_active(cb));
+           gtk_combo_box_get_active(cb), adjustor->parnum);
+    update_parameter(adjustor, (int) gtk_combo_box_get_active(cb));
   }
 }
 
@@ -108,9 +99,9 @@ void create_adjustment (gpointer data, gpointer user_data)
     adjustor->parnum = parnum;
     *adj_list = g_list_append(*adj_list, adjustor);
     if (GTK_IS_RANGE(this))
-      g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), NULL);
+      g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), adjustor);
     if (GTK_IS_COMBO_BOX(this))
-      g_signal_connect(this, "changed", G_CALLBACK(on_combobox_changed), NULL);
+      g_signal_connect(this, "changed", G_CALLBACK(on_combobox_changed), adjustor);
   }
 
   if (GTK_IS_CONTAINER(this)) {
