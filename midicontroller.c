@@ -1,8 +1,9 @@
 #include <gtk/gtk.h>
 
 struct adjustor {
-  const char *id;
-  GtkWidget *adj;
+  const char *id; /* name of parameter, e.g. "Filter 1 Cutoff" */
+  GtkWidget *adj; /* widget controlling parameter */
+  int parnum;  /* parameter number */
 };
 
 void 
@@ -72,6 +73,10 @@ void create_adjustment (gpointer data, gpointer user_data)
     adjustor->id = id;
     adjustor->adj = this;
     *adj_list = g_list_append(*adj_list, adjustor);
+    if (GTK_IS_RANGE(this))
+      g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), NULL);
+    if (GTK_IS_COMBO_BOX(this))
+      g_signal_connect(this, "changed", G_CALLBACK(on_combobox_changed), NULL);
   }
 
   if (GTK_IS_CONTAINER(this)) {
