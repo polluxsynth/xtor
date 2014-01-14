@@ -5,8 +5,8 @@ VERSION=$(TODAY)
 PREFIX=./
 DISTFILES=midicontroller.c Makefile controller.glade controller.gladep huge.glade huge.gladep README COPYING mkinstalldirs
 
-OBJS = midicontroller.o blofeld_params.o
-INCS = blofeld_params.h
+OBJS = midicontroller.o blofeld_params.o midi.o
+INCS = blofeld_params.h midi.h
 
 all: $(PROGNAME)
 

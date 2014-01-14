@@ -138,6 +138,9 @@ main (int argc, char *argv[])
   g_object_unref (G_OBJECT (builder));
 
   create_adjustments_list(window);
+
+  if (midi_init_alsa() < 0)
+    return 1;
   
   gtk_widget_show (window);       
   gtk_main ();
