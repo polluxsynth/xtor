@@ -7,6 +7,9 @@
 #define SYSEX 240
 #define EOX 247
 
+/* Convert two byte MIDI data to single int */
+#define MIDI_2BYTE(v1, v2) ((((int)(v1)) << 7) | (v2))
+
 struct polls
 {
   int npfd;

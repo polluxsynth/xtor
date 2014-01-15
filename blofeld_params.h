@@ -14,9 +14,9 @@ struct blofeld_param blofeld_params[BLOFELD_PARAMS];
 void blofeld_init(void);
 
 /* Register callback for parameter updates */
-typedef void (*blofeld_notify_cb)(void *ref, int parnum, int parlist, int val);
+typedef void (*blofeld_notify_cb)(int parnum, int parlist, int val, void *);
 
-void blofeld_register_notify_cb(void *ref, blofeld_notify_cb cb);
+void blofeld_register_notify_cb(blofeld_notify_cb cb, void *ref);
 
 /* Find parameter index from parameter name */
 int blofeld_find_index(const char *param_name);

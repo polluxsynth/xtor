@@ -195,9 +195,6 @@ static void send_parameter_update(int parnum, int buffer, int devno, int value)
     sndp[7] = parnum & 127;
     sndp[8] = value;
 
-    printf("Blofeld parameter update: buffer %d, parnum %d, value %d\n",
-           buffer, parnum, value);
-
     midi_send_sysex(sndp, sizeof(sndp));
   }
 }
@@ -205,14 +202,14 @@ static void send_parameter_update(int parnum, int buffer, int devno, int value)
 /* called from UI when parameter updated */
 void blofeld_update_parameter(int parnum, int parlist, int value, int tell_who)
 {
-printf("Parameter update: parno %d, value %d, tell_who %d\n", parnum, value, tell_who);
+  printf("Blofeld param update: parno %d, value %d, tell_who %d\n", parnum, value, tell_who);
   if (parnum < BLOFELD_PARAMS)
     parameter_list[parnum] = value;
   if (tell_who & BLOFELD_TELL_SYNTH)
     send_parameter_update(parnum, 0, 0, value);
   if (tell_who & BLOFELD_TELL_UI)
     if (notify_ui)
-      notify_ui(notify_ref, parnum, parlist, value);
+      notify_ui(parnum, parlist, value, notify_ref);
 }
 
 #define blofeld_update_ui(parnum, parlist, value) \
@@ -232,7 +229,8 @@ void blofeld_sysex(void *buffer, int len)
   printf("Blofeld received sysex, len %d\n", len);
   if (len > IDE && buf[IDE] == EQUIPMENT_ID_BLOFELD) {
     switch (buf[IDM]) {
-      case SNDP: blofeld_update_ui(buf[HH] << 7 + buf[PP], buf[LL], buf[XX]);
+      case SNDP: blofeld_update_ui(MIDI_2BYTE(buf[HH], buf[PP]),
+                                   buf[LL], buf[XX]);
                  break;
       case SNDD:
       case SNDR:
@@ -249,7 +247,7 @@ void blofeld_init(void)
   midi_register_sysex(SYSEX_ID_WALDORF, blofeld_sysex, BLOFELD_PARAMS + 10);
 }
 
-void blofeld_register_notify_cb(void *ref, blofeld_notify_cb cb)
+void blofeld_register_notify_cb(blofeld_notify_cb cb, void *ref)
 {
   notify_ui = cb;
   notify_ref = ref;

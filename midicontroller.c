@@ -10,7 +10,14 @@ struct adjustor {
   int parnum;  /* parameter number */
 };
 
+/* List of all adjustors */
 GList *adjustment_list = NULL;
+
+/* Map from parameter number to adjustment list */
+struct adjustor *adjustment_array[BLOFELD_PARAMS] = { 0 };
+
+/* used to temporarily block updates to MIDI */
+int block_updates;
 
 void 
 on_winMain_destroy (GtkObject *object, gpointer user_data)
@@ -31,6 +38,21 @@ on_midi_input (gpointer data, gint fd, GdkInputCondition condition)
 }
 
 void
+param_changed(int parnum, int parlist, int value, void *ref)
+{
+  struct adjustor *adj = adjustment_array[parnum];
+  if (adj && adj->adj) {
+    printf("Update UI: parnum %d, parname %s, value %d\n", parnum, adj->id, value);
+    block_updates = 1;
+    if (GTK_IS_RANGE(adj->adj))
+      gtk_range_set_value(GTK_RANGE(adj->adj), value);
+    else if (GTK_IS_COMBO_BOX(adj->adj))
+      gtk_combo_box_set_active(GTK_COMBO_BOX(adj->adj), value);
+    block_updates = 0;
+  }
+}
+
+void
 on_adjustment_value_changed (GtkObject *object, gpointer user_data)
 {
   GtkAdjustment *adj = GTK_ADJUSTMENT (object);
@@ -46,6 +68,8 @@ on_value_changed (GtkObject *object, gpointer user_data)
 {
   GtkRange *range = GTK_RANGE (object);
   struct adjustor *adjustor = user_data;
+  if (block_updates)
+    return;
   if (range) {
     printf("Slider %p: name %s, value %d, parnum %d\n",
            range, gtk_buildable_get_name(GTK_BUILDABLE(range)),
@@ -60,6 +84,8 @@ on_combobox_changed (GtkObject *object, gpointer user_data)
 {
   GtkComboBox *cb = GTK_COMBO_BOX (object);
   struct adjustor *adjustor = user_data;
+  if (block_updates)
+    return;
   if (cb) {
     printf("Combobox %p: name %s, value %d, parnum %d\n",
            cb, gtk_buildable_get_name(GTK_BUILDABLE(cb)),
@@ -98,6 +124,7 @@ void create_adjustment (gpointer data, gpointer user_data)
     adjustor->adj = this;
     adjustor->parnum = parnum;
     *adj_list = g_list_append(*adj_list, adjustor);
+    adjustment_array[parnum] = adjustor;
     if (GTK_IS_RANGE(this))
       g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), adjustor);
     if (GTK_IS_COMBO_BOX(this))
@@ -171,6 +198,12 @@ main (int argc, char *argv[])
   /* TODO: Should really loop over all potential fds */
   poll_tag = gdk_input_add (polls->pollfds[0].fd, GDK_INPUT_READ, on_midi_input, NULL);
   
+  blofeld_init();
+
+  blofeld_register_notify_cb(param_changed, NULL);
+
+  block_updates = 0;
+
   gtk_widget_show (window);       
   gtk_main ();
   
