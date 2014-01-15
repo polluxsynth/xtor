@@ -10,11 +10,8 @@ struct adjustor {
   int parnum;  /* parameter number */
 };
 
-/* List of all adjustors */
-GList *adjustment_list = NULL;
-
-/* Map from parameter number to adjustment list */
-struct adjustor *adjustment_array[BLOFELD_PARAMS] = { 0 };
+/* List of all adjustors, indexed by parameter number. */
+struct adjustor *adjustors[BLOFELD_PARAMS] = { 0 };
 
 /* used to temporarily block updates to MIDI */
 int block_updates;
@@ -40,7 +37,7 @@ on_midi_input (gpointer data, gint fd, GdkInputCondition condition)
 void
 param_changed(int parnum, int parlist, int value, void *ref)
 {
-  struct adjustor *adj = adjustment_array[parnum];
+  struct adjustor *adj = adjustors[parnum];
   if (adj && adj->adj) {
     printf("Update UI: parnum %d, parname %s, value %d\n", parnum, adj->id, value);
     block_updates = 1;
@@ -104,12 +101,12 @@ on_button_pressed (GtkObject *object, gpointer user_data)
 }
 
 
-void add_adjustments(GList *widget_list, GList **adj_list);
+void add_adjustments (GList *widget_list, struct adjustor **adjustors);
 
 void create_adjustment (gpointer data, gpointer user_data)
 {
   GtkWidget *this = data;
-  GList **adj_list = user_data;
+  struct adjustor **adjustors = user_data;
   int parnum;
 
   const char *id = gtk_buildable_get_name(GTK_BUILDABLE(this));
@@ -123,8 +120,7 @@ void create_adjustment (gpointer data, gpointer user_data)
     adjustor->id = id;
     adjustor->adj = this;
     adjustor->parnum = parnum;
-    *adj_list = g_list_append(*adj_list, adjustor);
-    adjustment_array[parnum] = adjustor;
+    adjustors[parnum] = adjustor;
     if (GTK_IS_RANGE(this))
       g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), adjustor);
     if (GTK_IS_COMBO_BOX(this))
@@ -133,18 +129,17 @@ void create_adjustment (gpointer data, gpointer user_data)
 
   if (GTK_IS_CONTAINER(this)) {
      printf("It's a container\n");
-     add_adjustments(gtk_container_get_children(GTK_CONTAINER(this)), adj_list);
+     add_adjustments(gtk_container_get_children(GTK_CONTAINER(this)), adjustors);
   }
 }
 
-void add_adjustments (GList *widget_list, GList **adj_list)
+void add_adjustments (GList *widget_list, struct adjustor **adjustors)
 {
-  g_list_foreach (widget_list, create_adjustment, adj_list);
+  g_list_foreach (widget_list, create_adjustment, adjustors);
 }
 
-void display_adjustment(gpointer data, gpointer user_data)
+void display_adjustment(struct adjustor *adjustor)
 {
-  struct adjustor *adjustor = data;
   GtkWidget *adj = adjustor->adj;
   
   if (GTK_IS_RANGE(adj)) {
@@ -164,9 +159,13 @@ void display_adjustment(gpointer data, gpointer user_data)
 void
 create_adjustments_list (GtkWidget *top_widget)
 {
-  create_adjustment(top_widget, &adjustment_list);
+  create_adjustment(top_widget, &adjustors);
 
-  g_list_foreach (adjustment_list, display_adjustment, 0);
+  int i;
+  for (i = 0; i < sizeof(adjustors)/sizeof(struct adjustor *); i++) {
+    if (adjustors[i])
+      display_adjustment(adjustors[i]);
+  }
 }
 
 int
