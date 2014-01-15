@@ -5,6 +5,15 @@
 int seq_port;
 snd_seq_t *seq;
 
+#define MAX_SYSEX_IDS 128
+
+struct sysex_info {
+  midi_sysex_receiver sysex_receiver;
+  int max_buflen;
+};
+
+struct sysex_info sysex_receivers[MAX_SYSEX_IDS];
+
 /* Initialize ALSA sequencer interface, and create MIDI port */
 struct polls *midi_init_alsa(void)
 {
@@ -56,6 +65,39 @@ int midi_send_sysex(void *buf, int buflen)
   return err;
 }
 
+static void sysex_in(snd_seq_event_t *ev)
+{
+  static int srcidx = 0, dstidx = 0;
+  static int max_buflen;
+  static int sysex_id = -1;
+  static unsigned char *input_buf = NULL;
+  int copy_len;
+  unsigned char *data = (unsigned char *)ev->data.ext.ptr;
+
+int i; for (i = 0; i < ev->data.ext.len; i++) printf("%d ", data[i]); printf("\n");
+
+  if (data[0] == SYSEX) { /* start of dump */
+    dstidx = 0;
+    sysex_id = data[1];
+    max_buflen = sysex_receivers[sysex_id].max_buflen;
+    input_buf = malloc(max_buflen);
+  }
+  if (sysex_id < 0) /* Just to be safe: exit if not reading sysex */
+    return;
+
+  copy_len = ev->data.ext.len;
+  /* Cap received data length at max_buflen to avoid overrunning buffer */
+  if (dstidx + copy_len > max_buflen)
+    copy_len -= dstidx + copy_len - max_buflen;
+  memcpy(&input_buf[dstidx], data, copy_len);
+  dstidx += copy_len;
+  if (data[ev->data.ext.len - 1] == EOX) {
+    if (sysex_receivers[sysex_id].sysex_receiver)
+      sysex_receivers[sysex_id].sysex_receiver(input_buf, dstidx);
+    sysex_id = -1;
+  }
+}
+
 void midi_input(void)
 {
   int midi_status;
@@ -73,6 +115,7 @@ printf("MIDI event length %d\n", evlen);
     switch (ev->type) {
       case SND_SEQ_EVENT_SYSEX:
         printf("Sysex: length %d\n", ev->data.ext.len);
+        sysex_in(ev);
         break;
       case SND_SEQ_EVENT_CONTROLLER:
         printf("CC: ch %d, param %d, val %d\n", ev->data.control.channel + 1,
@@ -81,5 +124,13 @@ printf("MIDI event length %d\n", evlen);
       default:
         break;
     }
+  }
+}
+
+void midi_register_sysex(int sysex_id, midi_sysex_receiver receiver, int max_len)
+{
+  if (sysex_id < MAX_SYSEX_IDS) {
+    sysex_receivers[sysex_id].sysex_receiver = receiver;
+    sysex_receivers[sysex_id].max_buflen = max_len;
   }
 }
