@@ -11,6 +11,18 @@
 #define GLBR 0x04 /* Global Request */
 #define GLBD 0x14 /* Global Dump */
 
+/* Offsets in Waldorf dumps, see sysex manual */
+#define EXC 0
+#define IDW 1
+#define IDE 2
+#define DEV 3
+#define IDM 4
+#define LL 5
+#define HH 6
+#define PP 7
+#define XX 8
+
+
 struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
   { "reserved" }, /* 0 */
   { "Osc 1 Octave" },
@@ -145,6 +157,10 @@ struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
 
 int parameter_list[BLOFELD_PARAMS];
 
+/* Callback and parameter for parameter updates */
+blofeld_notify_cb notify_ui;
+void *notify_ref;;
+
 int blofeld_find_index(const char *param_name)
 {
   int idx = -1; /* not found */
@@ -186,16 +202,55 @@ static void send_parameter_update(int parnum, int buffer, int devno, int value)
   }
 }
 
-void blofeld_update_parameter(int parnum, int parlist, int value)
+/* called from UI when parameter updated */
+void blofeld_update_parameter(int parnum, int parlist, int value, int tell_who)
 {
+printf("Parameter update: parno %d, value %d, tell_who %d\n", parnum, value, tell_who);
   if (parnum < BLOFELD_PARAMS)
     parameter_list[parnum] = value;
-  send_parameter_update(parnum, 0, 0, value);
+  if (tell_who & BLOFELD_TELL_SYNTH)
+    send_parameter_update(parnum, 0, 0, value);
+  if (tell_who & BLOFELD_TELL_UI)
+    if (notify_ui)
+      notify_ui(notify_ref, parnum, parlist, value);
 }
+
+#define blofeld_update_ui(parnum, parlist, value) \
+        blofeld_update_parameter(parnum, parlist, value, BLOFELD_TELL_UI)
 
 int blofeld_fetch_parameter(int parnum, int parlist)
 {
   if (parnum < BLOFELD_PARAMS)
     return parameter_list[parnum];
   return -1;
+}
+
+void blofeld_sysex(void *buffer, int len)
+{
+  unsigned char *buf = buffer;
+
+  printf("Blofeld received sysex, len %d\n", len);
+  if (len > IDE && buf[IDE] == EQUIPMENT_ID_BLOFELD) {
+    switch (buf[IDM]) {
+      case SNDP: blofeld_update_ui(buf[HH] << 7 + buf[PP], buf[LL], buf[XX]);
+                 break;
+      case SNDD:
+      case SNDR:
+      case GLBR:
+      case GLBD:
+      default: break; /* ignore these */
+    }
+  }
+}
+
+
+void blofeld_init(void)
+{
+  midi_register_sysex(SYSEX_ID_WALDORF, blofeld_sysex, BLOFELD_PARAMS + 10);
+}
+
+void blofeld_register_notify_cb(void *ref, blofeld_notify_cb cb)
+{
+  notify_ui = cb;
+  notify_ref = ref;
 }

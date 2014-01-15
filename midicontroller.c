@@ -20,7 +20,7 @@ on_winMain_destroy (GtkObject *object, gpointer user_data)
 
 static void update_parameter(struct adjustor *adjustor, int value)
 {
-  blofeld_update_parameter(adjustor->parnum, 0, value);
+  blofeld_update_param(adjustor->parnum, 0, value);
 }
 
 void
