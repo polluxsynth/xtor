@@ -1,15 +1,5 @@
 #define BLOFELD_PARAMS 383
 
-#define BLOFELD_TELL_SYNTH 1
-#define BLOFELD_TELL_UI 2
-
-struct blofeld_param {
-  const char *name;
-  /* More to come, such as CC number, where applicable */
-};
-
-struct blofeld_param blofeld_params[BLOFELD_PARAMS];
-
 /* Initialize internal structures */
 void blofeld_init(void);
 
@@ -21,11 +11,12 @@ void blofeld_register_notify_cb(blofeld_notify_cb cb, void *ref);
 /* Find parameter index from parameter name */
 int blofeld_find_index(const char *param_name);
 
-/* Set new parameter value in parameter list, and tell interested party */
-#define blofeld_update_param(parnum, parlist, value) \
-        blofeld_update_parameter(parnum, parlist, value, BLOFELD_TELL_SYNTH)
+/* Get min and max bounds for parameters, respectively */
+int blofeld_get_min(int param_num);
+int blofeld_get_max(int param_num);
 
-void blofeld_update_parameter(int parnum, int parlist, int value, int tell_who);
+/* Set new parameter value in parameter list, and notify synth */
+void blofeld_update_param(int parnum, int parlist, int value);
 
 /* Fetch parameter value from parameter list */
 int blofeld_fetch_parameter(int parnum, int parlist);

@@ -22,136 +22,162 @@
 #define PP 7
 #define XX 8
 
+#define TELL_SYNTH 1
+#define TELL_UI 2
+
+struct limits {
+  int min;
+  int max;
+};
+
+struct blofeld_param {
+  const char *name;
+  struct limits *limits;
+  /* More to come, such as CC number, where applicable */
+};
+
+struct blofeld_param blofeld_params[BLOFELD_PARAMS];
+
+struct limits norm = { 0, 127 };
+struct limits oct = { 12, 112 };
+struct limits bend = { -24, 24 };
+struct limits detune = { -64, 63 };
+struct limits semitone = { -12, 12 };
+struct limits keytrack = { -200, 196 };
+struct limits fmsource = { 0, 11 };
+struct limits modsource = { 0, 30 };
+struct limits wave = { 0, 72 };
+struct limits onoff = { 0, 1 };
 
 struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
-  { "reserved" }, /* 0 */
-  { "Osc 1 Octave" },
-  { "Osc 1 Semitone" },
-  { "Osc 1 Detune" },
-  { "Osc 1 Bend Range" },
-  { "Osc 1 Keytrack" },
-  { "Osc 1 FM Source" },
-  { "Osc 1 FM Amount" },
-  { "Osc 1 Wave" },
-  { "Osc 1 Waveshape" },
-  { "Osc 1 Shape Source" },
-  { "Osc 1 Shape Amount" },
-  { "reserved" },
-  { "reserved" },
-  { "Osc 1 Limit WT" },
-  { "reserved" },
-  { "Osc 1 Brilliance" }, /* 16 */
-  { "Osc 2 Octave" },
-  { "Osc 2 Semitone" },
-  { "Osc 2 Detune" },
-  { "Osc 2 Bend Range" },
-  { "Osc 2 Keytrack" },
-  { "Osc 2 FM Source" },
-  { "Osc 2 FM Amount" },
-  { "Osc 2 Wave" },
-  { "Osc 2 Waveshape" },
-  { "Osc 2 Shape Source" },
-  { "Osc 2 Shape Amount" },
-  { "reserved" },
-  { "reserved" },
-  { "Osc 2 Limit WT" },
-  { "reserved" },
-  { "Osc 2 Brilliance" }, /* 32 */
-  { "Osc 3 Octave" },
-  { "Osc 3 Semitone" },
-  { "Osc 3 Detune" },
-  { "Osc 3 Bend Range" },
-  { "Osc 3 Keytrack" },
-  { "Osc 3 FM Source" },
-  { "Osc 3 FM Amount" },
-  { "Osc 3 Wave" },
-  { "Osc 3 Waveshape" },
-  { "Osc 3 Shape Source" },
-  { "Osc 3 Shape Amount" },
-  { "reserved" },
-  { "reserved" },
-  { "Osc 3 Limit WT" },
-  { "reserved" },
-  { "Osc 3 Brilliance" }, /* 48 */
-  { "Osc 2 Sync to Osc 3" },
-  { "Osc Pitch Source" },
-  { "Osc Pitch Amount" },
-  { "reserved" },
-  { "Glide" },
-  { "reserved" },
-  { "reserved" },
-  { "Glide Mode" },
-  { "Glide Rate" },
-  { "Allocation/Unison" },
-  { "Unison Detune" },
-  { "reserved" },
-  { "Mixer Osc 1 Level" },
-  { "Mixer Osc 1 Balance" },
-  { "Mixer Osc 2 Level" },
-  { "Mixer Osc 2 Balance" },
-  { "Mixer Osc 3 Level" },
-  { "Mixer Osc 3 Balance" },
-  { "Mixer Noise Level" },
-  { "Mixer Noise Balance" },
-  { "Mixer Noise Color" },
-  { "reserved" },
-  { "Mixer Ringmod Level" },
-  { "Mixer Ringmod Balance" },
-  { "reserved" },
-  { "reserved" },
-  { "reserved" },
-  { "reserved" },
-  { "Filter 1 Type" }, /* 77 */
-  { "Filter 1 Cutoff" },
-  { "reserved" },
-  { "Filter 1 Resonance" },
-  { "Filter 1 Drive" },
-  { "Filter 1 Drive Curve" },
-  { "reserved" },
-  { "reserved" },
-  { "reserved" },
-  { "Filter 1 Keytrack" },
-  { "Filter 1 Env Amount" },
-  { "Filter 1 Env Velocity" },
-  { "Filter 1 Mod Source" },
-  { "Filter 1 Mod Amount" },
-  { "Filter 1 FM Source" },
-  { "Filter 1 FM Amount" },
-  { "Filter 1 Pan" },
-  { "Filter 1 Pan Source" },
-  { "Filter 1 Pan Amount" },
-  { "reserved" },
-  { "Filter 1 Type" }, /* 97 */
-  { "Filter 1 Cutoff" },
-  { "reserved" },
-  { "Filter 2 Resonance" },
-  { "Filter 2 Drive" },
-  { "Filter 2 Drive Curve" },
-  { "reserved" },
-  { "reserved" },
-  { "reserved" },
-  { "Filter 2 Keytrack" },
-  { "Filter 2 Env Amount" },
-  { "Filter 2 Env Velocity" },
-  { "Filter 2 Mod Source" },
-  { "Filter 2 Mod Amount" },
-  { "Filter 2 FM Source" },
-  { "Filter 2 FM Amount" },
-  { "Filter 2 Pan" },
-  { "Filter 2 Pan Source" },
-  { "Filter 2 Pan Amount" },
-  { "reserved" },
-  { "Filter Routing" }, /* 117 */
-  { "reserved" },
-  { "reserved" },
-  { "reserved" },
-  { "Amplifier Volume" }, /* 121 */
-  { "Amplifier Velocity" },
-  { "Amplifier Mod Source" },
-  { "Amplifier Mod Amount" },
-  { "reserved" },
-  { "reserved" },
-  { "reserved" }
+  { "reserved", &norm }, /* 0 */
+  { "Osc 1 Octave", &oct },
+  { "Osc 1 Semitone", &semitone },
+  { "Osc 1 Detune", &detune },
+  { "Osc 1 Bend Range", &bend },
+  { "Osc 1 Keytrack", &keytrack },
+  { "Osc 1 FM Source", &fmsource },
+  { "Osc 1 FM Amount", &norm },
+  { "Osc 1 Wave", &wave },
+  { "Osc 1 Waveshape", &norm },
+  { "Osc 1 Shape Source", &modsource },
+  { "Osc 1 Shape Amount", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Osc 1 Limit WT", &onoff },
+  { "reserved", &norm },
+  { "Osc 1 Brilliance", &norm }, /* 16 */
+  { "Osc 2 Octave", &oct },
+  { "Osc 2 Semitone", &semitone },
+  { "Osc 2 Detune", &detune },
+  { "Osc 2 Bend Range", &bend },
+  { "Osc 2 Keytrack", &keytrack },
+  { "Osc 2 FM Source", &fmsource },
+  { "Osc 2 FM Amount", &norm },
+  { "Osc 2 Wave", &wave },
+  { "Osc 2 Waveshape", &norm },
+  { "Osc 2 Shape Source", &modsource },
+  { "Osc 2 Shape Amount", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Osc 2 Limit WT", &onoff },
+  { "reserved", &norm },
+  { "Osc 2 Brilliance", &norm }, /* 32 */
+  { "Osc 3 Octave", &oct },
+  { "Osc 3 Semitone", &semitone },
+  { "Osc 3 Detune", &detune },
+  { "Osc 3 Bend Range", &bend },
+  { "Osc 3 Keytrack", &keytrack },
+  { "Osc 3 FM Source", &fmsource },
+  { "Osc 3 FM Amount", &norm },
+  { "Osc 3 Wave", &wave },
+  { "Osc 3 Waveshape", &norm },
+  { "Osc 3 Shape Source", &modsource },
+  { "Osc 3 Shape Amount", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Osc 3 Limit WT", &onoff },
+  { "reserved", &norm },
+  { "Osc 3 Brilliance", &norm }, /* 48 */
+  { "Osc 2 Sync to Osc 3", &norm },
+  { "Osc Pitch Source", &norm },
+  { "Osc Pitch Amount", &norm },
+  { "reserved", &norm },
+  { "Glide", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Glide Mode", &norm },
+  { "Glide Rate", &norm },
+  { "Allocation/Unison", &norm },
+  { "Unison Detune", &norm },
+  { "reserved", &norm },
+  { "Mixer Osc 1 Level", &norm },
+  { "Mixer Osc 1 Balance", &norm },
+  { "Mixer Osc 2 Level", &norm },
+  { "Mixer Osc 2 Balance", &norm },
+  { "Mixer Osc 3 Level", &norm },
+  { "Mixer Osc 3 Balance", &norm },
+  { "Mixer Noise Level", &norm },
+  { "Mixer Noise Balance", &norm },
+  { "Mixer Noise Color", &norm },
+  { "reserved", &norm },
+  { "Mixer Ringmod Level", &norm },
+  { "Mixer Ringmod Balance", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Filter 1 Type", &norm }, /* 77 */
+  { "Filter 1 Cutoff", &norm },
+  { "reserved", &norm },
+  { "Filter 1 Resonance", &norm },
+  { "Filter 1 Drive", &norm },
+  { "Filter 1 Drive Curve", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Filter 1 Keytrack", &keytrack },
+  { "Filter 1 Env Amount", &norm },
+  { "Filter 1 Env Velocity", &norm },
+  { "Filter 1 Mod Source", &norm },
+  { "Filter 1 Mod Amount", &norm },
+  { "Filter 1 FM Source", &fmsource },
+  { "Filter 1 FM Amount", &norm },
+  { "Filter 1 Pan", &norm },
+  { "Filter 1 Pan Source", &norm },
+  { "Filter 1 Pan Amount", &norm },
+  { "reserved", &norm },
+  { "Filter 1 Type", &norm }, /* 97 */
+  { "Filter 1 Cutoff", &norm },
+  { "reserved", &norm },
+  { "Filter 2 Resonance", &norm },
+  { "Filter 2 Drive", &norm },
+  { "Filter 2 Drive Curve", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Filter 2 Keytrack", &keytrack },
+  { "Filter 2 Env Amount", &norm },
+  { "Filter 2 Env Velocity", &norm },
+  { "Filter 2 Mod Source", &norm },
+  { "Filter 2 Mod Amount", &norm },
+  { "Filter 2 FM Source", &fmsource },
+  { "Filter 2 FM Amount", &norm },
+  { "Filter 2 Pan", &norm },
+  { "Filter 2 Pan Source", &norm },
+  { "Filter 2 Pan Amount", &norm },
+  { "reserved", &norm },
+  { "Filter Routing", &norm }, /* 117 */
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Amplifier Volume", &norm }, /* 121 */
+  { "Amplifier Velocity", &norm },
+  { "Amplifier Mod Source", &norm },
+  { "Amplifier Mod Amount", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm }
   /* More to come ... */
 };
 
@@ -177,6 +203,18 @@ int blofeld_find_index(const char *param_name)
   return idx;
 }
 
+int blofeld_get_min(int param_num)
+{
+  if (param_num < BLOFELD_PARAMS)
+    return blofeld_params[param_num].limits->min;
+}
+
+int blofeld_get_max(int param_num)
+{
+  if (param_num < BLOFELD_PARAMS)
+    return blofeld_params[param_num].limits->max;
+}
+
 static void send_parameter_update(int parnum, int buffer, int devno, int value)
 {
   unsigned char sndp[] = { SYSEX,
@@ -200,20 +238,42 @@ static void send_parameter_update(int parnum, int buffer, int devno, int value)
 }
 
 /* called from UI when parameter updated */
-void blofeld_update_parameter(int parnum, int parlist, int value, int tell_who)
+void blofeld_update_param(int parnum, int parlist, int value)
 {
-  printf("Blofeld param update: parno %d, value %d, tell_who %d\n", parnum, value, tell_who);
-  if (parnum < BLOFELD_PARAMS)
+  if (parnum < BLOFELD_PARAMS) {
+    int min = blofeld_params[parnum].limits->min;
+    int max = blofeld_params[parnum].limits->max;
+    int range = max + 1 - min;
+    if (range > 128) /* really only keytrack */
+      value = value * 128 / range;
+    if (min < 0)
+      value += 64;
+    else if (min == 12) /* octave */
+      value = 12 * value + 16;
     parameter_list[parnum] = value;
-  if (tell_who & BLOFELD_TELL_SYNTH)
+    printf("Blofeld update param: parno %d, value %d\n", parnum, value);
     send_parameter_update(parnum, 0, 0, value);
-  if (tell_who & BLOFELD_TELL_UI)
-    if (notify_ui)
-      notify_ui(parnum, parlist, value, notify_ref);
+  }
 }
 
-#define blofeld_update_ui(parnum, parlist, value) \
-        blofeld_update_parameter(parnum, parlist, value, BLOFELD_TELL_UI)
+/* called from MIDI when parameter updated */
+void update_ui(int parnum, int parlist, int value)
+{
+  printf("Blofeld update ui: parno %d, value %d\n", parnum, value);
+  if (parnum < BLOFELD_PARAMS) {
+    parameter_list[parnum] = value;
+    int min = blofeld_params[parnum].limits->min;
+    int max = blofeld_params[parnum].limits->max;
+    int range = max + 1 - min;
+    if (min < 0)
+      value -= 64;
+    else if (min == 12) /* octave */
+      value = (value - 16 ) / 12;
+    if (range > 128) /* really only keytrack */
+      value = value * range / 128;
+    notify_ui(parnum, parlist, value, notify_ref);
+  }
+}
 
 int blofeld_fetch_parameter(int parnum, int parlist)
 {
@@ -229,8 +289,7 @@ void blofeld_sysex(void *buffer, int len)
   printf("Blofeld received sysex, len %d\n", len);
   if (len > IDE && buf[IDE] == EQUIPMENT_ID_BLOFELD) {
     switch (buf[IDM]) {
-      case SNDP: blofeld_update_ui(MIDI_2BYTE(buf[HH], buf[PP]),
-                                   buf[LL], buf[XX]);
+      case SNDP: update_ui(MIDI_2BYTE(buf[HH], buf[PP]), buf[LL], buf[XX]);
                  break;
       case SNDD:
       case SNDR:

@@ -63,15 +63,19 @@ on_adjustment_value_changed (GtkObject *object, gpointer user_data)
 void
 on_value_changed (GtkObject *object, gpointer user_data)
 {
-  GtkRange *range = GTK_RANGE (object);
+  GtkRange *gtkrange = GTK_RANGE (object);
+  GtkAdjustment *adj;
   struct adjustor *adjustor = user_data;
+  int value;
+
   if (block_updates)
     return;
-  if (range) {
+
+  if (gtkrange) {
     printf("Slider %p: name %s, value %d, parnum %d\n",
-           range, gtk_buildable_get_name(GTK_BUILDABLE(range)),
-           (int) gtk_range_get_value(range), adjustor->parnum);
-    update_parameter(adjustor, (int) gtk_range_get_value(range));
+           gtkrange, gtk_buildable_get_name(GTK_BUILDABLE(gtkrange)),
+           (int) gtk_range_get_value(gtkrange), adjustor->parnum);
+    update_parameter(adjustor, (int) gtk_range_get_value(gtkrange));
   }
 }
 
@@ -92,6 +96,23 @@ on_combobox_changed (GtkObject *object, gpointer user_data)
 }
 
 void
+on_togglebutton_changed (GtkObject *object, gpointer user_data)
+{
+  GtkToggleButton *tb = GTK_TOGGLE_BUTTON (object);
+  struct adjustor *adjustor = user_data;
+  if (block_updates)
+    return;
+  if (tb) {
+    gboolean active;
+    g_object_get(object, "active", &active, NULL);
+    printf("Combobox %p: name %s, value %d, parnum %d\n",
+           tb, gtk_buildable_get_name(GTK_BUILDABLE(tb)),
+           active, adjustor->parnum);
+    update_parameter(adjustor, active);
+  }
+}
+
+void
 on_button_pressed (GtkObject *object, gpointer user_data)
 {
   GtkButton *button = GTK_BUTTON (object);
@@ -107,6 +128,8 @@ void create_adjustment (gpointer data, gpointer user_data)
 {
   GtkWidget *this = data;
   struct adjustor **adjustors = user_data;
+  GtkAdjustment *adj;
+  gdouble gdvalue;
   int parnum;
 
   const char *id = gtk_buildable_get_name(GTK_BUILDABLE(this));
@@ -121,10 +144,23 @@ void create_adjustment (gpointer data, gpointer user_data)
     adjustor->adj = this;
     adjustor->parnum = parnum;
     adjustors[parnum] = adjustor;
-    if (GTK_IS_RANGE(this))
+    if (GTK_IS_RANGE(this)) {
+      /* Set min and max properties */
+      g_object_get(this, "adjustment", &adj, NULL);
+      if (adj) {
+        gdvalue = (gdouble) blofeld_get_min(parnum);
+        g_object_set(adj, "lower", gdvalue, NULL);
+
+        gdvalue = (gdouble) blofeld_get_max(parnum);
+        g_object_set(adj, "upper", gdvalue, NULL);
+      }
       g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), adjustor);
+    }
+
     if (GTK_IS_COMBO_BOX(this))
       g_signal_connect(this, "changed", G_CALLBACK(on_combobox_changed), adjustor);
+    if (GTK_IS_TOGGLE_BUTTON(this))
+      g_signal_connect(this, "toggled", G_CALLBACK(on_togglebutton_changed), adjustor);
   }
 
   if (GTK_IS_CONTAINER(this)) {
@@ -175,11 +211,15 @@ main (int argc, char *argv[])
   GtkWidget *window;
   struct polls *polls;
   int poll_tag;
+  char *gladename;
+
+  gladename = "blofeld.glade";
+  if (argv[1]) gladename = argv[1];
   
   gtk_init (&argc, &argv);
   
   builder = gtk_builder_new ();
-  gtk_builder_add_from_file (builder, "controller-rw.glade", NULL);
+  gtk_builder_add_from_file (builder, gladename, NULL);
 
   window = GTK_WIDGET (gtk_builder_get_object (builder, "winMain"));
   gtk_builder_connect_signals (builder, NULL);
