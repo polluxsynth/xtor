@@ -1,5 +1,11 @@
 #define BLOFELD_PARAMS 383
 
+struct param_properties {
+  int ui_min;  /* user interface minimum */
+  int ui_max;  /* user interface maximum */
+  int ui_step; /* used interface step size */
+};
+
 /* Initialize internal structures */
 void blofeld_init(void);
 
@@ -11,9 +17,10 @@ void blofeld_register_notify_cb(blofeld_notify_cb cb, void *ref);
 /* Find parameter index from parameter name */
 int blofeld_find_index(const char *param_name);
 
-/* Get min and max bounds for parameters, respectively */
-int blofeld_get_min(int param_num);
-int blofeld_get_max(int param_num);
+/* Get min and max bounds, and final range for parameters */
+/* Returns 0 if properties struct filled in 
+ * (i.e. could find parameter and property !NULL), else -1 */
+int blofeld_get_param_properties(int param_num, struct param_properties *prop);
 
 /* Set new parameter value in parameter list, and notify synth */
 void blofeld_update_param(int parnum, int parlist, int value);

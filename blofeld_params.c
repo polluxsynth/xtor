@@ -203,16 +203,18 @@ int blofeld_find_index(const char *param_name)
   return idx;
 }
 
-int blofeld_get_min(int param_num)
+int blofeld_get_param_properties(int param_num,
+                                 struct param_properties *props)
 {
-  if (param_num < BLOFELD_PARAMS)
-    return blofeld_params[param_num].limits->min;
-}
-
-int blofeld_get_max(int param_num)
-{
-  if (param_num < BLOFELD_PARAMS)
-    return blofeld_params[param_num].limits->max;
+  if (param_num < BLOFELD_PARAMS && props) {
+    props->ui_min = blofeld_params[param_num].limits->min;
+    props->ui_max = blofeld_params[param_num].limits->max;
+    /* set sane values for step size */
+    int range = props->ui_max + 1 - props->ui_min;
+    props->ui_step = (range / 128 > 1) ? 2 : 1;
+    return 0;
+  }
+  return -1;
 }
 
 static void send_parameter_update(int parnum, int buffer, int devno, int value)
