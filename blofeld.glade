@@ -36,7 +36,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="orientation">vertical</property>
-                                <property name="adjustment">adjsemi1</property>
                                 <property name="inverted">True</property>
                                 <property name="digits">0</property>
                               </object>
@@ -49,7 +48,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="orientation">vertical</property>
-                                <property name="adjustment">adjdetune1</property>
                                 <property name="inverted">True</property>
                                 <property name="digits">0</property>
                               </object>
@@ -62,7 +60,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="orientation">vertical</property>
-                                <property name="adjustment">adjktrack1</property>
                                 <property name="inverted">True</property>
                                 <property name="digits">0</property>
                               </object>
@@ -75,7 +72,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="orientation">vertical</property>
-                                <property name="adjustment">adjbendr1</property>
                                 <property name="inverted">True</property>
                                 <property name="digits">0</property>
                               </object>
@@ -189,7 +185,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="orientation">vertical</property>
-                            <property name="adjustment">adjshamt1</property>
                             <property name="inverted">True</property>
                             <property name="digits">0</property>
                           </object>
@@ -330,7 +325,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="orientation">vertical</property>
-                            <property name="adjustment">adjfmamt1</property>
                             <property name="inverted">True</property>
                             <property name="digits">0</property>
                           </object>
@@ -409,7 +403,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="orientation">vertical</property>
-                                <property name="adjustment">adjwavesh1</property>
                                 <property name="inverted">True</property>
                                 <property name="digits">0</property>
                               </object>
@@ -422,7 +415,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="orientation">vertical</property>
-                                <property name="adjustment">adjbrill1</property>
                                 <property name="inverted">True</property>
                                 <property name="digits">0</property>
                               </object>
@@ -546,47 +538,6 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkAdjustment" id="adjsemi1">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjdetune1">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjktrack1">
-    <property name="value">100</property>
-    <property name="upper">100</property>
-    <property name="step_increment">2</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjwavesh1">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjshamt1">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjfmamt1">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjbrill1">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
-  </object>
-  <object class="GtkAdjustment" id="adjbendr1">
-    <property name="upper">100</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
   <object class="GtkListStore" id="waveshape">
     <columns>

@@ -128,8 +128,6 @@ void create_adjustment (gpointer data, gpointer user_data)
 {
   GtkWidget *this = data;
   struct adjustor **adjustors = user_data;
-  GtkAdjustment *adj;
-  gdouble gdvalue;
   int parnum;
 
   const char *id = gtk_buildable_get_name(GTK_BUILDABLE(this));
@@ -145,15 +143,19 @@ void create_adjustment (gpointer data, gpointer user_data)
     adjustor->parnum = parnum;
     adjustors[parnum] = adjustor;
     if (GTK_IS_RANGE(this)) {
-      /* Set min and max properties */
-      g_object_get(this, "adjustment", &adj, NULL);
+      GtkAdjustment *adj = gtk_range_get_adjustment(GTK_RANGE(this));
+      /* It will always have an adjustment, but set all required properties
+       * for it so we don't need to set them in the UI for all parameters.
+       * In effect, this means that in the UI we do not need to set an
+       * adjustment for any parameter. */
       if (adj) {
-        gdvalue = (gdouble) blofeld_get_min(parnum);
-        g_object_set(adj, "lower", gdvalue, NULL);
-
-        gdvalue = (gdouble) blofeld_get_max(parnum);
-        g_object_set(adj, "upper", gdvalue, NULL);
-      }
+        g_object_set(adj, "lower", (gdouble) blofeld_get_min(parnum), NULL);
+        g_object_set(adj, "upper", (gdouble) blofeld_get_max(parnum), NULL);
+        g_object_set(adj, "step-increment", (gdouble) 1, NULL);
+        g_object_set(adj, "page-increment", (gdouble) 10, NULL);
+        g_object_set(adj, "page-size", (gdouble) 0, NULL);
+      } else
+        printf("Warning: GtkRange %s has no adjustment\n", gtk_widget_get_name(this));
       g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), adjustor);
     }
 
