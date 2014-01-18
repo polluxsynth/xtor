@@ -42,6 +42,7 @@ struct limits norm = { 0, 127 };
 struct limits oct = { 12, 112 };
 struct limits bend = { -24, 24 };
 struct limits detune = { -64, 63 };
+#define balance detune
 struct limits semitone = { -12, 12 };
 struct limits keytrack = { -200, 196 };
 struct limits fmsource = { 0, 11 };
@@ -111,18 +112,18 @@ struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
   { "Allocation/Unison", &norm },
   { "Unison Detune", &norm },
   { "reserved", &norm },
-  { "Mixer Osc 1 Level", &norm },
-  { "Mixer Osc 1 Balance", &norm },
-  { "Mixer Osc 2 Level", &norm },
-  { "Mixer Osc 2 Balance", &norm },
-  { "Mixer Osc 3 Level", &norm },
-  { "Mixer Osc 3 Balance", &norm },
-  { "Mixer Noise Level", &norm },
-  { "Mixer Noise Balance", &norm },
-  { "Mixer Noise Color", &norm },
+  { "Osc 1 Level", &norm },
+  { "Osc 1 Balance", &balance },
+  { "Osc 2 Level", &norm },
+  { "Osc 2 Balance", &balance },
+  { "Osc 3 Level", &norm },
+  { "Osc 3 Balance", &balance },
+  { "Noise Level", &norm },
+  { "Noise Balance", &balance },
+  { "Noise Color", &norm },
   { "reserved", &norm },
-  { "Mixer Ringmod Level", &norm },
-  { "Mixer Ringmod Balance", &norm },
+  { "Ringmod Level", &norm },
+  { "Ringmod Balance", &balance },
   { "reserved", &norm },
   { "reserved", &norm },
   { "reserved", &norm },
