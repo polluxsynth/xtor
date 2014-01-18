@@ -238,24 +238,8 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label12">
-                                <property name="visible">True</property>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label17">
-                                <property name="visible">True</property>
-                              </object>
-                              <packing>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="Osc 1 Limit WT">
-                                <property name="label" translatable="yes">Limit WT</property>
+                              <object class="GtkCheckButton" id="Osc 1 Limit WT1">
+                                <property name="label" translatable="yes">Sync 3</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
@@ -264,7 +248,21 @@
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="pack_type">end</property>
-                                <property name="position">3</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="Osc 1 Limit WT">
+                                <property name="label" translatable="yes">Lim WT</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="draw_indicator">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="pack_type">end</property>
+                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
@@ -294,7 +292,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="label14">
+                              <object class="GtkLabel" id="label12">
                                 <property name="visible">True</property>
                               </object>
                               <packing>
@@ -478,7 +476,7 @@
                         <child>
                           <object class="GtkLabel" id="label18">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes"> Level </property>
+                            <property name="label" translatable="yes">Lvl</property>
                           </object>
                           <packing>
                             <property name="top_attach">1</property>
@@ -488,7 +486,7 @@
                         <child>
                           <object class="GtkLabel" id="label19">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes"> Balnce </property>
+                            <property name="label" translatable="yes">Bal </property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -515,7 +513,421 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkFrame" id="frame3">
+                <property name="visible">True</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">out</property>
+                <child>
+                  <object class="GtkAlignment" id="alignment4">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkTable" id="table4">
+                        <property name="visible">True</property>
+                        <property name="n_rows">4</property>
+                        <property name="n_columns">6</property>
+                        <child>
+                          <object class="GtkHBox" id="hbox7">
+                            <property name="height_request">80</property>
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkVScale" id="Filter 1 Cutoff">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="inverted">True</property>
+                                <property name="digits">0</property>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkVScale" id="Filter 1 Resonance">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="inverted">True</property>
+                                <property name="digits">0</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkVScale" id="Filter 1 Keytrack">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="inverted">True</property>
+                                <property name="digits">0</property>
+                              </object>
+                              <packing>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkHBox" id="hbox8">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkLabel" id="label21">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes"> Cutoff </property>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label22">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Peak </property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label23">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Keytrack</property>
+                              </object>
+                              <packing>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="Filter 1 Type">
+                            <property name="visible">True</property>
+                            <property name="model">filtertype</property>
+                            <property name="active">0</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderertext5"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="top_attach">2</property>
+                            <property name="bottom_attach">3</property>
+                            <property name="x_options">GTK_EXPAND</property>
+                            <property name="y_options">GTK_EXPAND</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkVScale" id="Filter 1 Drive">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="inverted">True</property>
+                            <property name="digits">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="Filter 1 Drive Curve">
+                            <property name="visible">True</property>
+                            <property name="model">drivecurve</property>
+                            <property name="active">0</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderertext6"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">2</property>
+                            <property name="bottom_attach">3</property>
+                            <property name="x_options">GTK_EXPAND</property>
+                            <property name="y_options">GTK_EXPAND</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label24">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Type</property>
+                          </object>
+                          <packing>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label25">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Drive</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label26">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Amount</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">1</property>
+                            <property name="right_attach">2</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkVScale" id="Filter 1 Mod Amount">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="inverted">True</property>
+                            <property name="digits">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkVScale" id="Filter 1 FM Amount">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="inverted">True</property>
+                            <property name="digits">0</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="right_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label27">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Amount</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label28">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Amount</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="right_attach">4</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="Filter 1 Mod Source">
+                            <property name="visible">True</property>
+                            <property name="model">modsource</property>
+                            <property name="active">0</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderertext7"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="top_attach">2</property>
+                            <property name="bottom_attach">3</property>
+                            <property name="x_options">GTK_EXPAND</property>
+                            <property name="y_options">GTK_EXPAND</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="Filter 1 FM Source">
+                            <property name="visible">True</property>
+                            <property name="model">FMsource</property>
+                            <property name="active">0</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderertext8"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="right_attach">4</property>
+                            <property name="top_attach">2</property>
+                            <property name="bottom_attach">3</property>
+                            <property name="x_options">GTK_EXPAND</property>
+                            <property name="y_options">GTK_EXPAND</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="Filter 1 Pan Source">
+                            <property name="visible">True</property>
+                            <property name="model">modsource</property>
+                            <property name="active">0</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="cellrenderertext9"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">4</property>
+                            <property name="right_attach">5</property>
+                            <property name="top_attach">2</property>
+                            <property name="bottom_attach">3</property>
+                            <property name="x_options">GTK_EXPAND</property>
+                            <property name="y_options">GTK_EXPAND</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkHBox" id="hbox9">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkVScale" id="Filter 1 Pan">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="digits">0</property>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkVScale" id="Filter 1 Pan Amount">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="inverted">True</property>
+                                <property name="digits">0</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">4</property>
+                            <property name="right_attach">5</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkHBox" id="hbox10">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkLabel" id="label29">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Pan</property>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label30">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Amount</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">4</property>
+                            <property name="right_attach">5</property>
+                            <property name="top_attach">1</property>
+                            <property name="bottom_attach">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label31">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Mod</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">2</property>
+                            <property name="right_attach">3</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label32">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">FM</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="right_attach">4</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label33">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Amount</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">4</property>
+                            <property name="right_attach">5</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label20">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Filter 1&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="right_attach">3</property>
+              </packing>
             </child>
             <child>
               <placeholder/>
@@ -667,16 +1079,243 @@
         <col id="0" translatable="yes">OFF</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Sine</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Tri</col>
+        <col id="0" translatable="yes">Pulse</col>
       </row>
       <row>
         <col id="0" translatable="yes">Saw</col>
       </row>
       <row>
-        <col id="0" translatable="yes">Square</col>
+        <col id="0" translatable="yes">Triangle</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Sine</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Alt 1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Alt 2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Resonant</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Resonant2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">MalletSyn</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Sqr-Sweep</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Bellish</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Pul-Sweep</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Saw-Sweep</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">MellowSaw</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Feedback</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Add Harm</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Reso 3 HP</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Wind Syn</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">High Harm</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Clipper</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Organ Syn</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">SquareSaw</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Formant 1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Polated</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Transient</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">ElectricP</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Robotic</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">StrongHrm</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">PercOrgan</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">ClipSweep</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">ResoHarms</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2 Echoes</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Formant 2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">FmntVocal</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">MicroSync</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Micro PWM</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Glassy</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Square HP</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">SawSync 1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">SawSync 2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">SawSync 3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">PulSync 1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">PulSync 2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">PulSync 3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">SinSync 1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">SinSync 2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">SinSync 3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">PWM Pulse</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">PWM Saw</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Fuzz Wave</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Distorted</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">HeavyFuzz</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Fuzz Sync</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">K+Strong1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">K+Strong2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">K+Strong3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1-2-3-4-5</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">19/twenty</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Wavetrip1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Wavetrip2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Wavetrip3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Wavetrip4</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">MaleVoice</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Low Piano</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">ResoSweep</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Xmas Bell</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">FM Piano</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Fat Organ</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Vibes</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Chorus 2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">True PWM</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">UpperWaves</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="waveshape3">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">OFF</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Pulse</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Saw</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Triangle</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Sine</col>
       </row>
     </data>
   </object>
@@ -717,7 +1356,7 @@
   </object>
   <object class="GtkListStore" id="modsource">
     <columns>
-      <!-- column-name fmsource -->
+      <!-- column-name modsource -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -728,7 +1367,91 @@
         <col id="0" translatable="yes">LFO1</col>
       </row>
       <row>
-        <col id="0" translatable="yes">LFO1+mw</col>
+        <col id="0" translatable="yes">LFO1*MW</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LFO 2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LFO2*Aft</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LFO 3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">FilterEnv</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">AmpEnv</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Env3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Env4</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Keytrack</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Velocity</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Rel. Velo</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Pressure</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Poly Press</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Pitch Bend</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Mod Wheel</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Sustain</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Foot Ctrl</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">BreathCtrl</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Control W</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Control X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Control Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Control Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Unisono V.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Modifier 1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Modifier 2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Modifier 3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Modifier 4</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">minimum</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">MAXIMUM</col>
       </row>
     </data>
   </object>
@@ -776,6 +1499,97 @@
       </row>
       <row>
         <col id="0" translatable="yes">A env</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="filtertype">
+    <columns>
+      <!-- column-name type -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Bypass</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LP 24dB</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LP 12dB</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">BP 24dB</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">BP 12dB</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">HP 24dB</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">HP 12dB</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Notch 24dB</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Notch 12dB</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Comb+</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Comb-</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">SSM2044</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="drivecurve">
+    <columns>
+      <!-- column-name type -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Clipping</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Tube</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Hard</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Medium</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Soft</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Pickup 1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Pickup 2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Rectifier</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Square</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Binary</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Overflow</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Sine shaper</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 1 Mod</col>
       </row>
     </data>
   </object>
