@@ -41,13 +41,16 @@ struct blofeld_param blofeld_params[BLOFELD_PARAMS];
 struct limits norm = { 0, 127 };
 struct limits oct = { 12, 112 };
 struct limits bend = { -24, 24 };
-struct limits detune = { -64, 63 };
-#define balance detune
+struct limits bipolar = { -64, 63 };
+#define detune bipolar
+#define balance bipolar
+#define pan bipolar
 struct limits semitone = { -12, 12 };
 struct limits keytrack = { -200, 196 };
 struct limits fmsource = { 0, 11 };
 struct limits modsource = { 0, 30 };
 struct limits wave = { 0, 72 };
+struct limits wave3 = { 0, 4 };
 struct limits onoff = { 0, 1 };
 
 struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
@@ -91,7 +94,7 @@ struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
   { "Osc 3 Keytrack", &keytrack },
   { "Osc 3 FM Source", &fmsource },
   { "Osc 3 FM Amount", &norm },
-  { "Osc 3 Wave", &wave },
+  { "Osc 3 Wave", &wave3 },
   { "Osc 3 Waveshape", &norm },
   { "Osc 3 Shape Source", &modsource },
   { "Osc 3 Shape Amount", &norm },
@@ -144,7 +147,7 @@ struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
   { "Filter 1 Mod Amount", &norm },
   { "Filter 1 FM Source", &fmsource },
   { "Filter 1 FM Amount", &norm },
-  { "Filter 1 Pan", &norm },
+  { "Filter 1 Pan", &pan },
   { "Filter 1 Pan Source", &norm },
   { "Filter 1 Pan Amount", &norm },
   { "reserved", &norm },
@@ -164,7 +167,7 @@ struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
   { "Filter 2 Mod Amount", &norm },
   { "Filter 2 FM Source", &fmsource },
   { "Filter 2 FM Amount", &norm },
-  { "Filter 2 Pan", &norm },
+  { "Filter 2 Pan", &pan },
   { "Filter 2 Pan Source", &norm },
   { "Filter 2 Pan Amount", &norm },
   { "reserved", &norm },
