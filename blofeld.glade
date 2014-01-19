@@ -197,7 +197,7 @@
                                 <child>
                                   <object class="GtkLabel" id="label4">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Detune </property>
+                                    <property name="label" translatable="yes">Fine </property>
                                   </object>
                                   <packing>
                                     <property name="position">1</property>
@@ -206,7 +206,7 @@
                                 <child>
                                   <object class="GtkLabel" id="label1">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Keytrack</property>
+                                    <property name="label" translatable="yes">Kbd</property>
                                   </object>
                                   <packing>
                                     <property name="position">2</property>
@@ -656,6 +656,30 @@
                                     <property name="position">2</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <object class="GtkVScale" id="Filter 1 Env Amount">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="inverted">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkVScale" id="Filter 1 Env Velocity">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="inverted">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">4</property>
+                                  </packing>
+                                </child>
                               </object>
                             </child>
                             <child>
@@ -664,7 +688,7 @@
                                 <child>
                                   <object class="GtkLabel" id="label21">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes"> Cutoff </property>
+                                    <property name="label" translatable="yes">Freq </property>
                                   </object>
                                   <packing>
                                     <property name="position">0</property>
@@ -682,10 +706,28 @@
                                 <child>
                                   <object class="GtkLabel" id="label23">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Keytrack</property>
+                                    <property name="label" translatable="yes">Kbd </property>
                                   </object>
                                   <packing>
                                     <property name="position">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label85">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Env </property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label86">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Vel </property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">4</property>
                                   </packing>
                                 </child>
                               </object>
@@ -1136,7 +1178,7 @@
                                 <child>
                                   <object class="GtkLabel" id="label17">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Detune </property>
+                                    <property name="label" translatable="yes">Fine </property>
                                   </object>
                                   <packing>
                                     <property name="position">1</property>
@@ -1145,7 +1187,7 @@
                                 <child>
                                   <object class="GtkLabel" id="label34">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Keytrack</property>
+                                    <property name="label" translatable="yes">Kbd</property>
                                   </object>
                                   <packing>
                                     <property name="position">2</property>
@@ -1565,7 +1607,7 @@
                                 <child>
                                   <object class="GtkLabel" id="label48">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Detune </property>
+                                    <property name="label" translatable="yes">Fine </property>
                                   </object>
                                   <packing>
                                     <property name="position">1</property>
@@ -1574,7 +1616,7 @@
                                 <child>
                                   <object class="GtkLabel" id="label49">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Keytrack</property>
+                                    <property name="label" translatable="yes">Kbd</property>
                                   </object>
                                   <packing>
                                     <property name="position">2</property>
@@ -2095,6 +2137,30 @@
                                     <property name="position">2</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <object class="GtkVScale" id="Filter 2 Env Amount">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="inverted">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkVScale" id="Filter 2 Env Velocity">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="inverted">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">4</property>
+                                  </packing>
+                                </child>
                               </object>
                             </child>
                             <child>
@@ -2103,7 +2169,7 @@
                                 <child>
                                   <object class="GtkLabel" id="label68">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes"> Cutoff </property>
+                                    <property name="label" translatable="yes">Freq  </property>
                                   </object>
                                   <packing>
                                     <property name="position">0</property>
@@ -2121,10 +2187,28 @@
                                 <child>
                                   <object class="GtkLabel" id="label70">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Keytrack</property>
+                                    <property name="label" translatable="yes">Kbd </property>
                                   </object>
                                   <packing>
                                     <property name="position">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label87">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Env </property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label88">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Vel </property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">4</property>
                                   </packing>
                                 </child>
                               </object>
