@@ -151,8 +151,8 @@ struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
   { "Filter 1 Pan Source", &norm },
   { "Filter 1 Pan Amount", &norm },
   { "reserved", &norm },
-  { "Filter 1 Type", &norm }, /* 97 */
-  { "Filter 1 Cutoff", &norm },
+  { "Filter 2 Type", &norm }, /* 97 */
+  { "Filter 2 Cutoff", &norm },
   { "reserved", &norm },
   { "Filter 2 Resonance", &norm },
   { "Filter 2 Drive", &norm },
