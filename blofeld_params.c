@@ -49,6 +49,13 @@ struct limits semitone = { -12, 12 };
 struct limits keytrack = { -200, 196 };
 struct limits fmsource = { 0, 11 };
 struct limits modsource = { 0, 30 };
+struct limits filterdrive = { 0, 12 };
+struct limits fxdrive = { 0, 11 };
+struct limits fx1type = { 0, 5 };
+struct limits fx2type = { 0, 8 };
+struct limits lfoshape = { 0, 5 };
+struct limits lfophase = { 0, 355 };
+struct limits envmode = { 0, 4 };
 struct limits wave = { 0, 72 };
 struct limits wave3 = { 0, 4 };
 struct limits onoff = { 0, 1 };
@@ -136,7 +143,7 @@ struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
   { "reserved", &norm },
   { "Filter 1 Resonance", &norm },
   { "Filter 1 Drive", &norm },
-  { "Filter 1 Drive Curve", &norm },
+  { "Filter 1 Drive Curve", &filterdrive },
   { "reserved", &norm },
   { "reserved", &norm },
   { "reserved", &norm },
@@ -156,7 +163,7 @@ struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
   { "reserved", &norm },
   { "Filter 2 Resonance", &norm },
   { "Filter 2 Drive", &norm },
-  { "Filter 2 Drive Curve", &norm },
+  { "Filter 2 Drive Curve", &filterdrive },
   { "reserved", &norm },
   { "reserved", &norm },
   { "reserved", &norm },
@@ -181,6 +188,122 @@ struct blofeld_param blofeld_params[BLOFELD_PARAMS] = {
   { "Amplifier Mod Amount", &norm },
   { "reserved", &norm },
   { "reserved", &norm },
+  { "reserved", &norm },
+  { "Effect 1 Type", &fx1type }, /* 128 */
+  { "Effect 1 Mix", &norm },
+  { "Effect 1 Parameter 1", &norm },
+  { "Effect 1 Parameter 2", &norm },
+  { "Effect 1 Parameter 3", &norm },
+  { "Effect 1 Parameter 4", &norm },
+  { "Effect 1 Parameter 5", &norm },
+  { "Effect 1 Parameter 6", &norm },
+  { "Effect 1 Parameter 7", &norm },
+  { "Effect 1 Parameter 8", &norm },
+  { "Effect 1 Parameter 9", &onoff },
+  { "Effect 1 Parameter 10", &fxdrive },
+  { "Effect 1 Parameter 11", &norm },
+  { "Effect 1 Parameter 12", &norm },
+  { "Effect 1 Parameter 13", &norm },
+  { "Effect 1 Parameter 14", &norm },
+  { "Effect 2 Type", &fx2type }, /* 146 */
+  { "Effect 2 Mix", &norm },
+  { "Effect 2 Parameter 1", &norm },
+  { "Effect 2 Parameter 2", &norm },
+  { "Effect 2 Parameter 3", &norm },
+  { "Effect 2 Parameter 4", &norm },
+  { "Effect 2 Parameter 5", &norm },
+  { "Effect 2 Parameter 6", &norm },
+  { "Effect 2 Parameter 7", &norm },
+  { "Effect 2 Parameter 8", &norm },
+  { "Effect 2 Parameter 9", &onoff },
+  { "Effect 2 Parameter 10", &fxdrive },
+  { "Effect 2 Parameter 11", &norm },
+  { "Effect 2 Parameter 12", &norm },
+  { "Effect 2 Parameter 13", &norm },
+  { "Effect 2 Parameter 14", &norm },
+  { "LFO 1 Shape", &lfoshape }, /* 160 */
+  { "LFO 1 Speed", &norm },
+  { "reserved", &norm },
+  { "LFO 1 Sync", &onoff },
+  { "LFO 1 Clocked", &onoff },
+  { "LFO 1 Phase", &lfophase },
+  { "LFO 1 Delay", &norm },
+  { "LFO 1 Fade", &bipolar },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "LFO 1 Keytrack", &keytrack },
+  { "reserved", &norm },
+  { "LFO 2 Shape", &lfoshape }, /* 172 */
+  { "LFO 2 Speed", &norm },
+  { "reserved", &norm },
+  { "LFO 2 Sync", &onoff },
+  { "LFO 2 Clocked", &onoff },
+  { "LFO 2 Phase", &lfophase },
+  { "LFO 2 Delay", &norm },
+  { "LFO 2 Fade", &bipolar },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "LFO 2 Keytrack", &keytrack },
+  { "reserved", &norm },
+  { "LFO 3 Shape", &lfoshape }, /* 184 */
+  { "LFO 3 Speed", &norm },
+  { "reserved", &norm },
+  { "LFO 3 Sync", &onoff },
+  { "LFO 3 Clocked", &onoff },
+  { "LFO 3 Phase", &lfophase },
+  { "LFO 3 Delay", &norm },
+  { "LFO 3 Fade", &bipolar },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "LFO 3 Keytrack", &keytrack },
+  { "reserved", &norm },
+  { "Filter Envelope Mode", &envmode }, /* 196 */
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Filter Envelope Attack", &norm },
+  { "Filter Envelope Attack Level", &norm },
+  { "Filter Envelope Decay", &norm },
+  { "Filter Envelope Sustain", &norm },
+  { "Filter Envelope Decay 2", &norm },
+  { "Filter Envelope Sustain 2", &norm },
+  { "Filter Envelope Release", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Amplifier Envelope Mode", &envmode }, /* 208 */
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Amplifier Envelope Attack", &norm },
+  { "Amplifier Envelope Attack Level", &norm },
+  { "Amplifier Envelope Decay", &norm },
+  { "Amplifier Envelope Sustain", &norm },
+  { "Amplifier Envelope Decay 2", &norm },
+  { "Amplifier Envelope Sustain 2", &norm },
+  { "Amplifier Envelope Release", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Envelope 3 Mode", &envmode }, /* 220 */
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Envelope 3 Attack", &norm },
+  { "Envelope 3 Attack Level", &norm },
+  { "Envelope 3 Decay", &norm },
+  { "Envelope 3 Sustain", &norm },
+  { "Envelope 3 Decay 2", &norm },
+  { "Envelope 3 Sustain 2", &norm },
+  { "Envelope 3 Release", &norm },
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Envelope 4 Mode", &envmode }, /* 232 */
+  { "reserved", &norm },
+  { "reserved", &norm },
+  { "Envelope 4 Attack", &norm },
+  { "Envelope 4 Attack Level", &norm },
+  { "Envelope 4 Decay", &norm },
+  { "Envelope 4 Sustain", &norm },
+  { "Envelope 4 Decay 2", &norm },
+  { "Envelope 4 Sustain 2", &norm },
+  { "Envelope 4 Release", &norm },
+  { "reserved", &norm },
   { "reserved", &norm }
   /* More to come ... */
 };
@@ -198,7 +321,7 @@ int blofeld_find_index(const char *param_name)
 
   if (!param_name) return idx;
 
-  for (i = 0; i < 128 /* TODO: BLOFELD_PARAMS */; i++) {
+  for (i = 0; i < 244 /* TODO: BLOFELD_PARAMS */; i++) {
     if (!strcmp(blofeld_params[i].name, param_name)) {
       idx = i;
       break;
