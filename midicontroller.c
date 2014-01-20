@@ -11,6 +11,8 @@ struct adjustor {
 };
 
 /* List of all adjustors, indexed by parameter number. */
+/* TODO: Need to make this dynamic, as there are more parameters than 
+ * BLOFELD_PARAMS, as we have bitmapped ones too. */
 struct adjustor *adjustors[BLOFELD_PARAMS] = { 0 };
 
 /* used to temporarily block updates to MIDI */
