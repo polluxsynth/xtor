@@ -34,10 +34,8 @@ struct limits {
 /* Used for all parameters, including bitmapped ones */
 struct blofeld_param {
   const char *name;
-  union {
-    struct limits *limits;
-    struct blofeld_param *child;
-  } l_ch; /* Initialized for ordinary parameters, NULL for combined ones */
+  struct limits *limits;
+  struct blofeld_param *child;
   struct blofeld_bitmap_param *bm_param; /* NULL for ordinary parameters */
   /* More to come, such as CC number, where applicable */
 };
@@ -83,255 +81,256 @@ struct blofeld_bitmap_param allocation = { "Allocation Mode", NULL, 0x01, 0 };
 
 /* The Parameter Definiton List */
 struct blofeld_param blofeld_params[] = {
-  { "reserved", &norm, NULL }, /* 0 */
-  { "Osc 1 Octave", &oct, NULL },
-  { "Osc 1 Semitone", &semitone, NULL },
-  { "Osc 1 Detune", &detune, NULL },
-  { "Osc 1 Bend Range", &bend, NULL },
-  { "Osc 1 Keytrack", &keytrack, NULL },
-  { "Osc 1 FM Source", &fmsource, NULL },
-  { "Osc 1 FM Amount", &norm, NULL },
-  { "Osc 1 Wave", &wave, NULL },
-  { "Osc 1 Waveshape", &norm, NULL },
-  { "Osc 1 Shape Source", &modsource, NULL },
-  { "Osc 1 Shape Amount", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Osc 1 Limit WT", &onoff, NULL },
-  { "reserved", &norm, NULL },
-  { "Osc 1 Brilliance", &norm, NULL }, /* 16 */
-  { "Osc 2 Octave", &oct, NULL },
-  { "Osc 2 Semitone", &semitone, NULL },
-  { "Osc 2 Detune", &detune, NULL },
-  { "Osc 2 Bend Range", &bend, NULL },
-  { "Osc 2 Keytrack", &keytrack, NULL },
-  { "Osc 2 FM Source", &fmsource, NULL },
-  { "Osc 2 FM Amount", &norm, NULL },
-  { "Osc 2 Wave", &wave, NULL },
-  { "Osc 2 Waveshape", &norm, NULL },
-  { "Osc 2 Shape Source", &modsource, NULL },
-  { "Osc 2 Shape Amount", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Osc 2 Limit WT", &onoff, NULL },
-  { "reserved", &norm, NULL },
-  { "Osc 2 Brilliance", &norm, NULL }, /* 32 */
-  { "Osc 3 Octave", &oct, NULL },
-  { "Osc 3 Semitone", &semitone, NULL },
-  { "Osc 3 Detune", &detune, NULL },
-  { "Osc 3 Bend Range", &bend, NULL },
-  { "Osc 3 Keytrack", &keytrack, NULL },
-  { "Osc 3 FM Source", &fmsource, NULL },
-  { "Osc 3 FM Amount", &norm, NULL },
-  { "Osc 3 Wave", &wave3, NULL },
-  { "Osc 3 Waveshape", &norm, NULL },
-  { "Osc 3 Shape Source", &modsource, NULL },
-  { "Osc 3 Shape Amount", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Osc 3 Limit WT", &onoff, NULL },
-  { "reserved", &norm, NULL },
-  { "Osc 3 Brilliance", &norm, NULL }, /* 48 */
-  { "Osc 2 Sync to Osc 3", &norm, NULL },
-  { "Osc Pitch Source", &norm, NULL },
-  { "Osc Pitch Amount", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Glide", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Glide Mode", &norm, NULL },
-  { "Glide Rate", &norm, NULL },
-  { "Allocation Mode", NULL, NULL },
-  { "Unison Detune", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Osc 1 Level", &norm, NULL },
-  { "Osc 1 Balance", &balance, NULL },
-  { "Osc 2 Level", &norm, NULL },
-  { "Osc 2 Balance", &balance, NULL },
-  { "Osc 3 Level", &norm, NULL },
-  { "Osc 3 Balance", &balance, NULL },
-  { "Noise Level", &norm, NULL },
-  { "Noise Balance", &balance, NULL },
-  { "Noise Color", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Ringmod Level", &norm, NULL },
-  { "Ringmod Balance", &balance, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Filter 1 Type", &norm, NULL }, /* 77 */
-  { "Filter 1 Cutoff", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Filter 1 Resonance", &norm, NULL },
-  { "Filter 1 Drive", &norm, NULL },
-  { "Filter 1 Drive Curve", &filterdrive, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Filter 1 Keytrack", &keytrack, NULL },
-  { "Filter 1 Env Amount", &norm, NULL },
-  { "Filter 1 Env Velocity", &norm, NULL },
-  { "Filter 1 Mod Source", &norm, NULL },
-  { "Filter 1 Mod Amount", &norm, NULL },
-  { "Filter 1 FM Source", &fmsource, NULL },
-  { "Filter 1 FM Amount", &norm, NULL },
-  { "Filter 1 Pan", &pan, NULL },
-  { "Filter 1 Pan Source", &norm, NULL },
-  { "Filter 1 Pan Amount", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Filter 2 Type", &norm, NULL }, /* 97 */
-  { "Filter 2 Cutoff", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Filter 2 Resonance", &norm, NULL },
-  { "Filter 2 Drive", &norm, NULL },
-  { "Filter 2 Drive Curve", &filterdrive, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Filter 2 Keytrack", &keytrack, NULL },
-  { "Filter 2 Env Amount", &norm, NULL },
-  { "Filter 2 Env Velocity", &norm, NULL },
-  { "Filter 2 Mod Source", &norm, NULL },
-  { "Filter 2 Mod Amount", &norm, NULL },
-  { "Filter 2 FM Source", &fmsource, NULL },
-  { "Filter 2 FM Amount", &norm, NULL },
-  { "Filter 2 Pan", &pan, NULL },
-  { "Filter 2 Pan Source", &norm, NULL },
-  { "Filter 2 Pan Amount", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Filter Routing", &onoff, NULL }, /* 117 */
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Amplifier Volume", &norm, NULL }, /* 121 */
-  { "Amplifier Velocity", &norm, NULL },
-  { "Amplifier Mod Source", &norm, NULL },
-  { "Amplifier Mod Amount", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Effect 1 Type", &fx1type, NULL }, /* 128 */
-  { "Effect 1 Mix", &norm, NULL },
-  { "Effect 1 Parameter 1", &norm, NULL },
-  { "Effect 1 Parameter 2", &norm, NULL },
-  { "Effect 1 Parameter 3", &norm, NULL },
-  { "Effect 1 Parameter 4", &norm, NULL },
-  { "Effect 1 Parameter 5", &norm, NULL },
-  { "Effect 1 Parameter 6", &norm, NULL },
-  { "Effect 1 Parameter 7", &norm, NULL },
-  { "Effect 1 Parameter 8", &norm, NULL },
-  { "Effect 1 Parameter 9", &onoff, NULL },
-  { "Effect 1 Parameter 10", &fxdrive, NULL },
-  { "Effect 1 Parameter 11", &norm, NULL },
-  { "Effect 1 Parameter 12", &norm, NULL },
-  { "Effect 1 Parameter 13", &norm, NULL },
-  { "Effect 1 Parameter 14", &norm, NULL },
-  { "Effect 2 Type", &fx2type, NULL }, /* 146 */
-  { "Effect 2 Mix", &norm, NULL },
-  { "Effect 2 Parameter 1", &norm, NULL },
-  { "Effect 2 Parameter 2", &norm, NULL },
-  { "Effect 2 Parameter 3", &norm, NULL },
-  { "Effect 2 Parameter 4", &norm, NULL },
-  { "Effect 2 Parameter 5", &norm, NULL },
-  { "Effect 2 Parameter 6", &norm, NULL },
-  { "Effect 2 Parameter 7", &norm, NULL },
-  { "Effect 2 Parameter 8", &norm, NULL },
-  { "Effect 2 Parameter 9", &onoff, NULL },
-  { "Effect 2 Parameter 10", &fxdrive, NULL },
-  { "Effect 2 Parameter 11", &norm, NULL },
-  { "Effect 2 Parameter 12", &norm, NULL },
-  { "Effect 2 Parameter 13", &norm, NULL },
-  { "Effect 2 Parameter 14", &norm, NULL },
-  { "LFO 1 Shape", &lfoshape, NULL }, /* 160 */
-  { "LFO 1 Speed", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "LFO 1 Sync", &onoff, NULL },
-  { "LFO 1 Clocked", &onoff, NULL },
-  { "LFO 1 Phase", &lfophase, NULL },
-  { "LFO 1 Delay", &norm, NULL },
-  { "LFO 1 Fade", &bipolar, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "LFO 1 Keytrack", &keytrack, NULL },
-  { "reserved", &norm, NULL },
-  { "LFO 2 Shape", &lfoshape, NULL }, /* 172 */
-  { "LFO 2 Speed", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "LFO 2 Sync", &onoff, NULL },
-  { "LFO 2 Clocked", &onoff, NULL },
-  { "LFO 2 Phase", &lfophase, NULL },
-  { "LFO 2 Delay", &norm, NULL },
-  { "LFO 2 Fade", &bipolar, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "LFO 2 Keytrack", &keytrack, NULL },
-  { "reserved", &norm, NULL },
-  { "LFO 3 Shape", &lfoshape, NULL }, /* 184 */
-  { "LFO 3 Speed", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "LFO 3 Sync", &onoff, NULL },
-  { "LFO 3 Clocked", &onoff, NULL },
-  { "LFO 3 Phase", &lfophase, NULL },
-  { "LFO 3 Delay", &norm, NULL },
-  { "LFO 3 Fade", &bipolar, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "LFO 3 Keytrack", &keytrack, NULL },
-  { "reserved", &norm, NULL },
-  { "Filter Envelope Mode", &envmode, NULL }, /* 196 */
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Filter Envelope Attack", &norm, NULL },
-  { "Filter Envelope Attack Level", &norm, NULL },
-  { "Filter Envelope Decay", &norm, NULL },
-  { "Filter Envelope Sustain", &norm, NULL },
-  { "Filter Envelope Decay 2", &norm, NULL },
-  { "Filter Envelope Sustain 2", &norm, NULL },
-  { "Filter Envelope Release", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Amplifier Envelope Mode", &envmode, NULL }, /* 208 */
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Amplifier Envelope Attack", &norm, NULL },
-  { "Amplifier Envelope Attack Level", &norm, NULL },
-  { "Amplifier Envelope Decay", &norm, NULL },
-  { "Amplifier Envelope Sustain", &norm, NULL },
-  { "Amplifier Envelope Decay 2", &norm, NULL },
-  { "Amplifier Envelope Sustain 2", &norm, NULL },
-  { "Amplifier Envelope Release", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Envelope 3 Mode", &envmode, NULL }, /* 220 */
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Envelope 3 Attack", &norm, NULL },
-  { "Envelope 3 Attack Level", &norm, NULL },
-  { "Envelope 3 Decay", &norm, NULL },
-  { "Envelope 3 Sustain", &norm, NULL },
-  { "Envelope 3 Decay 2", &norm, NULL },
-  { "Envelope 3 Sustain 2", &norm, NULL },
-  { "Envelope 3 Release", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Envelope 4 Mode", &envmode, NULL }, /* 232 */
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "Envelope 4 Attack", &norm, NULL },
-  { "Envelope 4 Attack Level", &norm, NULL },
-  { "Envelope 4 Decay", &norm, NULL },
-  { "Envelope 4 Sustain", &norm, NULL },
-  { "Envelope 4 Decay 2", &norm, NULL },
-  { "Envelope 4 Sustain 2", &norm, NULL },
-  { "Envelope 4 Release", &norm, NULL },
-  { "reserved", &norm, NULL },
-  { "reserved", &norm, NULL },
+  /* name, limits, child, bm_param */
+  { "reserved", &norm, NULL, NULL }, /* 0 */
+  { "Osc 1 Octave", &oct, NULL, NULL },
+  { "Osc 1 Semitone", &semitone, NULL, NULL },
+  { "Osc 1 Detune", &detune, NULL, NULL },
+  { "Osc 1 Bend Range", &bend, NULL, NULL },
+  { "Osc 1 Keytrack", &keytrack, NULL, NULL },
+  { "Osc 1 FM Source", &fmsource, NULL, NULL },
+  { "Osc 1 FM Amount", &norm, NULL, NULL },
+  { "Osc 1 Wave", &wave, NULL, NULL },
+  { "Osc 1 Waveshape", &norm, NULL, NULL },
+  { "Osc 1 Shape Source", &modsource, NULL, NULL },
+  { "Osc 1 Shape Amount", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Osc 1 Limit WT", &onoff, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Osc 1 Brilliance", &norm, NULL, NULL }, /* 16 */
+  { "Osc 2 Octave", &oct, NULL, NULL },
+  { "Osc 2 Semitone", &semitone, NULL, NULL },
+  { "Osc 2 Detune", &detune, NULL, NULL },
+  { "Osc 2 Bend Range", &bend, NULL, NULL },
+  { "Osc 2 Keytrack", &keytrack, NULL, NULL },
+  { "Osc 2 FM Source", &fmsource, NULL, NULL },
+  { "Osc 2 FM Amount", &norm, NULL, NULL },
+  { "Osc 2 Wave", &wave, NULL, NULL },
+  { "Osc 2 Waveshape", &norm, NULL, NULL },
+  { "Osc 2 Shape Source", &modsource, NULL, NULL },
+  { "Osc 2 Shape Amount", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Osc 2 Limit WT", &onoff, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Osc 2 Brilliance", &norm, NULL, NULL }, /* 32 */
+  { "Osc 3 Octave", &oct, NULL, NULL },
+  { "Osc 3 Semitone", &semitone, NULL, NULL },
+  { "Osc 3 Detune", &detune, NULL, NULL },
+  { "Osc 3 Bend Range", &bend, NULL, NULL },
+  { "Osc 3 Keytrack", &keytrack, NULL, NULL },
+  { "Osc 3 FM Source", &fmsource, NULL, NULL },
+  { "Osc 3 FM Amount", &norm, NULL, NULL },
+  { "Osc 3 Wave", &wave3, NULL, NULL },
+  { "Osc 3 Waveshape", &norm, NULL, NULL },
+  { "Osc 3 Shape Source", &modsource, NULL, NULL },
+  { "Osc 3 Shape Amount", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Osc 3 Limit WT", &onoff, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Osc 3 Brilliance", &norm, NULL, NULL }, /* 48 */
+  { "Osc 2 Sync to Osc 3", &norm, NULL, NULL },
+  { "Osc Pitch Source", &norm, NULL, NULL },
+  { "Osc Pitch Amount", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Glide", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Glide Mode", &norm, NULL, NULL },
+  { "Glide Rate", &norm, NULL, NULL },
+  { "Allocation Mode", NULL, NULL, NULL },
+  { "Unison Detune", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Osc 1 Level", &norm, NULL, NULL },
+  { "Osc 1 Balance", &balance, NULL, NULL },
+  { "Osc 2 Level", &norm, NULL, NULL },
+  { "Osc 2 Balance", &balance, NULL, NULL },
+  { "Osc 3 Level", &norm, NULL, NULL },
+  { "Osc 3 Balance", &balance, NULL, NULL },
+  { "Noise Level", &norm, NULL, NULL },
+  { "Noise Balance", &balance, NULL, NULL },
+  { "Noise Color", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Ringmod Level", &norm, NULL, NULL },
+  { "Ringmod Balance", &balance, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Filter 1 Type", &norm, NULL, NULL }, /* 77 */
+  { "Filter 1 Cutoff", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Filter 1 Resonance", &norm, NULL, NULL },
+  { "Filter 1 Drive", &norm, NULL, NULL },
+  { "Filter 1 Drive Curve", &filterdrive, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Filter 1 Keytrack", &keytrack, NULL, NULL },
+  { "Filter 1 Env Amount", &norm, NULL, NULL },
+  { "Filter 1 Env Velocity", &norm, NULL, NULL },
+  { "Filter 1 Mod Source", &norm, NULL, NULL },
+  { "Filter 1 Mod Amount", &norm, NULL, NULL },
+  { "Filter 1 FM Source", &fmsource, NULL, NULL },
+  { "Filter 1 FM Amount", &norm, NULL, NULL },
+  { "Filter 1 Pan", &pan, NULL, NULL },
+  { "Filter 1 Pan Source", &norm, NULL, NULL },
+  { "Filter 1 Pan Amount", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Filter 2 Type", &norm, NULL, NULL }, /* 97 */
+  { "Filter 2 Cutoff", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Filter 2 Resonance", &norm, NULL, NULL },
+  { "Filter 2 Drive", &norm, NULL, NULL },
+  { "Filter 2 Drive Curve", &filterdrive, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Filter 2 Keytrack", &keytrack, NULL, NULL },
+  { "Filter 2 Env Amount", &norm, NULL, NULL },
+  { "Filter 2 Env Velocity", &norm, NULL, NULL },
+  { "Filter 2 Mod Source", &norm, NULL, NULL },
+  { "Filter 2 Mod Amount", &norm, NULL, NULL },
+  { "Filter 2 FM Source", &fmsource, NULL, NULL },
+  { "Filter 2 FM Amount", &norm, NULL, NULL },
+  { "Filter 2 Pan", &pan, NULL, NULL },
+  { "Filter 2 Pan Source", &norm, NULL, NULL },
+  { "Filter 2 Pan Amount", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Filter Routing", &onoff, NULL, NULL }, /* 117 */
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Amplifier Volume", &norm, NULL, NULL }, /* 121 */
+  { "Amplifier Velocity", &norm, NULL, NULL },
+  { "Amplifier Mod Source", &norm, NULL, NULL },
+  { "Amplifier Mod Amount", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Effect 1 Type", &fx1type, NULL, NULL }, /* 128 */
+  { "Effect 1 Mix", &norm, NULL, NULL },
+  { "Effect 1 Parameter 1", &norm, NULL, NULL },
+  { "Effect 1 Parameter 2", &norm, NULL, NULL },
+  { "Effect 1 Parameter 3", &norm, NULL, NULL },
+  { "Effect 1 Parameter 4", &norm, NULL, NULL },
+  { "Effect 1 Parameter 5", &norm, NULL, NULL },
+  { "Effect 1 Parameter 6", &norm, NULL, NULL },
+  { "Effect 1 Parameter 7", &norm, NULL, NULL },
+  { "Effect 1 Parameter 8", &norm, NULL, NULL },
+  { "Effect 1 Parameter 9", &onoff, NULL, NULL },
+  { "Effect 1 Parameter 10", &fxdrive, NULL, NULL },
+  { "Effect 1 Parameter 11", &norm, NULL, NULL },
+  { "Effect 1 Parameter 12", &norm, NULL, NULL },
+  { "Effect 1 Parameter 13", &norm, NULL, NULL },
+  { "Effect 1 Parameter 14", &norm, NULL, NULL },
+  { "Effect 2 Type", &fx2type, NULL, NULL }, /* 146 */
+  { "Effect 2 Mix", &norm, NULL, NULL },
+  { "Effect 2 Parameter 1", &norm, NULL, NULL },
+  { "Effect 2 Parameter 2", &norm, NULL, NULL },
+  { "Effect 2 Parameter 3", &norm, NULL, NULL },
+  { "Effect 2 Parameter 4", &norm, NULL, NULL },
+  { "Effect 2 Parameter 5", &norm, NULL, NULL },
+  { "Effect 2 Parameter 6", &norm, NULL, NULL },
+  { "Effect 2 Parameter 7", &norm, NULL, NULL },
+  { "Effect 2 Parameter 8", &norm, NULL, NULL },
+  { "Effect 2 Parameter 9", &onoff, NULL, NULL },
+  { "Effect 2 Parameter 10", &fxdrive, NULL, NULL },
+  { "Effect 2 Parameter 11", &norm, NULL, NULL },
+  { "Effect 2 Parameter 12", &norm, NULL, NULL },
+  { "Effect 2 Parameter 13", &norm, NULL, NULL },
+  { "Effect 2 Parameter 14", &norm, NULL, NULL },
+  { "LFO 1 Shape", &lfoshape, NULL, NULL }, /* 160 */
+  { "LFO 1 Speed", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "LFO 1 Sync", &onoff, NULL, NULL },
+  { "LFO 1 Clocked", &onoff, NULL, NULL },
+  { "LFO 1 Phase", &lfophase, NULL, NULL },
+  { "LFO 1 Delay", &norm, NULL, NULL },
+  { "LFO 1 Fade", &bipolar, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "LFO 1 Keytrack", &keytrack, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "LFO 2 Shape", &lfoshape, NULL, NULL }, /* 172 */
+  { "LFO 2 Speed", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "LFO 2 Sync", &onoff, NULL, NULL },
+  { "LFO 2 Clocked", &onoff, NULL, NULL },
+  { "LFO 2 Phase", &lfophase, NULL, NULL },
+  { "LFO 2 Delay", &norm, NULL, NULL },
+  { "LFO 2 Fade", &bipolar, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "LFO 2 Keytrack", &keytrack, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "LFO 3 Shape", &lfoshape, NULL, NULL }, /* 184 */
+  { "LFO 3 Speed", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "LFO 3 Sync", &onoff, NULL, NULL },
+  { "LFO 3 Clocked", &onoff, NULL, NULL },
+  { "LFO 3 Phase", &lfophase, NULL, NULL },
+  { "LFO 3 Delay", &norm, NULL, NULL },
+  { "LFO 3 Fade", &bipolar, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "LFO 3 Keytrack", &keytrack, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Filter Envelope Mode", &envmode, NULL, NULL }, /* 196 */
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Filter Envelope Attack", &norm, NULL, NULL },
+  { "Filter Envelope Attack Level", &norm, NULL, NULL },
+  { "Filter Envelope Decay", &norm, NULL, NULL },
+  { "Filter Envelope Sustain", &norm, NULL, NULL },
+  { "Filter Envelope Decay 2", &norm, NULL, NULL },
+  { "Filter Envelope Sustain 2", &norm, NULL, NULL },
+  { "Filter Envelope Release", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Amplifier Envelope Mode", &envmode, NULL, NULL }, /* 208 */
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Amplifier Envelope Attack", &norm, NULL, NULL },
+  { "Amplifier Envelope Attack Level", &norm, NULL, NULL },
+  { "Amplifier Envelope Decay", &norm, NULL, NULL },
+  { "Amplifier Envelope Sustain", &norm, NULL, NULL },
+  { "Amplifier Envelope Decay 2", &norm, NULL, NULL },
+  { "Amplifier Envelope Sustain 2", &norm, NULL, NULL },
+  { "Amplifier Envelope Release", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Envelope 3 Mode", &envmode, NULL, NULL }, /* 220 */
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Envelope 3 Attack", &norm, NULL, NULL },
+  { "Envelope 3 Attack Level", &norm, NULL, NULL },
+  { "Envelope 3 Decay", &norm, NULL, NULL },
+  { "Envelope 3 Sustain", &norm, NULL, NULL },
+  { "Envelope 3 Decay 2", &norm, NULL, NULL },
+  { "Envelope 3 Sustain 2", &norm, NULL, NULL },
+  { "Envelope 3 Release", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Envelope 4 Mode", &envmode, NULL, NULL }, /* 232 */
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "Envelope 4 Attack", &norm, NULL, NULL },
+  { "Envelope 4 Attack Level", &norm, NULL, NULL },
+  { "Envelope 4 Decay", &norm, NULL, NULL },
+  { "Envelope 4 Sustain", &norm, NULL, NULL },
+  { "Envelope 4 Decay 2", &norm, NULL, NULL },
+  { "Envelope 4 Sustain 2", &norm, NULL, NULL },
+  { "Envelope 4 Release", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
   /* More to come ... */
   /* Bitmap parameters */
-  { "Unison", &threebit, &unison },
-  { "Allocation", &onoff, &allocation },
-  { "", NULL, NULL }
+  { "Unison", &threebit, NULL, &unison },
+  { "Allocation", &onoff, NULL, &allocation },
+  { "", NULL, NULL, NULL }
 };
 
 int parameter_list[BLOFELD_PARAMS];
@@ -361,8 +360,8 @@ int blofeld_get_param_properties(int param_num,
                                  struct param_properties *props)
 {
   if (param_num < BLOFELD_PARAMS_ALL && props) {
-    props->ui_min = blofeld_params[param_num].l_ch.limits->min;
-    props->ui_max = blofeld_params[param_num].l_ch.limits->max;
+    props->ui_min = blofeld_params[param_num].limits->min;
+    props->ui_max = blofeld_params[param_num].limits->max;
     /* set sane values for step size */
     int range = props->ui_max + 1 - props->ui_min;
     props->ui_step = (range / 128 > 1) ? 2 : 1;
@@ -396,13 +395,13 @@ static void send_parameter_update(int parnum, int buffer, int devno, int value)
 /* called from UI when parameter updated */
 void blofeld_update_param(int parnum, int parlist, int value)
 {
-  if (parnum >= BLOFELD_PARAMS_ALL)
+  if (parnum >= BLOFELD_PARAMS_ALL) /* sanity check */
     return;
 
   struct blofeld_param *param = &blofeld_params[parnum];
 
-  int min = param->l_ch.limits->min;
-  int max = param->l_ch.limits->max;
+  int min = param->limits->min;
+  int max = param->limits->max;
   int range = max + 1 - min;
   if (range > 128) /* really only keytrack */
     value = value * 128 / range;
@@ -426,23 +425,48 @@ void blofeld_update_param(int parnum, int parlist, int value)
   send_parameter_update(parnum, 0, 0, value);
 }
 
+static void update_ui_param(struct blofeld_param *param, int parlist, int value)
+{
+  int min = param->limits->min;
+  int max = param->limits->max;
+  int parnum = param - blofeld_params;
+  int range = max + 1 - min;
+  if (min < 0)
+    value -= 64;
+  else if (min == 12) /* octave */
+    value = (value - 16 ) / 12;
+  if (range > 128) /* really only keytrack */
+    value = value * range / 128;
+  notify_ui(parnum, parlist, value, notify_ref);
+}
+
 /* called from MIDI when parameter updated */
 void update_ui(int parnum, int parlist, int value)
 {
+  if (parnum >= BLOFELD_PARAMS) /* sanity check */
+    return;
+
+  struct blofeld_param *param = &blofeld_params[parnum];
+
   printf("Blofeld update ui: parno %d, value %d\n", parnum, value);
-  if (parnum < BLOFELD_PARAMS) {
-    parameter_list[parnum] = value;
-    /* TODO: Determine if param has children, process them all separately */
-    int min = blofeld_params[parnum].l_ch.limits->min;
-    int max = blofeld_params[parnum].l_ch.limits->max;
-    int range = max + 1 - min;
-    if (min < 0)
-      value -= 64;
-    else if (min == 12) /* octave */
-      value = (value - 16 ) / 12;
-    if (range > 128) /* really only keytrack */
-      value = value * range / 128;
-    notify_ui(parnum, parlist, value, notify_ref);
+
+  parameter_list[parnum] = value;
+
+  if (!param->child) /* no children => ordinary parameter */
+    update_ui_param(param, parlist, value);
+  else {
+    /* Get first child */
+    struct blofeld_param *child = param->child;
+    /* Children of same parent are always grouped together. Parent points
+     * to first child, so we just keep examining children until we find one
+     * with a different parent. 
+     */
+    do {
+      int mask = child->bm_param->bitmask;
+      int shift = child->bm_param->bitshift;
+      update_ui_param(child, parlist, (value & mask) >> shift);
+      child++;
+    } while (child->bm_param && child->bm_param->parent_param == param);
   }
 }
 
@@ -507,9 +531,9 @@ void blofeld_init(void)
      * The other children are assumed to lie after the first one in the
      * parameter definition list, with the same bm_param->parent.
       */
-    if (!bm_param->parent_param->l_ch.child) {
-      bm_param->parent_param->l_ch.child = param;
-      printf("Param %s has first child %s\n", param->bm_param->parent_param->name, param->bm_param->parent_param->l_ch.child->name);
+    if (!bm_param->parent_param->child) {
+      bm_param->parent_param->child = param;
+      printf("Param %s has first child %s\n", param->bm_param->parent_param->name, param->bm_param->parent_param->child->name);
     }
   }
 

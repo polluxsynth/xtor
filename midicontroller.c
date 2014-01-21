@@ -47,6 +47,8 @@ param_changed(int parnum, int parlist, int value, void *ref)
       gtk_range_set_value(GTK_RANGE(adj->adj), value);
     else if (GTK_IS_COMBO_BOX(adj->adj))
       gtk_combo_box_set_active(GTK_COMBO_BOX(adj->adj), value);
+    else if (GTK_IS_TOGGLE_BUTTON(adj->adj))
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(adj->adj), !!value);
     block_updates = 0;
   }
 }
@@ -107,7 +109,7 @@ on_togglebutton_changed (GtkObject *object, gpointer user_data)
   if (tb) {
     gboolean active;
     g_object_get(object, "active", &active, NULL);
-    printf("Combobox %p: name %s, value %d, parnum %d\n",
+    printf("Togglebutton %p: name %s, value %d, parnum %d\n",
            tb, gtk_buildable_get_name(GTK_BUILDABLE(tb)),
            active, adjustor->parnum);
     update_parameter(adjustor, active);
