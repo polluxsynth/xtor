@@ -17,10 +17,18 @@
 #define IDE 2
 #define DEV 3
 #define IDM 4
+/* SNDP offsets */
 #define LL 5
 #define HH 6
 #define PP 7
 #define XX 8
+/* SNDD offsets */
+#define BB 5
+#define NN 6
+#define SDATA 7
+
+/* Parameter buffers: 00..19h are banks A..Z (not all banks exist) */
+#define EDIT_BUF 0x7f
 
 #define TELL_SYNTH 1
 #define TELL_UI 2
@@ -53,9 +61,6 @@ struct limits norm = { 0, 127 };
 struct limits oct = { 12, 112 };
 struct limits bend = { -24, 24 };
 struct limits bipolar = { -64, 63 };
-#define detune bipolar
-#define balance bipolar
-#define pan bipolar
 struct limits semitone = { -12, 12 };
 struct limits keytrack = { -200, 196 };
 struct limits fmsource = { 0, 11 };
@@ -85,7 +90,7 @@ struct blofeld_param blofeld_params[] = {
   { "reserved", &norm, NULL, NULL }, /* 0 */
   { "Osc 1 Octave", &oct, NULL, NULL },
   { "Osc 1 Semitone", &semitone, NULL, NULL },
-  { "Osc 1 Detune", &detune, NULL, NULL },
+  { "Osc 1 Detune", &bipolar, NULL, NULL },
   { "Osc 1 Bend Range", &bend, NULL, NULL },
   { "Osc 1 Keytrack", &keytrack, NULL, NULL },
   { "Osc 1 FM Source", &fmsource, NULL, NULL },
@@ -93,7 +98,7 @@ struct blofeld_param blofeld_params[] = {
   { "Osc 1 Wave", &wave, NULL, NULL },
   { "Osc 1 Waveshape", &norm, NULL, NULL },
   { "Osc 1 Shape Source", &modsource, NULL, NULL },
-  { "Osc 1 Shape Amount", &norm, NULL, NULL },
+  { "Osc 1 Shape Amount", &bipolar, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Osc 1 Limit WT", &onoff, NULL, NULL },
@@ -101,7 +106,7 @@ struct blofeld_param blofeld_params[] = {
   { "Osc 1 Brilliance", &norm, NULL, NULL }, /* 16 */
   { "Osc 2 Octave", &oct, NULL, NULL },
   { "Osc 2 Semitone", &semitone, NULL, NULL },
-  { "Osc 2 Detune", &detune, NULL, NULL },
+  { "Osc 2 Detune", &bipolar, NULL, NULL },
   { "Osc 2 Bend Range", &bend, NULL, NULL },
   { "Osc 2 Keytrack", &keytrack, NULL, NULL },
   { "Osc 2 FM Source", &fmsource, NULL, NULL },
@@ -109,7 +114,7 @@ struct blofeld_param blofeld_params[] = {
   { "Osc 2 Wave", &wave, NULL, NULL },
   { "Osc 2 Waveshape", &norm, NULL, NULL },
   { "Osc 2 Shape Source", &modsource, NULL, NULL },
-  { "Osc 2 Shape Amount", &norm, NULL, NULL },
+  { "Osc 2 Shape Amount", &bipolar, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Osc 2 Limit WT", &onoff, NULL, NULL },
@@ -117,7 +122,7 @@ struct blofeld_param blofeld_params[] = {
   { "Osc 2 Brilliance", &norm, NULL, NULL }, /* 32 */
   { "Osc 3 Octave", &oct, NULL, NULL },
   { "Osc 3 Semitone", &semitone, NULL, NULL },
-  { "Osc 3 Detune", &detune, NULL, NULL },
+  { "Osc 3 Detune", &bipolar, NULL, NULL },
   { "Osc 3 Bend Range", &bend, NULL, NULL },
   { "Osc 3 Keytrack", &keytrack, NULL, NULL },
   { "Osc 3 FM Source", &fmsource, NULL, NULL },
@@ -125,7 +130,7 @@ struct blofeld_param blofeld_params[] = {
   { "Osc 3 Wave", &wave3, NULL, NULL },
   { "Osc 3 Waveshape", &norm, NULL, NULL },
   { "Osc 3 Shape Source", &modsource, NULL, NULL },
-  { "Osc 3 Shape Amount", &norm, NULL, NULL },
+  { "Osc 3 Shape Amount", &bipolar, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Osc 3 Limit WT", &onoff, NULL, NULL },
@@ -133,7 +138,7 @@ struct blofeld_param blofeld_params[] = {
   { "Osc 3 Brilliance", &norm, NULL, NULL }, /* 48 */
   { "Osc 2 Sync to Osc 3", &norm, NULL, NULL },
   { "Osc Pitch Source", &norm, NULL, NULL },
-  { "Osc Pitch Amount", &norm, NULL, NULL },
+  { "Osc Pitch Amount", &bipolar, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Glide", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
@@ -144,17 +149,17 @@ struct blofeld_param blofeld_params[] = {
   { "Unison Detune", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Osc 1 Level", &norm, NULL, NULL },
-  { "Osc 1 Balance", &balance, NULL, NULL },
+  { "Osc 1 Balance", &bipolar, NULL, NULL },
   { "Osc 2 Level", &norm, NULL, NULL },
-  { "Osc 2 Balance", &balance, NULL, NULL },
+  { "Osc 2 Balance", &bipolar, NULL, NULL },
   { "Osc 3 Level", &norm, NULL, NULL },
-  { "Osc 3 Balance", &balance, NULL, NULL },
+  { "Osc 3 Balance", &bipolar, NULL, NULL },
   { "Noise Level", &norm, NULL, NULL },
-  { "Noise Balance", &balance, NULL, NULL },
-  { "Noise Color", &norm, NULL, NULL },
+  { "Noise Balance", &bipolar, NULL, NULL },
+  { "Noise Color", &bipolar, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Ringmod Level", &norm, NULL, NULL },
-  { "Ringmod Balance", &balance, NULL, NULL },
+  { "Ringmod Balance", &bipolar, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
@@ -169,15 +174,15 @@ struct blofeld_param blofeld_params[] = {
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Filter 1 Keytrack", &keytrack, NULL, NULL },
-  { "Filter 1 Env Amount", &norm, NULL, NULL },
-  { "Filter 1 Env Velocity", &norm, NULL, NULL },
+  { "Filter 1 Env Amount", &bipolar, NULL, NULL },
+  { "Filter 1 Env Velocity", &bipolar, NULL, NULL },
   { "Filter 1 Mod Source", &norm, NULL, NULL },
-  { "Filter 1 Mod Amount", &norm, NULL, NULL },
+  { "Filter 1 Mod Amount", &bipolar, NULL, NULL },
   { "Filter 1 FM Source", &fmsource, NULL, NULL },
   { "Filter 1 FM Amount", &norm, NULL, NULL },
-  { "Filter 1 Pan", &pan, NULL, NULL },
+  { "Filter 1 Pan", &bipolar, NULL, NULL },
   { "Filter 1 Pan Source", &norm, NULL, NULL },
-  { "Filter 1 Pan Amount", &norm, NULL, NULL },
+  { "Filter 1 Pan Amount", &bipolar, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Filter 2 Type", &norm, NULL, NULL }, /* 97 */
   { "Filter 2 Cutoff", &norm, NULL, NULL },
@@ -189,24 +194,24 @@ struct blofeld_param blofeld_params[] = {
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Filter 2 Keytrack", &keytrack, NULL, NULL },
-  { "Filter 2 Env Amount", &norm, NULL, NULL },
-  { "Filter 2 Env Velocity", &norm, NULL, NULL },
+  { "Filter 2 Env Amount", &bipolar, NULL, NULL },
+  { "Filter 2 Env Velocity", &bipolar, NULL, NULL },
   { "Filter 2 Mod Source", &norm, NULL, NULL },
-  { "Filter 2 Mod Amount", &norm, NULL, NULL },
+  { "Filter 2 Mod Amount", &bipolar, NULL, NULL },
   { "Filter 2 FM Source", &fmsource, NULL, NULL },
   { "Filter 2 FM Amount", &norm, NULL, NULL },
-  { "Filter 2 Pan", &pan, NULL, NULL },
+  { "Filter 2 Pan", &bipolar, NULL, NULL },
   { "Filter 2 Pan Source", &norm, NULL, NULL },
-  { "Filter 2 Pan Amount", &norm, NULL, NULL },
+  { "Filter 2 Pan Amount", &bipolar, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Filter Routing", &onoff, NULL, NULL }, /* 117 */
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Amplifier Volume", &norm, NULL, NULL }, /* 121 */
-  { "Amplifier Velocity", &norm, NULL, NULL },
+  { "Amplifier Velocity", &bipolar, NULL, NULL },
   { "Amplifier Mod Source", &norm, NULL, NULL },
-  { "Amplifier Mod Amount", &norm, NULL, NULL },
+  { "Amplifier Mod Amount", &bipolar, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
@@ -326,7 +331,7 @@ struct blofeld_param blofeld_params[] = {
   { "Envelope 4 Release", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
-  /* More to come ... */
+  /* 244: More to come ... */
   /* Bitmap parameters */
   { "Unison", &threebit, NULL, &unison },
   { "Allocation", &onoff, NULL, &allocation },
@@ -443,7 +448,9 @@ static void update_ui_param(struct blofeld_param *param, int parlist, int value)
 /* called from MIDI when parameter updated */
 void update_ui(int parnum, int parlist, int value)
 {
-  if (parnum >= BLOFELD_PARAMS) /* sanity check */
+  if (parnum >= BLOFELD_PARAMS
+                               || parnum >= 244 /* TODO: remove */
+                              ) /* sanity check */
     return;
 
   struct blofeld_param *param = &blofeld_params[parnum];
@@ -470,6 +477,18 @@ void update_ui(int parnum, int parlist, int value)
   }
 }
 
+static void update_ui_all(unsigned char *param_buf, int parlist)
+{
+  int parnum;
+  for (parnum = 0; parnum < BLOFELD_PARAMS; parnum++) {
+    /* Only send UI updates for parameters that differ */
+    if (param_buf[parnum] != parameter_list[parnum]) {
+      int value = parameter_list[parnum] = param_buf[parnum];
+      update_ui(parnum, parlist, value);
+    }
+  }
+}
+
 int blofeld_fetch_parameter(int parnum, int parlist)
 {
   if (parnum < BLOFELD_PARAMS)
@@ -486,7 +505,10 @@ void blofeld_sysex(void *buffer, int len)
     switch (buf[IDM]) {
       case SNDP: update_ui(MIDI_2BYTE(buf[HH], buf[PP]), buf[LL], buf[XX]);
                  break;
-      case SNDD:
+      case SNDD: if (buf[BB] == EDIT_BUF)
+                 /* TODO: Verify checksum */
+                   update_ui_all(&buf[SDATA], buf[NN]);
+                 break;
       case SNDR:
       case GLBR:
       case GLBD:
