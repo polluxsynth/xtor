@@ -107,12 +107,10 @@ on_togglebutton_changed (GtkObject *object, gpointer user_data)
   if (block_updates)
     return;
   if (tb) {
-    gboolean active;
-    g_object_get(object, "active", &active, NULL);
     printf("Togglebutton %p: name %s, value %d, parnum %d\n",
            tb, gtk_buildable_get_name(GTK_BUILDABLE(tb)),
-           active, adjustor->parnum);
-    update_parameter(adjustor, active);
+           gtk_toggle_button_get_active(tb), adjustor->parnum);
+    update_parameter(adjustor, gtk_toggle_button_get_active(tb));
   }
 }
 
