@@ -396,21 +396,34 @@ static void send_parameter_update(int parnum, int buffer, int devno, int value)
 /* called from UI when parameter updated */
 void blofeld_update_param(int parnum, int parlist, int value)
 {
-  if (parnum < BLOFELD_PARAMS_ALL) {
-    int min = blofeld_params[parnum].l_ch.limits->min;
-    int max = blofeld_params[parnum].l_ch.limits->max;
-    int range = max + 1 - min;
-    if (range > 128) /* really only keytrack */
-      value = value * 128 / range;
-    if (min < 0)
-      value += 64;
-    else if (min == 12) /* octave */
-      value = 12 * value + 16;
-    /* TODO: If bitmap param, update parent, then update value and send it */
-    parameter_list[parnum] = value;
-    printf("Blofeld update param: parno %d, value %d\n", parnum, value);
-    send_parameter_update(parnum, 0, 0, value);
+  if (parnum >= BLOFELD_PARAMS_ALL)
+    return;
+
+  struct blofeld_param *param = &blofeld_params[parnum];
+
+  int min = param->l_ch.limits->min;
+  int max = param->l_ch.limits->max;
+  int range = max + 1 - min;
+  if (range > 128) /* really only keytrack */
+    value = value * 128 / range;
+  if (min < 0) /* bipolar parameter */
+    value += 64; /* center around mid range (64) */
+  else if (min == 12) /* octave */
+    value = 12 * value + 16; /* coding for octave parameters */
+
+  /* If bitmap param, fetch parent, then update value and send it */
+  if (param->bm_param) {
+    parnum = param->bm_param->parent_param - blofeld_params;
+    int mask = param->bm_param->bitmask;
+    int shift = param->bm_param->bitshift;
+    /* mask out non-changed bits, then or with new value */
+    value = (parameter_list[parnum] & ~mask) | (value << shift);
   }
+
+  /* Update parameter list, then send to Blofeld */
+  parameter_list[parnum] = value;
+  printf("Blofeld update param: parno %d, value %d\n", parnum, value);
+  send_parameter_update(parnum, 0, 0, value);
 }
 
 /* called from MIDI when parameter updated */
