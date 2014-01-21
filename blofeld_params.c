@@ -480,13 +480,16 @@ void update_ui(int parnum, int parlist, int value)
 static void update_ui_all(unsigned char *param_buf, int parlist)
 {
   int parnum;
+  static int force = 1; /* force complete update first time called */
+
   for (parnum = 0; parnum < BLOFELD_PARAMS; parnum++) {
     /* Only send UI updates for parameters that differ */
-    if (param_buf[parnum] != parameter_list[parnum]) {
+    if (param_buf[parnum] != parameter_list[parnum] || force) {
       int value = parameter_list[parnum] = param_buf[parnum];
       update_ui(parnum, parlist, value);
     }
   }
+  force = 0;
 }
 
 int blofeld_fetch_parameter(int parnum, int parlist)
