@@ -200,7 +200,7 @@ struct blofeld_param blofeld_params[] = {
   { "Filter 2 Pan Source", &norm, NULL },
   { "Filter 2 Pan Amount", &norm, NULL },
   { "reserved", &norm, NULL },
-  { "Filter Routing", &norm, NULL }, /* 117 */
+  { "Filter Routing", &onoff, NULL }, /* 117 */
   { "reserved", &norm, NULL },
   { "reserved", &norm, NULL },
   { "reserved", &norm, NULL },
