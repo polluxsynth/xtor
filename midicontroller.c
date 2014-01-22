@@ -196,6 +196,12 @@ void display_adjustment(struct adjustor *adjustor)
            cb, gtk_buildable_get_name(GTK_BUILDABLE(cb)),
            gtk_combo_box_get_active(cb));
   }
+  if (GTK_IS_TOGGLE_BUTTON(adj)) {
+    GtkToggleButton *tb = GTK_TOGGLE_BUTTON (adj);
+    printf("Togglebutton %p: name %s, value %d\n",
+           tb, gtk_buildable_get_name(GTK_BUILDABLE(tb)),
+           gtk_toggle_button_get_active(tb));
+  }
 }
 
 void
