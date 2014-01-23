@@ -18,6 +18,9 @@ struct adjustor *adjustors[BLOFELD_PARAMS] = { 0 };
 /* used to temporarily block updates to MIDI */
 int block_updates;
 
+/* buffer number currently shown */
+int current_buffer_no;
+
 void 
 on_winMain_destroy (GtkObject *object, gpointer user_data)
 {
@@ -26,7 +29,7 @@ on_winMain_destroy (GtkObject *object, gpointer user_data)
 
 static void update_parameter(struct adjustor *adjustor, int value)
 {
-  blofeld_update_param(adjustor->parnum, 0, value);
+  blofeld_update_param(adjustor->parnum, current_buffer_no, value);
 }
 
 void
@@ -37,11 +40,11 @@ on_midi_input (gpointer data, gint fd, GdkInputCondition condition)
 }
 
 void
-param_changed(int parnum, int parlist, int value, void *ref)
+param_changed(int parnum, int buffer_no, int value, void *ref)
 {
   struct adjustor *adj = adjustors[parnum];
-  if (adj && adj->adj) {
-    printf("Update UI: parnum %d, parname %s, value %d\n", parnum, adj->id, value);
+  if (buffer_no == current_buffer_no && adj && adj->adj) {
+    printf("Update UI: parnum %d, buf_no %d, parname %s, value %d\n", parnum, buffer_no, adj->id, value);
     block_updates = 1;
     if (GTK_IS_RANGE(adj->adj))
       gtk_range_set_value(GTK_RANGE(adj->adj), value);
@@ -56,8 +59,8 @@ param_changed(int parnum, int parlist, int value, void *ref)
 void
 on_GetDump_pressed (GtkObject *object, gpointer user_data)
 {
-  printf("Pressed get dump!\n");
-  blofeld_get_dump(0);
+  printf("Pressed get dump, requesting buffer no %d!\n", current_buffer_no);
+  blofeld_get_dump(current_buffer_no);
 }
 
 void
@@ -66,8 +69,11 @@ on_Buffer_pressed (GtkObject *object, gpointer user_data)
   const char *id = gtk_buildable_get_name(GTK_BUILDABLE(object));
   int buffer_no;
 
-  if (sscanf(id, "Buffer %d", &buffer_no) == 1) {
-    printf("Selected buffer #%d\n", buffer_no);
+  if (sscanf(id, "Buffer %d", &buffer_no) == 1 && 
+      buffer_no > 0 && buffer_no <= 16) {
+    current_buffer_no = buffer_no - 1;
+    printf("Selected buffer #%d = buf %d, requesting dump\n", buffer_no, current_buffer_no);
+    blofeld_get_dump(current_buffer_no);
   }
 }
 

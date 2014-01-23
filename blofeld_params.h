@@ -26,7 +26,7 @@ int blofeld_get_param_properties(int param_num, struct param_properties *prop);
 void blofeld_get_dump(int parlist);
 
 /* Set new parameter value in parameter list, and notify synth */
-void blofeld_update_param(int parnum, int parlist, int value);
+void blofeld_update_param(int parnum, int buf_no, int value);
 
 /* Fetch parameter value from parameter list */
-int blofeld_fetch_parameter(int parnum, int parlist);
+int blofeld_fetch_parameter(int parnum, int buf_no);

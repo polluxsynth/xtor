@@ -389,14 +389,14 @@ void blofeld_get_dump(int buffer)
   midi_send_sysex(sndr, sizeof(sndr));
 }
 
-static void send_parameter_update(int parnum, int buffer, int devno, int value)
+static void send_parameter_update(int parnum, int buf_no, int devno, int value)
 {
   unsigned char sndp[] = { SYSEX,
                            SYSEX_ID_WALDORF,
                            EQUIPMENT_ID_BLOFELD,
                            devno, /* device number */
                            SNDP,
-                           buffer,
+                           buf_no,
                            parnum >> 7, parnum & 127, /* big endian */
                            value,
                            EOX };
@@ -406,7 +406,7 @@ static void send_parameter_update(int parnum, int buffer, int devno, int value)
 }
 
 /* called from UI when parameter updated */
-void blofeld_update_param(int parnum, int parlist, int value)
+void blofeld_update_param(int parnum, int buf_no, int value)
 {
   if (parnum >= BLOFELD_PARAMS_ALL) /* sanity check */
     return;
@@ -434,11 +434,11 @@ void blofeld_update_param(int parnum, int parlist, int value)
 
   /* Update parameter list, then send to Blofeld */
   parameter_list[parnum] = value;
-  printf("Blofeld update param: parno %d, value %d\n", parnum, value);
-  send_parameter_update(parnum, 0, 0, value);
+  printf("Blofeld update param: parno %d, buf %d, value %d\n", parnum, buf_no, value);
+  send_parameter_update(parnum, buf_no, 0, value);
 }
 
-static void update_ui_param(struct blofeld_param *param, int parlist, int value)
+static void update_ui_param(struct blofeld_param *param, int buf_no, int value)
 {
   int min = param->limits->min;
   int max = param->limits->max;
@@ -450,11 +450,11 @@ static void update_ui_param(struct blofeld_param *param, int parlist, int value)
     value = (value - 16 ) / 12;
   if (range > 128) /* really only keytrack */
     value = value * range / 128;
-  notify_ui(parnum, parlist, value, notify_ref);
+  notify_ui(parnum, buf_no, value, notify_ref);
 }
 
 /* called from MIDI when parameter updated */
-void update_ui(int parnum, int parlist, int value)
+void update_ui(int parnum, int buf_no, int value)
 {
   if (parnum >= BLOFELD_PARAMS
                                || parnum >= 244 /* TODO: remove */
@@ -463,12 +463,12 @@ void update_ui(int parnum, int parlist, int value)
 
   struct blofeld_param *param = &blofeld_params[parnum];
 
-  printf("Blofeld update ui: parno %d, value %d\n", parnum, value);
+  printf("Blofeld update ui: parno %d, buf %d, value %d\n", parnum, buf_no, value);
 
   parameter_list[parnum] = value;
 
   if (!param->child) /* no children => ordinary parameter */
-    update_ui_param(param, parlist, value);
+    update_ui_param(param, buf_no, value);
   else {
     /* Get first child */
     struct blofeld_param *child = param->child;
@@ -479,13 +479,13 @@ void update_ui(int parnum, int parlist, int value)
     do {
       int mask = child->bm_param->bitmask;
       int shift = child->bm_param->bitshift;
-      update_ui_param(child, parlist, (value & mask) >> shift);
+      update_ui_param(child, buf_no, (value & mask) >> shift);
       child++;
     } while (child->bm_param && child->bm_param->parent_param == param);
   }
 }
 
-static void update_ui_all(unsigned char *param_buf, int parlist)
+static void update_ui_all(unsigned char *param_buf, int buf_no)
 {
   int parnum;
   static int force = 1; /* force complete update first time called */
@@ -494,13 +494,13 @@ static void update_ui_all(unsigned char *param_buf, int parlist)
     /* Only send UI updates for parameters that differ */
     if (param_buf[parnum] != parameter_list[parnum] || force) {
       int value = parameter_list[parnum] = param_buf[parnum];
-      update_ui(parnum, parlist, value);
+      update_ui(parnum, buf_no, value);
     }
   }
   force = 0;
 }
 
-int blofeld_fetch_parameter(int parnum, int parlist)
+int blofeld_fetch_parameter(int parnum, int buf_no)
 {
   if (parnum < BLOFELD_PARAMS)
     return parameter_list[parnum];
