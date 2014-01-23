@@ -380,21 +380,15 @@ static void send_parameter_update(int parnum, int buffer, int devno, int value)
   unsigned char sndp[] = { SYSEX,
                            SYSEX_ID_WALDORF,
                            EQUIPMENT_ID_BLOFELD,
-                           0x00, /* device number */
+                           devno, /* device number */
                            SNDP,
-			   0,    /* buffer number */
-			   0, 0, /* parameter number, big endian */
-			   0,    /* value */
+                           buffer,
+                           parnum >> 7, parnum & 127, /* big endian */
+                           value,
                            EOX };
-  if (parnum < BLOFELD_PARAMS) {
-    sndp[3] = devno;
-    sndp[5] = buffer;
-    sndp[6] = parnum >> 7;
-    sndp[7] = parnum & 127;
-    sndp[8] = value;
 
+  if (parnum < BLOFELD_PARAMS)
     midi_send_sysex(sndp, sizeof(sndp));
-  }
 }
 
 /* called from UI when parameter updated */
