@@ -601,7 +601,7 @@
                                     <child>
                                       <object class="GtkLabel" id="label10">
                                         <property name="visible">True</property>
-                                        <property name="label" translatable="yes">FM mod </property>
+                                        <property name="label" translatable="yes">FM</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">3</property>
@@ -1018,7 +1018,7 @@
                                     <child>
                                       <object class="GtkLabel" id="label38">
                                         <property name="visible">True</property>
-                                        <property name="label" translatable="yes">FM mod </property>
+                                        <property name="label" translatable="yes">FM</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">3</property>
@@ -1446,7 +1446,7 @@
                                     <child>
                                       <object class="GtkLabel" id="label53">
                                         <property name="visible">True</property>
-                                        <property name="label" translatable="yes">FM mod </property>
+                                        <property name="label" translatable="yes">FM</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">3</property>
@@ -2452,7 +2452,7 @@
                                         <child>
                                           <object class="GtkLabel" id="label22">
                                             <property name="visible">True</property>
-                                            <property name="label" translatable="yes">Peak </property>
+                                            <property name="label" translatable="yes">Res </property>
                                           </object>
                                           <packing>
                                             <property name="position">1</property>
@@ -2985,7 +2985,7 @@
                                         <child>
                                           <object class="GtkLabel" id="label69">
                                             <property name="visible">True</property>
-                                            <property name="label" translatable="yes">Peak </property>
+                                            <property name="label" translatable="yes">Res </property>
                                           </object>
                                           <packing>
                                             <property name="position">1</property>
