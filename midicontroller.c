@@ -78,17 +78,6 @@ on_Buffer_pressed (GtkObject *object, gpointer user_data)
 }
 
 void
-on_adjustment_value_changed (GtkObject *object, gpointer user_data)
-{
-  GtkAdjustment *adj = GTK_ADJUSTMENT (object);
-  printf("Got value changed: adj %p\n", adj);
-  if (adj)
-    printf("Adj %p: name %s, value %d, user_data %p\n",
-           adj, gtk_widget_get_name(GTK_WIDGET(object)),
-           (int) gtk_adjustment_get_value(adj), user_data);
-}
-
-void
 on_value_changed (GtkObject *object, gpointer user_data)
 {
   GtkRange *gtkrange = GTK_RANGE (object);
