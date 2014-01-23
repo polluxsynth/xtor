@@ -22,6 +22,9 @@ int blofeld_find_index(const char *param_name);
  * (i.e. could find parameter and property !NULL), else -1 */
 int blofeld_get_param_properties(int param_num, struct param_properties *prop);
 
+/* Fetch parameter dump from Blofeld */
+void blofeld_get_dump(int parlist);
+
 /* Set new parameter value in parameter list, and notify synth */
 void blofeld_update_param(int parnum, int parlist, int value);
 

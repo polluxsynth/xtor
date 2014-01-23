@@ -375,6 +375,20 @@ int blofeld_get_param_properties(int param_num,
   return -1;
 }
 
+void blofeld_get_dump(int buffer)
+{
+  unsigned char sndr[] = { SYSEX,
+                           SYSEX_ID_WALDORF,
+                           EQUIPMENT_ID_BLOFELD,
+                           0, /* device number */
+                           SNDR,
+                           EDIT_BUF,
+                           buffer,
+                           EOX };
+
+  midi_send_sysex(sndr, sizeof(sndr));
+}
+
 static void send_parameter_update(int parnum, int buffer, int devno, int value)
 {
   unsigned char sndp[] = { SYSEX,

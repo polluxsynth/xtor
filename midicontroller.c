@@ -54,6 +54,24 @@ param_changed(int parnum, int parlist, int value, void *ref)
 }
 
 void
+on_GetDump_pressed (GtkObject *object, gpointer user_data)
+{
+  printf("Pressed get dump!\n");
+  blofeld_get_dump(0);
+}
+
+void
+on_Buffer_pressed (GtkObject *object, gpointer user_data)
+{
+  const char *id = gtk_buildable_get_name(GTK_BUILDABLE(object));
+  int buffer_no;
+
+  if (sscanf(id, "Buffer %d", &buffer_no) == 1) {
+    printf("Selected buffer #%d\n", buffer_no);
+  }
+}
+
+void
 on_adjustment_value_changed (GtkObject *object, gpointer user_data)
 {
   GtkAdjustment *adj = GTK_ADJUSTMENT (object);
