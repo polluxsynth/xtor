@@ -528,8 +528,7 @@ void blofeld_sysex(void *buffer, int len)
   }
 }
 
-
-void blofeld_init(void)
+void blofeld_init(int *params)
 {
   int idx;
 
@@ -570,8 +569,11 @@ void blofeld_init(void)
     }
   }
 
-
   midi_register_sysex(SYSEX_ID_WALDORF, blofeld_sysex, BLOFELD_PARAMS + 10);
+
+  /* Return # parameters we have, including derived (e.g. bitmapped) types */
+  if (params)
+    *params = sizeof(blofeld_params)/sizeof(blofeld_params[0]);
 }
 
 void blofeld_register_notify_cb(blofeld_notify_cb cb, void *ref)

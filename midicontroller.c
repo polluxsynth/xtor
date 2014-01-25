@@ -12,9 +12,8 @@ struct adjustor {
 };
 
 /* List of all adjustors, indexed by parameter number. */
-/* TODO: Need to make this dynamic, as there are more parameters than 
- * BLOFELD_PARAMS, as we have bitmapped ones too. */
-GList *adjustors[BLOFELD_PARAMS] = { 0 };
+/* Each element is in fact a GList of adjustors with the same parameter name. */
+GList **adjustors;
 
 /* used to temporarily block updates to MIDI */
 int block_updates;
@@ -274,8 +273,10 @@ void display_adjustors(GList *adjlist)
 }
 
 void
-create_adjustors_list (GtkWidget *top_widget)
+create_adjustors_list (int ui_params, GtkWidget *top_widget)
 {
+  adjustors = g_malloc0_n(ui_params, sizeof(struct GList *));
+  if (!adjustors) return;
   create_adjustment(top_widget, &adjustors);
 
   int i;
@@ -293,6 +294,7 @@ main (int argc, char *argv[])
   struct polls *polls;
   int poll_tag;
   char *gladename;
+  int ui_params;
 
   gladename = "blofeld.glade";
   if (argv[1]) gladename = argv[1];
@@ -309,8 +311,6 @@ main (int argc, char *argv[])
 #endif
   g_object_unref (G_OBJECT (builder));
 
-  create_adjustors_list(window);
-
   polls = midi_init_alsa();
   if (!polls)
     return 2;
@@ -318,7 +318,9 @@ main (int argc, char *argv[])
   /* TODO: Should really loop over all potential fds */
   poll_tag = gdk_input_add (polls->pollfds[0].fd, GDK_INPUT_READ, on_midi_input, NULL);
   
-  blofeld_init();
+  blofeld_init(&ui_params);
+
+  create_adjustors_list(ui_params, window);
 
   blofeld_register_notify_cb(param_changed, NULL);
 

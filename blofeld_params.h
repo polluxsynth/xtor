@@ -6,8 +6,8 @@ struct param_properties {
   int ui_step; /* used interface step size */
 };
 
-/* Initialize internal structures */
-void blofeld_init(void);
+/* Initialize internal structures; return total number of UI params  */
+void blofeld_init(int *params);
 
 /* Register callback for parameter updates */
 typedef void (*blofeld_notify_cb)(int parnum, int parlist, int val, void *);
