@@ -145,8 +145,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 3">
-                    <property name="label" translatable="yes">3</property>
+                  <object class="GtkRadioButton" id="Buffer 4">
+                    <property name="label" translatable="yes">4</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -162,8 +162,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 4">
-                    <property name="label" translatable="yes">4</property>
+                  <object class="GtkRadioButton" id="Buffer 3">
+                    <property name="label" translatable="yes">3</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -4190,7 +4190,298 @@
                         <property name="n_rows">5</property>
                         <property name="n_columns">5</property>
                         <child>
-                          <placeholder/>
+                          <object class="GtkFrame" id="frame15">
+                            <property name="visible">True</property>
+                            <property name="label_xalign">0</property>
+                            <property name="shadow_type">out</property>
+                            <child>
+                              <object class="GtkAlignment" id="alignment15">
+                                <property name="visible">True</property>
+                                <child>
+                                  <object class="GtkTable" id="table19">
+                                    <property name="visible">True</property>
+                                    <property name="n_rows">4</property>
+                                    <property name="n_columns">6</property>
+                                    <child>
+                                      <object class="GtkVScale" id="LFO 1 Speed">
+                                        <property name="height_request">78</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="inverted">True</property>
+                                        <property name="digits">0</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkVScale" id="LFO 1 Phase">
+                                        <property name="height_request">78</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="inverted">True</property>
+                                        <property name="digits">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkVScale" id="LFO 1 Keytrack">
+                                        <property name="height_request">78</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="inverted">True</property>
+                                        <property name="digits">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">2</property>
+                                        <property name="right_attach">3</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkVScale" id="LFO 1 Delay">
+                                        <property name="height_request">78</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="inverted">True</property>
+                                        <property name="digits">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">4</property>
+                                        <property name="right_attach">5</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkVScale" id="LFO 1 Fade">
+                                        <property name="height_request">78</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="inverted">True</property>
+                                        <property name="digits">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">5</property>
+                                        <property name="right_attach">6</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label110">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Speed</property>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label111">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Start Phase</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label112">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Keytrack</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">2</property>
+                                        <property name="right_attach">3</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label115">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Delay </property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">4</property>
+                                        <property name="right_attach">5</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label123">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Fade </property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">5</property>
+                                        <property name="right_attach">6</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="LFO 1 Shape">
+                                        <property name="visible">True</property>
+                                        <property name="model">lfoshape</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="cellrenderertext10"/>
+                                          <attributes>
+                                            <attribute name="text">0</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="bottom_attach">3</property>
+                                        <property name="x_options"></property>
+                                        <property name="y_options"></property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="Wave">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Wave</property>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">3</property>
+                                        <property name="bottom_attach">4</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label136">
+                                        <property name="visible">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">3</property>
+                                        <property name="bottom_attach">4</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label137">
+                                        <property name="visible">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">2</property>
+                                        <property name="right_attach">3</property>
+                                        <property name="top_attach">3</property>
+                                        <property name="bottom_attach">4</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label138">
+                                        <property name="visible">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">3</property>
+                                        <property name="right_attach">4</property>
+                                        <property name="top_attach">3</property>
+                                        <property name="bottom_attach">4</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label139">
+                                        <property name="visible">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">4</property>
+                                        <property name="right_attach">5</property>
+                                        <property name="top_attach">3</property>
+                                        <property name="bottom_attach">4</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkVSeparator" id="vseparator4">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">vertical</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">3</property>
+                                        <property name="right_attach">4</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkVSeparator" id="vseparator9">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">vertical</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">3</property>
+                                        <property name="right_attach">4</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="LFO 1 Synced">
+                                        <property name="label" translatable="yes">Synced</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">2</property>
+                                        <property name="bottom_attach">3</property>
+                                        <property name="y_options"></property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="LFO 1 Clocked">
+                                        <property name="label" translatable="yes">Clocked</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">2</property>
+                                        <property name="right_attach">3</property>
+                                        <property name="top_attach">2</property>
+                                        <property name="bottom_attach">3</property>
+                                        <property name="y_options"></property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                    <child>
+                                      <placeholder/>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child type="label">
+                              <object class="GtkLabel" id="LFO 1">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">&lt;b&gt;LFO 1&lt;/b&gt;</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="right_attach">4</property>
+                            <property name="x_options"></property>
+                            <property name="y_options"></property>
+                          </packing>
                         </child>
                         <child>
                           <placeholder/>
@@ -5848,6 +6139,32 @@
       </row>
       <row>
         <col id="0" translatable="yes">Sine</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="lfoshape">
+    <columns>
+      <!-- column-name lfoshape -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Sine</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Tri</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Square</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Saw</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Random</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">SHold</col>
       </row>
     </data>
   </object>
