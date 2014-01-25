@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <poll.h>
+#include <string.h>
 #include <gtk/gtk.h>
 #include "blofeld_params.h"
 #include "midi.h"
@@ -7,13 +8,13 @@
 struct adjustor {
   const char *id; /* name of parameter, e.g. "Filter 1 Cutoff" */
   GtkWidget *adj; /* widget controlling parameter */
-  int parnum;  /* parameter number */
+  int parnum;  /* parameter number. Redunant, but practical */
 };
 
 /* List of all adjustors, indexed by parameter number. */
 /* TODO: Need to make this dynamic, as there are more parameters than 
  * BLOFELD_PARAMS, as we have bitmapped ones too. */
-struct adjustor *adjustors[BLOFELD_PARAMS] = { 0 };
+GList *adjustors[BLOFELD_PARAMS] = { 0 };
 
 /* used to temporarily block updates to MIDI */
 int block_updates;
@@ -27,11 +28,6 @@ on_winMain_destroy (GtkObject *object, gpointer user_data)
   gtk_main_quit();
 }
 
-static void update_parameter(struct adjustor *adjustor, int value)
-{
-  blofeld_update_param(adjustor->parnum, current_buffer_no, value);
-}
-
 void
 on_midi_input (gpointer data, gint fd, GdkInputCondition condition)
 {
@@ -39,21 +35,56 @@ on_midi_input (gpointer data, gint fd, GdkInputCondition condition)
   midi_input();
 }
 
-void
-param_changed(int parnum, int buffer_no, int value, void *ref)
+struct adj_update {
+  GtkWidget *widget; /* widget requesting update, or NULL */
+  int value; /* new value to set */
+};
+
+static void
+update_adjustor(gpointer data, gpointer user_data)
 {
-  struct adjustor *adj = adjustors[parnum];
-  if (buffer_no == current_buffer_no && adj && adj->adj) {
-    printf("Update UI: parnum %d, buf_no %d, parname %s, value %d\n", parnum, buffer_no, adj->id, value);
-    block_updates = 1;
+  struct adjustor *adj = data;
+  struct adj_update *adj_update = user_data;
+  int value = adj_update->value;
+
+  /* We only update adjustors that aren't the same as the widget generating 
+   * the update. For updates arriving from MIDI, there is no such widget,
+   * and it is set to NULL, so we update all widgets.
+   */
+  if (adj->adj && adj->adj != adj_update->widget) {
     if (GTK_IS_RANGE(adj->adj))
       gtk_range_set_value(GTK_RANGE(adj->adj), value);
     else if (GTK_IS_COMBO_BOX(adj->adj))
       gtk_combo_box_set_active(GTK_COMBO_BOX(adj->adj), value);
     else if (GTK_IS_TOGGLE_BUTTON(adj->adj))
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(adj->adj), !!value);
+  }
+}
+
+/* Called whenever parameter change arrives via MIDI */
+void
+param_changed(int parnum, int buffer_no, int value, void *ref)
+{
+  GList *adjlist = adjustors[parnum];
+  struct adj_update adj_update = { .widget = NULL, .value = value };
+  if (buffer_no == current_buffer_no) {
+    block_updates = 1;
+    g_list_foreach(adjlist, update_adjustor, &adj_update);
     block_updates = 0;
   }
+}
+
+/* Called whenever a widget's value changes.
+ * We send the update via MIDI, but also to other widgets with same parameter
+ * name (e.g. on other editor pages or tabs.)
+ */
+static void update_parameter(struct adjustor *adjustor, int value)
+{
+  struct adj_update adj_update = { .widget = adjustor->adj, .value = value };
+
+  blofeld_update_param(adjustor->parnum, current_buffer_no, value);
+
+  g_list_foreach(adjustors[adjustor->parnum], update_adjustor, &adj_update);
 }
 
 void
@@ -136,27 +167,44 @@ on_button_pressed (GtkObject *object, gpointer user_data)
            button, gtk_buildable_get_name(GTK_BUILDABLE(button)), user_data);
 }
 
+/* Chop trailing digits off name 
+ * I.e. for "LFO 1 Shape2" return "LFO 1 Shape".
+ * Returned string must be freed.
+ */
+gchar *chop_name(const gchar *name)
+{
+  gchar *new_name = g_strdup(name);
+  if (new_name) {
+    gchar *name_end = new_name + strlen(new_name) - 1;
+    while (name_end >= new_name && g_ascii_isdigit(*name_end))
+      name_end--;
+    name_end[1] = '\0';
+  }
+  return new_name;
+}
 
-void add_adjustments (GList *widget_list, struct adjustor **adjustors);
+void add_adjustors (GList *widget_list, GList **adjustors);
 
 void create_adjustment (gpointer data, gpointer user_data)
 {
   GtkWidget *this = data;
-  struct adjustor **adjustors = user_data;
+  GList **adjustors = user_data;
   int parnum;
 
-  const char *id = gtk_buildable_get_name(GTK_BUILDABLE(this));
+  gchar *id = chop_name(gtk_buildable_get_name(GTK_BUILDABLE(this)));
 
   printf("Widget: %s, id %s\n", gtk_widget_get_name(this), id ? id : "none");
 
   if (id && (parnum = blofeld_find_index(id)) >= 0) {
+    printf("has parameter\n");
     struct adjustor *adjustor = g_new(struct adjustor, 1);
 /*    g_object_get(this, "adjustment", &adjobj, NULL); */
-    printf("has parameter\n");
     adjustor->id = id;
     adjustor->adj = this;
     adjustor->parnum = parnum;
-    adjustors[parnum] = adjustor;
+    /* prepend is faster than append, and ok since we don't care about order */
+    adjustors[parnum] = g_list_prepend(adjustors[parnum], adjustor);
+
     if (GTK_IS_RANGE(this)) {
       struct param_properties props;
       GtkAdjustment *adj = gtk_range_get_adjustment(GTK_RANGE(this));
@@ -172,7 +220,7 @@ void create_adjustment (gpointer data, gpointer user_data)
         g_object_set(adj, "page-increment", (gdouble) 10 * props.ui_step, NULL);
         g_object_set(adj, "page-size", (gdouble) 0, NULL);
       } else
-        printf("Warning: GtkRange %s has no adjustment\n", gtk_widget_get_name(this));
+        printf("Warning: GtkRange %s has no adjustment\n", id);
       g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), adjustor);
     }
 
@@ -182,19 +230,22 @@ void create_adjustment (gpointer data, gpointer user_data)
       g_signal_connect(this, "toggled", G_CALLBACK(on_togglebutton_changed), adjustor);
   }
 
+  g_free(id);
+
   if (GTK_IS_CONTAINER(this)) {
      printf("It's a container\n");
-     add_adjustments(gtk_container_get_children(GTK_CONTAINER(this)), adjustors);
+     add_adjustors(gtk_container_get_children(GTK_CONTAINER(this)), adjustors);
   }
 }
 
-void add_adjustments (GList *widget_list, struct adjustor **adjustors)
+void add_adjustors (GList *widget_list, GList **adjustors)
 {
   g_list_foreach (widget_list, create_adjustment, adjustors);
 }
 
-void display_adjustment(struct adjustor *adjustor)
+void display_adjustor(gpointer data, gpointer user_data)
 {
+  struct adjustor *adjustor = data;
   GtkWidget *adj = adjustor->adj;
   
   if (GTK_IS_RANGE(adj)) {
@@ -217,15 +268,20 @@ void display_adjustment(struct adjustor *adjustor)
   }
 }
 
+void display_adjustors(GList *adjlist)
+{
+  g_list_foreach(adjlist, display_adjustor, NULL);
+}
+
 void
-create_adjustments_list (GtkWidget *top_widget)
+create_adjustors_list (GtkWidget *top_widget)
 {
   create_adjustment(top_widget, &adjustors);
 
   int i;
-  for (i = 0; i < sizeof(adjustors)/sizeof(struct adjustor *); i++) {
+  for (i = 0; i < sizeof(adjustors)/sizeof(adjustors[0]); i++) {
     if (adjustors[i])
-      display_adjustment(adjustors[i]);
+      display_adjustors(adjustors[i]);
   }
 }
 
@@ -253,7 +309,7 @@ main (int argc, char *argv[])
 #endif
   g_object_unref (G_OBJECT (builder));
 
-  create_adjustments_list(window);
+  create_adjustors_list(window);
 
   polls = midi_init_alsa();
   if (!polls)
