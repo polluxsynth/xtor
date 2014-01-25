@@ -145,8 +145,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 4">
-                    <property name="label" translatable="yes">4</property>
+                  <object class="GtkRadioButton" id="Buffer 3">
+                    <property name="label" translatable="yes">3</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -162,8 +162,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 3">
-                    <property name="label" translatable="yes">3</property>
+                  <object class="GtkRadioButton" id="Buffer 4">
+                    <property name="label" translatable="yes">4</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -958,7 +958,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="Osc 2 Shape Source1">
+                                      <object class="GtkComboBox" id="Osc 2 Shape Source">
                                         <property name="visible">True</property>
                                         <property name="model">modsource</property>
                                         <property name="active">0</property>
@@ -4176,10 +4176,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkTable" id="table7">
+                  <object class="GtkHBox" id="hbox40">
                     <property name="visible">True</property>
-                    <property name="n_rows">5</property>
-                    <property name="n_columns">5</property>
                     <child>
                       <placeholder/>
                     </child>
@@ -4187,77 +4185,1207 @@
                       <placeholder/>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkTable" id="table7">
+                        <property name="visible">True</property>
+                        <property name="n_rows">5</property>
+                        <property name="n_columns">5</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
                     </child>
                     <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
+                      <object class="GtkFrame" id="frame16">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">out</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment16">
+                            <property name="visible">True</property>
+                            <property name="xscale">0</property>
+                            <property name="yscale">0</property>
+                            <child>
+                              <object class="GtkTable" id="table18">
+                                <property name="visible">True</property>
+                                <property name="n_rows">16</property>
+                                <property name="n_columns">4</property>
+                                <child>
+                                  <object class="GtkLabel" id="label148">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes"> 1</property>
+                                  </object>
+                                  <packing>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 1 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext62"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 1 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 1 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext63"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label149">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes"> 2</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 2 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext64"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 2 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 2 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext65"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label150">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes"> 3</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">2</property>
+                                    <property name="bottom_attach">3</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 3 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext66"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">2</property>
+                                    <property name="bottom_attach">3</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 3 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">2</property>
+                                    <property name="bottom_attach">3</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 3 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext67"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">2</property>
+                                    <property name="bottom_attach">3</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label151">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes"> 4</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">3</property>
+                                    <property name="bottom_attach">4</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 4 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext68"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">3</property>
+                                    <property name="bottom_attach">4</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 4 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext69"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">3</property>
+                                    <property name="bottom_attach">4</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 4 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">3</property>
+                                    <property name="bottom_attach">4</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label152">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes"> 5</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">4</property>
+                                    <property name="bottom_attach">5</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 5 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext70"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">4</property>
+                                    <property name="bottom_attach">5</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 5 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">4</property>
+                                    <property name="bottom_attach">5</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 5 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext71"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">4</property>
+                                    <property name="bottom_attach">5</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label153">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes"> 6</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">5</property>
+                                    <property name="bottom_attach">6</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 6 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext72"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">5</property>
+                                    <property name="bottom_attach">6</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 6 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">5</property>
+                                    <property name="bottom_attach">6</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 6 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext73"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">5</property>
+                                    <property name="bottom_attach">6</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label154">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes"> 7</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">6</property>
+                                    <property name="bottom_attach">7</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 7 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext74"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">6</property>
+                                    <property name="bottom_attach">7</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 7 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">6</property>
+                                    <property name="bottom_attach">7</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 7 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext75"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">6</property>
+                                    <property name="bottom_attach">7</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 8 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext76"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">7</property>
+                                    <property name="bottom_attach">8</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label155">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes"> 8</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">7</property>
+                                    <property name="bottom_attach">8</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 8 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">7</property>
+                                    <property name="bottom_attach">8</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 8 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext77"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">7</property>
+                                    <property name="bottom_attach">8</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label156">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes"> 9</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">8</property>
+                                    <property name="bottom_attach">9</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 9 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext78"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">8</property>
+                                    <property name="bottom_attach">9</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 9 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">8</property>
+                                    <property name="bottom_attach">9</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 9 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext79"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">8</property>
+                                    <property name="bottom_attach">9</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label157">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">10</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">9</property>
+                                    <property name="bottom_attach">10</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 10 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext80"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">9</property>
+                                    <property name="bottom_attach">10</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 10 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">9</property>
+                                    <property name="bottom_attach">10</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 10 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext81"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">9</property>
+                                    <property name="bottom_attach">10</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 11 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext82"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">10</property>
+                                    <property name="bottom_attach">11</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label158">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">11</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">10</property>
+                                    <property name="bottom_attach">11</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label159">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">12</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">11</property>
+                                    <property name="bottom_attach">12</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label160">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">13</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">12</property>
+                                    <property name="bottom_attach">13</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label161">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">14</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">13</property>
+                                    <property name="bottom_attach">14</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label162">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">15</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">14</property>
+                                    <property name="bottom_attach">15</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label163">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">16</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">15</property>
+                                    <property name="bottom_attach">16</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 16 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext83"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">11</property>
+                                    <property name="bottom_attach">12</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 16 Source1">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext84"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">15</property>
+                                    <property name="bottom_attach">16</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 15 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext85"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">14</property>
+                                    <property name="bottom_attach">15</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 14 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext86"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">13</property>
+                                    <property name="bottom_attach">14</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 13 Source">
+                                    <property name="visible">True</property>
+                                    <property name="model">modsource</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext87"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">12</property>
+                                    <property name="bottom_attach">13</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 11 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">10</property>
+                                    <property name="bottom_attach">11</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 12 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">11</property>
+                                    <property name="bottom_attach">12</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 13 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">12</property>
+                                    <property name="bottom_attach">13</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 14 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">13</property>
+                                    <property name="bottom_attach">14</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 15 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">14</property>
+                                    <property name="bottom_attach">15</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Modulation 16 Amount">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">15</property>
+                                    <property name="bottom_attach">16</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 11 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext88"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">10</property>
+                                    <property name="bottom_attach">11</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 12 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext89"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">11</property>
+                                    <property name="bottom_attach">12</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 13 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext90"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">12</property>
+                                    <property name="bottom_attach">13</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 14 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext91"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">13</property>
+                                    <property name="bottom_attach">14</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 15 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext92"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">14</property>
+                                    <property name="bottom_attach">15</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Modulation 16 Destination">
+                                    <property name="visible">True</property>
+                                    <property name="model">moddest</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext93"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">15</property>
+                                    <property name="bottom_attach">16</property>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label147">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Modulation&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">3</property>
+                      </packing>
                     </child>
                     <child>
                       <placeholder/>
                     </child>
                   </object>
                   <packing>
-                    <property name="position">2</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child type="tab">
@@ -4903,6 +6031,176 @@
       </row>
       <row>
         <col id="0" translatable="yes">A env</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="moddest">
+    <columns>
+      <!-- column-name moddest -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Pitch</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 1 Pitch</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 1 FM</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 1 Shape</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 2 Pitch</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 2 FM</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 2 Shape</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 3 Pitch</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 3 FM</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 3 Shape</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 1 Lvl</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 1 Bal</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 2 Lvl</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 2 Bal</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 3 Lvl</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Osc 3 Bal</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">RMod Lvl</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">RMod Bal</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Noise Lvl</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Noise Bal</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Filt 1 Cutoff</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Filt 1 Res</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Filt 1 FM</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Filt 1 Drive</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Filt 1 Pan</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Filt 2 Cutoff</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Filt 2 Res</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Filt 2 FM</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Filt 2 Drive</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Filt 2 Pan</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Volume</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LFO 1 Freq</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LFO 2 Freq</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LFO 3 Freq</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">FEnv Attack</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">FEnv Decay</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">FEnv Sustain</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">FEnv Release</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">AEnv Attack</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">AEnv Decay</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">AEnv Sustain</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">AEnv Release</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Env 3 Attack</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Env 3 Decay</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Env 3 Sustain</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Env 3 Release</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Env 4 Attack</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Env 4 Decay</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Env 4 Sustain</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Env 4 Release</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">M1 Amount</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">M2 Amount</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">M3 Amount</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">M4 Amount</col>
       </row>
     </data>
   </object>
