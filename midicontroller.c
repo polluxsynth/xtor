@@ -60,18 +60,25 @@ update_adjustor(gpointer data, gpointer user_data)
   }
 }
 
+void update_adjustors(struct adjustor *adjustor, int value,
+                      GtkWidget *updating_widget)
+{
+  struct adj_update adj_update = { .widget = updating_widget, 
+                                   .value = value };
+
+  block_updates = 1;
+  g_list_foreach(adjustor->widgets, update_adjustor, &adj_update);
+  block_updates = 0;
+}
+
 /* Called whenever parameter change arrives via MIDI */
 void
 param_changed(int parnum, int buffer_no, int value, void *ref)
 {
-  struct adj_update adj_update = { .widget = NULL, .value = value };
   if (buffer_no == current_buffer_no) {
     struct adjustor *adjustor = adjustors[parnum];
-    if (adjustor) {
-      block_updates = 1;
-      g_list_foreach(adjustor->widgets, update_adjustor, &adj_update);
-      block_updates = 0;
-    }
+    if (adjustor)
+      update_adjustors(adjustor, value, NULL);
   }
 }
 
@@ -85,7 +92,7 @@ static void update_parameter(struct adjustor *adjustor, int value, GtkWidget *wi
 
   blofeld_update_param(adjustor->parnum, current_buffer_no, value);
 
-  g_list_foreach(adjustor->widgets, update_adjustor, &adj_update);
+  update_adjustors(adjustor, value, widget);
 }
 
 void
