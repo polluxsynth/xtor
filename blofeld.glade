@@ -8946,4 +8946,423 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="arpmode">
+    <columns>
+      <!-- column-name mode -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">off</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">on</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">One Shot</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Hold</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="arppat">
+    <columns>
+      <!-- column-name pattern -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">off</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">user</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">4</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">5</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">6</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">7</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">8</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">9</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">10</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">11</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">12</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">13</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">14</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">15</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="arpclock">
+    <columns>
+      <!-- column-name clock -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">1/96</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/48</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/32</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/16T</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/32.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/16</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/8T</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/16.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/8</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/4T</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/8.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/4</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/2T</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/4.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/1T</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/2.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1 bar</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1.5 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2.5 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3.5 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">4 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">5 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">6 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">7 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">8 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">9 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">10 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">12 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">14 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">16 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">18 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">20 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">24 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">28 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">32 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">36 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">40 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">48 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">56 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">64 bars</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="arpdir">
+    <columns>
+      <!-- column-name direction -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Up</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Down</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Alt Up</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Alt Down</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="arpsortord">
+    <columns>
+      <!-- column-name order -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">played</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">reversed</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Key lo-&gt;hi</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Key hi-&gt;lo</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Vel lo-&gt;hi</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Vel hi-&gt;lo</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="arpvel">
+    <columns>
+      <!-- column-name volmode -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Each</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">First</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Last</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">32</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">64</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">100</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">127</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="arpstep">
+    <columns>
+      <!-- column-name type -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">normal</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">pause</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">prev</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">first</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">last</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">f+l</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">chord</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">random</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="arpacc">
+    <columns>
+      <!-- column-name accent -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">silent</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">/4</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">/2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">/2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">*1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">*2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">*3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">*4</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="arptim">
+    <columns>
+      <!-- column-name timing -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">random</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">-3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">-2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">-1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">+1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">+2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">+3</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="arplen">
+    <columns>
+      <!-- column-name length -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">legato</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">-3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">-2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">-1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">+1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">+2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">+3</col>
+      </row>
+    </data>
+  </object>
 </interface>
