@@ -84,7 +84,14 @@ struct blofeld_bitmap_param allocation = { "Allocation Mode", NULL, 0x01, 0 };
 #define BLOFELD_PARAMS_ALL (sizeof(blofeld_params) / \
                             sizeof(struct blofeld_param))
 
-/* The Parameter Definiton List */
+/* The Parameter Definition List */
+/* Note: Owing to the design of the UI, in order to have the same parameter
+ * appear in more than one place, parameters names cannot end with a digit,
+ * This is because glade suffices widget names with numbers when copying,
+ * which we filter out in the main ui driver in order to have widgets
+ * with the same base name (i.e. without the number suffix) control the
+ * same parameter. 
+ */
 struct blofeld_param blofeld_params[] = {
   /* name, limits, child, bm_param */
   { "reserved", &norm, NULL, NULL }, /* 0 */
@@ -290,8 +297,8 @@ struct blofeld_param blofeld_params[] = {
   { "Filter Envelope Attack Level", &norm, NULL, NULL },
   { "Filter Envelope Decay", &norm, NULL, NULL },
   { "Filter Envelope Sustain", &norm, NULL, NULL },
-  { "Filter Envelope Decay 2", &norm, NULL, NULL },
-  { "Filter Envelope Sustain 2", &norm, NULL, NULL },
+  { "Filter Envelope Decay Two", &norm, NULL, NULL },
+  { "Filter Envelope Sustain Two", &norm, NULL, NULL },
   { "Filter Envelope Release", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
@@ -302,8 +309,8 @@ struct blofeld_param blofeld_params[] = {
   { "Amplifier Envelope Attack Level", &norm, NULL, NULL },
   { "Amplifier Envelope Decay", &norm, NULL, NULL },
   { "Amplifier Envelope Sustain", &norm, NULL, NULL },
-  { "Amplifier Envelope Decay 2", &norm, NULL, NULL },
-  { "Amplifier Envelope Sustain 2", &norm, NULL, NULL },
+  { "Amplifier Envelope Decay Two", &norm, NULL, NULL },
+  { "Amplifier Envelope Sustain Two", &norm, NULL, NULL },
   { "Amplifier Envelope Release", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
@@ -314,8 +321,8 @@ struct blofeld_param blofeld_params[] = {
   { "Envelope 3 Attack Level", &norm, NULL, NULL },
   { "Envelope 3 Decay", &norm, NULL, NULL },
   { "Envelope 3 Sustain", &norm, NULL, NULL },
-  { "Envelope 3 Decay 2", &norm, NULL, NULL },
-  { "Envelope 3 Sustain 2", &norm, NULL, NULL },
+  { "Envelope 3 Decay Two", &norm, NULL, NULL },
+  { "Envelope 3 Sustain Two", &norm, NULL, NULL },
   { "Envelope 3 Release", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
@@ -326,8 +333,8 @@ struct blofeld_param blofeld_params[] = {
   { "Envelope 4 Attack Level", &norm, NULL, NULL },
   { "Envelope 4 Decay", &norm, NULL, NULL },
   { "Envelope 4 Sustain", &norm, NULL, NULL },
-  { "Envelope 4 Decay 2", &norm, NULL, NULL },
-  { "Envelope 4 Sustain 2", &norm, NULL, NULL },
+  { "Envelope 4 Decay Two", &norm, NULL, NULL },
+  { "Envelope 4 Sustain Two", &norm, NULL, NULL },
   { "Envelope 4 Release", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
