@@ -145,8 +145,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 4">
-                    <property name="label" translatable="yes">4</property>
+                  <object class="GtkRadioButton" id="Buffer 3">
+                    <property name="label" translatable="yes">3</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -162,8 +162,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 3">
-                    <property name="label" translatable="yes">3</property>
+                  <object class="GtkRadioButton" id="Buffer 4">
+                    <property name="label" translatable="yes">4</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -3610,7 +3610,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkCheckButton" id="Filter Envelope Mode extra">
+                                              <object class="GtkCheckButton" id="Filter Envelope Trig">
                                                 <property name="label" translatable="yes">Single Trig</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
@@ -3902,7 +3902,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkCheckButton" id="Amplifier Envelope Mode extra">
+                                              <object class="GtkCheckButton" id="Amplifier Envelope Trig">
                                                 <property name="label" translatable="yes">Single Trig</property>
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
@@ -5291,7 +5291,7 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkCheckButton" id="Filter Envelope Mode extra1">
+                                          <object class="GtkCheckButton" id="Filter Envelope Trig1">
                                             <property name="label" translatable="yes">Single Trig</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
@@ -5587,7 +5587,7 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkCheckButton" id="Amplifier Envelope Mode extra2">
+                                          <object class="GtkCheckButton" id="Amplifier Envelope Trig2">
                                             <property name="label" translatable="yes">Single Trig</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
@@ -5885,7 +5885,7 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkCheckButton" id="Envelope 3 Mode extra">
+                                          <object class="GtkCheckButton" id="Envelope 3 Trig">
                                             <property name="label" translatable="yes">Single Trig</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
@@ -5960,60 +5960,6 @@
                             <property name="top_attach">2</property>
                             <property name="bottom_attach">3</property>
                           </packing>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
                         </child>
                         <child>
                           <object class="GtkFrame" id="frame20">
@@ -6237,7 +6183,7 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkCheckButton" id="Envelope 4 Mode extra1">
+                                          <object class="GtkCheckButton" id="Envelope 4 Trig">
                                             <property name="label" translatable="yes">Single Trig</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
@@ -6312,6 +6258,60 @@
                             <property name="top_attach">3</property>
                             <property name="bottom_attach">4</property>
                           </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
                         </child>
                       </object>
                       <packing>

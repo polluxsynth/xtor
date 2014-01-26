@@ -81,6 +81,15 @@ struct limits threebit = { 0, 7 };
 struct blofeld_bitmap_param unison = { "Allocation Mode", NULL, 0x70, 4 };
 struct blofeld_bitmap_param allocation = { "Allocation Mode", NULL, 0x01, 0 };
 
+struct blofeld_bitmap_param fenvmode = { "Filter Envelope Trig+Mode", NULL, 0x07, 0 };
+struct blofeld_bitmap_param fenvtrig = { "Filter Envelope Trig+Mode", NULL, 0x20, 5 };
+struct blofeld_bitmap_param aenvmode = { "Amplifier Envelope Trig+Mode", NULL, 0x07, 0 };
+struct blofeld_bitmap_param aenvtrig = { "Amplifier Envelope Trig+Mode", NULL, 0x20, 5 };
+struct blofeld_bitmap_param env3mode = { "Envelope 3 Trig+Mode", NULL, 0x07, 0 };
+struct blofeld_bitmap_param env4trig = { "Envelope 4 Trig+Mode", NULL, 0x20, 5 };
+struct blofeld_bitmap_param env4mode = { "Envelope 4 Trig+Mode", NULL, 0x07, 0 };
+struct blofeld_bitmap_param env3trig = { "Envelope 3 Trig+Mode", NULL, 0x20, 5 };
+
 #define BLOFELD_PARAMS_ALL (sizeof(blofeld_params) / \
                             sizeof(struct blofeld_param))
 
@@ -290,7 +299,7 @@ struct blofeld_param blofeld_params[] = {
   { "reserved", &norm, NULL, NULL },
   { "LFO 3 Keytrack", &keytrack, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
-  { "Filter Envelope Mode", &envmode, NULL, NULL }, /* 196 */
+  { "Filter Envelope Trig+Mode", &envmode, NULL, NULL }, /* 196 */
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Filter Envelope Attack", &norm, NULL, NULL },
@@ -302,7 +311,7 @@ struct blofeld_param blofeld_params[] = {
   { "Filter Envelope Release", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
-  { "Amplifier Envelope Mode", &envmode, NULL, NULL }, /* 208 */
+  { "Amplifier Envelope Trig+Mode", &envmode, NULL, NULL }, /* 208 */
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Amplifier Envelope Attack", &norm, NULL, NULL },
@@ -314,7 +323,7 @@ struct blofeld_param blofeld_params[] = {
   { "Amplifier Envelope Release", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
-  { "Envelope 3 Mode", &envmode, NULL, NULL }, /* 220 */
+  { "Envelope 3 Trig+Mode", &envmode, NULL, NULL }, /* 220 */
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Envelope 3 Attack", &norm, NULL, NULL },
@@ -326,7 +335,7 @@ struct blofeld_param blofeld_params[] = {
   { "Envelope 3 Release", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
-  { "Envelope 4 Mode", &envmode, NULL, NULL }, /* 232 */
+  { "Envelope 4 Trig+Mode", &envmode, NULL, NULL }, /* 232 */
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "Envelope 4 Attack", &norm, NULL, NULL },
@@ -342,6 +351,14 @@ struct blofeld_param blofeld_params[] = {
   /* Bitmap parameters */
   { "Unison", &threebit, NULL, &unison },
   { "Allocation", &onoff, NULL, &allocation },
+  { "Filter Envelope Mode", &envmode, NULL, &fenvmode },
+  { "Filter Envelope Trig", &onoff, NULL, &fenvtrig },
+  { "Amplifier Envelope Mode", &envmode, NULL, &aenvmode },
+  { "Amplifier Envelope Trig", &onoff, NULL, &aenvtrig },
+  { "Envelope 3 Mode", &envmode, NULL, &env3mode },
+  { "Envelope 3 Trig", &onoff, NULL, &env3trig },
+  { "Envelope 4 Mode", &envmode, NULL, &env4mode },
+  { "Envelope 4 Trig", &onoff, NULL, &env4trig },
   { "", NULL, NULL, NULL }
 };
 
