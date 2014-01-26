@@ -65,6 +65,7 @@ struct limits semitone = { -12, 12 };
 struct limits keytrack = { -200, 196 };
 struct limits fmsource = { 0, 11 };
 struct limits modsource = { 0, 30 };
+struct limits moddest = { 0, 53 };
 struct limits filterdrive = { 0, 12 };
 struct limits fxdrive = { 0, 11 };
 struct limits fx1type = { 0, 5 };
@@ -76,6 +77,7 @@ struct limits wave = { 0, 72 };
 struct limits wave3 = { 0, 4 };
 struct limits onoff = { 0, 1 };
 struct limits threebit = { 0, 7 };
+struct limits modop = { 0, 7 };
 
 /* Bitmapped parameters additional structures */
 struct blofeld_bitmap_param unison = { "Allocation Mode", NULL, 0x70, 4 };
@@ -92,6 +94,19 @@ struct blofeld_bitmap_param env3trig = { "Envelope 3 Trig+Mode", NULL, 0x20, 5 }
 
 #define BLOFELD_PARAMS_ALL (sizeof(blofeld_params) / \
                             sizeof(struct blofeld_param))
+
+/* Some definitions for tedious parameters that occur multiple times */
+
+#define MODIFIER(N) \
+  { "Modifier " N " Source A", &modsource, NULL, NULL }, \
+  { "Modifier " N " Source B", &modsource, NULL, NULL }, \
+  { "Modifier " N " Operation", &modop, NULL, NULL }, \
+  { "Modifier " N " Constant", &bipolar, NULL, NULL }
+
+#define MODULATION(N) \
+  { "Modulation " N " Source", &modsource, NULL, NULL }, \
+  { "Modulation " N " Destination", &moddest, NULL, NULL }, \
+  { "Modulation " N " Amount", &bipolar, NULL, NULL } \
 
 /* The Parameter Definition List */
 /* Note: Owing to the design of the UI, in order to have the same parameter
@@ -347,7 +362,30 @@ struct blofeld_param blofeld_params[] = {
   { "Envelope 4 Release", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
   { "reserved", &norm, NULL, NULL },
-  /* 244: More to come ... */
+  { "reserved", &norm, NULL, NULL },
+  MODIFIER("1"), /* 245 */
+  MODIFIER("2"),
+  MODIFIER("3"),
+  MODIFIER("4"),
+  MODULATION("1"), /* 261 */
+  MODULATION("2"),
+  MODULATION("3"),
+  MODULATION("4"),
+  MODULATION("5"),
+  MODULATION("6"),
+  MODULATION("7"),
+  MODULATION("8"),
+  MODULATION("9"),
+  MODULATION("10"),
+  MODULATION("11"),
+  MODULATION("12"),
+  MODULATION("13"),
+  MODULATION("14"),
+  MODULATION("15"),
+  MODULATION("16"),
+  { "reserved", &norm, NULL, NULL },
+  { "reserved", &norm, NULL, NULL },
+  /* 311: More to come ... */
   /* Bitmap parameters */
   { "Unison", &threebit, NULL, &unison },
   { "Allocation", &onoff, NULL, &allocation },
