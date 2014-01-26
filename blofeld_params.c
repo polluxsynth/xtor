@@ -78,6 +78,18 @@ struct limits wave3 = { 0, 4 };
 struct limits onoff = { 0, 1 };
 struct limits threebit = { 0, 7 };
 struct limits modop = { 0, 7 };
+struct limits arpmode = { 0, 3 };
+struct limits arppat = { 0, 15 };
+struct limits arpclock = { 0, 42 };
+struct limits arplength = { 0, 43 };
+struct limits arpoct = { 1, 10 };
+struct limits arpdir = { 0, 3 };
+struct limits arpsortord = { 0, 5 };
+struct limits arpvel = { 0, 6 };
+struct limits arpplen = { 1, 16 };
+struct limits arptempo = { 40, 300 };
+struct limits ascii = { 32, 127 };
+struct limits category = { 0, 12 };
 
 /* Bitmapped parameters additional structures */
 struct blofeld_bitmap_param unison = { "Allocation Mode", NULL, 0x70, 4 };
@@ -92,33 +104,66 @@ struct blofeld_bitmap_param env4trig = { "Envelope 4 Trig+Mode", NULL, 0x20, 5 }
 struct blofeld_bitmap_param env4mode = { "Envelope 4 Trig+Mode", NULL, 0x07, 0 };
 struct blofeld_bitmap_param env3trig = { "Envelope 3 Trig+Mode", NULL, 0x20, 5 };
 
+#define ARP_STEP_BITMAPS(N) \
+struct blofeld_bitmap_param arpstep ## N = { "Arp Pattern StGlAcc " #N, NULL, 0x70, 4 }; \
+struct blofeld_bitmap_param arpglide ## N = { "Arp Pattern StGlAcc " #N, NULL, 0x08, 3 }; \
+struct blofeld_bitmap_param arpacc ## N = { "Arp Pattern StGlAcc " #N, NULL, 0x07, 0 }; \
+struct blofeld_bitmap_param arplen ## N = { "Arp Pattern TimLen " #N, NULL, 0x70, 4 }; \
+struct blofeld_bitmap_param arptim ## N = { "Arp Pattern TimLen " #N, NULL, 0x07, 0 }
+
+ARP_STEP_BITMAPS(1);
+ARP_STEP_BITMAPS(2);
+ARP_STEP_BITMAPS(3);
+ARP_STEP_BITMAPS(4);
+ARP_STEP_BITMAPS(5);
+ARP_STEP_BITMAPS(6);
+ARP_STEP_BITMAPS(7);
+ARP_STEP_BITMAPS(8);
+ARP_STEP_BITMAPS(9);
+ARP_STEP_BITMAPS(10);
+ARP_STEP_BITMAPS(11);
+ARP_STEP_BITMAPS(12);
+ARP_STEP_BITMAPS(13);
+ARP_STEP_BITMAPS(14);
+ARP_STEP_BITMAPS(15);
+ARP_STEP_BITMAPS(16);
+
+
 #define BLOFELD_PARAMS_ALL (sizeof(blofeld_params) / \
-                            sizeof(struct blofeld_param))
+                            sizeof(blofeld_params[0]))
 
 /* Some definitions for tedious parameters that occur multiple times */
 
 #define MODIFIER(N) \
-  { "Modifier " N " Source A", &modsource, NULL, NULL }, \
-  { "Modifier " N " Source B", &modsource, NULL, NULL }, \
-  { "Modifier " N " Operation", &modop, NULL, NULL }, \
-  { "Modifier " N " Constant", &bipolar, NULL, NULL }
+  { "Modifier " #N " Source A", &modsource, NULL, NULL }, \
+  { "Modifier " #N " Source B", &modsource, NULL, NULL }, \
+  { "Modifier " #N " Operation", &modop, NULL, NULL }, \
+  { "Modifier " #N " Constant", &bipolar, NULL, NULL }
 
 #define MODULATION(N) \
-  { "Modulation " N " Source", &modsource, NULL, NULL }, \
-  { "Modulation " N " Destination", &moddest, NULL, NULL }, \
-  { "Modulation " N " Amount", &bipolar, NULL, NULL } \
+  { "Modulation " #N " Source", &modsource, NULL, NULL }, \
+  { "Modulation " #N " Destination", &moddest, NULL, NULL }, \
+  { "Modulation " #N " Amount", &bipolar, NULL, NULL } \
+
+#define ARPSTEP(N) \
+  { "Arp Step " #N "Type", &threebit, NULL, &arpstep ## N }, \
+  { "Arp Step " #N "Glide", &onoff, NULL, &arpglide ## N }, \
+  { "Arp Step " #N "Accent", &threebit, NULL, &arpacc ## N }, \
+  { "Arp Step " #N "Timing", &threebit, NULL, &arptim ## N }, \
+  { "Arp Step " #N "Length", &threebit, NULL, &arplen ## N }
 
 /* The Parameter Definition List */
 /* Note: Owing to the design of the UI, in order to have the same parameter
- * appear in more than one place, parameters names cannot end with a digit,
- * This is because glade suffices widget names with numbers when copying,
+ * appear in more than one place, parameters who are references by the UI
+ * cannot have names that end with a digit,
+ * This is because glade suffixes widget names with numbers when copying,
  * which we filter out in the main ui driver in order to have widgets
- * with the same base name (i.e. without the number suffix) control the
+ * with the same base name (i.e. without the number suffix) that control the
  * same parameter. 
  */
 struct blofeld_param blofeld_params[] = {
   /* name, limits, child, bm_param */
-  { "reserved", &norm, NULL, NULL }, /* 0 */
+  { "reserved", NULL, NULL, NULL }, /* 0 */
   { "Osc 1 Octave", &oct, NULL, NULL },
   { "Osc 1 Semitone", &semitone, NULL, NULL },
   { "Osc 1 Detune", &bipolar, NULL, NULL },
@@ -130,10 +175,10 @@ struct blofeld_param blofeld_params[] = {
   { "Osc 1 Waveshape", &norm, NULL, NULL },
   { "Osc 1 Shape Source", &modsource, NULL, NULL },
   { "Osc 1 Shape Amount", &bipolar, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Osc 1 Limit WT", &onoff, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Osc 1 Brilliance", &norm, NULL, NULL }, /* 16 */
   { "Osc 2 Octave", &oct, NULL, NULL },
   { "Osc 2 Semitone", &semitone, NULL, NULL },
@@ -146,10 +191,10 @@ struct blofeld_param blofeld_params[] = {
   { "Osc 2 Waveshape", &norm, NULL, NULL },
   { "Osc 2 Shape Source", &modsource, NULL, NULL },
   { "Osc 2 Shape Amount", &bipolar, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Osc 2 Limit WT", &onoff, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Osc 2 Brilliance", &norm, NULL, NULL }, /* 32 */
   { "Osc 3 Octave", &oct, NULL, NULL },
   { "Osc 3 Semitone", &semitone, NULL, NULL },
@@ -162,23 +207,23 @@ struct blofeld_param blofeld_params[] = {
   { "Osc 3 Waveshape", &norm, NULL, NULL },
   { "Osc 3 Shape Source", &modsource, NULL, NULL },
   { "Osc 3 Shape Amount", &bipolar, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Osc 3 Limit WT", &onoff, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Osc 3 Brilliance", &norm, NULL, NULL }, /* 48 */
   { "Osc 2 Sync to Osc 3", &norm, NULL, NULL },
   { "Osc Pitch Source", &norm, NULL, NULL },
   { "Osc Pitch Amount", &bipolar, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Glide", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Glide Mode", &norm, NULL, NULL },
   { "Glide Rate", &norm, NULL, NULL },
   { "Allocation Mode", NULL, NULL, NULL },
   { "Unison Detune", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Osc 1 Level", &norm, NULL, NULL },
   { "Osc 1 Balance", &bipolar, NULL, NULL },
   { "Osc 2 Level", &norm, NULL, NULL },
@@ -188,22 +233,22 @@ struct blofeld_param blofeld_params[] = {
   { "Noise Level", &norm, NULL, NULL },
   { "Noise Balance", &bipolar, NULL, NULL },
   { "Noise Color", &bipolar, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Ringmod Level", &norm, NULL, NULL },
   { "Ringmod Balance", &bipolar, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Filter 1 Type", &norm, NULL, NULL }, /* 77 */
   { "Filter 1 Cutoff", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Filter 1 Resonance", &norm, NULL, NULL },
   { "Filter 1 Drive", &norm, NULL, NULL },
   { "Filter 1 Drive Curve", &filterdrive, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Filter 1 Keytrack", &keytrack, NULL, NULL },
   { "Filter 1 Env Amount", &bipolar, NULL, NULL },
   { "Filter 1 Env Velocity", &bipolar, NULL, NULL },
@@ -214,16 +259,16 @@ struct blofeld_param blofeld_params[] = {
   { "Filter 1 Pan", &bipolar, NULL, NULL },
   { "Filter 1 Pan Source", &norm, NULL, NULL },
   { "Filter 1 Pan Amount", &bipolar, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Filter 2 Type", &norm, NULL, NULL }, /* 97 */
   { "Filter 2 Cutoff", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Filter 2 Resonance", &norm, NULL, NULL },
   { "Filter 2 Drive", &norm, NULL, NULL },
   { "Filter 2 Drive Curve", &filterdrive, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Filter 2 Keytrack", &keytrack, NULL, NULL },
   { "Filter 2 Env Amount", &bipolar, NULL, NULL },
   { "Filter 2 Env Velocity", &bipolar, NULL, NULL },
@@ -234,18 +279,18 @@ struct blofeld_param blofeld_params[] = {
   { "Filter 2 Pan", &bipolar, NULL, NULL },
   { "Filter 2 Pan Source", &norm, NULL, NULL },
   { "Filter 2 Pan Amount", &bipolar, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Filter Routing", &onoff, NULL, NULL }, /* 117 */
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Amplifier Volume", &norm, NULL, NULL }, /* 121 */
   { "Amplifier Velocity", &bipolar, NULL, NULL },
   { "Amplifier Mod Source", &norm, NULL, NULL },
   { "Amplifier Mod Amount", &bipolar, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Effect 1 Type", &fx1type, NULL, NULL }, /* 128 */
   { "Effect 1 Mix", &norm, NULL, NULL },
   { "Effect 1 Parameter 1", &norm, NULL, NULL },
@@ -280,43 +325,43 @@ struct blofeld_param blofeld_params[] = {
   { "Effect 2 Parameter 14", &norm, NULL, NULL },
   { "LFO 1 Shape", &lfoshape, NULL, NULL }, /* 160 */
   { "LFO 1 Speed", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "LFO 1 Sync", &onoff, NULL, NULL },
   { "LFO 1 Clocked", &onoff, NULL, NULL },
   { "LFO 1 Phase", &lfophase, NULL, NULL },
   { "LFO 1 Delay", &norm, NULL, NULL },
   { "LFO 1 Fade", &bipolar, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "LFO 1 Keytrack", &keytrack, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "LFO 2 Shape", &lfoshape, NULL, NULL }, /* 172 */
   { "LFO 2 Speed", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "LFO 2 Sync", &onoff, NULL, NULL },
   { "LFO 2 Clocked", &onoff, NULL, NULL },
   { "LFO 2 Phase", &lfophase, NULL, NULL },
   { "LFO 2 Delay", &norm, NULL, NULL },
   { "LFO 2 Fade", &bipolar, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "LFO 2 Keytrack", &keytrack, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "LFO 3 Shape", &lfoshape, NULL, NULL }, /* 184 */
   { "LFO 3 Speed", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "LFO 3 Sync", &onoff, NULL, NULL },
   { "LFO 3 Clocked", &onoff, NULL, NULL },
   { "LFO 3 Phase", &lfophase, NULL, NULL },
   { "LFO 3 Delay", &norm, NULL, NULL },
   { "LFO 3 Fade", &bipolar, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "LFO 3 Keytrack", &keytrack, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Filter Envelope Trig+Mode", &envmode, NULL, NULL }, /* 196 */
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Filter Envelope Attack", &norm, NULL, NULL },
   { "Filter Envelope Attack Level", &norm, NULL, NULL },
   { "Filter Envelope Decay", &norm, NULL, NULL },
@@ -324,11 +369,11 @@ struct blofeld_param blofeld_params[] = {
   { "Filter Envelope Decay Two", &norm, NULL, NULL },
   { "Filter Envelope Sustain Two", &norm, NULL, NULL },
   { "Filter Envelope Release", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Amplifier Envelope Trig+Mode", &envmode, NULL, NULL }, /* 208 */
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Amplifier Envelope Attack", &norm, NULL, NULL },
   { "Amplifier Envelope Attack Level", &norm, NULL, NULL },
   { "Amplifier Envelope Decay", &norm, NULL, NULL },
@@ -336,11 +381,11 @@ struct blofeld_param blofeld_params[] = {
   { "Amplifier Envelope Decay Two", &norm, NULL, NULL },
   { "Amplifier Envelope Sustain Two", &norm, NULL, NULL },
   { "Amplifier Envelope Release", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Envelope 3 Trig+Mode", &envmode, NULL, NULL }, /* 220 */
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Envelope 3 Attack", &norm, NULL, NULL },
   { "Envelope 3 Attack Level", &norm, NULL, NULL },
   { "Envelope 3 Decay", &norm, NULL, NULL },
@@ -348,11 +393,11 @@ struct blofeld_param blofeld_params[] = {
   { "Envelope 3 Decay Two", &norm, NULL, NULL },
   { "Envelope 3 Sustain Two", &norm, NULL, NULL },
   { "Envelope 3 Release", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Envelope 4 Trig+Mode", &envmode, NULL, NULL }, /* 232 */
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "Envelope 4 Attack", &norm, NULL, NULL },
   { "Envelope 4 Attack Level", &norm, NULL, NULL },
   { "Envelope 4 Decay", &norm, NULL, NULL },
@@ -360,32 +405,103 @@ struct blofeld_param blofeld_params[] = {
   { "Envelope 4 Decay Two", &norm, NULL, NULL },
   { "Envelope 4 Sustain Two", &norm, NULL, NULL },
   { "Envelope 4 Release", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  MODIFIER("1"), /* 245 */
-  MODIFIER("2"),
-  MODIFIER("3"),
-  MODIFIER("4"),
-  MODULATION("1"), /* 261 */
-  MODULATION("2"),
-  MODULATION("3"),
-  MODULATION("4"),
-  MODULATION("5"),
-  MODULATION("6"),
-  MODULATION("7"),
-  MODULATION("8"),
-  MODULATION("9"),
-  MODULATION("10"),
-  MODULATION("11"),
-  MODULATION("12"),
-  MODULATION("13"),
-  MODULATION("14"),
-  MODULATION("15"),
-  MODULATION("16"),
-  { "reserved", &norm, NULL, NULL },
-  { "reserved", &norm, NULL, NULL },
-  /* 311: More to come ... */
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  MODIFIER(1), /* 245 */
+  MODIFIER(2),
+  MODIFIER(3),
+  MODIFIER(4),
+  MODULATION(1), /* 261 */
+  MODULATION(2),
+  MODULATION(3),
+  MODULATION(4),
+  MODULATION(5),
+  MODULATION(6),
+  MODULATION(7),
+  MODULATION(8),
+  MODULATION(9),
+  MODULATION(10),
+  MODULATION(11),
+  MODULATION(12),
+  MODULATION(13),
+  MODULATION(14),
+  MODULATION(15),
+  MODULATION(16),
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "Arpeggiator Mode", &arpmode, NULL, NULL }, /* 311 */
+  { "Arpeggiator Pattern", &arppat, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "Arpeggiator Clock", &arpclock, NULL, NULL },
+  { "Arpeggiator Length", &arplength, NULL, NULL },
+  { "Arpeggiator Octave", &arpoct, NULL, NULL },
+  { "Arpeggiator Direction", &arpdir, NULL, NULL },
+  { "Arpeggiator Sort Order", &arpsortord, NULL, NULL },
+  { "Arpeggiator Arp Velocity", &arpvel, NULL, NULL },
+  { "Arpeggiator Timing Factor", &norm, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "Arpeggiator Ptn Reset", &onoff, NULL, NULL },
+  { "Arpeggiator Ptn Length", &arpplen, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "Arpeggiator Tempo", &arptempo, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 1", NULL, NULL, NULL }, /* 327 */
+  { "Arpeggiator Pattern StGlAcc 2", NULL, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 3", NULL, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 4", NULL, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 5", NULL, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 6", NULL, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 7", NULL, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 8", NULL, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 9", NULL, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 10", NULL, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 11", NULL, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 12", NULL, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 13", NULL, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 14", NULL, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 15", NULL, NULL, NULL },
+  { "Arpeggiator Pattern StGlAcc 16", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 1", NULL, NULL, NULL }, /* 343 */
+  { "Arpeggiator Pattern TimLen 2", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 3", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 4", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 5", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 6", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 7", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 8", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 9", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 10", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 11", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 12", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 13", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 14", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 15", NULL, NULL, NULL },
+  { "Arpeggiator Pattern TimLen 16", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL }, /* 359 */
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "Name Char 1", &ascii, NULL, NULL },
+  { "Name Char 2", &ascii, NULL, NULL },
+  { "Name Char 3", &ascii, NULL, NULL },
+  { "Name Char 4", &ascii, NULL, NULL },
+  { "Name Char 5", &ascii, NULL, NULL },
+  { "Name Char 6", &ascii, NULL, NULL },
+  { "Name Char 7", &ascii, NULL, NULL },
+  { "Name Char 8", &ascii, NULL, NULL },
+  { "Name Char 9", &ascii, NULL, NULL },
+  { "Name Char 10", &ascii, NULL, NULL },
+  { "Name Char 11", &ascii, NULL, NULL },
+  { "Name Char 12", &ascii, NULL, NULL },
+  { "Name Char 13", &ascii, NULL, NULL },
+  { "Name Char 14", &ascii, NULL, NULL },
+  { "Name Char 15", &ascii, NULL, NULL },
+  { "Name Char 16", &ascii, NULL, NULL },
+  { "Category", &category, NULL, NULL }, /* 379 */
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
+  { "reserved", NULL, NULL, NULL }, /* 382 */
   /* Bitmap parameters */
   { "Unison", &threebit, NULL, &unison },
   { "Allocation", &onoff, NULL, &allocation },
@@ -397,6 +513,22 @@ struct blofeld_param blofeld_params[] = {
   { "Envelope 3 Trig", &onoff, NULL, &env3trig },
   { "Envelope 4 Mode", &envmode, NULL, &env4mode },
   { "Envelope 4 Trig", &onoff, NULL, &env4trig },
+  ARPSTEP(1),
+  ARPSTEP(2),
+  ARPSTEP(3),
+  ARPSTEP(4),
+  ARPSTEP(5),
+  ARPSTEP(6),
+  ARPSTEP(7),
+  ARPSTEP(8),
+  ARPSTEP(9),
+  ARPSTEP(10),
+  ARPSTEP(11),
+  ARPSTEP(12),
+  ARPSTEP(13),
+  ARPSTEP(14),
+  ARPSTEP(15),
+  ARPSTEP(16),
   { "", NULL, NULL, NULL }
 };
 
