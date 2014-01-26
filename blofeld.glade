@@ -8491,4 +8491,36 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="modop">
+    <columns>
+      <!-- column-name operation -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Plus</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Minus</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Times</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">And</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Or</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Xor</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">MAX</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">min</col>
+      </row>
+    </data>
+  </object>
 </interface>
