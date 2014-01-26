@@ -4330,6 +4330,7 @@
                                       <object class="GtkComboBox" id="LFO 1 Shape">
                                         <property name="visible">True</property>
                                         <property name="model">lfoshape</property>
+                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext10"/>
                                           <attributes>
@@ -4479,6 +4480,7 @@
                           <packing>
                             <property name="left_attach">3</property>
                             <property name="right_attach">4</property>
+                            <property name="x_options">GTK_EXPAND</property>
                           </packing>
                         </child>
                         <child>
@@ -4622,6 +4624,7 @@
                                       <object class="GtkComboBox" id="LFO 2 Shape">
                                         <property name="visible">True</property>
                                         <property name="model">lfoshape</property>
+                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext31"/>
                                           <attributes>
@@ -4773,6 +4776,7 @@
                             <property name="right_attach">4</property>
                             <property name="top_attach">1</property>
                             <property name="bottom_attach">2</property>
+                            <property name="x_options">GTK_EXPAND</property>
                           </packing>
                         </child>
                         <child>
@@ -4916,6 +4920,7 @@
                                       <object class="GtkComboBox" id="LFO 3 Shape">
                                         <property name="visible">True</property>
                                         <property name="model">lfoshape</property>
+                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext32"/>
                                           <attributes>
@@ -5067,6 +5072,7 @@
                             <property name="right_attach">4</property>
                             <property name="top_attach">2</property>
                             <property name="bottom_attach">3</property>
+                            <property name="x_options">GTK_EXPAND</property>
                           </packing>
                         </child>
                         <child>
@@ -6347,6 +6353,7 @@
                                   <object class="GtkComboBox" id="Modulation 1 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext62"/>
                                       <attributes>
@@ -6379,6 +6386,7 @@
                                   <object class="GtkComboBox" id="Modulation 1 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext63"/>
                                       <attributes>
@@ -6409,6 +6417,7 @@
                                   <object class="GtkComboBox" id="Modulation 2 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext64"/>
                                       <attributes>
@@ -6445,6 +6454,7 @@
                                   <object class="GtkComboBox" id="Modulation 2 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext65"/>
                                       <attributes>
@@ -6477,6 +6487,7 @@
                                   <object class="GtkComboBox" id="Modulation 3 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext66"/>
                                       <attributes>
@@ -6513,6 +6524,7 @@
                                   <object class="GtkComboBox" id="Modulation 3 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext67"/>
                                       <attributes>
@@ -6545,6 +6557,7 @@
                                   <object class="GtkComboBox" id="Modulation 4 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext68"/>
                                       <attributes>
@@ -6565,6 +6578,7 @@
                                   <object class="GtkComboBox" id="Modulation 4 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext69"/>
                                       <attributes>
@@ -6613,6 +6627,7 @@
                                   <object class="GtkComboBox" id="Modulation 5 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext70"/>
                                       <attributes>
@@ -6649,6 +6664,7 @@
                                   <object class="GtkComboBox" id="Modulation 5 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext71"/>
                                       <attributes>
@@ -6681,6 +6697,7 @@
                                   <object class="GtkComboBox" id="Modulation 6 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext72"/>
                                       <attributes>
@@ -6717,6 +6734,7 @@
                                   <object class="GtkComboBox" id="Modulation 6 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext73"/>
                                       <attributes>
@@ -6749,6 +6767,7 @@
                                   <object class="GtkComboBox" id="Modulation 7 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext74"/>
                                       <attributes>
@@ -6785,6 +6804,7 @@
                                   <object class="GtkComboBox" id="Modulation 7 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext75"/>
                                       <attributes>
@@ -6805,6 +6825,7 @@
                                   <object class="GtkComboBox" id="Modulation 8 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext76"/>
                                       <attributes>
@@ -6853,6 +6874,7 @@
                                   <object class="GtkComboBox" id="Modulation 8 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext77"/>
                                       <attributes>
@@ -6885,6 +6907,7 @@
                                   <object class="GtkComboBox" id="Modulation 9 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext78"/>
                                       <attributes>
@@ -6921,6 +6944,7 @@
                                   <object class="GtkComboBox" id="Modulation 9 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext79"/>
                                       <attributes>
@@ -6953,6 +6977,7 @@
                                   <object class="GtkComboBox" id="Modulation 10 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext80"/>
                                       <attributes>
@@ -6989,6 +7014,7 @@
                                   <object class="GtkComboBox" id="Modulation 10 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext81"/>
                                       <attributes>
@@ -7009,6 +7035,7 @@
                                   <object class="GtkComboBox" id="Modulation 11 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext82"/>
                                       <attributes>
@@ -7098,9 +7125,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Modulation 16 Source">
+                                  <object class="GtkComboBox" id="Modulation 12 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext83"/>
                                       <attributes>
@@ -7118,9 +7146,10 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Modulation 16 Source1">
+                                  <object class="GtkComboBox" id="Modulation 16 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext84"/>
                                       <attributes>
@@ -7141,6 +7170,7 @@
                                   <object class="GtkComboBox" id="Modulation 15 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext85"/>
                                       <attributes>
@@ -7161,6 +7191,7 @@
                                   <object class="GtkComboBox" id="Modulation 14 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext86"/>
                                       <attributes>
@@ -7181,6 +7212,7 @@
                                   <object class="GtkComboBox" id="Modulation 13 Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext87"/>
                                       <attributes>
@@ -7297,6 +7329,7 @@
                                   <object class="GtkComboBox" id="Modulation 11 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext88"/>
                                       <attributes>
@@ -7317,6 +7350,7 @@
                                   <object class="GtkComboBox" id="Modulation 12 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext89"/>
                                       <attributes>
@@ -7337,6 +7371,7 @@
                                   <object class="GtkComboBox" id="Modulation 13 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext90"/>
                                       <attributes>
@@ -7357,6 +7392,7 @@
                                   <object class="GtkComboBox" id="Modulation 14 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext91"/>
                                       <attributes>
@@ -7377,6 +7413,7 @@
                                   <object class="GtkComboBox" id="Modulation 15 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext92"/>
                                       <attributes>
@@ -7397,6 +7434,7 @@
                                   <object class="GtkComboBox" id="Modulation 16 Destination">
                                     <property name="visible">True</property>
                                     <property name="model">moddest</property>
+                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext93"/>
                                       <attributes>
