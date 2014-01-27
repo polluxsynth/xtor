@@ -5013,303 +5013,6 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkFrame" id="frame19">
-                            <property name="visible">True</property>
-                            <property name="label_xalign">0</property>
-                            <property name="shadow_type">out</property>
-                            <child>
-                              <object class="GtkAlignment" id="alignment19">
-                                <property name="visible">True</property>
-                                <child>
-                                  <object class="GtkVBox" id="vbox13">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                    <child>
-                                      <object class="GtkTable" id="table23">
-                                        <property name="visible">True</property>
-                                        <property name="n_rows">2</property>
-                                        <property name="n_columns">7</property>
-                                        <child>
-                                          <object class="GtkVScale" id="Filter Envelope Decay1">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="orientation">vertical</property>
-                                            <property name="inverted">True</property>
-                                            <property name="digits">0</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkVScale" id="Filter Envelope Sustain1">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="orientation">vertical</property>
-                                            <property name="inverted">True</property>
-                                            <property name="digits">0</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">2</property>
-                                            <property name="right_attach">3</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkVScale" id="Filter Envelope Release1">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="orientation">vertical</property>
-                                            <property name="inverted">True</property>
-                                            <property name="digits">0</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">3</property>
-                                            <property name="right_attach">4</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkVScale" id="Filter Envelope Attack Level1">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="orientation">vertical</property>
-                                            <property name="inverted">True</property>
-                                            <property name="digits">0</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">4</property>
-                                            <property name="right_attach">5</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkVScale" id="Filter Envelope Decay 1">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="orientation">vertical</property>
-                                            <property name="inverted">True</property>
-                                            <property name="digits">0</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">5</property>
-                                            <property name="right_attach">6</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkVScale" id="Filter Envelope Sustain 1">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="orientation">vertical</property>
-                                            <property name="inverted">True</property>
-                                            <property name="digits">0</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">6</property>
-                                            <property name="right_attach">7</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label174">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">A</property>
-                                          </object>
-                                          <packing>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label175">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">D</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label176">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">S</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">2</property>
-                                            <property name="right_attach">3</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label177">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">R</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">3</property>
-                                            <property name="right_attach">4</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label178">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">AL</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">4</property>
-                                            <property name="right_attach">5</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label179">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">D2</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">5</property>
-                                            <property name="right_attach">6</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label180">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">S2</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">6</property>
-                                            <property name="right_attach">7</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkHBox" id="hbox33">
-                                            <property name="height_request">78</property>
-                                            <property name="visible">True</property>
-                                            <child>
-                                              <object class="GtkVScale" id="Filter Envelope Attack1">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="orientation">vertical</property>
-                                                <property name="inverted">True</property>
-                                                <property name="digits">0</property>
-                                              </object>
-                                              <packing>
-                                                <property name="position">0</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkHBox" id="hbox41">
-                                        <property name="visible">True</property>
-                                        <child>
-                                          <object class="GtkComboBox" id="Filter Envelope Mode1">
-                                            <property name="visible">True</property>
-                                            <property name="model">envmode</property>
-                                            <property name="active">0</property>
-                                            <child>
-                                              <object class="GtkCellRendererText" id="cellrenderertext33"/>
-                                              <attributes>
-                                                <attribute name="text">0</attribute>
-                                              </attributes>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkCheckButton" id="Filter Envelope Trig1">
-                                            <property name="label" translatable="yes">Single Trig</property>
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <property name="draw_indicator">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label181">
-                                            <property name="visible">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="position">2</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkHBox" id="hbox42">
-                                        <property name="visible">True</property>
-                                        <child>
-                                          <object class="GtkLabel" id="label182">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">Mode</property>
-                                          </object>
-                                          <packing>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label183">
-                                            <property name="visible">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label184">
-                                            <property name="visible">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="position">2</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="position">2</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child type="label">
-                              <object class="GtkLabel" id="label185">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Filter Envelope&lt;/b&gt;</property>
-                                <property name="use_markup">True</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">4</property>
-                            <property name="right_attach">5</property>
-                            <property name="x_options">GTK_EXPAND</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkFrame" id="frame21">
                             <property name="visible">True</property>
                             <property name="label_xalign">0</property>
@@ -5605,7 +5308,7 @@
                             <property name="right_attach">5</property>
                             <property name="top_attach">1</property>
                             <property name="bottom_attach">2</property>
-                            <property name="x_options">GTK_EXPAND</property>
+                            <property name="x_padding">4</property>
                           </packing>
                         </child>
                         <child>
@@ -5904,306 +5607,7 @@
                             <property name="right_attach">5</property>
                             <property name="top_attach">2</property>
                             <property name="bottom_attach">3</property>
-                            <property name="x_options">GTK_EXPAND</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkFrame" id="frame20">
-                            <property name="visible">True</property>
-                            <property name="label_xalign">0</property>
-                            <property name="shadow_type">out</property>
-                            <child>
-                              <object class="GtkAlignment" id="alignment20">
-                                <property name="visible">True</property>
-                                <child>
-                                  <object class="GtkVBox" id="vbox14">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                    <child>
-                                      <object class="GtkTable" id="table24">
-                                        <property name="visible">True</property>
-                                        <property name="n_rows">2</property>
-                                        <property name="n_columns">7</property>
-                                        <child>
-                                          <object class="GtkVScale" id="Envelope 4 Decay">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="orientation">vertical</property>
-                                            <property name="inverted">True</property>
-                                            <property name="digits">0</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkVScale" id="Envelope 4 Sustain">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="orientation">vertical</property>
-                                            <property name="inverted">True</property>
-                                            <property name="digits">0</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">2</property>
-                                            <property name="right_attach">3</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkVScale" id="Envelope 4 Release">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="orientation">vertical</property>
-                                            <property name="inverted">True</property>
-                                            <property name="digits">0</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">3</property>
-                                            <property name="right_attach">4</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkVScale" id="Envelope 4 Attack Level">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="orientation">vertical</property>
-                                            <property name="inverted">True</property>
-                                            <property name="digits">0</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">4</property>
-                                            <property name="right_attach">5</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkVScale" id="Envelope 4 Decay Two">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="orientation">vertical</property>
-                                            <property name="inverted">True</property>
-                                            <property name="digits">0</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">5</property>
-                                            <property name="right_attach">6</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkVScale" id="Envelope 4 Sustain Two">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="orientation">vertical</property>
-                                            <property name="inverted">True</property>
-                                            <property name="digits">0</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">6</property>
-                                            <property name="right_attach">7</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label186">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">A</property>
-                                          </object>
-                                          <packing>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label187">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">D</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">1</property>
-                                            <property name="right_attach">2</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label188">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">S</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">2</property>
-                                            <property name="right_attach">3</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label189">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">R</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">3</property>
-                                            <property name="right_attach">4</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label190">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">AL</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">4</property>
-                                            <property name="right_attach">5</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label191">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">D2</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">5</property>
-                                            <property name="right_attach">6</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label192">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">S2</property>
-                                          </object>
-                                          <packing>
-                                            <property name="left_attach">6</property>
-                                            <property name="right_attach">7</property>
-                                            <property name="top_attach">1</property>
-                                            <property name="bottom_attach">2</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkHBox" id="hbox43">
-                                            <property name="height_request">78</property>
-                                            <property name="visible">True</property>
-                                            <child>
-                                              <object class="GtkVScale" id="Envelope 4 Attack">
-                                                <property name="visible">True</property>
-                                                <property name="can_focus">True</property>
-                                                <property name="orientation">vertical</property>
-                                                <property name="inverted">True</property>
-                                                <property name="digits">0</property>
-                                              </object>
-                                              <packing>
-                                                <property name="position">0</property>
-                                              </packing>
-                                            </child>
-                                          </object>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkHBox" id="hbox44">
-                                        <property name="visible">True</property>
-                                        <child>
-                                          <object class="GtkComboBox" id="Envelope 4 Mode">
-                                            <property name="visible">True</property>
-                                            <property name="model">envmode</property>
-                                            <property name="active">0</property>
-                                            <child>
-                                              <object class="GtkCellRendererText" id="cellrenderertext34"/>
-                                              <attributes>
-                                                <attribute name="text">0</attribute>
-                                              </attributes>
-                                            </child>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkCheckButton" id="Envelope 4 Trig">
-                                            <property name="label" translatable="yes">Single Trig</property>
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <property name="draw_indicator">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label193">
-                                            <property name="visible">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="position">2</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkHBox" id="hbox45">
-                                        <property name="visible">True</property>
-                                        <child>
-                                          <object class="GtkLabel" id="label194">
-                                            <property name="visible">True</property>
-                                            <property name="label" translatable="yes">Mode</property>
-                                          </object>
-                                          <packing>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label195">
-                                            <property name="visible">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel" id="label196">
-                                            <property name="visible">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="position">2</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="position">2</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child type="label">
-                              <object class="GtkLabel" id="label197">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Envelope 4&lt;/b&gt;</property>
-                                <property name="use_markup">True</property>
-                              </object>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="left_attach">4</property>
-                            <property name="right_attach">5</property>
-                            <property name="top_attach">3</property>
-                            <property name="bottom_attach">4</property>
-                            <property name="x_options">GTK_EXPAND</property>
+                            <property name="x_padding">4</property>
                           </packing>
                         </child>
                         <child>
@@ -6573,6 +5977,631 @@
                             <property name="right_attach">4</property>
                             <property name="top_attach">3</property>
                             <property name="bottom_attach">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkVBox" id="vbox18">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkFrame" id="frame20">
+                                <property name="visible">True</property>
+                                <property name="label_xalign">0</property>
+                                <property name="shadow_type">out</property>
+                                <child>
+                                  <object class="GtkAlignment" id="alignment20">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkVBox" id="vbox14">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">vertical</property>
+                                        <child>
+                                          <object class="GtkTable" id="table24">
+                                            <property name="visible">True</property>
+                                            <property name="n_rows">2</property>
+                                            <property name="n_columns">7</property>
+                                            <child>
+                                              <object class="GtkVScale" id="Envelope 4 Decay">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="orientation">vertical</property>
+                                                <property name="inverted">True</property>
+                                                <property name="digits">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkVScale" id="Envelope 4 Sustain">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="orientation">vertical</property>
+                                                <property name="inverted">True</property>
+                                                <property name="digits">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkVScale" id="Envelope 4 Release">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="orientation">vertical</property>
+                                                <property name="inverted">True</property>
+                                                <property name="digits">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkVScale" id="Envelope 4 Attack Level">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="orientation">vertical</property>
+                                                <property name="inverted">True</property>
+                                                <property name="digits">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">4</property>
+                                                <property name="right_attach">5</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkVScale" id="Envelope 4 Decay Two">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="orientation">vertical</property>
+                                                <property name="inverted">True</property>
+                                                <property name="digits">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">5</property>
+                                                <property name="right_attach">6</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkVScale" id="Envelope 4 Sustain Two">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="orientation">vertical</property>
+                                                <property name="inverted">True</property>
+                                                <property name="digits">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">6</property>
+                                                <property name="right_attach">7</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label186">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">A</property>
+                                              </object>
+                                              <packing>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label187">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">D</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label188">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">S</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label189">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">R</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label190">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">AL</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">4</property>
+                                                <property name="right_attach">5</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label191">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">D2</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">5</property>
+                                                <property name="right_attach">6</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label192">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">S2</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">6</property>
+                                                <property name="right_attach">7</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkHBox" id="hbox43">
+                                                <property name="height_request">78</property>
+                                                <property name="visible">True</property>
+                                                <child>
+                                                  <object class="GtkVScale" id="Envelope 4 Attack">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="orientation">vertical</property>
+                                                    <property name="inverted">True</property>
+                                                    <property name="digits">0</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkHBox" id="hbox44">
+                                            <property name="visible">True</property>
+                                            <child>
+                                              <object class="GtkComboBox" id="Envelope 4 Mode">
+                                                <property name="visible">True</property>
+                                                <property name="model">envmode</property>
+                                                <property name="active">0</property>
+                                                <child>
+                                                  <object class="GtkCellRendererText" id="cellrenderertext34"/>
+                                                  <attributes>
+                                                    <attribute name="text">0</attribute>
+                                                  </attributes>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">False</property>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckButton" id="Envelope 4 Trig">
+                                                <property name="label" translatable="yes">Single Trig</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="draw_indicator">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label193">
+                                                <property name="visible">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="position">2</property>
+                                              </packing>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkHBox" id="hbox45">
+                                            <property name="visible">True</property>
+                                            <child>
+                                              <object class="GtkLabel" id="label194">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">Mode</property>
+                                              </object>
+                                              <packing>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label195">
+                                                <property name="visible">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label196">
+                                                <property name="visible">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="position">2</property>
+                                              </packing>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="position">2</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child type="label">
+                                  <object class="GtkLabel" id="label197">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Envelope 4&lt;/b&gt;</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label265">
+                                <property name="visible">True</property>
+                              </object>
+                              <packing>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">4</property>
+                            <property name="right_attach">5</property>
+                            <property name="top_attach">3</property>
+                            <property name="bottom_attach">4</property>
+                            <property name="x_padding">4</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkVBox" id="vbox19">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkFrame" id="frame19">
+                                <property name="visible">True</property>
+                                <property name="label_xalign">0</property>
+                                <property name="shadow_type">out</property>
+                                <child>
+                                  <object class="GtkAlignment" id="alignment19">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkVBox" id="vbox13">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">vertical</property>
+                                        <child>
+                                          <object class="GtkTable" id="table23">
+                                            <property name="visible">True</property>
+                                            <property name="n_rows">2</property>
+                                            <property name="n_columns">7</property>
+                                            <child>
+                                              <object class="GtkVScale" id="Filter Envelope Decay1">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="orientation">vertical</property>
+                                                <property name="inverted">True</property>
+                                                <property name="digits">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkVScale" id="Filter Envelope Sustain1">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="orientation">vertical</property>
+                                                <property name="inverted">True</property>
+                                                <property name="digits">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkVScale" id="Filter Envelope Release1">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="orientation">vertical</property>
+                                                <property name="inverted">True</property>
+                                                <property name="digits">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkVScale" id="Filter Envelope Attack Level1">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="orientation">vertical</property>
+                                                <property name="inverted">True</property>
+                                                <property name="digits">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">4</property>
+                                                <property name="right_attach">5</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkVScale" id="Filter Envelope Decay 1">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="orientation">vertical</property>
+                                                <property name="inverted">True</property>
+                                                <property name="digits">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">5</property>
+                                                <property name="right_attach">6</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkVScale" id="Filter Envelope Sustain 1">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="orientation">vertical</property>
+                                                <property name="inverted">True</property>
+                                                <property name="digits">0</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">6</property>
+                                                <property name="right_attach">7</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label174">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">A</property>
+                                              </object>
+                                              <packing>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label175">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">D</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="right_attach">2</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label176">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">S</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">2</property>
+                                                <property name="right_attach">3</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label177">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">R</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">3</property>
+                                                <property name="right_attach">4</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label178">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">AL</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">4</property>
+                                                <property name="right_attach">5</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label179">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">D2</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">5</property>
+                                                <property name="right_attach">6</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label180">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">S2</property>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">6</property>
+                                                <property name="right_attach">7</property>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkHBox" id="hbox33">
+                                                <property name="height_request">78</property>
+                                                <property name="visible">True</property>
+                                                <child>
+                                                  <object class="GtkVScale" id="Filter Envelope Attack1">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">True</property>
+                                                    <property name="orientation">vertical</property>
+                                                    <property name="inverted">True</property>
+                                                    <property name="digits">0</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkHBox" id="hbox41">
+                                            <property name="visible">True</property>
+                                            <child>
+                                              <object class="GtkComboBox" id="Filter Envelope Mode1">
+                                                <property name="visible">True</property>
+                                                <property name="model">envmode</property>
+                                                <property name="active">0</property>
+                                                <child>
+                                                  <object class="GtkCellRendererText" id="cellrenderertext33"/>
+                                                  <attributes>
+                                                    <attribute name="text">0</attribute>
+                                                  </attributes>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">False</property>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckButton" id="Filter Envelope Trig1">
+                                                <property name="label" translatable="yes">Single Trig</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="draw_indicator">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label181">
+                                                <property name="visible">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="position">2</property>
+                                              </packing>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkHBox" id="hbox42">
+                                            <property name="visible">True</property>
+                                            <child>
+                                              <object class="GtkLabel" id="label182">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">Mode</property>
+                                              </object>
+                                              <packing>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label183">
+                                                <property name="visible">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label184">
+                                                <property name="visible">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="position">2</property>
+                                              </packing>
+                                            </child>
+                                          </object>
+                                          <packing>
+                                            <property name="position">2</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child type="label">
+                                  <object class="GtkLabel" id="label185">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Filter Envelope&lt;/b&gt;</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="left_attach">4</property>
+                            <property name="right_attach">5</property>
+                            <property name="x_padding">4</property>
                           </packing>
                         </child>
                         <child>
@@ -7820,6 +7849,8 @@
                             </child>
                           </object>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -10883,6 +10914,10 @@
                       <object class="GtkLabel" id="label264">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">
+
+
+
+
 
 
 
