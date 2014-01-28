@@ -638,7 +638,12 @@ void blofeld_update_param(int parnum, int buf_no, int value)
 
   /* If bitmap param, fetch parent, then update value and send it */
   if (param->bm_param) {
-    parnum = param->bm_param->parent_param - blofeld_params;
+    struct blofeld_param *parent = param->bm_param->parent_param;
+    if (parent == NULL) {
+      printf("Warning: bitmap parameter %s has no parent!\n", param->name);
+      return;
+    }
+    parnum = parent - blofeld_params;
     int mask = param->bm_param->bitmask;
     int shift = param->bm_param->bitshift;
     /* mask out non-changed bits, then or with new value */
