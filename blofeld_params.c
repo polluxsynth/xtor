@@ -77,6 +77,7 @@ struct limits wave = { 0, 72 };
 struct limits wave3 = { 0, 4 };
 struct limits onoff = { 0, 1 };
 struct limits threebit = { 0, 7 };
+struct limits sixbit = { 0, 63 };
 struct limits modop = { 0, 7 };
 struct limits arpmode = { 0, 3 };
 struct limits arppat = { 0, 15 };
@@ -103,6 +104,18 @@ struct blofeld_bitmap_param env3mode = { "Envelope 3 Trig+Mode", NULL, 0x07, 0 }
 struct blofeld_bitmap_param env4trig = { "Envelope 4 Trig+Mode", NULL, 0x20, 5 };
 struct blofeld_bitmap_param env4mode = { "Envelope 4 Trig+Mode", NULL, 0x07, 0 };
 struct blofeld_bitmap_param env3trig = { "Envelope 3 Trig+Mode", NULL, 0x20, 5 };
+
+/* LFO speed and clock are the same parameter viewed in different ways
+ * depending on the Clocked parameter. Speed is normal 0..127, but clock
+ * is every second value, i.e. 0->0..1, 1->2..3, etc , so suitable for bitmap
+ * parameter.
+ */
+struct blofeld_bitmap_param lfo1speed = { "LFO 1 Clock+Speed", NULL, 0x7f, 0 };
+struct blofeld_bitmap_param lfo1clock = { "LFO 1 Clock+Speed", NULL, 0x3f, 1 };
+struct blofeld_bitmap_param lfo2speed = { "LFO 2 Clock+Speed", NULL, 0x7f, 0 };
+struct blofeld_bitmap_param lfo2clock = { "LFO 2 Clock+Speed", NULL, 0x3f, 1 };
+struct blofeld_bitmap_param lfo3speed = { "LFO 3 Clock+Speed", NULL, 0x7f, 0 };
+struct blofeld_bitmap_param lfo3clock = { "LFO 3 Clock+Speed", NULL, 0x3f, 1 };
 
 #define ARP_STEP_BITMAPS(N) \
 struct blofeld_bitmap_param arpstep ## N = { "Arp Pattern StGlAcc " #N, NULL, 0x70, 4 }; \
@@ -324,7 +337,7 @@ struct blofeld_param blofeld_params[] = {
   { "Effect 2 Parameter 13", &norm, NULL, NULL },
   { "Effect 2 Parameter 14", &norm, NULL, NULL },
   { "LFO 1 Shape", &lfoshape, NULL, NULL }, /* 160 */
-  { "LFO 1 Speed", &norm, NULL, NULL },
+  { "LFO 1 Clock+Speed", &norm, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
   { "LFO 1 Sync", &onoff, NULL, NULL },
   { "LFO 1 Clocked", &onoff, NULL, NULL },
@@ -336,7 +349,7 @@ struct blofeld_param blofeld_params[] = {
   { "LFO 1 Keytrack", &keytrack, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
   { "LFO 2 Shape", &lfoshape, NULL, NULL }, /* 172 */
-  { "LFO 2 Speed", &norm, NULL, NULL },
+  { "LFO 2 Clock+Speed", &norm, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
   { "LFO 2 Sync", &onoff, NULL, NULL },
   { "LFO 2 Clocked", &onoff, NULL, NULL },
@@ -348,7 +361,7 @@ struct blofeld_param blofeld_params[] = {
   { "LFO 2 Keytrack", &keytrack, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
   { "LFO 3 Shape", &lfoshape, NULL, NULL }, /* 184 */
-  { "LFO 3 Speed", &norm, NULL, NULL },
+  { "LFO 3 Clock+Speed", &norm, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
   { "LFO 3 Sync", &onoff, NULL, NULL },
   { "LFO 3 Clocked", &onoff, NULL, NULL },
@@ -513,6 +526,12 @@ struct blofeld_param blofeld_params[] = {
   { "Envelope 3 Trig", &onoff, NULL, &env3trig },
   { "Envelope 4 Mode", &envmode, NULL, &env4mode },
   { "Envelope 4 Trig", &onoff, NULL, &env4trig },
+  { "LFO 1 Speed", &norm, NULL, &lfo1speed },
+  { "LFO 1 Clock", &sixbit, NULL, &lfo1clock },
+  { "LFO 2 Speed", &norm, NULL, &lfo2speed },
+  { "LFO 2 Clock", &sixbit, NULL, &lfo2clock },
+  { "LFO 3 Speed", &norm, NULL, &lfo3speed },
+  { "LFO 3 Clock", &sixbit, NULL, &lfo3clock },
   ARPSTEP(1),
   ARPSTEP(2),
   ARPSTEP(3),
