@@ -11390,7 +11390,7 @@
   </object>
   <object class="GtkListStore" id="lfoshape">
     <columns>
-      <!-- column-name lfoshape -->
+      <!-- column-name shape -->
       <column type="gchararray"/>
     </columns>
     <data>
@@ -11411,6 +11411,206 @@
       </row>
       <row>
         <col id="0" translatable="yes">SHold</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="lfoclock">
+    <columns>
+      <!-- column-name clock -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">1280 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1152 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1024 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">896 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">768 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">640 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">576 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">512 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">448 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">384 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">320 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">288 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">256 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">224 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">192 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">160 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">144 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">128 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">112 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">96 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">80 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">72 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">64 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">56 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">48 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">40 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">36 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">32 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">28 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">24 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">20 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">18 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">16 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">14 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">12 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">10 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">9 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">8 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">7 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">6 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">5 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">4 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3.5 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2.5 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1.5 bars</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1 bar</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/2.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/1T</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/2 </col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/4.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/2T</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/4 </col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/8.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/4T</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/8 </col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/16.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/8T</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/16 </col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/32.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/16T</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/32 </col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1/48</col>
       </row>
     </data>
   </object>
