@@ -10306,7 +10306,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step  Glide">
+                                  <object class="GtkCheckButton" id="Arp Step 16 Glide">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>

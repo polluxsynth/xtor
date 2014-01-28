@@ -118,11 +118,11 @@ struct blofeld_bitmap_param lfo3speed = { "LFO 3 Clock+Speed", NULL, 0x7f, 0 };
 struct blofeld_bitmap_param lfo3clock = { "LFO 3 Clock+Speed", NULL, 0x3f, 1 };
 
 #define ARP_STEP_BITMAPS(N) \
-struct blofeld_bitmap_param arpstep ## N = { "Arp Pattern StGlAcc " #N, NULL, 0x70, 4 }; \
-struct blofeld_bitmap_param arpglide ## N = { "Arp Pattern StGlAcc " #N, NULL, 0x08, 3 }; \
-struct blofeld_bitmap_param arpacc ## N = { "Arp Pattern StGlAcc " #N, NULL, 0x07, 0 }; \
-struct blofeld_bitmap_param arplen ## N = { "Arp Pattern TimLen " #N, NULL, 0x70, 4 }; \
-struct blofeld_bitmap_param arptim ## N = { "Arp Pattern TimLen " #N, NULL, 0x07, 0 }
+struct blofeld_bitmap_param arpstep ## N = { "Arpeggiator Pattern StGlAcc " #N, NULL, 0x70, 4 }; \
+struct blofeld_bitmap_param arpglide ## N = { "Arpeggiator Pattern StGlAcc " #N, NULL, 0x08, 3 }; \
+struct blofeld_bitmap_param arpacc ## N = { "Arpeggiator Pattern StGlAcc " #N, NULL, 0x07, 0 }; \
+struct blofeld_bitmap_param arplen ## N = { "Arpeggiator Pattern TimLen " #N, NULL, 0x70, 4 }; \
+struct blofeld_bitmap_param arptim ## N = { "Arpeggiator Pattern TimLen " #N, NULL, 0x07, 0 }
 
 ARP_STEP_BITMAPS(1);
 ARP_STEP_BITMAPS(2);
@@ -159,11 +159,11 @@ ARP_STEP_BITMAPS(16);
   { "Modulation " #N " Amount", &bipolar, NULL, NULL } \
 
 #define ARPSTEP(N) \
-  { "Arp Step " #N "Type", &threebit, NULL, &arpstep ## N }, \
-  { "Arp Step " #N "Glide", &onoff, NULL, &arpglide ## N }, \
-  { "Arp Step " #N "Accent", &threebit, NULL, &arpacc ## N }, \
-  { "Arp Step " #N "Timing", &threebit, NULL, &arptim ## N }, \
-  { "Arp Step " #N "Length", &threebit, NULL, &arplen ## N }
+  { "Arp Step " #N " Type", &threebit, NULL, &arpstep ## N }, \
+  { "Arp Step " #N " Glide", &onoff, NULL, &arpglide ## N }, \
+  { "Arp Step " #N " Accent", &threebit, NULL, &arpacc ## N }, \
+  { "Arp Step " #N " Timing", &threebit, NULL, &arptim ## N }, \
+  { "Arp Step " #N " Length", &threebit, NULL, &arplen ## N }
 
 /* The Parameter Definition List */
 /* Note: Owing to the design of the UI, in order to have the same parameter
