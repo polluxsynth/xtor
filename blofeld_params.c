@@ -117,6 +117,14 @@ struct blofeld_bitmap_param lfo2clock = { "LFO 2 Clock+Speed", NULL, 0x3f, 1 };
 struct blofeld_bitmap_param lfo3speed = { "LFO 3 Clock+Speed", NULL, 0x7f, 0 };
 struct blofeld_bitmap_param lfo3clock = { "LFO 3 Clock+Speed", NULL, 0x3f, 1 };
 
+/* FX 2 has two parameters with different data types */
+/* Damping is continuous 0..127, polarity is 0..1 */
+struct blofeld_bitmap_param fx2damping = { "Effect 2 Parameter 154.", NULL, 0x7f, 0 };
+struct blofeld_bitmap_param fx2polarity = { "Effect 2 Parameter 154.", NULL, 0x7f, 0 };
+/* Spread is continuous -64..+63, curve is 0..11 */
+struct blofeld_bitmap_param fx2spread = { "Effect 2 Parameter 155.", NULL, 0x7f, 0 };
+struct blofeld_bitmap_param fx2curve = { "Effect 2 Parameter 155.", NULL, 0x7f, 0 };
+
 #define ARP_STEP_BITMAPS(N) \
 struct blofeld_bitmap_param arpstep ## N = { "Arpeggiator Pattern StGlAcc " #N, NULL, 0x70, 4 }; \
 struct blofeld_bitmap_param arpglide ## N = { "Arpeggiator Pattern StGlAcc " #N, NULL, 0x08, 3 }; \
@@ -306,36 +314,36 @@ struct blofeld_param blofeld_params[] = {
   { "reserved", NULL, NULL, NULL },
   { "Effect 1 Type", &fx1type, NULL, NULL }, /* 128 */
   { "Effect 1 Mix", &norm, NULL, NULL },
-  { "Effect 1 Parameter 1", &norm, NULL, NULL },
-  { "Effect 1 Parameter 2", &norm, NULL, NULL },
-  { "Effect 1 Parameter 3", &norm, NULL, NULL },
-  { "Effect 1 Parameter 4", &norm, NULL, NULL },
-  { "Effect 1 Parameter 5", &norm, NULL, NULL },
-  { "Effect 1 Parameter 6", &norm, NULL, NULL },
-  { "Effect 1 Parameter 7", &norm, NULL, NULL },
-  { "Effect 1 Parameter 8", &norm, NULL, NULL },
-  { "Effect 1 Parameter 9", &onoff, NULL, NULL },
-  { "Effect 1 Parameter 10", &fxdrive, NULL, NULL },
-  { "Effect 1 Parameter 11", &norm, NULL, NULL },
-  { "Effect 1 Parameter 12", &norm, NULL, NULL },
-  { "Effect 1 Parameter 13", &norm, NULL, NULL },
-  { "Effect 1 Parameter 14", &norm, NULL, NULL },
-  { "Effect 2 Type", &fx2type, NULL, NULL }, /* 146 */
+  { "Effect 1 Parameter 130.", &norm, NULL, NULL },
+  { "Effect 1 Parameter 131.", &norm, NULL, NULL },
+  { "Effect 1 Parameter 132.", &norm, NULL, NULL },
+  { "Effect 1 Parameter 133.", &norm, NULL, NULL },
+  { "Effect 1 Parameter 134.", &norm, NULL, NULL },
+  { "Effect 1 Parameter 135.", &norm, NULL, NULL },
+  { "Effect 1 Parameter 136.", &norm, NULL, NULL },
+  { "Effect 1 Parameter 137.", &norm, NULL, NULL },
+  { "Effect 1 Parameter 138.", &onoff, NULL, NULL },
+  { "Effect 1 Parameter 139.", &fxdrive, NULL, NULL },
+  { "Effect 1 Parameter 140.", &norm, NULL, NULL },
+  { "Effect 1 Parameter 141.", &norm, NULL, NULL },
+  { "Effect 1 Parameter 142.", &norm, NULL, NULL },
+  { "Effect 1 Parameter 143.", &norm, NULL, NULL },
+  { "Effect 2 Type", &fx2type, NULL, NULL }, /* 144 */
   { "Effect 2 Mix", &norm, NULL, NULL },
-  { "Effect 2 Parameter 1", &norm, NULL, NULL },
-  { "Effect 2 Parameter 2", &norm, NULL, NULL },
-  { "Effect 2 Parameter 3", &norm, NULL, NULL },
-  { "Effect 2 Parameter 4", &norm, NULL, NULL },
-  { "Effect 2 Parameter 5", &norm, NULL, NULL },
-  { "Effect 2 Parameter 6", &norm, NULL, NULL },
-  { "Effect 2 Parameter 7", &norm, NULL, NULL },
-  { "Effect 2 Parameter 8", &norm, NULL, NULL },
-  { "Effect 2 Parameter 9", &onoff, NULL, NULL },
-  { "Effect 2 Parameter 10", &fxdrive, NULL, NULL },
-  { "Effect 2 Parameter 11", &norm, NULL, NULL },
-  { "Effect 2 Parameter 12", &norm, NULL, NULL },
-  { "Effect 2 Parameter 13", &norm, NULL, NULL },
-  { "Effect 2 Parameter 14", &norm, NULL, NULL },
+  { "Effect 2 Parameter 146.", &norm, NULL, NULL },
+  { "Effect 2 Parameter 147.", &norm, NULL, NULL },
+  { "Effect 2 Parameter 148.", &norm, NULL, NULL },
+  { "Effect 2 Parameter 149.", &norm, NULL, NULL },
+  { "Effect 2 Parameter 150.", &norm, NULL, NULL },
+  { "Effect 2 Parameter 151.", &norm, NULL, NULL },
+  { "Effect 2 Parameter 152.", &norm, NULL, NULL },
+  { "Effect 2 Parameter 153.", &norm, NULL, NULL },
+  { "Effect 2 Parameter 154.", &onoff, NULL, NULL },
+  { "Effect 2 Parameter 155.", &fxdrive, NULL, NULL },
+  { "Effect 2 Parameter 156.", &norm, NULL, NULL },
+  { "Effect 2 Parameter 157.", &norm, NULL, NULL },
+  { "Effect 2 Parameter 158.", &norm, NULL, NULL },
+  { "Effect 2 Parameter 159.", &norm, NULL, NULL },
   { "LFO 1 Shape", &lfoshape, NULL, NULL }, /* 160 */
   { "LFO 1 Clock+Speed", &norm, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
@@ -548,6 +556,10 @@ struct blofeld_param blofeld_params[] = {
   ARPSTEP(14),
   ARPSTEP(15),
   ARPSTEP(16),
+  { "Effect 2 Spread", &bipolar, NULL, &fx2spread },
+  { "Effect 2 Curve", &filterdrive, NULL, &fx2curve },
+  { "Effect 2 Damping", &norm, NULL, &fx2damping },
+  { "Effect 2 Polarity", &onoff, NULL, &fx2polarity },
   { "", NULL, NULL, NULL }
 };
 
