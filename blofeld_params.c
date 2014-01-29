@@ -686,9 +686,7 @@ static void update_ui_param(struct blofeld_param *param, int buf_no, int value)
 /* called from MIDI when parameter updated */
 void update_ui(int parnum, int buf_no, int value)
 {
-  if (parnum >= BLOFELD_PARAMS
-                               || parnum >= 244 /* TODO: remove */
-                              ) /* sanity check */
+  if (parnum >= BLOFELD_PARAMS) /* sanity check */
     return;
 
   struct blofeld_param *param = &blofeld_params[parnum];
