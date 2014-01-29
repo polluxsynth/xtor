@@ -292,7 +292,7 @@ create_adjustors_list (int ui_params, GtkWidget *top_widget)
   create_adjustor(top_widget, adjustors);
 
   int i;
-  for (i = 0; i < sizeof(adjustors)/sizeof(adjustors[0]); i++) {
+  for (i = 0; i < ui_params; i++) {
     struct adjustor *adjustor = adjustors[i];
     if (adjustor)
       display_adjustors(adjustor);
