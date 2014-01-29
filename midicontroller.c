@@ -36,7 +36,7 @@ on_midi_input (gpointer data, gint fd, GdkInputCondition condition)
 
 struct adj_update {
   GtkWidget *widget; /* widget requesting update, or NULL */
-  int value; /* new value to set */
+  const void *valptr; /* pointer to new value to set */
 };
 
 static void
@@ -44,7 +44,7 @@ update_adjustor(gpointer data, gpointer user_data)
 {
   GtkWidget *widget = data;
   struct adj_update *adj_update = user_data;
-  int value = adj_update->value;
+  const void *valptr = adj_update->valptr;
 
   /* We only update adjustors that aren't the same as the widget generating 
    * the update. For updates arriving from MIDI, there is no such widget,
@@ -52,19 +52,19 @@ update_adjustor(gpointer data, gpointer user_data)
    */
   if (widget != adj_update->widget) {
     if (GTK_IS_RANGE(widget))
-      gtk_range_set_value(GTK_RANGE(widget), value);
+      gtk_range_set_value(GTK_RANGE(widget), *(const int *)valptr);
     else if (GTK_IS_COMBO_BOX(widget))
-      gtk_combo_box_set_active(GTK_COMBO_BOX(widget), value);
+      gtk_combo_box_set_active(GTK_COMBO_BOX(widget), *(const int *)valptr);
     else if (GTK_IS_TOGGLE_BUTTON(widget))
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), !!value);
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), !!*(const int *)valptr);
   }
 }
 
-void update_adjustors(struct adjustor *adjustor, int value,
+void update_adjustors(struct adjustor *adjustor, const void *valptr,
                       GtkWidget *updating_widget)
 {
   struct adj_update adj_update = { .widget = updating_widget, 
-                                   .value = value };
+                                   .valptr = valptr };
 
   block_updates = 1;
   g_list_foreach(adjustor->widgets, update_adjustor, &adj_update);
@@ -73,12 +73,12 @@ void update_adjustors(struct adjustor *adjustor, int value,
 
 /* Called whenever parameter change arrives via MIDI */
 void
-param_changed(int parnum, int buffer_no, int value, void *ref)
+param_changed(int parnum, int buffer_no, void *valptr, void *ref)
 {
-  if (buffer_no == current_buffer_no) {
+  if (buffer_no == current_buffer_no && valptr) {
     struct adjustor *adjustor = adjustors[parnum];
     if (adjustor)
-      update_adjustors(adjustor, value, NULL);
+      update_adjustors(adjustor, valptr, NULL);
   }
 }
 
@@ -86,11 +86,11 @@ param_changed(int parnum, int buffer_no, int value, void *ref)
  * We send the update via MIDI, but also to other widgets with same parameter
  * name (e.g. on other editor pages or tabs.)
  */
-static void update_parameter(struct adjustor *adjustor, int value, GtkWidget *widget)
+static void update_parameter(struct adjustor *adjustor, const void *valptr, GtkWidget *widget)
 {
-  blofeld_update_param(adjustor->parnum, current_buffer_no, value);
+  blofeld_update_param(adjustor->parnum, current_buffer_no, valptr);
 
-  update_adjustors(adjustor, value, widget);
+  update_adjustors(adjustor, valptr, widget);
 }
 
 void
@@ -115,6 +115,25 @@ on_Buffer_pressed (GtkObject *object, gpointer user_data)
 }
 
 void
+on_entry_activate(GtkObject *object, gpointer user_data)
+{
+  GtkEntry *gtkentry = GTK_ENTRY (object);
+  struct adjustor *adjustor = user_data;
+  const char *stringptr;
+
+  if (block_updates)
+    return;
+
+  if (gtkentry) {
+    stringptr = gtk_entry_get_text(gtkentry);
+    printf("Entry %p: name %s, value \"%s\", parnum %d\n",
+           gtkentry, gtk_buildable_get_name(GTK_BUILDABLE(gtkentry)),
+           stringptr, adjustor->parnum);
+  }
+  update_parameter(adjustor, stringptr, GTK_WIDGET(object));
+}
+
+void
 on_value_changed (GtkObject *object, gpointer user_data)
 {
   GtkRange *gtkrange = GTK_RANGE (object);
@@ -128,7 +147,8 @@ on_value_changed (GtkObject *object, gpointer user_data)
     printf("Slider %p: name %s, value %d, parnum %d\n",
            gtkrange, gtk_buildable_get_name(GTK_BUILDABLE(gtkrange)),
            (int) gtk_range_get_value(gtkrange), adjustor->parnum);
-    update_parameter(adjustor, (int) gtk_range_get_value(gtkrange), GTK_WIDGET(object));
+    value = (int) gtk_range_get_value(gtkrange);
+    update_parameter(adjustor, &value, GTK_WIDGET(object));
   }
 }
 
@@ -137,6 +157,7 @@ on_combobox_changed (GtkObject *object, gpointer user_data)
 {
   GtkComboBox *cb = GTK_COMBO_BOX (object);
   struct adjustor *adjustor = user_data;
+  int value;
 
   if (block_updates)
     return;
@@ -145,7 +166,8 @@ on_combobox_changed (GtkObject *object, gpointer user_data)
     printf("Combobox %p: name %s, value %d, parnum %d\n",
            cb, gtk_buildable_get_name(GTK_BUILDABLE(cb)),
            gtk_combo_box_get_active(cb), adjustor->parnum);
-    update_parameter(adjustor, (int) gtk_combo_box_get_active(cb), GTK_WIDGET(object));
+    value = (int) gtk_combo_box_get_active(cb);
+    update_parameter(adjustor, &value, GTK_WIDGET(object));
   }
 }
 
@@ -154,6 +176,7 @@ on_togglebutton_changed (GtkObject *object, gpointer user_data)
 {
   GtkToggleButton *tb = GTK_TOGGLE_BUTTON (object);
   struct adjustor *adjustor = user_data;
+  int value;
 
   if (block_updates)
     return;
@@ -162,7 +185,8 @@ on_togglebutton_changed (GtkObject *object, gpointer user_data)
     printf("Togglebutton %p: name %s, value %d, parnum %d\n",
            tb, gtk_buildable_get_name(GTK_BUILDABLE(tb)),
            gtk_toggle_button_get_active(tb), adjustor->parnum);
-    update_parameter(adjustor, gtk_toggle_button_get_active(tb), GTK_WIDGET(object));
+    value = gtk_toggle_button_get_active(tb);
+    update_parameter(adjustor, &value, GTK_WIDGET(object));
   }
 }
 
@@ -240,6 +264,9 @@ void create_adjustor (gpointer data, gpointer user_data)
       g_signal_connect(this, "changed", G_CALLBACK(on_combobox_changed), adjustor);
     if (GTK_IS_TOGGLE_BUTTON(this))
       g_signal_connect(this, "toggled", G_CALLBACK(on_togglebutton_changed), adjustor);
+
+    if (GTK_IS_ENTRY(this))
+      g_signal_connect(this, "activate", G_CALLBACK(on_entry_activate), adjustor);
   }
 
   g_free(id);
@@ -276,6 +303,12 @@ void display_adjustor(gpointer data, gpointer user_data)
     printf("Togglebutton %p: name %s, value %d\n",
            tb, gtk_buildable_get_name(GTK_BUILDABLE(tb)),
            gtk_toggle_button_get_active(tb));
+  }
+  if (GTK_IS_ENTRY(adj)) {
+    GtkEntry *e = GTK_ENTRY (adj);
+    printf("Entry %p: name %s, value \"%s\"\n",
+           e, gtk_buildable_get_name(GTK_BUILDABLE(e)),
+           gtk_entry_get_text(e));
   }
 }
 

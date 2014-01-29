@@ -149,6 +149,8 @@ ARP_STEP_BITMAPS(14);
 ARP_STEP_BITMAPS(15);
 ARP_STEP_BITMAPS(16);
 
+/* string parameter: bitmask == 0, bitshift == string length */
+struct blofeld_bitmap_param patchname = { "Name Char 1", NULL, 0, 16 };
 
 #define BLOFELD_PARAMS_ALL (sizeof(blofeld_params) / \
                             sizeof(blofeld_params[0]))
@@ -560,6 +562,7 @@ struct blofeld_param blofeld_params[] = {
   { "Effect 2 Curve", &filterdrive, NULL, &fx2curve },
   { "Effect 2 Damping", &norm, NULL, &fx2damping },
   { "Effect 2 Polarity", &onoff, NULL, &fx2polarity },
+  { "Patch Name", NULL, NULL, &patchname },
   { "", NULL, NULL, NULL }
 };
 
@@ -626,18 +629,15 @@ static void send_parameter_update(int parnum, int buf_no, int devno, int value)
                            value,
                            EOX };
 
+  printf("Blofeld update param: parnum %d, buf %d, value %d\n", parnum, buf_no, value);
   if (parnum < BLOFELD_PARAMS)
     midi_send_sysex(sndp, sizeof(sndp));
 }
 
-/* called from UI when parameter updated */
-void blofeld_update_param(int parnum, int buf_no, int value)
+/* Update numeric (integer) parameter and send to Blofeld */
+static void update_int_param(struct blofeld_param *param,
+                             int parnum, int buf_no, int value)
 {
-  if (parnum >= BLOFELD_PARAMS_ALL) /* sanity check */
-    return;
-
-  struct blofeld_param *param = &blofeld_params[parnum];
-
   int min = param->limits->min;
   int max = param->limits->max;
   int range = max + 1 - min;
@@ -664,8 +664,48 @@ void blofeld_update_param(int parnum, int buf_no, int value)
 
   /* Update parameter list, then send to Blofeld */
   parameter_list[parnum] = value;
-  printf("Blofeld update param: parno %d, buf %d, value %d\n", parnum, buf_no, value);
   send_parameter_update(parnum, buf_no, 0, value);
+}
+
+/* Update string parameter and send to Blofeld */
+static void update_str_param(struct blofeld_param *param, int parnum,
+                             int buf_no, const unsigned char *value)
+{
+  /* String parameters must be bitmap parameters, and bitmask must be == 0 */
+  if (!param->bm_param || param->bm_param->bitmask)
+    return;
+
+  struct blofeld_param *parent = param->bm_param->parent_param;
+  if (parent == NULL) {
+    printf("Warning: bitmap/string parameter %s has no parent!\n", param->name);
+    return;
+  }
+  parnum = parent - blofeld_params; /* param no of first char of parent */
+  /* Now update each char parameter in the param list, then
+   * send it on to Blofeld. */
+  int len = param->bm_param->bitshift; /* we use bitshift field as (max) len */
+  int i;
+  for (i = 0; i < len; i++) {
+    /* if we run out of the end of the string, the rest of the chars are ' ' */
+    unsigned char ch = (*value) ? (*value++) : ' ';
+    parameter_list[parnum + i] = ch;
+    send_parameter_update(parnum + i, buf_no, 0, ch);
+  }
+}
+
+/* called from UI when parameter updated */
+void blofeld_update_param(int parnum, int buf_no, const void *valptr)
+{
+  if (parnum >= BLOFELD_PARAMS_ALL || !valptr) /* sanity check */
+    return;
+
+  struct blofeld_param *param = &blofeld_params[parnum];
+
+  if (param->limits) /* string parameters have limits set to NULL */
+    update_int_param(param, parnum, buf_no, *(const int *)valptr);
+  else
+    update_str_param(param, parnum, buf_no, valptr);
+
 }
 
 static void update_ui_param(struct blofeld_param *param, int buf_no, int value)
@@ -680,7 +720,7 @@ static void update_ui_param(struct blofeld_param *param, int buf_no, int value)
     value = (value - 16 ) / 12;
   if (range > 128) /* really only keytrack */
     value = value * range / 128;
-  notify_ui(parnum, buf_no, value, notify_ref);
+  notify_ui(parnum, buf_no, &value, notify_ref);
 }
 
 /* called from MIDI when parameter updated */
@@ -728,11 +768,11 @@ static void update_ui_all(unsigned char *param_buf, int buf_no)
   force = 0;
 }
 
-int blofeld_fetch_parameter(int parnum, int buf_no)
+void *blofeld_fetch_parameter(int parnum, int buf_no)
 {
   if (parnum < BLOFELD_PARAMS)
-    return parameter_list[parnum];
-  return -1;
+    return &parameter_list[parnum];
+  return NULL;
 }
 
 void blofeld_sysex(void *buffer, int len)
