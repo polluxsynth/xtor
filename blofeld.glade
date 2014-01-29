@@ -145,8 +145,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 4">
-                    <property name="label" translatable="yes">4</property>
+                  <object class="GtkRadioButton" id="Buffer 3">
+                    <property name="label" translatable="yes">3</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -162,8 +162,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 3">
-                    <property name="label" translatable="yes">3</property>
+                  <object class="GtkRadioButton" id="Buffer 4">
+                    <property name="label" translatable="yes">4</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -3387,7 +3387,7 @@
                           <object class="GtkTable" id="table16">
                             <property name="visible">True</property>
                             <property name="n_rows">2</property>
-                            <property name="n_columns">3</property>
+                            <property name="n_columns">2</property>
                             <child>
                               <object class="GtkFrame" id="frame10">
                                 <property name="visible">True</property>
@@ -4136,13 +4136,149 @@
                               </packing>
                             </child>
                             <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
-                            </child>
-                            <child>
-                              <placeholder/>
+                              <object class="GtkTable" id="table33">
+                                <property name="visible">True</property>
+                                <property name="n_rows">3</property>
+                                <property name="n_columns">3</property>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <object class="GtkFrame" id="frame28">
+                                    <property name="visible">True</property>
+                                    <property name="label_xalign">0</property>
+                                    <property name="shadow_type">out</property>
+                                    <child>
+                                      <object class="GtkAlignment" id="alignment28">
+                                        <property name="visible">True</property>
+                                        <child>
+                                          <object class="GtkTable" id="table32">
+                                            <property name="visible">True</property>
+                                            <property name="n_rows">3</property>
+                                            <property name="n_columns">3</property>
+                                            <child>
+                                              <object class="GtkEntry" id="Patch Name">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="invisible_char">&#x25CF;</property>
+                                                <property name="width_chars">16</property>
+                                                <property name="text" translatable="yes">0123456789ABCDEF</property>
+                                                <property name="caps_lock_warning">False</property>
+                                              </object>
+                                              <packing>
+                                                <property name="x_options">GTK_EXPAND</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkComboBox" id="Category">
+                                                <property name="visible">True</property>
+                                                <property name="model">category</property>
+                                                <property name="active">0</property>
+                                                <child>
+                                                  <object class="GtkCellRendererText" id="cellrenderertext169"/>
+                                                  <attributes>
+                                                    <attribute name="text">0</attribute>
+                                                  </attributes>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="top_attach">1</property>
+                                                <property name="bottom_attach">2</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkLabel" id="label334">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">Category</property>
+                                              </object>
+                                              <packing>
+                                                <property name="top_attach">2</property>
+                                                <property name="bottom_attach">3</property>
+                                                <property name="x_options"></property>
+                                                <property name="y_options"></property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                            <child>
+                                              <placeholder/>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child type="label">
+                                      <object class="GtkLabel" id="label331">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">&lt;b&gt;Patch name&lt;/b&gt;</property>
+                                        <property name="use_markup">True</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label333">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">           </property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label335">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">
+
+</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="right_attach">2</property>
+                              </packing>
                             </child>
                           </object>
                           <packing>
@@ -15399,6 +15535,53 @@
       </row>
       <row>
         <col id="0" translatable="yes">Negative</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="category">
+    <columns>
+      <!-- column-name category -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Init</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Arp </col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Atmo</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Bass</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Drum</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">FX  </col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Keys</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Lead</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Mono</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Pad </col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Perc</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Poly</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Seq </col>
       </row>
     </data>
   </object>
