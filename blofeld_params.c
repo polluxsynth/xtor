@@ -708,7 +708,7 @@ void blofeld_update_param(int parnum, int buf_no, const void *valptr)
 
 }
 
-static void update_ui_param(struct blofeld_param *param, int buf_no, int value)
+static void update_ui_int_param(struct blofeld_param *param, int buf_no, int value)
 {
   int min = param->limits->min;
   int max = param->limits->max;
@@ -723,6 +723,21 @@ static void update_ui_param(struct blofeld_param *param, int buf_no, int value)
   notify_ui(parnum, buf_no, &value, notify_ref);
 }
 
+static void update_ui_str_param(struct blofeld_param *param, int buf_no)
+{
+  /* here we assume the caller has validated that we are a bm/str parameter */
+  int len = param->bm_param->bitshift;
+  unsigned char string[len + 1];
+  int parnum = param - blofeld_params;
+  int parent_parnum = param->bm_param->parent_param - blofeld_params;
+  int i;
+
+  for (i = 0; i < len; i++)
+    string[i] = (unsigned char) parameter_list[parent_parnum + i];
+  string[len] = '\0';
+  notify_ui(parnum, buf_no, string, notify_ref);
+}
+
 /* called from MIDI when parameter updated */
 void update_ui(int parnum, int buf_no, int value)
 {
@@ -735,22 +750,32 @@ void update_ui(int parnum, int buf_no, int value)
 
   parameter_list[parnum] = value;
 
-  if (!param->child) /* no children => ordinary parameter */
-    update_ui_param(param, buf_no, value);
-  else {
-    /* Get first child */
-    struct blofeld_param *child = param->child;
-    /* Children of same parent are always grouped together. Parent points
-     * to first child, so we just keep examining children until we find one
-     * with a different parent. 
-     */
-    do {
-      int mask = child->bm_param->bitmask;
-      int shift = child->bm_param->bitshift;
-      update_ui_param(child, buf_no, (value & mask) >> shift);
-      child++;
-    } while (child->bm_param && child->bm_param->parent_param == param);
+  if (!param->limits) /* parameters with no limits are generally 'reserved' */
+    return;
+
+  if (!param->child) { /* no children => ordinary parameter (always numeric) */
+    update_ui_int_param(param, buf_no, value);
+    return;
   }
+
+  struct blofeld_param *child = param->child;
+  if (!child->bm_param->bitmask) { /* string parameter */
+    update_ui_str_param(child, buf_no);
+    return;
+  }
+
+  /* bitmapped parameter */
+
+  /* Children of same parent are always grouped together. Parent points
+   * to first child, so we just keep examining children until we find one
+   * with a different parent. 
+   */
+  do {
+    int mask = child->bm_param->bitmask;
+    int shift = child->bm_param->bitshift;
+    update_ui_int_param(child, buf_no, (value & mask) >> shift);
+    child++;
+  } while (child->bm_param && child->bm_param->parent_param == param);
 }
 
 static void update_ui_all(unsigned char *param_buf, int buf_no)
@@ -816,24 +841,37 @@ void blofeld_init(int *params)
 
     if (!bm_param) continue; /* not a bitmapped param, go to next */
 
+    /* bitmapped/string param */
+
     int parent_parno = blofeld_find_index(bm_param->parent_param_name);
     if (parent_parno < 0) {
       printf("Invalid bitmap param %s\n", bm_param->parent_param_name);
       continue;
     }
+    struct blofeld_param *parent_param = &blofeld_params[parent_parno];
+
     /* Put link to parent in bitmap parameter */
-    bm_param->parent_param = &blofeld_params[parent_parno];
-    printf("Param %s has parent %s\n", param->name, param->bm_param->parent_param->name);
-    /* Put link to first child in parent. The limit/child member of
+    bm_param->parent_param = parent_param;
+
+    printf("Param %s has parent %s\n", param->name, parent_param->name);
+
+    /* Put link to first child in parent. The 'limits' member of
      * combined parameters must always be initialized to NULL, fairly
      * logical since such parameters have no limits on their own, relying
      * on the child limits for the individual fields.
      * The other children are assumed to lie after the first one in the
      * parameter definition list, with the same bm_param->parent.
-      */
-    if (!bm_param->parent_param->child) {
-      bm_param->parent_param->child = param;
-      printf("Param %s has first child %s\n", param->bm_param->parent_param->name, param->bm_param->parent_param->child->name);
+     */
+    /* For string parameters, we have many parents, one for each character,
+     * so update them all. The bitmask field is == 0 for string parameters,
+     * with the string length being in the bitshift field. */
+    int params = (bm_param->bitmask) ? 1 : (bm_param->bitshift);
+    while (params--) {
+      if (!parent_param->child) {
+        parent_param->child = param;
+        printf("Param %s has first child %s\n", parent_param->name, param->bm_param->parent_param->child->name);
+      }
+      parent_param++; /* next parent */
     }
   }
 

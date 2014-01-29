@@ -57,6 +57,8 @@ update_adjustor(gpointer data, gpointer user_data)
       gtk_combo_box_set_active(GTK_COMBO_BOX(widget), *(const int *)valptr);
     else if (GTK_IS_TOGGLE_BUTTON(widget))
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), !!*(const int *)valptr);
+    else if (GTK_IS_ENTRY(widget))
+      gtk_entry_set_text(GTK_ENTRY(widget), valptr);
   }
 }
 
