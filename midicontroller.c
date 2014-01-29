@@ -88,8 +88,6 @@ param_changed(int parnum, int buffer_no, int value, void *ref)
  */
 static void update_parameter(struct adjustor *adjustor, int value, GtkWidget *widget)
 {
-  struct adj_update adj_update = { .widget = widget, .value = value };
-
   blofeld_update_param(adjustor->parnum, current_buffer_no, value);
 
   update_adjustors(adjustor, value, widget);
@@ -120,7 +118,6 @@ void
 on_value_changed (GtkObject *object, gpointer user_data)
 {
   GtkRange *gtkrange = GTK_RANGE (object);
-  GtkAdjustment *adj;
   struct adjustor *adjustor = user_data;
   int value;
 
@@ -135,14 +132,15 @@ on_value_changed (GtkObject *object, gpointer user_data)
   }
 }
 
-
 void
 on_combobox_changed (GtkObject *object, gpointer user_data)
 {
   GtkComboBox *cb = GTK_COMBO_BOX (object);
   struct adjustor *adjustor = user_data;
+
   if (block_updates)
     return;
+
   if (cb) {
     printf("Combobox %p: name %s, value %d, parnum %d\n",
            cb, gtk_buildable_get_name(GTK_BUILDABLE(cb)),
@@ -156,8 +154,10 @@ on_togglebutton_changed (GtkObject *object, gpointer user_data)
 {
   GtkToggleButton *tb = GTK_TOGGLE_BUTTON (object);
   struct adjustor *adjustor = user_data;
+
   if (block_updates)
     return;
+
   if (tb) {
     printf("Togglebutton %p: name %s, value %d, parnum %d\n",
            tb, gtk_buildable_get_name(GTK_BUILDABLE(tb)),
