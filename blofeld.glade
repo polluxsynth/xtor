@@ -8188,7 +8188,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 2 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 2.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8209,7 +8209,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 3 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 3.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8230,7 +8230,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 4 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 4.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8251,7 +8251,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 1 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 1.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8438,7 +8438,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 16 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 16.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8459,7 +8459,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 15 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 15.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8480,7 +8480,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 14 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 14.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8501,7 +8501,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 13 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 13.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8522,7 +8522,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 12 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 12.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8543,7 +8543,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 11 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 11.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8564,7 +8564,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 10 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 10.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8585,7 +8585,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 9 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 9.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8606,7 +8606,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 8 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 8.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8627,7 +8627,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 7 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 7.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8648,7 +8648,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 6 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 6.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8669,7 +8669,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 5 Type">
+                                  <object class="GtkComboBox" id="Arp Step Type 5.">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8916,7 +8916,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step All Type">
+                                  <object class="GtkComboBox" id="Arp Step Type All">
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
@@ -8951,7 +8951,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 1 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 1.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -8972,7 +8972,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 2 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 2.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -8993,7 +8993,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 3 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 3.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9014,7 +9014,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 4 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 4.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9035,7 +9035,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 5 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 5.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9056,7 +9056,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 6 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 6.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9077,7 +9077,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 7 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 7.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9098,7 +9098,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 8 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 8.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9119,7 +9119,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 9 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 9.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9140,7 +9140,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 10 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 10.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9161,7 +9161,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 11 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 11.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9182,7 +9182,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 12 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 12.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9203,7 +9203,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 13 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 13.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9224,7 +9224,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 14 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 14.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9245,7 +9245,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 15 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 15.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9266,7 +9266,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 16 Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent 16.">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9287,7 +9287,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step All Accent">
+                                  <object class="GtkComboBox" id="Arp Step Accent All">
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
@@ -9308,7 +9308,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 1 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 1.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9329,7 +9329,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 2 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 2.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9350,7 +9350,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 3 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 3.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9371,7 +9371,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 4 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 4.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9392,7 +9392,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 5 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 5.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9413,7 +9413,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 6 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 6.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9434,7 +9434,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 7 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 7.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9455,7 +9455,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 8 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 8.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9476,7 +9476,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 9 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 9.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9497,7 +9497,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 10 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 10.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9518,7 +9518,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 11 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 11.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9539,7 +9539,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 12 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 12.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9560,7 +9560,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 13 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 13.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9581,7 +9581,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 14 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 14.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9602,7 +9602,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 15 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 15.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9623,7 +9623,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 16 Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing 16.">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9644,7 +9644,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step All Timing">
+                                  <object class="GtkComboBox" id="Arp Step Timing All">
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
@@ -9761,7 +9761,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 1 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 1.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -9782,7 +9782,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 2 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 2.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -9803,7 +9803,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 3 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 3.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -9824,7 +9824,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 4 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 4.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -9845,7 +9845,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 5 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 5.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -9866,7 +9866,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 6 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 6.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -9887,7 +9887,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 7 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 7.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -9908,7 +9908,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 8 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 8.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -9929,7 +9929,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 10 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 10.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -9950,7 +9950,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 9 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 9.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -9971,7 +9971,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 11 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 11.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -9992,7 +9992,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 12 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 12.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -10013,7 +10013,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 13 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 13.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -10034,7 +10034,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 14 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 14.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -10055,7 +10055,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 15 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 15.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -10076,7 +10076,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step 16 Length">
+                                  <object class="GtkComboBox" id="Arp Step Length 16.">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -10097,7 +10097,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Arp Step All Length">
+                                  <object class="GtkComboBox" id="Arp Step Length All">
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
@@ -10166,7 +10166,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 1 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 1.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10182,7 +10182,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 3 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 3.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10198,7 +10198,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 2 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 2.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10214,7 +10214,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 4 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 4.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10266,7 +10266,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 5 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 5.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10282,7 +10282,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 6 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 6.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10298,7 +10298,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 7 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 7.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10314,7 +10314,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 8 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 8.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10330,7 +10330,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 9 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 9.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10346,7 +10346,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 10 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 10.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10362,7 +10362,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 11 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 11.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10378,7 +10378,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 12 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 12.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10394,7 +10394,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 13 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 13.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10410,7 +10410,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 14 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 14.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10426,7 +10426,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 15 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 15.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10442,7 +10442,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step 16 Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide 16.">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -10458,7 +10458,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="Arp Step All Glide">
+                                  <object class="GtkCheckButton" id="Arp Step Glide All">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>

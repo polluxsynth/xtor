@@ -169,11 +169,11 @@ struct blofeld_bitmap_param patchname = { "Name Char 1", NULL, 0, 16 };
   { "Modulation " #N " Amount", &bipolar, NULL, NULL } \
 
 #define ARPSTEP(N) \
-  { "Arp Step " #N " Type", &threebit, NULL, &arpstep ## N }, \
-  { "Arp Step " #N " Glide", &onoff, NULL, &arpglide ## N }, \
-  { "Arp Step " #N " Accent", &threebit, NULL, &arpacc ## N }, \
-  { "Arp Step " #N " Timing", &threebit, NULL, &arptim ## N }, \
-  { "Arp Step " #N " Length", &threebit, NULL, &arplen ## N }
+  { "Arp Step Type " #N ".", &threebit, NULL, &arpstep ## N }, \
+  { "Arp Step Glide " #N ".", &onoff, NULL, &arpglide ## N }, \
+  { "Arp Step Accent " #N ".", &threebit, NULL, &arpacc ## N }, \
+  { "Arp Step Timing " #N ".", &threebit, NULL, &arptim ## N }, \
+  { "Arp Step Length " #N ".", &threebit, NULL, &arplen ## N }
 
 /* The Parameter Definition List */
 /* Note: Owing to the design of the UI, in order to have the same parameter
