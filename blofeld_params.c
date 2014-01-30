@@ -757,11 +757,9 @@ void update_ui(int parnum, int buf_no, int value)
 
   parameter_list[parnum] = value;
 
-  if (!param->limits) /* parameters with no limits are generally 'reserved' */
-    return;
-
-  if (!param->child) { /* no children => ordinary parameter (always numeric) */
-    update_ui_int_param(param, buf_no, value);
+  if (!param->child) { /* no children => ordinary parameter ... */
+    if (param->limits) /* ... unless it has no limits, then it's 'reserved' */
+      update_ui_int_param(param, buf_no, value);
     return;
   }
 
