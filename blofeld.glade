@@ -8920,6 +8920,7 @@
                                     <property name="visible">True</property>
                                     <property name="model">arpstep</property>
                                     <property name="active">0</property>
+                                    <signal name="changed" handler="on_all_changed"/>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext97"/>
                                       <attributes>
@@ -9291,6 +9292,7 @@
                                     <property name="visible">True</property>
                                     <property name="model">arpacc</property>
                                     <property name="active">0</property>
+                                    <signal name="changed" handler="on_all_changed"/>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext114"/>
                                       <attributes>
@@ -9648,6 +9650,7 @@
                                     <property name="visible">True</property>
                                     <property name="model">arptim</property>
                                     <property name="active">0</property>
+                                    <signal name="changed" handler="on_all_changed"/>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext131"/>
                                       <attributes>
@@ -10101,6 +10104,7 @@
                                     <property name="visible">True</property>
                                     <property name="model">arpsteplen</property>
                                     <property name="active">0</property>
+                                    <signal name="changed" handler="on_all_changed"/>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext148"/>
                                       <attributes>
@@ -10463,6 +10467,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="on_all_changed"/>
                                   </object>
                                   <packing>
                                     <property name="left_attach">21</property>
