@@ -568,6 +568,8 @@ struct blofeld_param blofeld_params[] = {
 
 int parameter_list[BLOFELD_PARAMS];
 
+int paste_buffer[BLOFELD_PARAMS];
+
 /* Callback and parameter for parameter updates */
 blofeld_notify_cb notify_ui;
 void *notify_ref;;
@@ -745,7 +747,7 @@ static void update_ui_str_param(struct blofeld_param *param, int buf_no)
   notify_ui(parnum, buf_no, string, notify_ref);
 }
 
-/* called from MIDI when parameter updated */
+/* called from MIDI (or paste buf) when parameter updated */
 void update_ui(int parnum, int buf_no, int value)
 {
   if (parnum >= BLOFELD_PARAMS) /* sanity check */
@@ -791,8 +793,7 @@ static void update_ui_all(unsigned char *param_buf, int buf_no)
   for (parnum = 0; parnum < BLOFELD_PARAMS; parnum++) {
     /* Only send UI updates for parameters that differ */
     if (param_buf[parnum] != parameter_list[parnum] || force) {
-      int value = parameter_list[parnum] = param_buf[parnum];
-      update_ui(parnum, buf_no, value);
+      update_ui(parnum, buf_no, param_buf[parnum]);
     }
   }
   force = 0;
@@ -891,4 +892,28 @@ void blofeld_register_notify_cb(blofeld_notify_cb cb, void *ref)
 {
   notify_ui = cb;
   notify_ref = ref;
+}
+
+/* Copy selected parameters to selected paste buffer */
+void *blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf)
+{
+  void *src = &parameter_list[par_from];
+  void *dest = &paste_buffer[par_from];
+  int len = (par_to + 1 - par_from) * sizeof(parameter_list[0]);
+
+  memcpy(dest, src, len);
+}
+
+/* Copy selected parameters from selected paste buffer */
+void *blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_buf)
+{
+  int parnum;
+
+  /* update parameter_list ui with pasted parameters */
+  for (parnum = par_from; parnum <= par_to; parnum++) {
+    /* Only send UI updates for parameters that differ */
+    if (paste_buffer[parnum] != parameter_list[parnum]) {
+      update_ui(parnum, buf_no, paste_buffer[parnum]);
+    }
+  }
 }

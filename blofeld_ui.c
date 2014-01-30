@@ -26,3 +26,14 @@ on_Buffer_pressed (GtkObject *object, gpointer user_data)
   }
 }
 
+void
+on_Copy_Arp_pressed (GtkObject *object, gpointer user_data)
+{
+  blofeld_copy_to_paste(PARNOS_ARPEGGIATOR, current_buffer_no, 0);
+}
+
+void
+on_Paste_Arp_pressed (GtkObject *object, gpointer user_data)
+{
+  blofeld_copy_from_paste(PARNOS_ARPEGGIATOR, current_buffer_no, 0);
+}

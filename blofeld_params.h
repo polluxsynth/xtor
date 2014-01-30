@@ -1,5 +1,7 @@
 #define BLOFELD_PARAMS 383
 
+#define PARNOS_ARPEGGIATOR 311, 358
+
 struct param_properties {
   int ui_min;  /* user interface minimum */
   int ui_max;  /* user interface maximum */
@@ -30,3 +32,9 @@ void blofeld_update_param(int parnum, int buf_no, const void *valptr);
 
 /* Fetch parameter value from parameter list */
 void *blofeld_fetch_parameter(int parnum, int buf_no);
+
+/* Copy selected parameters to selected paste buffer */
+void *blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf);
+
+/* Copy selected parameters from selected paste buffer and update ui */
+void *blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_buf);
