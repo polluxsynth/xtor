@@ -241,12 +241,12 @@ void create_adjustor (gpointer data, gpointer user_data)
       g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), adjustor);
     }
 
-    if (GTK_IS_COMBO_BOX(this))
+    else if (GTK_IS_COMBO_BOX(this))
       g_signal_connect(this, "changed", G_CALLBACK(on_combobox_changed), adjustor);
-    if (GTK_IS_TOGGLE_BUTTON(this))
+    else if (GTK_IS_TOGGLE_BUTTON(this))
       g_signal_connect(this, "toggled", G_CALLBACK(on_togglebutton_changed), adjustor);
 
-    if (GTK_IS_ENTRY(this))
+    else if (GTK_IS_ENTRY(this))
       g_signal_connect(this, "changed", G_CALLBACK(on_entry_changed), adjustor);
   }
 
@@ -273,19 +273,19 @@ void display_adjustor(gpointer data, gpointer user_data)
            range, gtk_buildable_get_name(GTK_BUILDABLE(range)),
            (int) gtk_range_get_value(range));
   }
-  if (GTK_IS_COMBO_BOX(adj)) {
+  else if (GTK_IS_COMBO_BOX(adj)) {
     GtkComboBox *cb = GTK_COMBO_BOX (adj);
     printf("Combobox %p: name %s, value %d\n",
            cb, gtk_buildable_get_name(GTK_BUILDABLE(cb)),
            gtk_combo_box_get_active(cb));
   }
-  if (GTK_IS_TOGGLE_BUTTON(adj)) {
+  else if (GTK_IS_TOGGLE_BUTTON(adj)) {
     GtkToggleButton *tb = GTK_TOGGLE_BUTTON (adj);
     printf("Togglebutton %p: name %s, value %d\n",
            tb, gtk_buildable_get_name(GTK_BUILDABLE(tb)),
            gtk_toggle_button_get_active(tb));
   }
-  if (GTK_IS_ENTRY(adj)) {
+  else if (GTK_IS_ENTRY(adj)) {
     GtkEntry *e = GTK_ENTRY (adj);
     printf("Entry %p: name %s, value \"%s\"\n",
            e, gtk_buildable_get_name(GTK_BUILDABLE(e)),
