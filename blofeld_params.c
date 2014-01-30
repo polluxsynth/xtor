@@ -669,7 +669,7 @@ static void update_int_param(struct blofeld_param *param,
 
 /* Update string parameter and send to Blofeld */
 static void update_str_param(struct blofeld_param *param, int parnum,
-                             int buf_no, const unsigned char *value)
+                             int buf_no, const unsigned char *string)
 {
   /* String parameters must be bitmap parameters, and bitmask must be == 0 */
   if (!param->bm_param || param->bm_param->bitmask)
@@ -684,12 +684,19 @@ static void update_str_param(struct blofeld_param *param, int parnum,
   /* Now update each char parameter in the param list, then
    * send it on to Blofeld. */
   int len = param->bm_param->bitshift; /* we use bitshift field as (max) len */
-  int i;
-  for (i = 0; i < len; i++) {
-    /* if we run out of the end of the string, the rest of the chars are ' ' */
-    unsigned char ch = (*value) ? (*value++) : ' ';
-    parameter_list[parnum + i] = ch;
-    send_parameter_update(parnum + i, buf_no, 0, ch);
+  while (len--) {
+    /* If we run out of the end of the string, the rest of the chars are ' ' */
+    /* So once we hit \0, stay there, otherwise move on. */
+    unsigned char ch = (*string) ? (*string++) : ' ';
+    /* To minimize amount of data to be sent, only update the parameters that
+     * are changed. Otherwise, we send the whole string each time a single
+     * character is updated. We could do this for ordinary parameters too,
+     * but the gain would be much less. */
+    if (parameter_list[parnum] != ch) {
+      parameter_list[parnum] = ch;
+      send_parameter_update(parnum, buf_no, 0, ch);
+    }
+    parnum++;
   }
 }
 
