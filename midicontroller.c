@@ -115,7 +115,7 @@ on_Buffer_pressed (GtkObject *object, gpointer user_data)
 }
 
 void
-on_entry_activate(GtkObject *object, gpointer user_data)
+on_entry_changed(GtkObject *object, gpointer user_data)
 {
   GtkEntry *gtkentry = GTK_ENTRY (object);
   struct adjustor *adjustor = user_data;
@@ -266,7 +266,7 @@ void create_adjustor (gpointer data, gpointer user_data)
       g_signal_connect(this, "toggled", G_CALLBACK(on_togglebutton_changed), adjustor);
 
     if (GTK_IS_ENTRY(this))
-      g_signal_connect(this, "activate", G_CALLBACK(on_entry_activate), adjustor);
+      g_signal_connect(this, "changed", G_CALLBACK(on_entry_changed), adjustor);
   }
 
   g_free(id);
