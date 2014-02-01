@@ -7,12 +7,11 @@
 
 struct adjustor {
   const char *id; /* name of parameter, e.g. "Filter 1 Cutoff" */
-  int parnum;  /* parameter number. Redunant, but practical */
+  int parnum;  /* parameter number. Redundant, but practical */
   GList *widgets; /* list of widgets controlling parameter */
 };
 
 /* List of all adjustors, indexed by parameter number. */
-/* Each element is in fact a GList of adjustors with the same parameter name. */
 struct adjustor **adjustors;
 
 /* used to temporarily block updates to MIDI */
