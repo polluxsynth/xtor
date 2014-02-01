@@ -636,6 +636,13 @@ static void send_parameter_update(int parnum, int buf_no, int devno, int value)
     midi_send_sysex(sndp, sizeof(sndp));
 }
 
+
+/* Prototype for forward declaration */
+static void update_ui_int_param_children(struct blofeld_param *param,
+                                         struct blofeld_param *excepted_child,
+                                         int buf_no, int value, int mask);
+
+
 /* Update numeric (integer) parameter and send to Blofeld */
 static void update_int_param(struct blofeld_param *param,
                              int parnum, int buf_no, int value)
@@ -650,7 +657,7 @@ static void update_int_param(struct blofeld_param *param,
   else if (min == 12) /* octave */
     value = 12 * value + 16; /* coding for octave parameters */
 
-  /* If bitmap param, fetch parent, then update value and send it */
+  /* If bitmap param, fetch parent, then update value */
   if (param->bm_param) {
     struct blofeld_param *parent = param->bm_param->parent_param;
     if (parent == NULL) {
@@ -662,6 +669,11 @@ static void update_int_param(struct blofeld_param *param,
     int shift = param->bm_param->bitshift;
     /* mask out non-changed bits, then or with new value */
     value = (parameter_list[parnum] & ~mask) | (value << shift);
+
+    /* Update UI for all children that have a bitmask that overlaps, 
+     * (skipping the one we've just received the update for)  */
+    /* This happens for for instance LFO Speed vs Clock */
+    update_ui_int_param_children(parent, param, buf_no, value, mask);
   }
 
   /* Update parameter list, then send to Blofeld */
@@ -747,6 +759,31 @@ static void update_ui_str_param(struct blofeld_param *param, int buf_no)
   notify_ui(parnum, buf_no, string, notify_ref);
 }
 
+/* update the ui for all children of the supplied param but only if the 
+ * bitmask overlaps with the supplied mask. */
+static void update_ui_int_param_children(struct blofeld_param *param,
+                                         struct blofeld_param *excepted_child,
+                                         int buf_no, int value, int mask)
+{
+  struct blofeld_param *child = param->child;
+  if (!child) return; /* We shouldn't be called in this case, but .. */
+  printf("Updating ui for children of %s, mask %d\n", param->name, mask);
+  /* Children of same parent are always grouped together. Parent points
+   * to first child, so we just keep examining children until we find one
+   * with a different parent. 
+   */
+  do {
+    int bitmask = child->bm_param->bitmask;
+    int bitshift = child->bm_param->bitshift;
+    if ((bitmask & mask) && child != excepted_child) {
+      printf("Updating child %s: bitmask %d mask %d\n", param->name, bitmask, mask);
+      update_ui_int_param(child, buf_no, (value & bitmask) >> bitshift);
+    }
+    child++;
+  } while (child->bm_param && child->bm_param->parent_param == param);
+}
+
+
 /* called from MIDI (or paste buf) when parameter updated */
 void update_ui(int parnum, int buf_no, int value)
 {
@@ -772,17 +809,8 @@ void update_ui(int parnum, int buf_no, int value)
   }
 
   /* bitmapped parameter */
-
-  /* Children of same parent are always grouped together. Parent points
-   * to first child, so we just keep examining children until we find one
-   * with a different parent. 
-   */
-  do {
-    int mask = child->bm_param->bitmask;
-    int shift = child->bm_param->bitshift;
-    update_ui_int_param(child, buf_no, (value & mask) >> shift);
-    child++;
-  } while (child->bm_param && child->bm_param->parent_param == param);
+  /* update all the children */
+  update_ui_int_param_children(param, NULL, buf_no, value, 0x7f);
 }
 
 static void update_ui_all(unsigned char *param_buf, int buf_no)
