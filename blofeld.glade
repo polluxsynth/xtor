@@ -145,8 +145,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 3">
-                    <property name="label" translatable="yes">3</property>
+                  <object class="GtkRadioButton" id="Buffer 4">
+                    <property name="label" translatable="yes">4</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -162,8 +162,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 4">
-                    <property name="label" translatable="yes">4</property>
+                  <object class="GtkRadioButton" id="Buffer 3">
+                    <property name="label" translatable="yes">3</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -1934,30 +1934,6 @@
                                 <property name="n_rows">3</property>
                                 <property name="n_columns">3</property>
                                 <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
                                   <object class="GtkFrame" id="frame28">
                                     <property name="visible">True</property>
                                     <property name="label_xalign">0</property>
@@ -2032,6 +2008,30 @@
                                     <property name="bottom_attach">2</property>
                                     <property name="y_options"></property>
                                   </packing>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
                                 </child>
                               </object>
                               <packing>
@@ -5072,27 +5072,6 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
                                   <object class="GtkFrame" id="frame30">
                                     <property name="visible">True</property>
                                     <property name="label_xalign">0</property>
@@ -5109,7 +5088,6 @@
                                             <property name="n_columns">4</property>
                                             <child>
                                               <object class="GtkComboBox" id="Modulation 1 Source2">
-                                                <property name="visible">True</property>
                                                 <property name="model">modsource</property>
                                                 <property name="active">0</property>
                                                 <child>
@@ -5129,7 +5107,6 @@
                                             <child>
                                               <object class="GtkHScale" id="Modulation 1 Amount2">
                                                 <property name="width_request">80</property>
-                                                <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="digits">0</property>
                                               </object>
@@ -5142,7 +5119,6 @@
                                             </child>
                                             <child>
                                               <object class="GtkComboBox" id="Modulation 1 Destination2">
-                                                <property name="visible">True</property>
                                                 <property name="model">moddest</property>
                                                 <property name="active">0</property>
                                                 <child>
@@ -5161,6 +5137,7 @@
                                             </child>
                                             <child>
                                               <object class="GtkComboBox" id="Modulation 2 Source2">
+                                                <property name="visible">True</property>
                                                 <property name="model">modsource</property>
                                                 <property name="active">0</property>
                                                 <child>
@@ -5182,6 +5159,7 @@
                                             <child>
                                               <object class="GtkHScale" id="Modulation 2 Amount2">
                                                 <property name="width_request">80</property>
+                                                <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="digits">0</property>
                                               </object>
@@ -5196,6 +5174,7 @@
                                             </child>
                                             <child>
                                               <object class="GtkComboBox" id="Modulation 2 Destination2">
+                                                <property name="visible">True</property>
                                                 <property name="model">moddest</property>
                                                 <property name="active">0</property>
                                                 <child>
@@ -6030,7 +6009,7 @@
                                               <object class="GtkComboBox" id="Modulation Select1">
                                                 <property name="visible">True</property>
                                                 <property name="model">sixteen</property>
-                                                <property name="active">0</property>
+                                                <property name="active">1</property>
                                                 <signal name="changed" handler="on_Modulation_Select_changed"/>
                                                 <child>
                                                   <object class="GtkCellRendererText" id="cellrenderertext235"/>
@@ -6075,6 +6054,27 @@
                                     <property name="top_attach">1</property>
                                     <property name="bottom_attach">2</property>
                                   </packing>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
                                 </child>
                               </object>
                               <packing>
