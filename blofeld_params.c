@@ -111,11 +111,11 @@ struct blofeld_bitmap_param env3trig = { "Envelope 3 Trig+Mode", NULL, 0x20, 5 }
  * parameter.
  */
 struct blofeld_bitmap_param lfo1speed = { "LFO 1 Clock+Speed", NULL, 0x7f, 0 };
-struct blofeld_bitmap_param lfo1clock = { "LFO 1 Clock+Speed", NULL, 0x3f, 1 };
+struct blofeld_bitmap_param lfo1clock = { "LFO 1 Clock+Speed", NULL, 0x7e, 1 };
 struct blofeld_bitmap_param lfo2speed = { "LFO 2 Clock+Speed", NULL, 0x7f, 0 };
-struct blofeld_bitmap_param lfo2clock = { "LFO 2 Clock+Speed", NULL, 0x3f, 1 };
+struct blofeld_bitmap_param lfo2clock = { "LFO 2 Clock+Speed", NULL, 0x7e, 1 };
 struct blofeld_bitmap_param lfo3speed = { "LFO 3 Clock+Speed", NULL, 0x7f, 0 };
-struct blofeld_bitmap_param lfo3clock = { "LFO 3 Clock+Speed", NULL, 0x3f, 1 };
+struct blofeld_bitmap_param lfo3clock = { "LFO 3 Clock+Speed", NULL, 0x7e, 1 };
 
 /* FX 2 has two parameters with different data types */
 /* Damping is continuous 0..127, polarity is 0..1 */
