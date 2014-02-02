@@ -11,6 +11,7 @@ void
 on_GetDump_pressed (GtkObject *object, gpointer user_data)
 {
   printf("Pressed get dump, requesting buffer no %d!\n", current_buffer_no);
+  midi_connect(NULL);
   blofeld_get_dump(current_buffer_no);
 }
 

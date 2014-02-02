@@ -1,6 +1,7 @@
 #include <asoundlib.h>
 
 #include "midi.h"
+#include <alloca.h>
 
 int seq_port;
 snd_seq_t *seq;
@@ -26,7 +27,7 @@ struct polls *midi_init_alsa(void)
     return NULL;
   }
   snd_seq_set_client_name(seq, "Controller");
-  seq_port = snd_seq_create_simple_port(seq, "MIDI OUT",
+  seq_port = snd_seq_create_simple_port(seq, "Sysex editor",
 	 			        SND_SEQ_PORT_CAP_READ | 
 				        SND_SEQ_PORT_CAP_WRITE | 
 				        SND_SEQ_PORT_CAP_SUBS_READ |
@@ -47,6 +48,70 @@ struct polls *midi_init_alsa(void)
   snd_seq_nonblock(seq, SND_SEQ_NONBLOCK);
 
   return polls;
+}
+
+
+static int subscribe(snd_seq_port_subscribe_t *sub)
+{
+  if (snd_seq_get_port_subscription(seq, sub) == 0) {
+    printf("Connection between editor and device already established\n");
+    return -1;
+  }
+
+  if (snd_seq_subscribe_port(seq, sub) < 0) {
+    printf("Couldn't estabilsh connection between editor and device\n");
+    return -1;
+  }
+
+  return 0;
+}
+
+/* Make bidirectional MIDI connection to specified remote device */
+/* Remote device name is saved after first call; subsequent calls may use
+ * NULL as the remote_device. */
+int midi_connect(const char *remote_device)
+{
+  int client;
+  snd_seq_port_subscribe_t *sub;
+  snd_seq_addr_t my_addr;
+  snd_seq_addr_t remote_addr;
+  static const char *saved_remote_device = "";
+
+  if (remote_device)
+    saved_remote_device = remote_device;
+
+  client = snd_seq_client_id(seq);
+  if (client < 0) {
+    printf("Can't get client_id: %d\n", client);
+    return client;
+  }
+  printf("Client address %d:%d\n", client, seq_port);
+
+  snd_seq_port_subscribe_alloca(&sub);
+
+  /* My address */
+  my_addr.client = client;
+  my_addr.port = seq_port;
+
+  /* Other devices address */
+  if (snd_seq_parse_address(seq, &remote_addr, saved_remote_device) < 0) {
+    printf("Can't locate destination device %s\n", saved_remote_device);
+    return -1;
+  }
+ 
+  /* Set up sender and destination in subscription. */ 
+  snd_seq_port_subscribe_set_sender(sub, &my_addr);
+  snd_seq_port_subscribe_set_dest(sub, &remote_addr);
+
+  subscribe(sub);
+
+  /* And now, connection in other direction. */ 
+  snd_seq_port_subscribe_set_sender(sub, &remote_addr);
+  snd_seq_port_subscribe_set_dest(sub, &my_addr);
+
+  subscribe(sub);
+
+  return 0;
 }
 
 /* Send sysex buffer (buffer must contain complete sysex msg w/ SYSEX & EOX) */

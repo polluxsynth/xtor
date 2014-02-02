@@ -9,6 +9,7 @@ const char *main_window_name = "winMain";
 GtkWidget *main_window = NULL;
 
 const char *program_name = "Blofeld Editor";
+const char *remote_device = "Waldorf Blofeld"; /* used for MIDI connection id */
 
 struct adjustor {
   const char *id; /* name of parameter, e.g. "Filter 1 Cutoff" */
@@ -376,6 +377,8 @@ main (int argc, char *argv[])
 
   /* TODO: Should really loop over all potential fds */
   poll_tag = gdk_input_add (polls->pollfds[0].fd, GDK_INPUT_READ, on_midi_input, NULL);
+
+  midi_connect(remote_device);
   
   blofeld_init(&ui_params);
 

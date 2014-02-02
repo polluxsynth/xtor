@@ -28,6 +28,9 @@ int midi_send_sysex(void *buf, int buflen);
 /* Process incoming MIDI data */
 void midi_input(void);
 
+/* Make bidirectional MIDI connection to specified remote device */
+int midi_connect(const char *remote_device);
+
 /* Register sysex receiver */
 void midi_register_sysex(int sysex_id, midi_sysex_receiver receiver, int max_len);
 
