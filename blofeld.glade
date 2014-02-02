@@ -1951,7 +1951,6 @@
                                                 <property name="can_focus">True</property>
                                                 <property name="invisible_char">&#x25CF;</property>
                                                 <property name="width_chars">16</property>
-                                                <property name="text" translatable="yes">0123456789ABCDEF</property>
                                                 <property name="caps_lock_warning">False</property>
                                               </object>
                                               <packing>
