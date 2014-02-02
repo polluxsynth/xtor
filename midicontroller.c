@@ -5,6 +5,11 @@
 #include "blofeld_params.h"
 #include "midi.h"
 
+const char *main_window_name = "winMain";
+GtkWidget *main_window = NULL;
+
+const char *program_name = "Blofeld Editor";
+
 struct adjustor {
   const char *id; /* name of parameter, e.g. "Filter 1 Cutoff" */
   int parnum;  /* parameter number. Redundant, but practical */
@@ -20,6 +25,22 @@ int block_updates;
 /* buffer number currently shown */
 int current_buffer_no;
 
+/* current patch name */
+char current_patch_name[BLOFELD_PATCH_NAME_LEN_MAX + 1] = { 0 };
+int current_patch_name_max = BLOFELD_PATCH_NAME_LEN_MAX;
+GtkWidget *patch_name_widget;
+
+void set_title(void)
+{
+  char title[80];
+
+  sprintf(title, "%s - %s (Part %d)", 
+          program_name, current_patch_name, current_buffer_no + 1);
+
+  if (main_window && GTK_IS_WINDOW(main_window))
+    gtk_window_set_title(GTK_WINDOW(main_window), title);
+}
+  
 void 
 on_winMain_destroy (GtkObject *object, gpointer user_data)
 {
@@ -109,8 +130,13 @@ on_entry_changed(GtkObject *object, gpointer user_data)
     printf("Entry %p: name %s, value \"%s\", parnum %d\n",
            gtkentry, gtk_buildable_get_name(GTK_BUILDABLE(gtkentry)),
            stringptr, adjustor->parnum);
+    /* Set our global patch name if respective widget and update title */
+    if (GTK_WIDGET(object) == patch_name_widget) {
+      strncpy(current_patch_name, stringptr, current_patch_name_max);
+      set_title();
+    }
+    update_parameter(adjustor, stringptr, GTK_WIDGET(object));
   }
-  update_parameter(adjustor, stringptr, GTK_WIDGET(object));
 }
 
 void
@@ -202,6 +228,7 @@ void create_adjustor (gpointer data, gpointer user_data)
   GtkWidget *this = data;
   struct adjustor **adjustors = user_data;
   int parnum;
+  static const char *patch_name = NULL;
 
   gchar *id = chop_name(gtk_buildable_get_name(GTK_BUILDABLE(this)));
 
@@ -245,8 +272,15 @@ void create_adjustor (gpointer data, gpointer user_data)
     else if (GTK_IS_TOGGLE_BUTTON(this))
       g_signal_connect(this, "toggled", G_CALLBACK(on_togglebutton_changed), adjustor);
 
-    else if (GTK_IS_ENTRY(this))
+    else if (GTK_IS_ENTRY(this)) {
       g_signal_connect(this, "changed", G_CALLBACK(on_entry_changed), adjustor);
+      /* Fetch patch name id (i.e. "Patch Name") if we haven't got it yet */
+      if (!patch_name)
+        patch_name = blofeld_get_patch_name_id();
+      /* If we're looking at that parameter, save widget ref for later. */
+      if (!strcmp(id, patch_name))
+        patch_name_widget = this;
+    }
   }
 
   g_free(id);
@@ -316,7 +350,6 @@ int
 main (int argc, char *argv[])
 {
   GtkBuilder *builder;
-  GtkWidget *window;
   struct polls *polls;
   int poll_tag;
   char *gladename;
@@ -330,10 +363,10 @@ main (int argc, char *argv[])
   builder = gtk_builder_new ();
   gtk_builder_add_from_file (builder, gladename, NULL);
 
-  window = GTK_WIDGET (gtk_builder_get_object (builder, "winMain"));
+  main_window = GTK_WIDGET (gtk_builder_get_object (builder, main_window_name));
   gtk_builder_connect_signals (builder, NULL);
 #if 0 /* example of explicit signal connection */
-  g_signal_connect (window, "destroy", G_CALLBACK (on_winMain_destroy), NULL);
+  g_signal_connect (main_window, "destroy", G_CALLBACK (on_winMain_destroy), NULL);
 #endif
   g_object_unref (G_OBJECT (builder));
 
@@ -346,13 +379,14 @@ main (int argc, char *argv[])
   
   blofeld_init(&ui_params);
 
-  create_adjustors_list(ui_params, window);
+  create_adjustors_list(ui_params, main_window);
 
   blofeld_register_notify_cb(param_changed, NULL);
 
   block_updates = 0;
 
-  gtk_widget_show (window);       
+  set_title();
+  gtk_widget_show (main_window);       
   gtk_main ();
   
   return 0;

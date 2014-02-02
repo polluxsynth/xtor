@@ -175,6 +175,8 @@ struct blofeld_bitmap_param patchname = { "Name Char 1", NULL, 0, 16 };
   { "Arp Step Timing " #N ".", &threebit, NULL, &arptim ## N }, \
   { "Arp Step Length " #N ".", &threebit, NULL, &arplen ## N }
 
+static char patch_name[] = "Patch Name";
+
 /* The Parameter Definition List */
 /* Note: Owing to the design of the UI, in order to have the same parameter
  * appear in more than one place, parameters who are references by the UI
@@ -562,7 +564,7 @@ struct blofeld_param blofeld_params[] = {
   { "Effect 2 Curve", &filterdrive, NULL, &fx2curve },
   { "Effect 2 Damping", &norm, NULL, &fx2damping },
   { "Effect 2 Polarity", &onoff, NULL, &fx2polarity },
-  { "Patch Name", NULL, NULL, &patchname },
+  { patch_name, NULL, NULL, &patchname },
   { "", NULL, NULL, NULL }
 };
 
@@ -944,4 +946,10 @@ void *blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_bu
       update_ui(parnum, buf_no, paste_buffer[parnum]);
     }
   }
+}
+
+/* Called when ui wants to know what the patch name parameter is called */
+const char *blofeld_get_patch_name_id(void)
+{
+  return patch_name;
 }

@@ -2,6 +2,8 @@
 
 #define PARNOS_ARPEGGIATOR 311, 358
 
+#define BLOFELD_PATCH_NAME_LEN_MAX 16
+
 struct param_properties {
   int ui_min;  /* user interface minimum */
   int ui_max;  /* user interface maximum */
@@ -38,3 +40,6 @@ void *blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf)
 
 /* Copy selected parameters from selected paste buffer and update ui */
 void *blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_buf);
+
+/* Called when ui wants to know what the patch name parameter is called */
+const char *blofeld_get_patch_name_id(void);

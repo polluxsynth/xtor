@@ -5,6 +5,8 @@
 
 extern int current_buffer_no;
 
+extern void set_title(void);
+
 void
 on_GetDump_pressed (GtkObject *object, gpointer user_data)
 {
@@ -21,6 +23,7 @@ on_Buffer_pressed (GtkObject *object, gpointer user_data)
   if (sscanf(id, "Buffer %d", &buffer_no) == 1 && 
       buffer_no > 0 && buffer_no <= 16) {
     current_buffer_no = buffer_no - 1;
+    set_title();
     printf("Selected buffer #%d = buf %d, requesting dump\n", buffer_no, current_buffer_no);
     blofeld_get_dump(current_buffer_no);
   }
