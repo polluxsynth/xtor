@@ -2,6 +2,7 @@
 #include <poll.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 #include "blofeld_params.h"
 #include "midi.h"
 
@@ -30,6 +31,17 @@ int current_buffer_no;
 char current_patch_name[BLOFELD_PATCH_NAME_LEN_MAX + 1] = { 0 };
 int current_patch_name_max = BLOFELD_PATCH_NAME_LEN_MAX;
 GtkWidget *patch_name_widget;
+
+/* structure for mapping keys to specific widget focus */
+struct keymap {
+  guint keyval;
+  const gchar *key_name;
+  const gchar *param_name;
+  GtkWidget *widget;
+  int aux_param;
+};
+
+GList *keymaps = NULL;
 
 void set_title(void)
 {
@@ -206,6 +218,91 @@ on_button_pressed (GtkObject *object, gpointer user_data)
            button, gtk_buildable_get_name(GTK_BUILDABLE(button)), user_data);
 }
 
+
+/* Used for g_list_find_custom to find widget in keymaps */
+static gint find_keymap_widget(gconstpointer data, gconstpointer user_data)
+{
+  GtkWidget *widget = (GtkWidget *) user_data;
+  const struct keymap *keymap = data;
+
+  return !(widget == keymap->widget); /* 0 if found */
+}
+
+/* Used for g_list_find_custom to find widget name in keymaps */
+static gint find_keymap_paramname(gconstpointer data, gconstpointer user_data)
+{
+  const gchar *name = (const gchar *) user_data;
+  const struct keymap *keymap = data;
+
+  if (!keymap->param_name) /* TODO: really need to test this ? */
+    return 1; /* no name for this keymap; not found */
+  return strcmp(keymap->param_name, name); /* 0 if found */
+}
+
+/* Used for g_list_find_custom to find key val in keymaps */
+static gint find_keymap(gconstpointer data, gconstpointer user_data)
+{
+  guint keyval = (guint) user_data;
+  const struct keymap *keymap = data;
+
+  return !(keymap->keyval == keyval); /* 0 if found */
+}
+
+gboolean
+key_event(GtkWidget *widget, GdkEventKey *event)
+{
+  GtkWidget *focus = GTK_WINDOW(widget)->focus_widget;
+
+  printf("Key pressed: \"%s\", widget %p, focus widget %p, (main window %p)\n", gdk_keyval_name(event->keyval), widget, focus, main_window);
+  printf("Focused widget is a %s, name %s\n", gtk_widget_get_name(focus), gtk_buildable_get_name(GTK_BUILDABLE(focus)));
+
+  if (GTK_IS_ENTRY(focus)) {
+    printf("is entry, don't handle keys here\n");
+    return FALSE;
+  }
+  printf("is not entry, handle keys here\n");
+
+  GList *keymap_l = g_list_find_custom(keymaps, (gconstpointer) event->keyval, find_keymap);
+  if (keymap_l) {
+    struct keymap *keymap = keymap_l->data;
+    printf("Found key map for %s=%s: widget %s (%p)\n", gdk_keyval_name(event->keyval), keymap->key_name, keymap->param_name, keymap->widget);
+    if (keymap->widget) {
+      if (GTK_IS_NOTEBOOK(keymap->widget)) {
+        printf("Setting notebook page to %d\n", keymap->aux_param);
+        gtk_notebook_set_current_page(GTK_NOTEBOOK(keymap->widget), keymap->aux_param);
+      } else {
+        gtk_widget_grab_focus(keymap->widget);
+      }
+    }
+    return TRUE; /* key handled */
+  }
+
+  return FALSE;
+}
+
+
+void add_to_keymap(gpointer data, gpointer user_data)
+{
+  struct keymap *keymap = data;
+  struct keymap *keymap_add = user_data;
+
+  if (keymap->param_name && !strcmp(keymap->param_name, keymap_add->param_name))
+  {
+    keymap->widget = keymap_add->widget;
+    printf("Mapped key %s to widget %s (%p) aux %d\n", keymap->key_name, keymap->param_name, keymap->widget, keymap->aux_param);
+  }
+}
+
+void add_to_keymaps(GList *keymaps, GtkWidget *widget, const char *param_name)
+{
+  struct keymap map_data;
+
+  map_data.param_name = param_name;
+  map_data.widget = widget;
+  g_list_foreach(keymaps, add_to_keymap, &map_data);
+}
+
+
 /* Chop trailing digits off name 
  * I.e. for "LFO 1 Shape2" return "LFO 1 Shape".
  * Returned string must be freed.
@@ -231,9 +328,14 @@ void create_adjustor (gpointer data, gpointer user_data)
   int parnum;
   static const char *patch_name = NULL;
 
-  gchar *id = chop_name(gtk_buildable_get_name(GTK_BUILDABLE(this)));
+  const gchar *name = gtk_buildable_get_name(GTK_BUILDABLE(this));
+  gchar *id = chop_name(name);
 
-  printf("Widget: %s, id %s\n", gtk_widget_get_name(this), id ? id : "none");
+  printf("Widget: %s, name %s id %s\n", gtk_widget_get_name(this), name ? name : "none", id ? id : "none");
+
+  /* Scan keymaps, add widget if found */
+  if (name)
+    add_to_keymaps(keymaps, this, name);
 
   if (id && (parnum = blofeld_find_index(id)) >= 0) {
     printf("has parameter\n");
@@ -347,6 +449,59 @@ create_adjustors_list (int ui_params, GtkWidget *top_widget)
   }
 }
 
+/* Read one row from the keymap liststore in the UI definition file,
+ * and create an entry in the keymaps list for it. */
+static gboolean
+get_liststore_keymap(GtkTreeModel *model,
+                     GtkTreePath *path,
+                     GtkTreeIter *iter,
+                     gpointer user_data)
+{
+  const gchar *key, *param_name, *parent;
+  int aux_param;
+  GList **keymaps = user_data;
+  int keyval;
+
+  gtk_tree_model_get(model, iter, 
+                     0, &key,
+                     1, &param_name,
+                     2, &parent,
+                     3, &aux_param, -1);
+  keyval = gdk_keyval_from_name(key);
+  if (keyval == GDK_VoidSymbol)
+    return FALSE;
+
+  gchar *tree_path_str = gtk_tree_path_to_string(path); /* TODO: Don't really need this */
+
+  printf("Keymap row: %s: key %s mapping %s, aux %d\n", tree_path_str, key, param_name, aux_param);
+
+  struct keymap *map = g_new0(struct keymap, 1);
+  map->key_name = key;
+  map->keyval = keyval;
+  map->param_name = param_name;
+  map->aux_param = aux_param;
+
+  *keymaps = g_list_append(*keymaps, map);
+
+  g_free(tree_path_str);
+
+  return FALSE;
+}
+
+static void
+setup_hotkeys(GtkBuilder *builder, const gchar *store_name)
+{
+  GtkListStore *store;
+
+  store = GTK_LIST_STORE( gtk_builder_get_object( builder, "KeyMappings" ) );
+  if (!store) {
+    printf("Can't find key mappings in UI file!\n");
+    return;
+  }
+
+  gtk_tree_model_foreach(GTK_TREE_MODEL(store), get_liststore_keymap, &keymaps);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -369,6 +524,10 @@ main (int argc, char *argv[])
 #if 0 /* example of explicit signal connection */
   g_signal_connect (main_window, "destroy", G_CALLBACK (on_winMain_destroy), NULL);
 #endif
+
+  setup_hotkeys(builder, "KeyMappings");
+  g_signal_connect(main_window, "key-press-event", G_CALLBACK(key_event), NULL);
+
   g_object_unref (G_OBJECT (builder));
 
   polls = midi_init_alsa();
