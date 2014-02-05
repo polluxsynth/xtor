@@ -17635,6 +17635,13 @@
         <col id="3" translatable="yes">Main Notebook</col>
         <col id="4">0</col>
       </row>
+      <row>
+        <col id="0" translatable="yes">g</col>
+        <col id="1" translatable="yes">Get Dump</col>
+        <col id="2">-1</col>
+        <col id="3" translatable="yes"></col>
+        <col id="4">-1</col>
+      </row>
     </data>
   </object>
 </interface>
