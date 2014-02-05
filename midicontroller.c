@@ -34,10 +34,12 @@ GtkWidget *patch_name_widget;
 
 /* structure for mapping keys to specific widget focus */
 struct keymap {
-  guint keyval;
-  const gchar *key_name;
+  const gchar *key_name; /* e.g. "s" */
+  guint keyval;          /* GDK_ code for key */
   const gchar *param_name;
   GtkWidget *widget;
+  const gchar *parent_name;
+  GtkWidget *parent;
   int aux_param;
 };
 
@@ -219,6 +221,20 @@ on_button_pressed (GtkObject *object, gpointer user_data)
 }
 
 
+/* Is parent a parent of widget ? */
+int is_parent(GtkWidget *widget, GtkWidget *parent)
+{
+const gchar *pname = gtk_buildable_get_name(GTK_BUILDABLE(parent));
+  while (widget = gtk_widget_get_parent(widget)) {
+const gchar *name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
+printf("Scanning %s (%p), looking for %s (%p)\n", name, widget, pname, parent);
+    if (widget == parent)
+      return 1;
+  }
+  return 0;
+}
+
+#if 0
 /* Used for g_list_find_custom to find widget in keymaps */
 static gint find_keymap_widget(gconstpointer data, gconstpointer user_data)
 {
@@ -238,14 +254,34 @@ static gint find_keymap_paramname(gconstpointer data, gconstpointer user_data)
     return 1; /* no name for this keymap; not found */
   return strcmp(keymap->param_name, name); /* 0 if found */
 }
+#endif
+
+struct key_search_spec {
+  guint keyval;
+  GtkWidget *focus_widget;
+};
 
 /* Used for g_list_find_custom to find key val in keymaps */
 static gint find_keymap(gconstpointer data, gconstpointer user_data)
 {
-  guint keyval = (guint) user_data;
   const struct keymap *keymap = data;
+  const struct key_search_spec *search = user_data;
 
-  return !(keymap->keyval == keyval); /* 0 if found */
+printf("Scan keymap %s: %s\n", keymap->key_name, keymap->param_name);
+  if (keymap->keyval != search->keyval)
+    return 1; /* not found */
+printf("Found keyval\n");
+  if (!keymap->parent) /* keymap has no parent specified; we're done */
+    return 0; /* found */
+printf("Has parent %s\n", keymap->parent_name);
+  /* If parent is a notebook, then check for the relevant notebook page. */
+  if (GTK_IS_NOTEBOOK(keymap->parent))
+    return gtk_notebook_get_current_page(GTK_NOTEBOOK(keymap->parent)) !=
+           keymap->aux_param; /* 0 if on correct page */
+printf("Parent is not a notebook\n");
+  /* Otherwise check if the currently focused widget has the same parent
+   * as the parameter specified in the keymap. */
+  return !is_parent(search->focus_widget, keymap->parent); /* 0 if found */
 }
 
 gboolean
@@ -262,7 +298,10 @@ key_event(GtkWidget *widget, GdkEventKey *event)
   }
   printf("is not entry, handle keys here\n");
 
-  GList *keymap_l = g_list_find_custom(keymaps, (gconstpointer) event->keyval, find_keymap);
+  struct key_search_spec key_search_spec;
+  key_search_spec.keyval = event->keyval; /* event to search for in keymaps */
+  key_search_spec.focus_widget = focus; /* currently focused widget */
+  GList *keymap_l = g_list_find_custom(keymaps, &key_search_spec, find_keymap);
   if (keymap_l) {
     struct keymap *keymap = keymap_l->data;
     printf("Found key map for %s=%s: widget %s (%p)\n", gdk_keyval_name(event->keyval), keymap->key_name, keymap->param_name, keymap->widget);
@@ -281,6 +320,74 @@ key_event(GtkWidget *widget, GdkEventKey *event)
 }
 
 
+/* A collection of three functions and passing struct that work together
+ * in order to find a widget with a given id in a whole window hierarchy,
+ * starting with the top window.
+ */
+
+/* The union is a hack to get around the fact that the GCompareFunc for
+ * g_list_find_custom has gcoinstpointers for arguments, while we want
+ * to be able to export the resulting GtkWidget out of the whole
+ * kit-n.kaboodle when we've actually found the widget we're looking for. */
+struct find_widget_data {
+  const char *id;
+  union {
+    const GtkWidget **const_ptr;
+    GtkWidget **ptr;
+  } result;
+};
+
+/* Forward declaration since the two following functions call each other. */
+int find_widgets_id(GList *widget_list, const struct find_widget_data *find_widget_data);
+
+/* GCompareFunc for g_list_find_custom: compare the names of the
+ * search element pointed to by data and the find_widget_data pointed
+ * to by user_data. If equal, return 0 and set the result.[const_]ptr of
+ * the find_widget_data. If not found, and the widget is a container,
+ * get a list of its children, and do a new search through the result list. */
+int find_widget_id(gconstpointer data, gconstpointer user_data)
+{
+  const GtkWidget *widget = data;
+  const struct find_widget_data *find_widget_data = user_data;
+  const gchar *widget_id = gtk_buildable_get_name(GTK_BUILDABLE(widget));
+  if (widget_id && !strcmp(find_widget_data->id, widget_id))
+  {
+    *find_widget_data->result.const_ptr = widget; /* only set if found. */
+    return 0; /* found it! */
+  }
+  if (GTK_IS_CONTAINER(widget))
+    return find_widgets_id(gtk_container_get_children(GTK_CONTAINER(widget)), find_widget_data);
+  return 1; /* we didn't find it this time around */
+}
+
+/* Try to find a widget in widget_list with the id in find_widget_data,
+ * recursively. Needs to return an int in order to be useful when called
+ * from a GCompareFunc. */
+int find_widgets_id(GList *widget_list, const struct find_widget_data *find_widget_data)
+{
+  /* return 0 if found */
+  return !g_list_find_custom(widget_list, find_widget_data, find_widget_id);
+}
+
+/* Top level interface for widget search function. Search recursively from
+ * widget and all its children for a widget with the id 'id', and return
+ * the widget. */
+GtkWidget *find_widget_with_id(GtkWidget *widget, const char *id)
+{
+  GtkWidget *result = NULL;
+  struct find_widget_data find_widget_data;
+
+  printf("Searching for widget with id %s\n", id);
+  find_widget_data.id = id;
+  find_widget_data.result.ptr = &result;
+  find_widget_id(widget, &find_widget_data);
+  if (result)
+    printf("Found it!\n");
+
+  return result;
+}
+
+
 void add_to_keymap(gpointer data, gpointer user_data)
 {
   struct keymap *keymap = data;
@@ -288,8 +395,18 @@ void add_to_keymap(gpointer data, gpointer user_data)
 
   if (keymap->param_name && !strcmp(keymap->param_name, keymap_add->param_name))
   {
-    keymap->widget = keymap_add->widget;
-    printf("Mapped key %s to widget %s (%p) aux %d\n", keymap->key_name, keymap->param_name, keymap->widget, keymap->aux_param);
+    /* Scan all widgets from the top window and down for a parent with the
+     * name specified in the keymap. If there is no parent_name specified,
+     * that means that the key map is valid in any context. */
+    GtkWidget *parent = NULL;
+    if (keymap->parent_name)
+      parent = find_widget_with_id(gtk_widget_get_toplevel(keymap_add->widget),
+                                   keymap->parent_name);
+    if (!keymap->parent_name || parent) { /* no parent specified; or, found */
+      keymap->widget = keymap_add->widget;
+      keymap->parent = parent;
+      printf("Mapped key %s to widget %s (%p) parent %s (%p) aux %d\n", keymap->key_name, keymap->param_name, keymap->widget, keymap->parent_name, keymap->parent, keymap->aux_param);
+    }
   }
 }
 
@@ -399,6 +516,7 @@ void add_adjustors (GList *widget_list, struct adjustor **adjustors)
   g_list_foreach (widget_list, create_adjustor, adjustors);
 }
 
+
 void display_adjustor(gpointer data, gpointer user_data)
 {
   GtkWidget *adj = data;
@@ -457,7 +575,7 @@ get_liststore_keymap(GtkTreeModel *model,
                      GtkTreeIter *iter,
                      gpointer user_data)
 {
-  const gchar *key, *param_name, *parent;
+  gchar *key, *param_name, *parent_name;
   int aux_param;
   GList **keymaps = user_data;
   int keyval;
@@ -465,7 +583,7 @@ get_liststore_keymap(GtkTreeModel *model,
   gtk_tree_model_get(model, iter, 
                      0, &key,
                      1, &param_name,
-                     2, &parent,
+                     2, &parent_name,
                      3, &aux_param, -1);
   keyval = gdk_keyval_from_name(key);
   if (keyval == GDK_VoidSymbol)
@@ -473,12 +591,23 @@ get_liststore_keymap(GtkTreeModel *model,
 
   gchar *tree_path_str = gtk_tree_path_to_string(path); /* TODO: Don't really need this */
 
-  printf("Keymap row: %s: key %s mapping %s, aux %d\n", tree_path_str, key, param_name, aux_param);
+  printf("Keymap row: %s: key %s mapping %s, parent %s, aux %d\n", tree_path_str, key, param_name, parent_name, aux_param);
+
+  /* Empty parent_name string means there is no specified parent.
+   * Easier to manage if just set to NULL rather than having zero-length
+   * string.
+   */
+  if (parent_name && !parent_name[0])
+  {
+    g_free(parent_name);
+    parent_name = NULL;
+  }
 
   struct keymap *map = g_new0(struct keymap, 1);
   map->key_name = key;
   map->keyval = keyval;
   map->param_name = param_name;
+  map->parent_name = parent_name;
   map->aux_param = aux_param;
 
   *keymaps = g_list_append(*keymaps, map);
