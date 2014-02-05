@@ -222,16 +222,14 @@ on_button_pressed (GtkObject *object, gpointer user_data)
 }
 
 
-/* Is parent a parent of widget ? */
+/* Is 'parent' identical to or a parent of 'widget' ? */
 int is_parent(GtkWidget *widget, GtkWidget *parent)
 {
-const gchar *pname = gtk_buildable_get_name(GTK_BUILDABLE(parent));
-  while (widget = gtk_widget_get_parent(widget)) {
-const gchar *name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
-printf("Scanning %s (%p), looking for %s (%p)\n", name, widget, pname, parent);
+  do {
+printf("Scanning %s (%p), looking for %s (%p)\n", gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget, gtk_buildable_get_name(GTK_BUILDABLE(parent)), parent);
     if (widget == parent)
       return 1;
-  }
+  } while (widget = gtk_widget_get_parent(widget));
   return 0;
 }
 
