@@ -38,9 +38,10 @@ struct keymap {
   guint keyval;          /* GDK_ code for key */
   const gchar *param_name;
   GtkWidget *widget;
+  int param_arg;
   const gchar *parent_name;
   GtkWidget *parent;
-  int aux_param;
+  int parent_arg;
 };
 
 GList *keymaps = NULL;
@@ -277,7 +278,7 @@ printf("Has parent %s\n", keymap->parent_name);
   /* If parent is a notebook, then check for the relevant notebook page. */
   if (GTK_IS_NOTEBOOK(keymap->parent))
     return gtk_notebook_get_current_page(GTK_NOTEBOOK(keymap->parent)) !=
-           keymap->aux_param; /* 0 if on correct page */
+           keymap->parent_arg; /* 0 if on correct page */
 printf("Parent is not a notebook\n");
   /* Otherwise check if the currently focused widget has the same parent
    * as the parameter specified in the keymap. */
@@ -307,8 +308,8 @@ key_event(GtkWidget *widget, GdkEventKey *event)
     printf("Found key map for %s=%s: widget %s (%p)\n", gdk_keyval_name(event->keyval), keymap->key_name, keymap->param_name, keymap->widget);
     if (keymap->widget) {
       if (GTK_IS_NOTEBOOK(keymap->widget)) {
-        printf("Setting notebook page to %d\n", keymap->aux_param);
-        gtk_notebook_set_current_page(GTK_NOTEBOOK(keymap->widget), keymap->aux_param);
+        printf("Setting notebook page to %d\n", keymap->param_arg);
+        gtk_notebook_set_current_page(GTK_NOTEBOOK(keymap->widget), keymap->param_arg);
       } else {
         gtk_widget_grab_focus(keymap->widget);
       }
@@ -405,7 +406,7 @@ void add_to_keymap(gpointer data, gpointer user_data)
     if (!keymap->parent_name || parent) { /* no parent specified; or, found */
       keymap->widget = keymap_add->widget;
       keymap->parent = parent;
-      printf("Mapped key %s to widget %s (%p) parent %s (%p) aux %d\n", keymap->key_name, keymap->param_name, keymap->widget, keymap->parent_name, keymap->parent, keymap->aux_param);
+      printf("Mapped key %s to widget %s (%p) arg %d parent %s (%p) arg %d\n", keymap->key_name, keymap->param_name, keymap->widget, keymap->param_arg, keymap->parent_name, keymap->parent, keymap->parent_arg);
     }
   }
 }
@@ -576,22 +577,23 @@ get_liststore_keymap(GtkTreeModel *model,
                      gpointer user_data)
 {
   gchar *key, *param_name, *parent_name;
-  int aux_param;
+  int param_arg, parent_arg;
   GList **keymaps = user_data;
   int keyval;
 
   gtk_tree_model_get(model, iter, 
                      0, &key,
                      1, &param_name,
-                     2, &parent_name,
-                     3, &aux_param, -1);
+                     2, &param_arg,
+                     3, &parent_name,
+                     4, &parent_arg, -1);
   keyval = gdk_keyval_from_name(key);
   if (keyval == GDK_VoidSymbol)
     return FALSE;
 
   gchar *tree_path_str = gtk_tree_path_to_string(path); /* TODO: Don't really need this */
 
-  printf("Keymap row: %s: key %s mapping %s, parent %s, aux %d\n", tree_path_str, key, param_name, parent_name, aux_param);
+  printf("Keymap row: %s: key %s mapping %s, arg %d, parent %s, arg %d\n", tree_path_str, key, param_name, param_arg, parent_name, parent_arg);
 
   /* Empty parent_name string means there is no specified parent.
    * Easier to manage if just set to NULL rather than having zero-length
@@ -607,8 +609,9 @@ get_liststore_keymap(GtkTreeModel *model,
   map->key_name = key;
   map->keyval = keyval;
   map->param_name = param_name;
+  map->param_arg = param_arg;
   map->parent_name = parent_name;
-  map->aux_param = aux_param;
+  map->parent_arg = parent_arg;
 
   *keymaps = g_list_append(*keymaps, map);
 
