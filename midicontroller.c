@@ -248,7 +248,9 @@ static gint find_keymap(gconstpointer data, gconstpointer user_data)
 
 printf("Scan keymap %s: %s\n", keymap->key_name, keymap->param_name);
   if (keymap->keyval != search->keyval)
-    return 1; /* not found */
+    return 1; /* not the key we're looking for found */
+  if (!keymap->widget)
+    return 1; /* Widget not set, UI specified unknown Param or Parent */
 printf("Found keyval\n");
   if (!keymap->parent) /* keymap has no parent specified; we're done */
     return 0; /* found */
@@ -386,9 +388,14 @@ void add_to_keymap(gpointer data, gpointer user_data)
     if (keymap->parent_name) {
       parent = find_widget_with_id(gtk_widget_get_toplevel(keymap_add->widget),
                                    keymap->parent_name);
-      if (!parent)
-        printf("Warning: Can't find parent %s for key %s map for %s!\n",
+      if (!parent) {
+        printf("Warning: Can't find parent %s for key %s map for %s, skipping!\n",
                keymap->parent_name, keymap->key_name, keymap->param_name);
+        /* We return here to avoid setting an unconditional mapping (since
+         * parent is NULL) which is not what the user intended, and might
+         * screw up other mappings, very confusing. */
+        return;
+      }
     }
     if (!keymap->parent_name || parent) { /* no parent specified; or, found */
       keymap->widget = keymap_add->widget;
