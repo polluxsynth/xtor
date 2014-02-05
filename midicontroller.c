@@ -308,6 +308,8 @@ key_event(GtkWidget *widget, GdkEventKey *event)
       if (GTK_IS_NOTEBOOK(keymap->widget)) {
         printf("Setting notebook page to %d\n", keymap->param_arg);
         gtk_notebook_set_current_page(GTK_NOTEBOOK(keymap->widget), keymap->param_arg);
+      } else if (GTK_IS_BUTTON(keymap->widget)) {
+        gtk_button_pressed(GTK_BUTTON(keymap->widget));
       } else {
         gtk_widget_grab_focus(keymap->widget);
       }
