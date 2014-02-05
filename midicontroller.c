@@ -233,28 +233,8 @@ printf("Scanning %s (%p), looking for %s (%p)\n", gtk_buildable_get_name(GTK_BUI
   return 0;
 }
 
-#if 0
-/* Used for g_list_find_custom to find widget in keymaps */
-static gint find_keymap_widget(gconstpointer data, gconstpointer user_data)
-{
-  GtkWidget *widget = (GtkWidget *) user_data;
-  const struct keymap *keymap = data;
 
-  return !(widget == keymap->widget); /* 0 if found */
-}
-
-/* Used for g_list_find_custom to find widget name in keymaps */
-static gint find_keymap_paramname(gconstpointer data, gconstpointer user_data)
-{
-  const gchar *name = (const gchar *) user_data;
-  const struct keymap *keymap = data;
-
-  if (!keymap->param_name) /* TODO: really need to test this ? */
-    return 1; /* no name for this keymap; not found */
-  return strcmp(keymap->param_name, name); /* 0 if found */
-}
-#endif
-
+/* Used for searching for valid key map given key val and current focus */
 struct key_search_spec {
   guint keyval;
   GtkWidget *focus_widget;
@@ -283,6 +263,7 @@ printf("Parent is not a notebook\n");
   return !is_parent(search->focus_widget, keymap->parent); /* 0 if found */
 }
 
+/* Handle all key events arriving in the main window */
 gboolean
 key_event(GtkWidget *widget, GdkEventKey *event)
 {
@@ -291,33 +272,33 @@ key_event(GtkWidget *widget, GdkEventKey *event)
   printf("Key pressed: \"%s\", widget %p, focus widget %p, (main window %p)\n", gdk_keyval_name(event->keyval), widget, focus, main_window);
   printf("Focused widget is a %s, name %s\n", gtk_widget_get_name(focus), gtk_buildable_get_name(GTK_BUILDABLE(focus)));
 
-  if (GTK_IS_ENTRY(focus)) {
-    printf("is entry, don't handle keys here\n");
-    return FALSE;
-  }
-  printf("is not entry, handle keys here\n");
+  if (GTK_IS_ENTRY(focus))
+    return FALSE; /* We let GTK handle all key events for GtkEntries*/
 
   struct key_search_spec key_search_spec;
   key_search_spec.keyval = event->keyval; /* event to search for in keymaps */
   key_search_spec.focus_widget = focus; /* currently focused widget */
   GList *keymap_l = g_list_find_custom(keymaps, &key_search_spec, find_keymap);
-  if (keymap_l) {
-    struct keymap *keymap = keymap_l->data;
-    printf("Found key map for %s=%s: widget %s (%p)\n", gdk_keyval_name(event->keyval), keymap->key_name, keymap->param_name, keymap->widget);
-    if (keymap->widget) {
-      if (GTK_IS_NOTEBOOK(keymap->widget)) {
-        printf("Setting notebook page to %d\n", keymap->param_arg);
-        gtk_notebook_set_current_page(GTK_NOTEBOOK(keymap->widget), keymap->param_arg);
-      } else if (GTK_IS_BUTTON(keymap->widget)) {
-        gtk_button_pressed(GTK_BUTTON(keymap->widget));
-      } else {
-        gtk_widget_grab_focus(keymap->widget);
-      }
-    }
-    return TRUE; /* key handled */
+  if (!keymap_l)
+    return FALSE; /* can't find valid key mapping */
+
+  struct keymap *keymap = keymap_l->data;
+  printf("Found key map for %s: widget %s (%p)\n", keymap->key_name, keymap->param_name, keymap->widget);
+
+  if (!keymap->widget)
+    return FALSE; /* Shouldn't really happen, all widgets must have a value */
+
+  if (GTK_IS_NOTEBOOK(keymap->widget)) {
+    printf("Setting notebook page to %d\n", keymap->param_arg);
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(keymap->widget),
+                                  keymap->param_arg);
+  } else if (GTK_IS_BUTTON(keymap->widget)) {
+    gtk_button_pressed(GTK_BUTTON(keymap->widget));
+  } else { /* other widget types */
+    gtk_widget_grab_focus(keymap->widget);
   }
 
-  return FALSE;
+  return TRUE; /* key handled */
 }
 
 
@@ -389,10 +370,12 @@ GtkWidget *find_widget_with_id(GtkWidget *widget, const char *id)
 }
 
 
+/* GFunc for iterating over keymaps when adding new widgets in
+ * create_adjustor. */
 void add_to_keymap(gpointer data, gpointer user_data)
 {
-  struct keymap *keymap = data;
-  struct keymap *keymap_add = user_data;
+  struct keymap *keymap = data; /* current keymap definition */
+  struct keymap *keymap_add = user_data; /* data we want to add to key map */
 
   if (keymap->param_name && !strcmp(keymap->param_name, keymap_add->param_name))
   {
@@ -400,9 +383,13 @@ void add_to_keymap(gpointer data, gpointer user_data)
      * name specified in the keymap. If there is no parent_name specified,
      * that means that the key map is valid in any context. */
     GtkWidget *parent = NULL;
-    if (keymap->parent_name)
+    if (keymap->parent_name) {
       parent = find_widget_with_id(gtk_widget_get_toplevel(keymap_add->widget),
                                    keymap->parent_name);
+      if (!parent)
+        printf("Warning: Can't find parent %s for key %s map for %s!\n",
+               keymap->parent_name, keymap->key_name, keymap->param_name);
+    }
     if (!keymap->parent_name || parent) { /* no parent specified; or, found */
       keymap->widget = keymap_add->widget;
       keymap->parent = parent;
@@ -411,6 +398,7 @@ void add_to_keymap(gpointer data, gpointer user_data)
   }
 }
 
+/* Add widget with id param_name to keymaps, if any key maps reference it. */
 void add_to_keymaps(GList *keymaps, GtkWidget *widget, const char *param_name)
 {
   struct keymap map_data;
@@ -568,8 +556,9 @@ create_adjustors_list (int ui_params, GtkWidget *top_widget)
   }
 }
 
-/* Read one row from the keymap liststore in the UI definition file,
- * and create an entry in the keymaps list for it. */
+
+/* GtkTreeModelForeachFunc to read one row from the KeyMappings liststore
+ * in the UI definition file, and create an entry in the keymaps list for it. */
 static gboolean
 get_liststore_keymap(GtkTreeModel *model,
                      GtkTreePath *path,
@@ -577,9 +566,8 @@ get_liststore_keymap(GtkTreeModel *model,
                      gpointer user_data)
 {
   gchar *key, *param_name, *parent_name;
-  int param_arg, parent_arg;
+  int keyval, param_arg, parent_arg;
   GList **keymaps = user_data;
-  int keyval;
 
   gtk_tree_model_get(model, iter, 
                      0, &key,
@@ -588,8 +576,12 @@ get_liststore_keymap(GtkTreeModel *model,
                      3, &parent_name,
                      4, &parent_arg, -1);
   keyval = gdk_keyval_from_name(key);
-  if (keyval == GDK_VoidSymbol)
+  if (keyval == GDK_VoidSymbol) {
+    g_free(key);
+    g_free(param_name);
+    g_free(parent_name);
     return FALSE;
+  }
 
   gchar *tree_path_str = gtk_tree_path_to_string(path); /* TODO: Don't really need this */
 
@@ -613,6 +605,7 @@ get_liststore_keymap(GtkTreeModel *model,
   map->parent_name = parent_name;
   map->parent_arg = parent_arg;
 
+  /* We need to use append here, because we want to preserve ordering */
   *keymaps = g_list_append(*keymaps, map);
 
   g_free(tree_path_str);
@@ -620,6 +613,7 @@ get_liststore_keymap(GtkTreeModel *model,
   return FALSE;
 }
 
+/* Load UI KeyMappings liststore into keymaps list */
 static void
 setup_hotkeys(GtkBuilder *builder, const gchar *store_name)
 {
@@ -633,6 +627,7 @@ setup_hotkeys(GtkBuilder *builder, const gchar *store_name)
 
   gtk_tree_model_foreach(GTK_TREE_MODEL(store), get_liststore_keymap, &keymaps);
 }
+
 
 int
 main (int argc, char *argv[])
