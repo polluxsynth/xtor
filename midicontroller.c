@@ -265,13 +265,76 @@ printf("Parent is not a notebook\n");
   return !is_parent(search->focus_widget, keymap->parent); /* 0 if found */
 }
 
+
+gboolean navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
+{
+  GtkWidget *parent;
+  int shifted = event->state & GDK_SHIFT_MASK;
+  int arg = -1;
+#define SET_ARG(value) if (arg < 0) arg = (value)
+  GtkWidget *what = NULL;
+  const char *signal = NULL;
+
+  switch (event->keyval) {
+    case GDK_Right:
+      SET_ARG(GTK_DIR_RIGHT);
+    case GDK_Left:
+      SET_ARG(GTK_DIR_LEFT);
+    case GDK_Up:
+      SET_ARG(GTK_DIR_UP);
+    case GDK_Down:
+      SET_ARG(GTK_DIR_DOWN);
+      what = widget;
+      signal = "move-focus";
+      break;
+    case GDK_Forward:
+    case GDK_Page_Up:
+      if (GTK_IS_RANGE(focus)) {
+        SET_ARG(shifted ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD);
+        what = focus;
+        signal = "move-slider";
+      }
+      if (GTK_IS_TOGGLE_BUTTON(focus) && 
+          (parent = gtk_widget_get_parent(focus)) &&
+          GTK_IS_COMBO_BOX(parent)) {
+        SET_ARG(shifted ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD);
+        what = parent;
+        signal = "move-active";
+      }
+      break;
+    case GDK_Back:
+    case GDK_Page_Down:
+      if (GTK_IS_RANGE(focus)) {
+        SET_ARG(shifted ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_STEP_BACKWARD);
+        what = focus;
+        signal = "move-slider";
+      }
+      if (GTK_IS_TOGGLE_BUTTON(focus) && 
+          (parent = gtk_widget_get_parent(focus)) &&
+          GTK_IS_COMBO_BOX(parent)) {
+        SET_ARG(shifted ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_STEP_BACKWARD);
+        what = parent;
+        signal = "move-active";
+      }
+      break;
+    default:
+      break;
+  }
+  if (what && signal) {
+    g_signal_emit_by_name(GTK_OBJECT(what), signal, arg);
+    return TRUE;
+  }
+  return FALSE;
+}
+
+  
 /* Handle all key events arriving in the main window */
 gboolean
 key_event(GtkWidget *widget, GdkEventKey *event)
 {
   GtkWidget *focus = GTK_WINDOW(widget)->focus_widget;
 
-  printf("Key pressed: \"%s\", widget %p, focus widget %p, (main window %p)\n", gdk_keyval_name(event->keyval), widget, focus, main_window);
+  printf("Key pressed: \"%s\" (0x%08x), widget %p, focus widget %p, (main window %p)\n", gdk_keyval_name(event->keyval), event->keyval, widget, focus, main_window);
   printf("Focused widget is a %s, name %s\n", gtk_widget_get_name(focus), gtk_buildable_get_name(GTK_BUILDABLE(focus)));
 
   if (GTK_IS_ENTRY(focus))
@@ -280,6 +343,10 @@ key_event(GtkWidget *widget, GdkEventKey *event)
   struct key_search_spec key_search_spec;
   key_search_spec.keyval = event->keyval; /* event to search for in keymaps */
   key_search_spec.focus_widget = focus; /* currently focused widget */
+
+  if (navigation(widget, focus, event))
+    return TRUE;
+
   GList *keymap_l = g_list_find_custom(keymaps, &key_search_spec, find_keymap);
   if (!keymap_l)
     return FALSE; /* can't find valid key mapping */
