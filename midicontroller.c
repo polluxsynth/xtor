@@ -6,7 +6,7 @@
 #include "blofeld_params.h"
 #include "midi.h"
 
-const char *main_window_name = "winMain";
+const char *main_window_name = "Main Window";
 GtkWidget *main_window = NULL;
 
 const char *program_name = "Blofeld Editor";
@@ -58,7 +58,7 @@ void set_title(void)
 }
   
 void 
-on_winMain_destroy (GtkObject *object, gpointer user_data)
+on_Main_Window_destroy (GtkObject *object, gpointer user_data)
 {
   gtk_main_quit();
 }
@@ -723,7 +723,7 @@ main (int argc, char *argv[])
   main_window = GTK_WIDGET (gtk_builder_get_object (builder, main_window_name));
   gtk_builder_connect_signals (builder, NULL);
 #if 0 /* example of explicit signal connection */
-  g_signal_connect (main_window, "destroy", G_CALLBACK (on_winMain_destroy), NULL);
+  g_signal_connect (main_window, "destroy", G_CALLBACK (on_Main_Window_destroy), NULL);
 #endif
 
   setup_hotkeys(builder, "KeyMappings");
