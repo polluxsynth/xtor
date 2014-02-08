@@ -321,7 +321,9 @@ gboolean navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
 int is_parent(GtkWidget *widget, GtkWidget *parent)
 {
   do {
-dprintf("Scanning %s (%p), looking for %s (%p)\n", gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget, gtk_buildable_get_name(GTK_BUILDABLE(parent)), parent);
+    dprintf("Scanning %s (%p), looking for %s (%p)\n",
+            gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget,
+            gtk_buildable_get_name(GTK_BUILDABLE(parent)), parent);
     if (widget == parent)
       return 1;
   } while (widget = gtk_widget_get_parent(widget));
@@ -340,20 +342,20 @@ static gint find_keymap(gconstpointer data, gconstpointer user_data)
   const struct keymap *keymap = data;
   const struct key_search_spec *search = user_data;
 
-dprintf("Scan keymap %s: %s\n", keymap->key_name, keymap->param_name);
+  dprintf("Scan keymap %s: %s\n", keymap->key_name, keymap->param_name);
   if (keymap->keyval != search->keyval)
     return 1; /* not the key we're looking for found */
   if (!keymap->widget)
     return 1; /* Widget not set, UI specified unknown Param or Parent */
-dprintf("Found keyval\n");
+  dprintf("Found keyval\n");
   if (!keymap->parent) /* keymap has no parent specified; we're done */
     return 0; /* found */
-dprintf("Has parent %s\n", keymap->parent_name);
+  dprintf("Has parent %s\n", keymap->parent_name);
   /* If parent is a notebook, then check for the relevant notebook page. */
   if (GTK_IS_NOTEBOOK(keymap->parent))
     return gtk_notebook_get_current_page(GTK_NOTEBOOK(keymap->parent)) !=
            keymap->parent_arg; /* 0 if on correct page */
-dprintf("Parent is not a notebook\n");
+  dprintf("Parent is not a notebook\n");
   /* Otherwise check if the currently focused widget has the same parent
    * as the parameter specified in the keymap. */
   return !is_parent(search->focus_widget, keymap->parent); /* 0 if found */
@@ -371,7 +373,8 @@ gboolean mapped_key(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
     return FALSE; /* can't find valid key mapping */
 
   struct keymap *keymap = keymap_l->data;
-  dprintf("Found key map for %s: widget %s (%p)\n", keymap->key_name, keymap->param_name, keymap->widget);
+  dprintf("Found key map for %s: widget %s (%p)\n",
+          keymap->key_name, keymap->param_name, keymap->widget);
 
   if (!keymap->widget) /* Can happen if ParamName note found */
     return FALSE;
@@ -401,8 +404,11 @@ key_event(GtkWidget *widget, GdkEventKey *event)
 {
   GtkWidget *focus = GTK_WINDOW(widget)->focus_widget;
 
-  dprintf("Key pressed: \"%s\" (0x%08x), widget %p, focus widget %p, (main window %p)\n", gdk_keyval_name(event->keyval), event->keyval, widget, focus, main_window);
-  dprintf("Focused widget is a %s, name %s\n", gtk_widget_get_name(focus), gtk_buildable_get_name(GTK_BUILDABLE(focus)));
+  dprintf("Key pressed: \"%s\" (0x%08x), widget %p, focus widget %p, "
+          "(main window %p)\n", gdk_keyval_name(event->keyval), event->keyval,
+          widget, focus, main_window);
+  dprintf("Focused widget is a %s, name %s\n",gtk_widget_get_name(focus),
+          gtk_buildable_get_name(GTK_BUILDABLE(focus)));
 
   if (GTK_IS_ENTRY(focus))
     return FALSE; /* We let GTK handle all key events for GtkEntries*/
@@ -513,7 +519,10 @@ void add_to_keymap(gpointer data, gpointer user_data)
     if (!keymap->parent_name || parent) { /* no parent specified; or, found */
       keymap->widget = keymap_add->widget;
       keymap->parent = parent;
-      dprintf("Mapped key %s to widget %s (%p) arg %d parent %s (%p) arg %d\n", keymap->key_name, keymap->param_name, keymap->widget, keymap->param_arg, keymap->parent_name, keymap->parent, keymap->parent_arg);
+      dprintf("Mapped key %s to widget %s (%p) arg %d parent %s (%p) arg %d\n",
+              keymap->key_name, keymap->param_name, keymap->widget,
+              keymap->param_arg, keymap->parent_name, keymap->parent,
+              keymap->parent_arg);
     }
   }
 }
@@ -557,7 +566,8 @@ void create_adjustor (gpointer data, gpointer user_data)
   const gchar *name = gtk_buildable_get_name(GTK_BUILDABLE(this));
   gchar *id = chop_name(name);
 
-  dprintf("Widget: %s, name %s id %s\n", gtk_widget_get_name(this), name ? name : "none", id ? id : "none");
+  dprintf("Widget: %s, name %s id %s\n", gtk_widget_get_name(this),
+          name ? name : "none", id ? id : "none");
 
   /* Scan keymaps, add widget if found */
   if (name)
@@ -705,7 +715,8 @@ get_liststore_keymap(GtkTreeModel *model,
 
   gchar *tree_path_str = gtk_tree_path_to_string(path); /* TODO: Don't really need this */
 
-  dprintf("Keymap row: %s: key %s mapping %s, arg %d, parent %s, arg %d\n", tree_path_str, key, param_name, param_arg, parent_name, parent_arg);
+  dprintf("Keymap row: %s: key %s mapping %s, arg %d, parent %s, arg %d\n",
+          tree_path_str, key, param_name, param_arg, parent_name, parent_arg);
 
   /* Empty parent_name string means there is no specified parent.
    * Easier to manage if just set to NULL rather than having zero-length

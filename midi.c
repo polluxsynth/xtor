@@ -162,7 +162,14 @@ static void sysex_in(snd_seq_event_t *ev)
   int copy_len;
   unsigned char *data = (unsigned char *)ev->data.ext.ptr;
 
-int i; for (i = 0; i < ev->data.ext.len; i++) dprintf("%d ", data[i]); printf("\n");
+#ifdef DEBUG
+  {
+    int i;
+    for (i = 0; i < ev->data.ext.len; i++)
+      dprintf("%d ", data[i]);
+     printf("\n");
+  }
+#endif
 
   if (data[0] == SYSEX) { /* start of dump */
     dstidx = 0;
@@ -195,11 +202,11 @@ void midi_input(void)
   while (1)
   {
     midi_status = snd_seq_event_input(seq, &ev);
-dprintf("MIDI input status : %d\n", midi_status);
+    dprintf("MIDI input status : %d\n", midi_status);
     if (midi_status < 0)
       break;
     evlen = snd_seq_event_length(ev);
-dprintf("MIDI event length %d\n", evlen);
+    dprintf("MIDI event length %d\n", evlen);
     switch (ev->type) {
       case SND_SEQ_EVENT_SYSEX:
         dprintf("Sysex: length %d\n", ev->data.ext.len);

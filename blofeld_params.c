@@ -658,7 +658,8 @@ static void send_parameter_update(int parnum, int buf_no, int devno, int value)
                            value,
                            EOX };
 
-  dprintf("Blofeld update param: parnum %d, buf %d, value %d\n", parnum, buf_no, value);
+  dprintf("Blofeld update param: parnum %d, buf %d, value %d\n",
+          parnum, buf_no, value);
   if (parnum < BLOFELD_PARAMS)
     midi_send_sysex(sndp, sizeof(sndp));
 }
@@ -803,7 +804,8 @@ static void update_ui_int_param_children(struct blofeld_param *param,
     int bitmask = child->bm_param->bitmask;
     int bitshift = child->bm_param->bitshift;
     if ((bitmask & mask) && child != excepted_child) {
-      dprintf("Updating child %s: bitmask %d mask %d\n", param->name, bitmask, mask);
+      dprintf("Updating child %s: bitmask %d mask %d\n",
+              param->name, bitmask, mask);
       update_ui_int_param(child, buf_no, (value & bitmask) >> bitshift);
     }
     child++;
@@ -819,7 +821,8 @@ void update_ui(int parnum, int buf_no, int value)
 
   struct blofeld_param *param = &blofeld_params[parnum];
 
-  dprintf("Blofeld update ui: parno %d, buf %d, value %d\n", parnum, buf_no, value);
+  dprintf("Blofeld update ui: parno %d, buf %d, value %d\n",
+          parnum, buf_no, value);
 
   parameter_list[parnum] = value;
 
@@ -966,7 +969,8 @@ void blofeld_init(struct param_handler *param_handler)
     while (params--) {
       if (!parent_param->child) {
         parent_param->child = param;
-        dprintf("Param %s has first child %s\n", parent_param->name, param->bm_param->parent_param->child->name);
+        dprintf("Param %s has first child %s\n",
+                parent_param->name, param->bm_param->parent_param->child->name);
       }
       parent_param++; /* next parent */
     }

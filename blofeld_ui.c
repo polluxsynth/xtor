@@ -49,7 +49,8 @@ on_Buffer_pressed (GtkObject *object, gpointer user_data)
       buffer_no > 0 && buffer_no <= 16) {
     current_buffer_no = buffer_no - 1;
     set_title();
-    dprintf("Selected buffer #%d = buf %d, requesting dump\n", buffer_no, current_buffer_no);
+    dprintf("Selected buffer #%d = buf %d, requesting dump\n",
+            buffer_no, current_buffer_no);
     blofeld_get_dump(current_buffer_no);
   }
 }
