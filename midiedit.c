@@ -354,7 +354,43 @@ gboolean navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
   return FALSE;
 }
 
-  
+
+/* Handle keys mapped in UI KeyMapping liststore */  
+gboolean mapped_key(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
+{
+  struct key_search_spec key_search_spec;
+  key_search_spec.keyval = event->keyval; /* event to search for in keymaps */
+  key_search_spec.focus_widget = focus; /* currently focused widget */
+
+  GList *keymap_l = g_list_find_custom(keymaps, &key_search_spec, find_keymap);
+  if (!keymap_l)
+    return FALSE; /* can't find valid key mapping */
+
+  struct keymap *keymap = keymap_l->data;
+  printf("Found key map for %s: widget %s (%p)\n", keymap->key_name, keymap->param_name, keymap->widget);
+
+  if (!keymap->widget) /* Can happen if ParamName note found */
+    return FALSE;
+
+  if (GTK_IS_NOTEBOOK(keymap->widget)) {
+    printf("Setting notebook page to %d\n", keymap->param_arg);
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(keymap->widget),
+                                  keymap->param_arg);
+    return TRUE;
+  }
+
+  if (GTK_IS_BUTTON(keymap->widget)) {
+    gtk_button_pressed(GTK_BUTTON(keymap->widget));
+    return TRUE;
+  }
+
+  /* All other widget types */
+  gtk_widget_grab_focus(keymap->widget);
+
+  return TRUE; /* key handled */
+}
+
+
 /* Handle all key events arriving in the main window */
 gboolean
 key_event(GtkWidget *widget, GdkEventKey *event)
@@ -367,34 +403,13 @@ key_event(GtkWidget *widget, GdkEventKey *event)
   if (GTK_IS_ENTRY(focus))
     return FALSE; /* We let GTK handle all key events for GtkEntries*/
 
-  struct key_search_spec key_search_spec;
-  key_search_spec.keyval = event->keyval; /* event to search for in keymaps */
-  key_search_spec.focus_widget = focus; /* currently focused widget */
-
   if (navigation(widget, focus, event))
     return TRUE;
 
-  GList *keymap_l = g_list_find_custom(keymaps, &key_search_spec, find_keymap);
-  if (!keymap_l)
-    return FALSE; /* can't find valid key mapping */
+  if (mapped_key(widget, focus, event))
+    return TRUE;
 
-  struct keymap *keymap = keymap_l->data;
-  printf("Found key map for %s: widget %s (%p)\n", keymap->key_name, keymap->param_name, keymap->widget);
-
-  if (!keymap->widget)
-    return FALSE; /* Shouldn't really happen, all widgets must have a value */
-
-  if (GTK_IS_NOTEBOOK(keymap->widget)) {
-    printf("Setting notebook page to %d\n", keymap->param_arg);
-    gtk_notebook_set_current_page(GTK_NOTEBOOK(keymap->widget),
-                                  keymap->param_arg);
-  } else if (GTK_IS_BUTTON(keymap->widget)) {
-    gtk_button_pressed(GTK_BUTTON(keymap->widget));
-  } else { /* other widget types */
-    gtk_widget_grab_focus(keymap->widget);
-  }
-
-  return TRUE; /* key handled */
+  return FALSE; /* key not handled - defer to GTK defaults */
 }
 
 
