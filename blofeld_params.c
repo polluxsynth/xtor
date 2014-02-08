@@ -26,6 +26,8 @@
 #include "blofeld_params.h"
 #include "midi.h"
 
+#include "debug.h"
+
 #define SYSEX_ID_WALDORF 0x3E
 #define EQUIPMENT_ID_BLOFELD 0x13
 #define SNDR 0x00 /* Sound Request */
@@ -656,7 +658,7 @@ static void send_parameter_update(int parnum, int buf_no, int devno, int value)
                            value,
                            EOX };
 
-  printf("Blofeld update param: parnum %d, buf %d, value %d\n", parnum, buf_no, value);
+  dprintf("Blofeld update param: parnum %d, buf %d, value %d\n", parnum, buf_no, value);
   if (parnum < BLOFELD_PARAMS)
     midi_send_sysex(sndp, sizeof(sndp));
 }
@@ -686,7 +688,7 @@ static void update_int_param(struct blofeld_param *param,
   if (param->bm_param) {
     struct blofeld_param *parent = param->bm_param->parent_param;
     if (parent == NULL) {
-      printf("Warning: bitmap parameter %s has no parent!\n", param->name);
+      eprintf("Warning: bitmap parameter %s has no parent!\n", param->name);
       return;
     }
     parnum = parent - blofeld_params;
@@ -716,7 +718,7 @@ static void update_str_param(struct blofeld_param *param, int parnum,
 
   struct blofeld_param *parent = param->bm_param->parent_param;
   if (parent == NULL) {
-    printf("Warning: bitmap/string parameter %s has no parent!\n", param->name);
+    eprintf("Warning: bitmap/string parameter %s has no parent!\n", param->name);
     return;
   }
   parnum = parent - blofeld_params; /* param no of first char of parent */
@@ -792,7 +794,7 @@ static void update_ui_int_param_children(struct blofeld_param *param,
 {
   struct blofeld_param *child = param->child;
   if (!child) return; /* We shouldn't be called in this case, but .. */
-  printf("Updating ui for children of %s, mask %d\n", param->name, mask);
+  dprintf("Updating ui for children of %s, mask %d\n", param->name, mask);
   /* Children of same parent are always grouped together. Parent points
    * to first child, so we just keep examining children until we find one
    * with a different parent. 
@@ -801,7 +803,7 @@ static void update_ui_int_param_children(struct blofeld_param *param,
     int bitmask = child->bm_param->bitmask;
     int bitshift = child->bm_param->bitshift;
     if ((bitmask & mask) && child != excepted_child) {
-      printf("Updating child %s: bitmask %d mask %d\n", param->name, bitmask, mask);
+      dprintf("Updating child %s: bitmask %d mask %d\n", param->name, bitmask, mask);
       update_ui_int_param(child, buf_no, (value & bitmask) >> bitshift);
     }
     child++;
@@ -817,7 +819,7 @@ void update_ui(int parnum, int buf_no, int value)
 
   struct blofeld_param *param = &blofeld_params[parnum];
 
-  printf("Blofeld update ui: parno %d, buf %d, value %d\n", parnum, buf_no, value);
+  dprintf("Blofeld update ui: parno %d, buf %d, value %d\n", parnum, buf_no, value);
 
   parameter_list[parnum] = value;
 
@@ -863,7 +865,7 @@ void blofeld_sysex(void *buffer, int len)
 {
   unsigned char *buf = buffer;
 
-  printf("Blofeld received sysex, len %d\n", len);
+  dprintf("Blofeld received sysex, len %d\n", len);
   if (len > IDE && buf[IDE] == EQUIPMENT_ID_BLOFELD) {
     switch (buf[IDM]) {
       case SNDP: update_ui(MIDI_2BYTE(buf[HH], buf[PP]), buf[LL], buf[XX]);
@@ -940,7 +942,7 @@ void blofeld_init(struct param_handler *param_handler)
 
     int parent_parno = blofeld_find_index(bm_param->parent_param_name);
     if (parent_parno < 0) {
-      printf("Invalid bitmap param %s\n", bm_param->parent_param_name);
+      dprintf("Invalid bitmap param %s\n", bm_param->parent_param_name);
       continue;
     }
     struct blofeld_param *parent_param = &blofeld_params[parent_parno];
@@ -948,7 +950,7 @@ void blofeld_init(struct param_handler *param_handler)
     /* Put link to parent in bitmap parameter */
     bm_param->parent_param = parent_param;
 
-    printf("Param %s has parent %s\n", param->name, parent_param->name);
+    dprintf("Param %s has parent %s\n", param->name, parent_param->name);
 
     /* Put link to first child in parent. The 'limits' member of
      * combined parameters must always be initialized to NULL, fairly
@@ -964,7 +966,7 @@ void blofeld_init(struct param_handler *param_handler)
     while (params--) {
       if (!parent_param->child) {
         parent_param->child = param;
-        printf("Param %s has first child %s\n", parent_param->name, param->bm_param->parent_param->child->name);
+        dprintf("Param %s has first child %s\n", parent_param->name, param->bm_param->parent_param->child->name);
       }
       parent_param++; /* next parent */
     }

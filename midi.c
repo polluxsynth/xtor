@@ -23,6 +23,7 @@
 #include <asoundlib.h>
 
 #include "midi.h"
+#include "debug.h"
 #include <alloca.h>
 
 int seq_port;
@@ -45,7 +46,7 @@ struct polls *midi_init_alsa(void)
   int i;
 
   if (snd_seq_open(&seq, "default", SND_SEQ_OPEN_DUPLEX, 0) < 0) {
-    printf("Couldn't open ALSA sequencer: %s\n", snd_strerror(errno));
+    dprintf("Couldn't open ALSA sequencer: %s\n", snd_strerror(errno));
     return NULL;
   }
   snd_seq_set_client_name(seq, "Controller");
@@ -56,7 +57,7 @@ struct polls *midi_init_alsa(void)
 				        SND_SEQ_PORT_CAP_SUBS_WRITE,
 				        SND_SEQ_PORT_TYPE_APPLICATION);
   if (seq_port < 0) {
-    printf("Couldn't create sequencer port: %s\n", snd_strerror(errno));
+    dprintf("Couldn't create sequencer port: %s\n", snd_strerror(errno));
     return NULL;
   }
  
@@ -76,12 +77,12 @@ struct polls *midi_init_alsa(void)
 static int subscribe(snd_seq_port_subscribe_t *sub)
 {
   if (snd_seq_get_port_subscription(seq, sub) == 0) {
-    printf("Connection between editor and device already established\n");
+    dprintf("Connection between editor and device already established\n");
     return -1;
   }
 
   if (snd_seq_subscribe_port(seq, sub) < 0) {
-    printf("Couldn't estabilsh connection between editor and device\n");
+    dprintf("Couldn't estabilsh connection between editor and device\n");
     return -1;
   }
 
@@ -104,10 +105,10 @@ int midi_connect(const char *remote_device)
 
   client = snd_seq_client_id(seq);
   if (client < 0) {
-    printf("Can't get client_id: %d\n", client);
+    dprintf("Can't get client_id: %d\n", client);
     return client;
   }
-  printf("Client address %d:%d\n", client, seq_port);
+  dprintf("Client address %d:%d\n", client, seq_port);
 
   snd_seq_port_subscribe_alloca(&sub);
 
@@ -117,7 +118,7 @@ int midi_connect(const char *remote_device)
 
   /* Other devices address */
   if (snd_seq_parse_address(seq, &remote_addr, saved_remote_device) < 0) {
-    printf("Can't locate destination device %s\n", saved_remote_device);
+    dprintf("Can't locate destination device %s\n", saved_remote_device);
     return -1;
   }
  
@@ -148,7 +149,7 @@ int midi_send_sysex(void *buf, int buflen)
   snd_seq_ev_set_direct(&sendev);
   err = snd_seq_event_output_direct(seq, &sendev);
   if (err < 0)
-    printf("Couldn't send MIDI sysex: %s\n", snd_strerror(err));
+    dprintf("Couldn't send MIDI sysex: %s\n", snd_strerror(err));
   return err;
 }
 
@@ -161,7 +162,7 @@ static void sysex_in(snd_seq_event_t *ev)
   int copy_len;
   unsigned char *data = (unsigned char *)ev->data.ext.ptr;
 
-int i; for (i = 0; i < ev->data.ext.len; i++) printf("%d ", data[i]); printf("\n");
+int i; for (i = 0; i < ev->data.ext.len; i++) dprintf("%d ", data[i]); printf("\n");
 
   if (data[0] == SYSEX) { /* start of dump */
     dstidx = 0;
@@ -194,19 +195,19 @@ void midi_input(void)
   while (1)
   {
     midi_status = snd_seq_event_input(seq, &ev);
-printf("MIDI input status : %d\n", midi_status);
+dprintf("MIDI input status : %d\n", midi_status);
     if (midi_status < 0)
       break;
     evlen = snd_seq_event_length(ev);
-printf("MIDI event length %d\n", evlen);
+dprintf("MIDI event length %d\n", evlen);
     switch (ev->type) {
       case SND_SEQ_EVENT_SYSEX:
-        printf("Sysex: length %d\n", ev->data.ext.len);
+        dprintf("Sysex: length %d\n", ev->data.ext.len);
         sysex_in(ev);
         break;
       case SND_SEQ_EVENT_CONTROLLER:
-        printf("CC: ch %d, param %d, val %d\n", ev->data.control.channel + 1,
-               ev->data.control.param, ev->data.control.value);
+        dprintf("CC: ch %d, param %d, val %d\n", ev->data.control.channel + 1,
+                ev->data.control.param, ev->data.control.value);
         break;
       default:
         break;
