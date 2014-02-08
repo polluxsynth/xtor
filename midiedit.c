@@ -249,50 +249,6 @@ on_button_pressed (GtkObject *object, gpointer user_data)
 }
 
 
-/* Is 'parent' identical to or a parent of 'widget' ? */
-int is_parent(GtkWidget *widget, GtkWidget *parent)
-{
-  do {
-printf("Scanning %s (%p), looking for %s (%p)\n", gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget, gtk_buildable_get_name(GTK_BUILDABLE(parent)), parent);
-    if (widget == parent)
-      return 1;
-  } while (widget = gtk_widget_get_parent(widget));
-  return 0;
-}
-
-
-/* Used for searching for valid key map given key val and current focus */
-struct key_search_spec {
-  guint keyval;
-  GtkWidget *focus_widget;
-};
-
-/* Used for g_list_find_custom to find key val in keymaps */
-static gint find_keymap(gconstpointer data, gconstpointer user_data)
-{
-  const struct keymap *keymap = data;
-  const struct key_search_spec *search = user_data;
-
-printf("Scan keymap %s: %s\n", keymap->key_name, keymap->param_name);
-  if (keymap->keyval != search->keyval)
-    return 1; /* not the key we're looking for found */
-  if (!keymap->widget)
-    return 1; /* Widget not set, UI specified unknown Param or Parent */
-printf("Found keyval\n");
-  if (!keymap->parent) /* keymap has no parent specified; we're done */
-    return 0; /* found */
-printf("Has parent %s\n", keymap->parent_name);
-  /* If parent is a notebook, then check for the relevant notebook page. */
-  if (GTK_IS_NOTEBOOK(keymap->parent))
-    return gtk_notebook_get_current_page(GTK_NOTEBOOK(keymap->parent)) !=
-           keymap->parent_arg; /* 0 if on correct page */
-printf("Parent is not a notebook\n");
-  /* Otherwise check if the currently focused widget has the same parent
-   * as the parameter specified in the keymap. */
-  return !is_parent(search->focus_widget, keymap->parent); /* 0 if found */
-}
-
-
 gboolean navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
 {
   GtkWidget *parent;
@@ -354,6 +310,48 @@ gboolean navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
   return FALSE;
 }
 
+
+/* Is 'parent' identical to or a parent of 'widget' ? */
+int is_parent(GtkWidget *widget, GtkWidget *parent)
+{
+  do {
+printf("Scanning %s (%p), looking for %s (%p)\n", gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget, gtk_buildable_get_name(GTK_BUILDABLE(parent)), parent);
+    if (widget == parent)
+      return 1;
+  } while (widget = gtk_widget_get_parent(widget));
+  return 0;
+}
+
+/* Used for searching for valid key map given key val and current focus */
+struct key_search_spec {
+  guint keyval;
+  GtkWidget *focus_widget;
+};
+
+/* Used for g_list_find_custom to find key val in keymaps */
+static gint find_keymap(gconstpointer data, gconstpointer user_data)
+{
+  const struct keymap *keymap = data;
+  const struct key_search_spec *search = user_data;
+
+printf("Scan keymap %s: %s\n", keymap->key_name, keymap->param_name);
+  if (keymap->keyval != search->keyval)
+    return 1; /* not the key we're looking for found */
+  if (!keymap->widget)
+    return 1; /* Widget not set, UI specified unknown Param or Parent */
+printf("Found keyval\n");
+  if (!keymap->parent) /* keymap has no parent specified; we're done */
+    return 0; /* found */
+printf("Has parent %s\n", keymap->parent_name);
+  /* If parent is a notebook, then check for the relevant notebook page. */
+  if (GTK_IS_NOTEBOOK(keymap->parent))
+    return gtk_notebook_get_current_page(GTK_NOTEBOOK(keymap->parent)) !=
+           keymap->parent_arg; /* 0 if on correct page */
+printf("Parent is not a notebook\n");
+  /* Otherwise check if the currently focused widget has the same parent
+   * as the parameter specified in the keymap. */
+  return !is_parent(search->focus_widget, keymap->parent); /* 0 if found */
+}
 
 /* Handle keys mapped in UI KeyMapping liststore */  
 gboolean mapped_key(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
