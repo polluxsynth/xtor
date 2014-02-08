@@ -1,11 +1,11 @@
-PROGNAME=midicontroller
+PROGNAME=midiedit
 TODAY=041011
 VERSION=$(TODAY)
 #PREFIX=/usr/local
 PREFIX=./
-DISTFILES=midicontroller.c Makefile controller.glade controller.gladep huge.glade huge.gladep README COPYING mkinstalldirs
+DISTFILES=midiedit.c Makefile controller.glade controller.gladep huge.glade huge.gladep README COPYING mkinstalldirs
 
-OBJS = midicontroller.o blofeld_ui.o blofeld_params.o midi.o
+OBJS = midiedit.o blofeld_ui.o blofeld_params.o midi.o
 INCS = blofeld_params.h midi.h
 
 all: $(PROGNAME)
