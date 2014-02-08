@@ -30,14 +30,16 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include "param.h"
 #include "blofeld_params.h"
 #include "midi.h"
 
 const char *main_window_name = "Main Window";
 GtkWidget *main_window = NULL;
 
-const char *program_name = "Blofeld Editor";
-const char *remote_device = "Waldorf Blofeld"; /* used for MIDI connection id */
+/* Parameter handler */
+struct param_handler phandler;
+struct param_handler *param_handler = &phandler;
 
 struct adjustor {
   const char *id; /* name of parameter, e.g. "Filter 1 Cutoff" */
@@ -77,8 +79,8 @@ void set_title(void)
 {
   char title[80];
 
-  sprintf(title, "%s - %s (Part %d)", 
-          program_name, current_patch_name, current_buffer_no + 1);
+  sprintf(title, "%s Editor - %s (Part %d)", 
+          param_handler->name, current_patch_name, current_buffer_no + 1);
 
   if (main_window && GTK_IS_WINDOW(main_window))
     gtk_window_set_title(GTK_WINDOW(main_window), title);
@@ -153,7 +155,7 @@ param_changed(int parnum, int buffer_no, void *valptr, void *ref)
  */
 static void update_parameter(struct adjustor *adjustor, const void *valptr, GtkWidget *widget)
 {
-  blofeld_update_param(adjustor->parnum, current_buffer_no, valptr);
+  param_handler->param_update_parameter(adjustor->parnum, current_buffer_no, valptr);
 
   update_adjustors(adjustor, valptr, widget);
 }
@@ -559,7 +561,7 @@ void create_adjustor (gpointer data, gpointer user_data)
   if (name)
     add_to_keymaps(keymaps, this, name);
 
-  if (id && (parnum = blofeld_find_index(id)) >= 0) {
+  if (id && (parnum = param_handler->param_find_index(id)) >= 0) {
     printf("has parameter\n");
     struct adjustor *adjustor = adjustors[parnum];
     if (!adjustors[parnum]) {
@@ -581,7 +583,7 @@ void create_adjustor (gpointer data, gpointer user_data)
        * In effect, this means that in the UI we do not need to set an
        * adjustment for any parameter. */
       if (adj) {
-        blofeld_get_param_properties(parnum, &props);
+        param_handler->param_get_properties(parnum, &props);
         g_object_set(adj, "lower", (gdouble) props.ui_min, NULL);
         g_object_set(adj, "upper", (gdouble) props.ui_max, NULL);
         g_object_set(adj, "step-increment", (gdouble) props.ui_step, NULL);
@@ -601,7 +603,7 @@ void create_adjustor (gpointer data, gpointer user_data)
       g_signal_connect(this, "changed", G_CALLBACK(on_entry_changed), adjustor);
       /* Fetch patch name id (i.e. "Patch Name") if we haven't got it yet */
       if (!patch_name)
-        patch_name = blofeld_get_patch_name_id();
+        patch_name = param_handler->param_get_patch_name_id();
       /* If we're looking at that parameter, save widget ref for later. */
       if (!strcmp(id, patch_name))
         patch_name_widget = this;
@@ -752,7 +754,6 @@ main (int argc, char *argv[])
   struct polls *polls;
   int poll_tag;
   char *gladename;
-  int ui_params;
 
   gladename = "blofeld.glade";
   if (argv[1]) gladename = argv[1];
@@ -780,14 +781,15 @@ main (int argc, char *argv[])
   /* TODO: Should really loop over all potential fds */
   poll_tag = gdk_input_add (polls->pollfds[0].fd, GDK_INPUT_READ, on_midi_input, NULL);
 
-  midi_connect(remote_device);
+  memset(param_handler, 0, sizeof (*param_handler));
+  blofeld_init(param_handler);
+
+  create_adjustors_list(param_handler->params, main_window);
+
+  param_handler->param_register_notify_cb(param_changed, NULL);
+
+  midi_connect(param_handler->remote_midi_device);
   
-  blofeld_init(&ui_params);
-
-  create_adjustors_list(ui_params, main_window);
-
-  blofeld_register_notify_cb(param_changed, NULL);
-
   block_updates = 0;
 
   set_title();

@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include "param.h"
 #include "blofeld_params.h"
 
 extern int current_buffer_no;

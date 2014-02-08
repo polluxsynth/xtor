@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include "param.h"
 #include "blofeld_params.h"
 #include "midi.h"
 
@@ -595,8 +596,8 @@ int parameter_list[BLOFELD_PARAMS];
 int paste_buffer[BLOFELD_PARAMS];
 
 /* Callback and parameter for parameter updates */
-blofeld_notify_cb notify_ui;
-void *notify_ref;;
+notify_cb notify_ui;
+void *notify_ref;
 
 int blofeld_find_index(const char *param_name)
 {
@@ -879,7 +880,43 @@ void blofeld_sysex(void *buffer, int len)
   }
 }
 
-void blofeld_init(int *params)
+void blofeld_register_notify_cb(notify_cb cb, void *ref)
+{
+  notify_ui = cb;
+  notify_ref = ref;
+}
+
+/* Copy selected parameters to selected paste buffer */
+void *blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf)
+{
+  void *src = &parameter_list[par_from];
+  void *dest = &paste_buffer[par_from];
+  int len = (par_to + 1 - par_from) * sizeof(parameter_list[0]);
+
+  memcpy(dest, src, len);
+}
+
+/* Copy selected parameters from selected paste buffer */
+void *blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_buf)
+{
+  int parnum;
+
+  /* update parameter_list ui with pasted parameters */
+  for (parnum = par_from; parnum <= par_to; parnum++) {
+    /* Only send UI updates for parameters that differ */
+    if (paste_buffer[parnum] != parameter_list[parnum]) {
+      update_ui(parnum, buf_no, paste_buffer[parnum]);
+    }
+  }
+}
+
+/* Called when ui wants to know what the patch name parameter is called */
+const char *blofeld_get_patch_name_id(void)
+{
+  return patch_name;
+}
+
+void blofeld_init(struct param_handler *param_handler)
 {
   int idx;
 
@@ -935,43 +972,20 @@ void blofeld_init(int *params)
 
   midi_register_sysex(SYSEX_ID_WALDORF, blofeld_sysex, BLOFELD_PARAMS + 10);
 
-  /* Return # parameters we have, including derived (e.g. bitmapped) types */
-  if (params)
-    *params = sizeof(blofeld_params)/sizeof(blofeld_params[0]);
+  /* Fill in param_handler struct */
+
+  /* # parameters we have, including derived (e.g. bitmapped) types */
+  param_handler->params = sizeof(blofeld_params)/sizeof(blofeld_params[0]);
+
+  param_handler->remote_midi_device = "Waldorf Blofeld";
+  param_handler->name = "Blofeld";
+
+  /* Fill in function pointers */
+  param_handler->param_register_notify_cb = blofeld_register_notify_cb;
+  param_handler->param_find_index = blofeld_find_index;
+  param_handler->param_get_properties = blofeld_get_param_properties;
+  param_handler->param_update_parameter = blofeld_update_param;
+  param_handler->param_fetch_parameter = blofeld_fetch_parameter;
+  param_handler->param_get_patch_name_id = blofeld_get_patch_name_id;
 }
 
-void blofeld_register_notify_cb(blofeld_notify_cb cb, void *ref)
-{
-  notify_ui = cb;
-  notify_ref = ref;
-}
-
-/* Copy selected parameters to selected paste buffer */
-void *blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf)
-{
-  void *src = &parameter_list[par_from];
-  void *dest = &paste_buffer[par_from];
-  int len = (par_to + 1 - par_from) * sizeof(parameter_list[0]);
-
-  memcpy(dest, src, len);
-}
-
-/* Copy selected parameters from selected paste buffer */
-void *blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_buf)
-{
-  int parnum;
-
-  /* update parameter_list ui with pasted parameters */
-  for (parnum = par_from; parnum <= par_to; parnum++) {
-    /* Only send UI updates for parameters that differ */
-    if (paste_buffer[parnum] != parameter_list[parnum]) {
-      update_ui(parnum, buf_no, paste_buffer[parnum]);
-    }
-  }
-}
-
-/* Called when ui wants to know what the patch name parameter is called */
-const char *blofeld_get_patch_name_id(void)
-{
-  return patch_name;
-}
