@@ -753,9 +753,12 @@ main (int argc, char *argv[])
   GtkBuilder *builder;
   struct polls *polls;
   int poll_tag;
-  char *gladename;
+  const char *gladename;
 
-  gladename = "blofeld.glade";
+  memset(param_handler, 0, sizeof (*param_handler));
+  blofeld_init(param_handler);
+
+  gladename = param_handler->ui_filename;
   if (argv[1]) gladename = argv[1];
   
   gtk_init (&argc, &argv);
@@ -780,9 +783,6 @@ main (int argc, char *argv[])
 
   /* TODO: Should really loop over all potential fds */
   poll_tag = gdk_input_add (polls->pollfds[0].fd, GDK_INPUT_READ, on_midi_input, NULL);
-
-  memset(param_handler, 0, sizeof (*param_handler));
-  blofeld_init(param_handler);
 
   create_adjustors_list(param_handler->params, main_window);
 

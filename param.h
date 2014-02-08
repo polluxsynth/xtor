@@ -53,4 +53,5 @@ struct param_handler {
   int params; /* tital #params in parameter list (including bitmapped ones) */
   const char *name; /* Name of synth, to be used for window title etc */
   const char *remote_midi_device; /* ID of USB MIDI device */
+  const char *ui_filename; /* name of glade file with UI definition */
 };

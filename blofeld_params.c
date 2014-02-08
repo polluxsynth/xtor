@@ -979,6 +979,7 @@ void blofeld_init(struct param_handler *param_handler)
 
   param_handler->remote_midi_device = "Waldorf Blofeld";
   param_handler->name = "Blofeld";
+  param_handler->ui_filename = "blofeld.glade";
 
   /* Fill in function pointers */
   param_handler->param_register_notify_cb = blofeld_register_notify_cb;
