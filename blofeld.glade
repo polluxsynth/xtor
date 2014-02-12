@@ -145,8 +145,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 4">
-                    <property name="label" translatable="yes">4</property>
+                  <object class="GtkRadioButton" id="Buffer 3">
+                    <property name="label" translatable="yes">3</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -162,8 +162,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 3">
-                    <property name="label" translatable="yes">3</property>
+                  <object class="GtkRadioButton" id="Buffer 4">
+                    <property name="label" translatable="yes">4</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -12664,25 +12664,6 @@
                                 <property name="n_rows">2</property>
                                 <property name="n_columns">19</property>
                                 <child>
-                                  <object class="GtkComboBox" id="Arpeggiator Mode">
-                                    <property name="visible">True</property>
-                                    <property name="model">arpmode</property>
-                                    <property name="active">0</property>
-                                    <child>
-                                      <object class="GtkCellRendererText" id="cellrenderertext149"/>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
-                                    <property name="x_options"></property>
-                                    <property name="y_options"></property>
-                                  </packing>
-                                </child>
-                                <child>
                                   <object class="GtkComboBox" id="Arpeggiator Pattern">
                                     <property name="visible">True</property>
                                     <property name="model">arppat</property>
@@ -12695,34 +12676,10 @@
                                     </child>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">2</property>
-                                    <property name="right_attach">3</property>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
                                     <property name="x_options"></property>
                                     <property name="y_options"></property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label252">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Mode</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label253">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Pattern</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">2</property>
-                                    <property name="right_attach">3</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -12987,28 +12944,6 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkVSeparator" id="vseparator43">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">3</property>
-                                    <property name="right_attach">4</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVSeparator" id="vseparator44">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">3</property>
-                                    <property name="right_attach">4</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
                                   <object class="GtkComboBox" id="Arpeggiator Velocity">
                                     <property name="visible">True</property>
                                     <property name="model">arpvel</property>
@@ -13131,7 +13066,55 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <placeholder/>
+                                  <object class="GtkLabel" id="label252">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Mode</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="Arpeggiator Mode">
+                                    <property name="visible">True</property>
+                                    <property name="model">arpmode</property>
+                                    <property name="active">0</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="cellrenderertext149"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="x_options"></property>
+                                    <property name="y_options"></property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label209">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Tempo</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="Arpeggiator Tempo">
+                                    <property name="width_request">80</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                  </packing>
                                 </child>
                                 <child>
                                   <placeholder/>
@@ -13140,7 +13123,38 @@
                                   <placeholder/>
                                 </child>
                                 <child>
-                                  <placeholder/>
+                                  <object class="GtkLabel" id="label253">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Pattern</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">3</property>
+                                    <property name="right_attach">4</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkVSeparator" id="vseparator43">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkVSeparator" id="vseparator44">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="right_attach">3</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
                                 </child>
                               </object>
                             </child>
@@ -16682,7 +16696,7 @@
         <col id="0" translatable="yes">on</col>
       </row>
       <row>
-        <col id="0" translatable="yes">One Shot</col>
+        <col id="0" translatable="yes">Oneshot</col>
       </row>
       <row>
         <col id="0" translatable="yes">Hold</col>
