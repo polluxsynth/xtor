@@ -768,12 +768,14 @@ main (int argc, char *argv[])
   int poll_tag;
   const char *gladename;
 
+  debug = 0;
+  
   memset(param_handler, 0, sizeof (*param_handler));
   blofeld_init(param_handler);
 
   gladename = param_handler->ui_filename;
   if (argv[1]) gladename = argv[1];
-  
+
   gtk_init (&argc, &argv);
   
   builder = gtk_builder_new ();

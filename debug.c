@@ -20,19 +20,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ****************************************************************************/
 
-/* Undef this if we don't want to disable all potential debug printouts. */
-#define DEBUG
+#include <stdio.h>
+#include <stdarg.h>
+#include "debug.h"
 
-/* Debug printouts, conditional on DEBUG && debug */
-#ifdef DEBUG
-int dprintf(const char *fmt, ...);
-/*#define dprintf(...) fprintf(stderr, __VA_ARGS__)*/
-#else
-#define dprintf(...)
-#endif
+int debug = 0;
 
-/* Error/warning printouts, active at all times. */
-#define eprintf(...) fprintf(stderr, __VA_ARGS__)
+int dprintf(const char *fmt, ...)
+{
+  if (!debug) return 0;
 
-/* Global debug enable/disable */
-int debug;
+  int res;
+  va_list args;
+
+  va_start(args, fmt);
+  res = vfprintf(stderr, fmt, args);
+  va_end(args);
+
+  return res;
+}
