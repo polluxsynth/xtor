@@ -260,42 +260,44 @@ gboolean navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
 
   switch (event->keyval) {
     case GDK_Right:
-      SET_ARG(GTK_DIR_RIGHT);
+      arg = GTK_DIR_RIGHT;
     case GDK_Left:
-      SET_ARG(GTK_DIR_LEFT);
+      if (arg < 0) arg = GTK_DIR_LEFT;
     case GDK_Up:
-      SET_ARG(GTK_DIR_UP);
+      if (arg < 0) arg = GTK_DIR_UP;
     case GDK_Down:
-      SET_ARG(GTK_DIR_DOWN);
+      if (arg < 0) arg = GTK_DIR_DOWN;
       what = widget;
       signal = "move-focus";
       break;
     case GDK_Forward:
     case GDK_Page_Up:
+    case GDK_plus:
       if (GTK_IS_RANGE(focus)) {
-        SET_ARG(shifted ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD);
+        arg = shifted ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD;
         what = focus;
         signal = "move-slider";
       }
       if (GTK_IS_TOGGLE_BUTTON(focus) && 
           (parent = gtk_widget_get_parent(focus)) &&
           GTK_IS_COMBO_BOX(parent)) {
-        SET_ARG(shifted ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD);
+        arg = shifted ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD;
         what = parent;
         signal = "move-active";
       }
       break;
     case GDK_Back:
     case GDK_Page_Down:
+    case GDK_minus:
       if (GTK_IS_RANGE(focus)) {
-        SET_ARG(shifted ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_STEP_BACKWARD);
+        arg = shifted ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_STEP_BACKWARD;
         what = focus;
         signal = "move-slider";
       }
       if (GTK_IS_TOGGLE_BUTTON(focus) && 
           (parent = gtk_widget_get_parent(focus)) &&
           GTK_IS_COMBO_BOX(parent)) {
-        SET_ARG(shifted ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_STEP_BACKWARD);
+        arg = shifted ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_STEP_BACKWARD;
         what = parent;
         signal = "move-active";
       }
