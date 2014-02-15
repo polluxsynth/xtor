@@ -423,6 +423,44 @@ key_event(GtkWidget *widget, GdkEventKey *event)
 }
 
 
+/* Handle mouse scrolling events arriving in slider widgets */
+gboolean
+scroll_event(GtkWidget *widget, GdkEventScroll *event)
+{
+  static int count = 0;
+  int delta = -1;
+  int shifted = 0;
+
+  dprintf("scroll %d: widget is a %s, name %s\n", ++count,
+          gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)));
+
+  if (!GTK_IS_RANGE(widget))
+    return FALSE; /* let someone else handle the event */
+
+  if (event->state & (GDK_SHIFT_MASK | GDK_BUTTON2_MASK))
+    shifted = 1;
+
+  switch (event->direction) {
+    case GDK_SCROLL_UP:
+    case GDK_SCROLL_LEFT:
+      delta = shifted ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD;
+      break;
+    case GDK_SCROLL_DOWN:
+    case GDK_SCROLL_RIGHT:
+      delta = shifted ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_STEP_BACKWARD;
+      break;
+    default:
+      break;
+  }
+  if (delta >= 0) {
+    g_signal_emit_by_name(GTK_OBJECT(widget), "move-slider", delta);
+    return TRUE; /* evant handled */
+  }
+  return FALSE;
+}
+
+
 /* A collection of three functions and passing struct that work together
  * in order to find a widget with a given id in a whole window hierarchy,
  * starting with the top window.
@@ -603,7 +641,10 @@ void create_adjustor (gpointer data, gpointer user_data)
         g_object_set(adj, "page-size", (gdouble) 0, NULL);
       } else
         eprintf("Warning: GtkRange %s has no adjustment\n", id);
+      /* Handle parameter updates when value changed */
       g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), adjustor);
+      /* Handle scroll events (mouse wheel) */
+      g_signal_connect(this, "scroll-event", G_CALLBACK(scroll_event), NULL);
     }
 
     else if (GTK_IS_COMBO_BOX(this))
