@@ -461,6 +461,26 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
 }
 
 
+/* Handle all mouse button events arriving in slider widgets */
+gboolean
+button_event(GtkWidget *widget, GdkEventButton *event)
+{
+  static int count = 0;
+  dprintf("mouse button %d: %d, state %d, widget is a %s, name %s\n", ++count,
+          event->button, event->state, gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)));
+
+  if (!GTK_IS_RANGE(widget))
+    return FALSE;
+
+  if (event->button != 2)
+    return FALSE;
+
+  /* Nothing special to do, just swallow event. */
+  return TRUE;
+}
+
+
 /* A collection of three functions and passing struct that work together
  * in order to find a widget with a given id in a whole window hierarchy,
  * starting with the top window.
@@ -645,6 +665,18 @@ void create_adjustor (gpointer data, gpointer user_data)
       g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), adjustor);
       /* Handle scroll events (mouse wheel) */
       g_signal_connect(this, "scroll-event", G_CALLBACK(scroll_event), NULL);
+      /* Handle mouse buttons */
+      /* We want to mask them so we can use middle mouse button = scroll wheel
+       * button on most mice as a shift key. Since by default releasing the
+       * middle button causes the value to jump to the value pointed to by
+       * the mouse pointer, we need to suppress this by hand. */
+      /* We can use the same callback for both press and release events,
+       * as all it does is gobble up the event no matter if button is pressed
+       * or released. */
+      gtk_widget_add_events(this, GDK_BUTTON_RELEASE_MASK);
+      g_signal_connect(this, "button-release-event", G_CALLBACK(button_event), NULL);
+      gtk_widget_add_events(this, GDK_BUTTON_PRESS_MASK);
+      g_signal_connect(this, "button-press-event", G_CALLBACK(button_event), NULL);
     }
 
     else if (GTK_IS_COMBO_BOX(this))
