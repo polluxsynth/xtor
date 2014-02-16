@@ -77,6 +77,12 @@ struct keymap {
 
 GList *keymaps = NULL;
 
+struct ui_settings {
+  gboolean scroll_focused_only;
+};
+
+struct ui_settings ui_settings = { TRUE };
+
 void set_title(void)
 {
   char title[80];
@@ -253,6 +259,34 @@ on_button_pressed (GtkObject *object, gpointer user_data)
 }
 
 
+static gboolean change_value(GtkWidget *what, int shifted, int dir)
+{
+  GtkWidget *parent;
+  int delta;
+  const char *signal = NULL;
+
+  if (dir == 1)
+    delta = shifted ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD;
+  else if (dir == -1)
+    delta = shifted ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_STEP_BACKWARD;
+
+  if (GTK_IS_RANGE(what))
+    signal = "move-slider";
+  else if (GTK_IS_TOGGLE_BUTTON(what) && 
+           (parent = gtk_widget_get_parent(what)) &&
+           GTK_IS_COMBO_BOX(parent)) {
+    what = parent;
+    signal = "move-active";
+  }
+
+  if (what && signal) {
+    g_signal_emit_by_name(GTK_OBJECT(what), signal, delta);
+    return TRUE;
+  }
+  return FALSE;
+}
+
+
 gboolean navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
 {
   GtkWidget *parent;
@@ -261,6 +295,7 @@ gboolean navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
 #define SET_ARG(value) if (arg < 0) arg = (value)
   GtkWidget *what = NULL;
   const char *signal = NULL;
+  gboolean handled = FALSE;
 
   switch (event->keyval) {
     case GDK_Right:
@@ -273,47 +308,22 @@ gboolean navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
       if (arg < 0) arg = GTK_DIR_DOWN;
       what = widget;
       signal = "move-focus";
+      g_signal_emit_by_name(GTK_OBJECT(what), signal, arg);
+      handled = TRUE;
       break;
     case GDK_Forward:
     case GDK_Page_Up:
     case GDK_plus:
-      if (GTK_IS_RANGE(focus)) {
-        arg = shifted ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD;
-        what = focus;
-        signal = "move-slider";
-      }
-      if (GTK_IS_TOGGLE_BUTTON(focus) && 
-          (parent = gtk_widget_get_parent(focus)) &&
-          GTK_IS_COMBO_BOX(parent)) {
-        arg = shifted ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD;
-        what = parent;
-        signal = "move-active";
-      }
+      handled = change_value(focus, shifted, 1);
       break;
     case GDK_Back:
     case GDK_Page_Down:
     case GDK_minus:
-      if (GTK_IS_RANGE(focus)) {
-        arg = shifted ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_STEP_BACKWARD;
-        what = focus;
-        signal = "move-slider";
-      }
-      if (GTK_IS_TOGGLE_BUTTON(focus) && 
-          (parent = gtk_widget_get_parent(focus)) &&
-          GTK_IS_COMBO_BOX(parent)) {
-        arg = shifted ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_STEP_BACKWARD;
-        what = parent;
-        signal = "move-active";
-      }
-      break;
+      handled = change_value(focus, shifted, -1);
     default:
       break;
   }
-  if (what && signal) {
-    g_signal_emit_by_name(GTK_OBJECT(what), signal, arg);
-    return TRUE;
-  }
-  return FALSE;
+  return handled;
 }
 
 
@@ -428,15 +438,31 @@ gboolean
 scroll_event(GtkWidget *widget, GdkEventScroll *event)
 {
   static int count = 0;
-  int delta = -1;
   int shifted = 0;
 
-  dprintf("scroll %d: widget is a %s, name %s\n", ++count,
-          gtk_widget_get_name(widget),
-          gtk_buildable_get_name(GTK_BUILDABLE(widget)));
+  /* Depending on whether ui_settings.scroll_focused_only is set,
+   * we don't want to scroll the widget currently pointed to, we want
+   * to scroll the one that has focus. */
+  GtkWidget *toplevel = gtk_widget_get_toplevel(widget);
+  if (!toplevel) return FALSE;
+  GtkWidget *focus = GTK_WINDOW(toplevel)->focus_widget;
+  if (!focus) return FALSE;
 
-  if (!GTK_IS_RANGE(widget))
-    return FALSE; /* let someone else handle the event */
+  dprintf("scroll %d: widget is a %s, name %s, focus is a %s, name %s\n",
+          ++count,
+          gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)),
+          gtk_widget_get_name(focus),
+          gtk_buildable_get_name(GTK_BUILDABLE(focus)));
+
+  /* If UI is set to scroll_focused_only (Midiedit default mode), always
+   * scroll the widget that is focused, regardless of where the mouse
+   * pointer is. Handy when using Midiedit's key based navigation. 
+   * Otherwise, use the Gnome default of scrolling whatever the mouse
+   * pointer points to. Handy when navigating using the mouse, as we 
+   * don't need to left-click to focus an item before scrolling. */
+  if (ui_settings.scroll_focused_only)
+    widget = focus;
 
   if (event->state & (GDK_SHIFT_MASK | GDK_BUTTON2_MASK))
     shifted = 1;
@@ -444,20 +470,16 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
   switch (event->direction) {
     case GDK_SCROLL_UP:
     case GDK_SCROLL_LEFT:
-      delta = shifted ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD;
+      change_value(widget, shifted, 1);
       break;
     case GDK_SCROLL_DOWN:
     case GDK_SCROLL_RIGHT:
-      delta = shifted ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_STEP_BACKWARD;
+      change_value(widget, shifted, -1);
       break;
     default:
       break;
   }
-  if (delta >= 0) {
-    g_signal_emit_by_name(GTK_OBJECT(widget), "move-slider", delta);
-    return TRUE; /* evant handled */
-  }
-  return FALSE;
+  return TRUE;
 }
 
 
@@ -470,13 +492,16 @@ button_event(GtkWidget *widget, GdkEventButton *event)
           event->button, event->state, gtk_widget_get_name(widget),
           gtk_buildable_get_name(GTK_BUILDABLE(widget)));
 
-  if (!GTK_IS_RANGE(widget))
-    return FALSE;
-
+  /* What we want to is stop the default action of jumping to the pointed-to
+   * value when the middle button is pressed or released. */
   if (event->button != 2)
     return FALSE;
 
-  /* Nothing special to do, just swallow event. */
+  /* We want to keep the action of setting focus though when pressed. */
+  if (event->type & GDK_BUTTON_PRESS)
+    gtk_widget_grab_focus(widget);
+
+  /* Nothing else to do, just swallow event. */
   return TRUE;
 }
 
@@ -631,6 +656,26 @@ void create_adjustor (gpointer data, gpointer user_data)
   if (name)
     add_to_keymaps(keymaps, this, name);
 
+  /* We need to have our own signal handlers for scroll events and (middle)
+   * mouse buttons, otherwise the default handler and action will be invoked
+   * so we can't do this at the main window level. */
+
+  /* Handle scroll events (mouse wheel) */
+  g_signal_connect(this, "scroll-event", G_CALLBACK(scroll_event), NULL);
+
+  /* Handle mouse buttons */
+  /* Note that we do this for _all_ widgets, not just those who have
+   * parameters. In the UI file we can have meta parameters, e.g. the
+   * arpeggiator 'all' column, which don't control individual synth params. */
+  /* We want to mask them so we can use middle the mouse button = scroll
+   * wheel button on most mice as a shift key. Since by default pressing or
+   * releasing the middle button causes the value to jump to the value
+   * pointed to by the mouse pointer, we need to suppress this behavior. */
+  gtk_widget_add_events(this, GDK_BUTTON_RELEASE_MASK);
+  g_signal_connect(this, "button-release-event", G_CALLBACK(button_event), NULL);
+  gtk_widget_add_events(this, GDK_BUTTON_PRESS_MASK);
+  g_signal_connect(this, "button-press-event", G_CALLBACK(button_event), NULL);
+
   if (id && (parnum = param_handler->param_find_index(id)) >= 0) {
     dprintf("has parameter\n");
     struct adjustor *adjustor = adjustors[parnum];
@@ -663,20 +708,6 @@ void create_adjustor (gpointer data, gpointer user_data)
         eprintf("Warning: GtkRange %s has no adjustment\n", id);
       /* Handle parameter updates when value changed */
       g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), adjustor);
-      /* Handle scroll events (mouse wheel) */
-      g_signal_connect(this, "scroll-event", G_CALLBACK(scroll_event), NULL);
-      /* Handle mouse buttons */
-      /* We want to mask them so we can use middle mouse button = scroll wheel
-       * button on most mice as a shift key. Since by default releasing the
-       * middle button causes the value to jump to the value pointed to by
-       * the mouse pointer, we need to suppress this by hand. */
-      /* We can use the same callback for both press and release events,
-       * as all it does is gobble up the event no matter if button is pressed
-       * or released. */
-      gtk_widget_add_events(this, GDK_BUTTON_RELEASE_MASK);
-      g_signal_connect(this, "button-release-event", G_CALLBACK(button_event), NULL);
-      gtk_widget_add_events(this, GDK_BUTTON_PRESS_MASK);
-      g_signal_connect(this, "button-press-event", G_CALLBACK(button_event), NULL);
     }
 
     else if (GTK_IS_COMBO_BOX(this))
@@ -862,6 +893,10 @@ main (int argc, char *argv[])
 
   setup_hotkeys(builder, "KeyMappings");
   g_signal_connect(main_window, "key-press-event", G_CALLBACK(key_event), NULL);
+
+  /* Handle scroll events (mouse wheel) when not focused on any widget */
+  gtk_widget_add_events(GTK_WIDGET(main_window), GDK_SCROLL_MASK);
+  g_signal_connect(main_window, "scroll-event", G_CALLBACK(scroll_event), NULL);
 
   g_object_unref (G_OBJECT (builder));
 
