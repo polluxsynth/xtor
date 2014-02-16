@@ -864,6 +864,15 @@ void *blofeld_fetch_parameter(int parnum, int buf_no)
   return NULL;
 }
 
+static int midi_csum(const unsigned char *buf, int bytes)
+{
+  int c = 0;
+  while (bytes--)
+    c += *buf++;
+
+  return (c & 127);
+}
+
 void blofeld_sysex(void *buffer, int len)
 {
   unsigned char *buf = buffer;
@@ -873,9 +882,16 @@ void blofeld_sysex(void *buffer, int len)
     switch (buf[IDM]) {
       case SNDP: update_ui(MIDI_2BYTE(buf[HH], buf[PP]), buf[LL], buf[XX]);
                  break;
-      case SNDD: if (buf[BB] == EDIT_BUF)
-                 /* TODO: Verify checksum */
-                   update_ui_all(&buf[SDATA], buf[NN]);
+      case SNDD: if (buf[BB] == EDIT_BUF) {
+                   int checksum = midi_csum(&buf[SDATA], BLOFELD_PARAMS);
+                   int expected = buf[SDATA + BLOFELD_PARAMS];
+                   if (checksum != expected)
+                     eprintf("Warning: Incorrect checksum in received data: "
+                             "calculated %d, should have been %d\n",
+                             checksum, expected);
+                   else
+                     update_ui_all(&buf[SDATA], buf[NN]);
+                 }
                  break;
       case SNDR:
       case GLBR:
