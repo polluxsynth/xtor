@@ -626,7 +626,7 @@ int blofeld_get_param_properties(int param_num,
     props->ui_max = blofeld_params[param_num].limits->max;
     /* set sane values for step size */
     int range = props->ui_max + 1 - props->ui_min;
-    props->ui_step = (range / 128 > 1) ? 2 : 1;
+    props->ui_step = (range / 128 > 1) ? 1 : 1; /* TODO adjust for keytrack */
     return 0;
   }
   return -1;
@@ -678,9 +678,9 @@ static void update_int_param(struct blofeld_param *param,
   int min = param->limits->min;
   int max = param->limits->max;
   int range = max + 1 - min;
-  if (range > 128) /* really only keytrack */
-    value = value * 128 / range;
-  if (min < 0) /* bipolar parameter */
+  if (min == -200) /* keytrack */
+    value = (value + 202) * 64 / 200; /* empirically verified against Blofeld */
+  else if (min < 0) /* bipolar parameter */
     value += 64; /* center around mid range (64) */
   else if (min == 12) /* octave */
     value = 12 * value + 16; /* coding for octave parameters */
@@ -763,12 +763,12 @@ static void update_ui_int_param(struct blofeld_param *param, int buf_no, int val
   int max = param->limits->max;
   int parnum = param - blofeld_params;
   int range = max + 1 - min;
-  if (min < 0)
+  if (min == -200) /* keytrack */
+    value = value * 200 / 64 - 200; /* empirically verified against Blofeld */
+  else if (min < 0)
     value -= 64;
   else if (min == 12) /* octave */
     value = (value - 16 ) / 12;
-  if (range > 128) /* really only keytrack */
-    value = value * range / 128;
   notify_ui(parnum, buf_no, &value, notify_ref);
 }
 
