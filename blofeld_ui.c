@@ -237,3 +237,13 @@ on_all_changed (GtkObject *object, gpointer user_data)
 
   g_list_foreach(container_children, set_value, &all_updater);
 }
+
+/* When device number spin box changed */
+void
+on_Device_Number_changed (GtkObject *object, gpointer user_data)
+{
+  if (!GTK_IS_SPIN_BUTTON(object)) return;
+  device_number = gtk_spin_button_get_value(GTK_SPIN_BUTTON(object));
+
+  dprintf("User set device number to %d\n", device_number);
+}
