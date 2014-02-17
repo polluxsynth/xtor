@@ -30,7 +30,7 @@
 void blofeld_init(struct param_handler *param_handler);
 
 /* Fetch parameter dump from Blofeld */
-void blofeld_get_dump(int parlist);
+void blofeld_get_dump(int parlist, int dev_no);
 
 /* Copy selected parameters to selected paste buffer */
 void *blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf);

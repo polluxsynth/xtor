@@ -28,15 +28,17 @@
 #include "debug.h"
 
 extern int current_buffer_no;
+extern int device_number;
 
 extern void set_title(void);
+
 
 void
 on_GetDump_pressed (GtkObject *object, gpointer user_data)
 {
   dprintf("Pressed get dump, requesting buffer no %d!\n", current_buffer_no);
   midi_connect(NULL);
-  blofeld_get_dump(current_buffer_no);
+  blofeld_get_dump(current_buffer_no, device_number);
 }
 
 void
@@ -51,7 +53,7 @@ on_Buffer_pressed (GtkObject *object, gpointer user_data)
     set_title();
     dprintf("Selected buffer #%d = buf %d, requesting dump\n",
             buffer_no, current_buffer_no);
-    blofeld_get_dump(current_buffer_no);
+    blofeld_get_dump(current_buffer_no, device_number);
   }
 }
 

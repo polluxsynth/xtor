@@ -597,6 +597,8 @@ int parameter_list[BLOFELD_PARAMS];
 
 int paste_buffer[BLOFELD_PARAMS];
 
+int device_number = 0;
+
 /* Callback and parameter for parameter updates */
 notify_cb notify_ui;
 void *notify_ref;
@@ -632,15 +634,15 @@ int blofeld_get_param_properties(int param_num,
   return -1;
 }
 
-void blofeld_get_dump(int buffer)
+void blofeld_get_dump(int buf_no, int devno)
 {
   unsigned char sndr[] = { SYSEX,
                            SYSEX_ID_WALDORF,
                            EQUIPMENT_ID_BLOFELD,
-                           0, /* device number */
+                           devno, /* device number */
                            SNDR,
                            EDIT_BUF,
-                           buffer,
+                           buf_no,
                            EOX };
 
   midi_send_sysex(sndr, sizeof(sndr));
