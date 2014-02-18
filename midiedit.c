@@ -389,6 +389,24 @@ static gboolean change_value(GtkWidget *what, int shifted, int dir)
 }
 
 
+/* Show popup menu when mouse right button pressed. */
+gboolean
+menu_button_event(GtkWidget *widget, GdkEventButton *event)
+{
+  static int count = 0;
+  dprintf("mouse button %d: %d, state %d, widget is a %s, name %s\n", ++count,
+          event->button, event->state, gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)));
+
+  if (event->button == 3) {
+    gtk_menu_popup(popup_menu, NULL, NULL, NULL, NULL, 0, event->time);
+    return TRUE;
+  }
+ 
+  return FALSE;
+}
+
+
 gboolean navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
 {
   GtkWidget *parent;
@@ -522,7 +540,8 @@ key_event(GtkWidget *widget, GdkEventKey *event)
   dprintf("Focused widget is a %s, name %s\n",gtk_widget_get_name(focus),
           gtk_buildable_get_name(GTK_BUILDABLE(focus)));
 
-  if (event->keyval == GDK_F1) {
+  if (event->keyval == GDK_F1 || event->keyval == GDK_F10 ||
+      event->keyval == GDK_Menu) {
     gtk_menu_popup(popup_menu, NULL, NULL, NULL, NULL, 0, event->time);
     return TRUE;
   }
@@ -1011,6 +1030,11 @@ main (int argc, char *argv[])
   about_window = GTK_WIDGET(gtk_builder_get_object(builder, "About"));
 
   setup_settings(popup_menu);
+
+  /* We want the popup menu to be displayed for right hand mouse button */
+  gtk_widget_add_events(main_window, GDK_BUTTON_PRESS_MASK);
+  g_signal_connect(main_window, "button-press-event", G_CALLBACK(menu_button_event), NULL);
+
 
   setup_hotkeys(builder, "KeyMappings");
   g_signal_connect(main_window, "key-press-event", G_CALLBACK(key_event), NULL);
