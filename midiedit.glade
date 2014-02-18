@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkAboutDialog" id="About">
+    <property name="border_width">5</property>
+    <property name="type_hint">normal</property>
+    <property name="gravity">center</property>
+    <property name="has_separator">False</property>
+    <property name="program_name">Midiedit</property>
+    <property name="version">1.0</property>
+    <property name="copyright" translatable="yes">(c) 2014 Ricard Wanderlof</property>
+    <property name="comments" translatable="yes">Gtk based editor
+for Waldorf Blofeld</property>
+    <property name="license" translatable="yes">This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA</property>
+    <property name="authors">Ricard Wanderlof
+Inspired by midicontroller by Lars Luthman</property>
+    <signal name="response" handler="on_About_response"/>
+    <signal name="delete_event" handler="on_About_delete"/>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="dialog-vbox1">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child>
+          <placeholder/>
+        </child>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="dialog-action_area1">
+            <property name="visible">True</property>
+            <property name="layout_style">end</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="Popup">
+    <property name="visible">True</property>
+    <child>
+      <object class="GtkCheckMenuItem" id="navigation">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Use Midiedit navigation</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator1">
+        <property name="visible">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="about">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">About</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="activate_About"/>
+      </object>
+    </child>
+  </object>
+</interface>

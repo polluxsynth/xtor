@@ -39,6 +39,9 @@
 const char *main_window_name = "Main Window";
 GtkWidget *main_window = NULL;
 
+GtkMenu *popup_menu = NULL;
+GtkWidget *about_window = NULL;
+
 /* Parameter handler */
 struct param_handler phandler;
 struct param_handler *param_handler = &phandler;
@@ -93,6 +96,8 @@ void set_title(void)
   if (main_window && GTK_IS_WINDOW(main_window))
     gtk_window_set_title(GTK_WINDOW(main_window), title);
 }
+
+/* General signal handlers */
   
 void 
 on_Main_Window_destroy (GtkObject *object, gpointer user_data)
@@ -106,6 +111,36 @@ on_midi_input (gpointer data, gint fd, GdkInputCondition condition)
   dprintf("Received MIDI data on fd %d\n", fd);
   midi_input();
 }
+
+/* Popup menu signal handlers */
+
+gboolean
+activate_About (GtkObject *object, gpointer user_data)
+{
+  dprintf("activate About: object %p is %s\n", object, gtk_widget_get_name(GTK_WIDGET(object)));
+  gtk_widget_show(about_window);
+  return TRUE;
+}
+
+/* Need to have this, or the default signal handler destroys the about box */
+gboolean 
+on_About_delete (GtkObject *object, gpointer user_data)
+{
+  dprintf("About deleted\n");
+  gtk_widget_hide(GTK_WIDGET(object));
+  return TRUE;
+}
+
+/* Basically when Closed is pressed, but also ESC or window X */
+gboolean 
+on_About_response (GtkObject *object, gpointer user_data)
+{
+  dprintf("About response\n");
+  gtk_widget_hide(GTK_WIDGET(object));
+  return TRUE;
+}
+
+/* Parameter editing */
 
 struct adj_update {
   GtkWidget *widget; /* widget requesting update, or NULL */
@@ -168,6 +203,7 @@ static void update_parameter(struct adjustor *adjustor, const void *valptr, GtkW
   update_adjustors(adjustor, valptr, widget);
 }
 
+/* TODO: Have all handlers return TRUE to show that signal is handled? */
 void
 on_entry_changed(GtkObject *object, gpointer user_data)
 {
@@ -409,6 +445,12 @@ key_event(GtkWidget *widget, GdkEventKey *event)
           widget, focus, main_window);
   dprintf("Focused widget is a %s, name %s\n",gtk_widget_get_name(focus),
           gtk_buildable_get_name(GTK_BUILDABLE(focus)));
+
+  if (event->keyval == GDK_F1) {
+    printf("got F1\n");
+    gtk_menu_popup(popup_menu, NULL, NULL, NULL, NULL, 0, event->time);
+    return TRUE;
+  }
 
   if (GTK_IS_ENTRY(focus))
     return FALSE; /* We let GTK handle all key events for GtkEntries*/
@@ -874,12 +916,24 @@ main (int argc, char *argv[])
   
   builder = gtk_builder_new ();
   gtk_builder_add_from_file (builder, gladename, NULL);
+  gtk_builder_add_from_file (builder, "midiedit.glade", NULL);
 
   main_window = GTK_WIDGET (gtk_builder_get_object (builder, main_window_name));
   gtk_builder_connect_signals (builder, NULL);
 #if 0 /* example of explicit signal connection */
   g_signal_connect (main_window, "destroy", G_CALLBACK (on_Main_Window_destroy), NULL);
 #endif
+
+  popup_menu = GTK_MENU(gtk_builder_get_object(builder, "Popup"));
+  /* Not sure why we need to bump the ref counter for the popup menu,
+   * but not for the main window or the About dialog. If we don't though
+   * (or remove the unref call for builder), we get an error message about
+   * popup_menu not being a menu when we try to open it.
+   * Perhaps it's because the menu is not a finished widget but just
+   * a description? */
+  g_object_ref (G_OBJECT(popup_menu));
+
+  about_window = GTK_WIDGET(gtk_builder_get_object(builder, "About"));
 
   setup_hotkeys(builder, "KeyMappings");
   g_signal_connect(main_window, "key-press-event", G_CALLBACK(key_event), NULL);
