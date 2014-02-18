@@ -249,16 +249,6 @@ on_togglebutton_changed (GtkObject *object, gpointer user_data)
   }
 }
 
-void
-on_button_pressed (GtkObject *object, gpointer user_data)
-{
-  GtkButton *button = GTK_BUTTON (object);
-  if (button)
-    dprintf("Button %p: name %s, user_data %p\n",
-            button, gtk_buildable_get_name(GTK_BUILDABLE(button)), user_data);
-}
-
-
 static gboolean change_value(GtkWidget *what, int shifted, int dir)
 {
   GtkWidget *parent;
