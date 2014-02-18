@@ -133,6 +133,7 @@ gboolean
 activate_About (GtkObject *object, gpointer user_data)
 {
   dprintf("activate About: object %p is %s\n", object, gtk_widget_get_name(GTK_WIDGET(object)));
+  gtk_window_set_transient_for(GTK_WINDOW(about_window), GTK_WINDOW(main_window));
   gtk_widget_show(about_window);
   return TRUE;
 }
