@@ -80,11 +80,26 @@ struct keymap {
 
 GList *keymaps = NULL;
 
+/* How the UI behaves */
 struct ui_settings {
-  gboolean scroll_focused_only;
+  int scroll_focused_only;
+  int midiedit_navigation;
 };
 
-struct ui_settings ui_settings = { TRUE };
+struct ui_settings ui_settings = { TRUE, TRUE };
+
+struct setting {
+  int *valueptr;
+  const char *name;
+  GtkWidget *widget;
+};
+
+struct setting settings[] = {
+  { &ui_settings.scroll_focused_only, "Scrollfocus", NULL },
+  { &ui_settings.midiedit_navigation, "Navigation", NULL },
+  { &debug, "Debug", NULL },
+  { NULL, NULL }
+};
 
 void set_title(void)
 {
@@ -139,6 +154,67 @@ on_About_response (GtkObject *object, gpointer user_data)
   gtk_widget_hide(GTK_WIDGET(object));
   return TRUE;
 }
+
+gboolean
+on_Setting_changed (GtkObject *object, gpointer user_data)
+{
+  dprintf("Setting changed: object is a %s, name %s\n",
+          gtk_widget_get_name(GTK_WIDGET(object)),
+          gtk_buildable_get_name(GTK_BUILDABLE(object)));
+
+  if (!GTK_IS_WIDGET(object)) return;
+
+  GtkWidget *widget = GTK_WIDGET(object);
+  struct setting *setting = settings;
+
+  /* Scan our settings for one with a matching widget pointer */
+  while (setting->valueptr) {
+    if (widget == setting->widget) {
+      if (GTK_IS_CHECK_MENU_ITEM(object)) {
+        *setting->valueptr = 
+          gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(object));
+        dprintf("Setting %s to %d\n", setting->name, *setting->valueptr);
+      }
+      break;
+    }
+    setting++;
+  }
+  return TRUE;
+}
+
+
+/* Popup menu settings */
+
+/* Assign menu item settings to appropriate setting[] */
+void assign_setting(gpointer data, gpointer user_data)
+{
+  struct setting *setting = user_data;
+
+  if (!GTK_IS_CHECK_MENU_ITEM(data)) return;
+  GtkCheckMenuItem *menuitem = data;
+  const char *name = gtk_buildable_get_name(GTK_BUILDABLE(menuitem));
+  dprintf("Scanning settings for %s\n", name);
+
+  while (setting->valueptr) {
+    if (!strcmp(name, setting->name)) {
+      dprintf("Found it!\n");
+      setting->widget = GTK_WIDGET(menuitem);
+      gtk_check_menu_item_set_active(menuitem, *setting->valueptr);
+      return;
+    }
+    setting++;
+  }
+}
+
+/* Set up all settings in the Popup menu to match our settigs[] */  
+void setup_settings(GtkMenu *menu)
+{
+  if (!GTK_IS_CONTAINER(menu)) return;
+
+  g_list_foreach(gtk_container_get_children(GTK_CONTAINER(menu)),
+                 assign_setting, settings);
+}
+
 
 /* Parameter editing */
 
@@ -447,7 +523,6 @@ key_event(GtkWidget *widget, GdkEventKey *event)
           gtk_buildable_get_name(GTK_BUILDABLE(focus)));
 
   if (event->keyval == GDK_F1) {
-    printf("got F1\n");
     gtk_menu_popup(popup_menu, NULL, NULL, NULL, NULL, 0, event->time);
     return TRUE;
   }
@@ -455,7 +530,7 @@ key_event(GtkWidget *widget, GdkEventKey *event)
   if (GTK_IS_ENTRY(focus))
     return FALSE; /* We let GTK handle all key events for GtkEntries*/
 
-  if (navigation(widget, focus, event))
+  if (ui_settings.midiedit_navigation && navigation(widget, focus, event))
     return TRUE;
 
   if (mapped_key(widget, focus, event))
@@ -934,6 +1009,8 @@ main (int argc, char *argv[])
   g_object_ref (G_OBJECT(popup_menu));
 
   about_window = GTK_WIDGET(gtk_builder_get_object(builder, "About"));
+
+  setup_settings(popup_menu);
 
   setup_hotkeys(builder, "KeyMappings");
   g_signal_connect(main_window, "key-press-event", G_CALLBACK(key_event), NULL);

@@ -54,14 +54,36 @@ Inspired by midicontroller by Lars Luthman</property>
   <object class="GtkMenu" id="Popup">
     <property name="visible">True</property>
     <child>
-      <object class="GtkCheckMenuItem" id="navigation">
+      <object class="GtkCheckMenuItem" id="Scrollfocus">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Scroll focused only</property>
+        <property name="use_underline">True</property>
+        <signal name="toggled" handler="on_Setting_changed"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="Navigation">
         <property name="visible">True</property>
         <property name="label" translatable="yes">Use Midiedit navigation</property>
         <property name="use_underline">True</property>
+        <signal name="toggled" handler="on_Setting_changed"/>
       </object>
     </child>
     <child>
       <object class="GtkSeparatorMenuItem" id="separator1">
+        <property name="visible">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckMenuItem" id="Debug">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Debug enable</property>
+        <property name="use_underline">True</property>
+        <signal name="toggled" handler="on_Setting_changed"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator">
         <property name="visible">True</property>
       </object>
     </child>
