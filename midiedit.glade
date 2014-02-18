@@ -68,7 +68,7 @@ Inspired by midicontroller by Lars Luthman</property>
     <child>
       <object class="GtkCheckMenuItem" id="Scrollfocus">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">Scroll focused widgets only</property>
+        <property name="label" translatable="yes">_Scroll focused widgets only</property>
         <property name="use_underline">True</property>
         <signal name="toggled" handler="on_Setting_changed"/>
       </object>
@@ -76,7 +76,7 @@ Inspired by midicontroller by Lars Luthman</property>
     <child>
       <object class="GtkCheckMenuItem" id="Navigation">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">Use Midiedit navigation keys</property>
+        <property name="label" translatable="yes">Use _Midiedit navigation keys</property>
         <property name="use_underline">True</property>
         <signal name="toggled" handler="on_Setting_changed"/>
       </object>
@@ -89,7 +89,7 @@ Inspired by midicontroller by Lars Luthman</property>
     <child>
       <object class="GtkCheckMenuItem" id="Debug">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">Debug enable</property>
+        <property name="label" translatable="yes">_Debug enable</property>
         <property name="use_underline">True</property>
         <signal name="toggled" handler="on_Setting_changed"/>
       </object>
@@ -102,7 +102,7 @@ Inspired by midicontroller by Lars Luthman</property>
     <child>
       <object class="GtkMenuItem" id="about">
         <property name="visible">True</property>
-        <property name="label" translatable="yes">About</property>
+        <property name="label" translatable="yes">_About</property>
         <property name="use_underline">True</property>
         <signal name="activate" handler="activate_About"/>
       </object>
