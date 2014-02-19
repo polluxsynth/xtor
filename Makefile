@@ -21,11 +21,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 PROGNAME=midiedit
-TODAY=041011
-VERSION=$(TODAY)
-#PREFIX=/usr/local
-PREFIX=./
-DISTFILES=midiedit.c Makefile controller.glade controller.gladep huge.glade huge.gladep README COPYING mkinstalldirs
+PREFIX=/usr/local
 
 OBJS = midiedit.o blofeld_ui.o blofeld_params.o midi.o debug.o
 INCS = param.h blofeld_params.h midi.h debug.h
@@ -40,18 +36,10 @@ $(PROGNAME): $(OBJS)
 	gcc -ansi -Werror -o $@ $^ `pkg-config --libs libglade-2.0 gmodule-2.0 alsa`
 
 clean:
-	rm -f $(PROGNAME) $(OBJS) *.bak *~
+	rm -f $(PROGNAME) $(OBJS) *~
 
-dist: $(DISTFILES)
-	mkdir $(PROGNAME)-$(VERSION)
-	cp $(DISTFILES) $(PROGNAME)-$(VERSION)
-	cat Makefile |\
-	sed -e "s'\`date +%y%m%d\`'$(TODAY)'g" > $(PROGNAME)-$(VERSION)/Makefile
-	tar -jc $(PROGNAME)-$(VERSION) > $(PROGNAME)-$(VERSION).tar.bz2
-	rm -rf $(PROGNAME)-$(VERSION)
-
-install: $(PROGNAME) controller.glade README COPYING
-	./mkinstalldirs $(PREFIX)/bin $(PREFIX)/share/$(PROGNAME) $(PREFIX)/share/doc/$(PROGNAME)-$(VERSION)
+install: $(PROGNAME) midiedit.glade blofeld.glade README COPYING
+	./mkinstalldirs $(PREFIX)/bin $(PREFIX)/share/$(PROGNAME) $(PREFIX)/share/doc/$(PROGNAME)
 	cp $(PROGNAME) $(PREFIX)/bin/
-	cp controller.glade huge.glade $(PREFIX)/share/$(PROGNAME)/
-	cp README COPYING $(PREFIX)/share/doc/$(PROGNAME)-$(VERSION)/
+	cp midiedit.glade blofeld.glade $(PREFIX)/share/$(PROGNAME)/
+	cp README COPYING $(PREFIX)/share/doc/$(PROGNAME)
