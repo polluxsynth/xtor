@@ -88,6 +88,7 @@ struct ui_settings {
 
 struct ui_settings ui_settings = { TRUE, TRUE };
 
+/* Global settings in Popup menu */
 struct setting {
   int *valueptr;
   const char *name;
@@ -127,7 +128,25 @@ on_midi_input (gpointer data, gint fd, GdkInputCondition condition)
   midi_input();
 }
 
+
 /* Popup menu signal handlers */
+
+/* Show popup menu when mouse right button pressed. */
+gboolean
+menu_button_event(GtkWidget *widget, GdkEventButton *event)
+{
+  static int count = 0;
+  dprintf("mouse button %d: %d, state %d, widget is a %s, name %s\n", ++count,
+          event->button, event->state, gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)));
+
+  if (event->button == 3) {
+    gtk_menu_popup(popup_menu, NULL, NULL, NULL, NULL, 0, event->time);
+    return TRUE;
+  }
+ 
+  return FALSE;
+}
 
 gboolean
 activate_About (GtkObject *object, gpointer user_data)
@@ -386,24 +405,6 @@ static gboolean change_value(GtkWidget *what, int shifted, int dir)
     g_signal_emit_by_name(GTK_OBJECT(what), signal, delta);
     return TRUE;
   }
-  return FALSE;
-}
-
-
-/* Show popup menu when mouse right button pressed. */
-gboolean
-menu_button_event(GtkWidget *widget, GdkEventButton *event)
-{
-  static int count = 0;
-  dprintf("mouse button %d: %d, state %d, widget is a %s, name %s\n", ++count,
-          event->button, event->state, gtk_widget_get_name(widget),
-          gtk_buildable_get_name(GTK_BUILDABLE(widget)));
-
-  if (event->button == 3) {
-    gtk_menu_popup(popup_menu, NULL, NULL, NULL, NULL, 0, event->time);
-    return TRUE;
-  }
- 
   return FALSE;
 }
 
