@@ -595,7 +595,9 @@ struct blofeld_param blofeld_params[] = {
 
 int parameter_list[BLOFELD_PARAMS];
 
-int paste_buffer[BLOFELD_PARAMS];
+#define PASTE_BUFFERS 2
+
+int paste_buffer[PASTE_BUFFERS][BLOFELD_PARAMS];
 
 int device_number = 0;
 
@@ -931,8 +933,10 @@ void blofeld_register_notify_cb(notify_cb cb, void *ref)
 /* Copy selected parameters to selected paste buffer */
 void *blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf)
 {
+  if (paste_buf >= PASTE_BUFFERS) return;
+
   void *src = &parameter_list[par_from];
-  void *dest = &paste_buffer[par_from];
+  void *dest = &paste_buffer[paste_buf][par_from];
   int len = (par_to + 1 - par_from) * sizeof(parameter_list[0]);
 
   memcpy(dest, src, len);
@@ -943,11 +947,13 @@ void *blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_bu
 {
   int parnum;
 
+  if (paste_buf >= PASTE_BUFFERS) return;
+
   /* update parameter_list ui with pasted parameters */
   for (parnum = par_from; parnum <= par_to; parnum++) {
     /* Only send UI updates for parameters that differ */
-    if (paste_buffer[parnum] != parameter_list[parnum]) {
-      update_ui(parnum, buf_no, paste_buffer[parnum]);
+    if (paste_buffer[paste_buf][parnum] != parameter_list[parnum]) {
+      update_ui(parnum, buf_no, paste_buffer[paste_buf][parnum]);
     }
   }
 }
