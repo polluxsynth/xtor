@@ -634,6 +634,15 @@ int blofeld_get_param_properties(int param_num,
   return -1;
 }
 
+static int midi_csum(const unsigned char *buf, int bytes)
+{
+  int c = 0;
+  while (bytes--)
+    c += *buf++;
+
+  return (c & 127);
+}
+
 void blofeld_get_dump(int buf_no, int devno)
 {
   unsigned char sndr[] = { SYSEX,
@@ -646,6 +655,25 @@ void blofeld_get_dump(int buf_no, int devno)
                            EOX };
 
   midi_send_sysex(sndr, sizeof(sndr));
+}
+
+void blofeld_send_dump(int buf_no, int devno)
+{
+  unsigned char sndd[BLOFELD_PARAMS + 9] = { SYSEX,
+                                             SYSEX_ID_WALDORF,
+                                             EQUIPMENT_ID_BLOFELD,
+                                             devno,
+                                             SNDD,
+                                             EDIT_BUF,
+                                             buf_no };
+  int parno;
+
+  for (parno = 0; parno < BLOFELD_PARAMS; parno++)
+    sndd[SDATA + parno] = parameter_list[parno];
+  sndd[SDATA + BLOFELD_PARAMS] = midi_csum(&sndd[SDATA], BLOFELD_PARAMS);
+  sndd[SDATA + BLOFELD_PARAMS + 1] = EOX;
+
+  midi_send_sysex(sndd, sizeof(sndd));
 }
 
 static void send_parameter_update(int parnum, int buf_no, int devno, int value)
@@ -864,15 +892,6 @@ void *blofeld_fetch_parameter(int parnum, int buf_no)
   if (parnum < BLOFELD_PARAMS)
     return &parameter_list[parnum];
   return NULL;
-}
-
-static int midi_csum(const unsigned char *buf, int bytes)
-{
-  int c = 0;
-  while (bytes--)
-    c += *buf++;
-
-  return (c & 127);
 }
 
 void blofeld_sysex(void *buffer, int len)
