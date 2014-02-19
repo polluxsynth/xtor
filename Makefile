@@ -28,7 +28,7 @@ PREFIX=./
 DISTFILES=midiedit.c Makefile controller.glade controller.gladep huge.glade huge.gladep README COPYING mkinstalldirs
 
 OBJS = midiedit.o blofeld_ui.o blofeld_params.o midi.o debug.o
-INCS = blofeld_params.h midi.h
+INCS = param.h blofeld_params.h midi.h debug.h
 
 all: $(PROGNAME)
 
