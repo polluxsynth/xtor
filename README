@@ -1,0 +1,6 @@
+Midiedit - an extensable Gtk based MIDI editor
+==============================================
+RW 140219
+
+Midiedit is an editor for MIDI synthesizers (or indeed any MIDI device),
+currently configured for the Waldorf Blofeld.
