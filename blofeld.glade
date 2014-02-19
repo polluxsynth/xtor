@@ -15486,7 +15486,7 @@
                                   <object class="GtkTable" id="table6">
                                     <property name="visible">True</property>
                                     <property name="n_rows">2</property>
-                                    <property name="n_columns">8</property>
+                                    <property name="n_columns">11</property>
                                     <child>
                                       <object class="GtkButton" id="Patch Send">
                                         <property name="label" translatable="yes">Send</property>
@@ -15660,6 +15660,85 @@
                                       <packing>
                                         <property name="x_options"></property>
                                         <property name="y_options"></property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry" id="Patch Name1">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="invisible_char">&#x25CF;</property>
+                                        <property name="width_chars">16</property>
+                                        <property name="caps_lock_warning">False</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">9</property>
+                                        <property name="right_attach">10</property>
+                                        <property name="x_options">GTK_EXPAND</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label343">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Patch Name</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">9</property>
+                                        <property name="right_attach">10</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkVSeparator" id="vseparator52">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">vertical</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">8</property>
+                                        <property name="right_attach">9</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkVSeparator" id="vseparator53">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">vertical</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">8</property>
+                                        <property name="right_attach">9</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="Category1">
+                                        <property name="visible">True</property>
+                                        <property name="model">category</property>
+                                        <property name="active">0</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="cellrenderertext236"/>
+                                          <attributes>
+                                            <attribute name="text">0</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">10</property>
+                                        <property name="right_attach">11</property>
+                                        <property name="x_options"></property>
+                                        <property name="y_options"></property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label344">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Category</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">10</property>
+                                        <property name="right_attach">11</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
                                       </packing>
                                     </child>
                                   </object>
