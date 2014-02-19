@@ -42,6 +42,14 @@ on_GetDump_pressed (GtkObject *object, gpointer user_data)
 }
 
 void
+on_SendDump_pressed (GtkObject *object, gpointer user_data)
+{
+  dprintf("Pressed send dump, sending buffer no %d!\n", current_buffer_no);
+  midi_connect(NULL);
+  blofeld_send_dump(current_buffer_no, device_number);
+}
+
+void
 on_Buffer_pressed (GtkObject *object, gpointer user_data)
 {
   const char *id = gtk_buildable_get_name(GTK_BUILDABLE(object));
