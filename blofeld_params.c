@@ -703,9 +703,8 @@ static void update_ui_int_param_children(struct blofeld_param *param,
                                          int buf_no, int value, int mask);
 
 
-/* Update numeric (integer) parameter and send to Blofeld */
-static void update_int_param(struct blofeld_param *param,
-                             int parnum, int buf_no, int value)
+/* Convert UI representation of value to parameter value */
+static int ui_to_param_value(struct blofeld_param *param, int value)
 {
   int min = param->limits->min;
   int max = param->limits->max;
@@ -716,6 +715,14 @@ static void update_int_param(struct blofeld_param *param,
     value += 64; /* center around mid range (64) */
   else if (min == 12) /* octave */
     value = 12 * value + 16; /* coding for octave parameters */
+  return value;
+}
+
+/* Update numeric (integer) parameter and send to Blofeld */
+static void update_int_param(struct blofeld_param *param,
+                             int parnum, int buf_no, int value)
+{
+  int parval = ui_to_param_value(param, value);
 
   /* If bitmap param, fetch parent, then update value */
   if (param->bm_param) {
@@ -728,17 +735,17 @@ static void update_int_param(struct blofeld_param *param,
     int mask = param->bm_param->bitmask;
     int shift = param->bm_param->bitshift;
     /* mask out non-changed bits, then or with new value */
-    value = (parameter_list[parnum] & ~mask) | (value << shift);
+    parval = (parameter_list[parnum] & ~mask) | (parval << shift);
 
     /* Update UI for all children that have a bitmask that overlaps, 
      * (skipping the one we've just received the update for)  */
     /* This happens for for instance LFO Speed vs Clock */
-    update_ui_int_param_children(parent, param, buf_no, value, mask);
+    update_ui_int_param_children(parent, param, buf_no, parval, mask);
   }
 
   /* Update parameter list, then send to Blofeld */
-  parameter_list[parnum] = value;
-  send_parameter_update(parnum, buf_no, 0, value);
+  parameter_list[parnum] = parval;
+  send_parameter_update(parnum, buf_no, 0, parval);
 }
 
 /* Update string parameter and send to Blofeld */
@@ -789,18 +796,25 @@ void blofeld_update_param(int parnum, int buf_no, const void *valptr)
 
 }
 
-static void update_ui_int_param(struct blofeld_param *param, int buf_no, int value)
+/* Convert parameter value to UI representation of value */
+static int param_value_to_ui(struct blofeld_param *param, int value)
 {
   int min = param->limits->min;
   int max = param->limits->max;
-  int parnum = param - blofeld_params;
-  int range = max + 1 - min;
   if (min == -200) /* keytrack */
     value = value * 200 / 64 - 200; /* empirically verified against Blofeld */
   else if (min < 0)
     value -= 64;
   else if (min == 12) /* octave */
     value = (value - 16 ) / 12;
+  return value;
+}
+
+/* Notify UI of new parameter value */
+static void update_ui_int_param(struct blofeld_param *param, int buf_no, int parval)
+{
+  int parnum = param - blofeld_params;
+  int value = param_value_to_ui(param, parval);
   notify_ui(parnum, buf_no, &value, notify_ref);
 }
 
