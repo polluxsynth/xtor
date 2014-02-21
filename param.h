@@ -44,6 +44,10 @@ struct param_handler {
   /* Set new parameter value in parameter list, and notify synth */
   void (*param_update_parameter)(int parnum, int buf_no, const void *valptr);
 
+  /* Update value depending on delta, and return new value, taking into
+   * consideration limits and parameter step size for the parameter */
+  int (*param_update_value)(int parnum, int old_val, int new_val, int delta);
+
   /* Fetch parameter value from parameter list */
   void *(*param_fetch_parameter)(int parnum, int buf_no);
 

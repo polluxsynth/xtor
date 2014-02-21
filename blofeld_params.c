@@ -903,6 +903,50 @@ static void update_ui_all(unsigned char *param_buf, int buf_no)
   force = 0;
 }
 
+#define CAP(value, min, max) \
+  if (value < (min)) value = (min); else if (value > (max)) value = (max)
+
+static int blofeld_update_value(int parno, int old_val, int new_val, int delta)
+{
+  if (parno >= BLOFELD_PARAMS_ALL) return old_val; /* sanity check */
+
+  struct blofeld_param *param = &blofeld_params[parno];
+  int min = param->limits->min;
+  int max = param->limits->max;
+  int range = max - min;
+  int bigrange = range >= 127; /* UI range larger than parameter value range */
+                               /* In practice, only keytrack parameters */
+  int value;
+
+  /* For bigrange parameters, when jumping to a new value (delta == 0), 
+   * we want to CAP the value before locking it to the available values,
+   * as the ui_to_param_value() is not required to be valid for overrange
+   * values. For incremental changes, we start with the old value, which
+   * will always be in range, and then we can simply cap it in the
+   * 0..127 range before converting back to UI representation of value. */
+  if (delta == 0) { /* jump */
+    value = new_val; /* jump to new val*/
+    CAP(value, min, max);
+    if (bigrange) /* lock UI value to available parameter values */
+      value = param_value_to_ui(param, ui_to_param_value(param, value));
+  } else { /* incremental */
+    value = old_val;
+    if (bigrange) {
+      /* Go to parameter value domain, and add delta */
+      value = ui_to_param_value(param, value) + delta;
+      CAP(value, 0, 127);
+      /* Go back to UI value domain */
+      value = param_value_to_ui(param, value);
+    } else {
+      /* UI representation has same step size as parameter */
+      /* Just add the delta, and cap it */
+      value += delta;
+      CAP(value, min, max);
+    }
+  }
+  return value;
+}
+
 void *blofeld_fetch_parameter(int parnum, int buf_no)
 {
   if (parnum < BLOFELD_PARAMS)
@@ -1049,6 +1093,7 @@ void blofeld_init(struct param_handler *param_handler)
   param_handler->param_find_index = blofeld_find_index;
   param_handler->param_get_properties = blofeld_get_param_properties;
   param_handler->param_update_parameter = blofeld_update_param;
+  param_handler->param_update_value = blofeld_update_value;
   param_handler->param_fetch_parameter = blofeld_fetch_parameter;
   param_handler->param_get_patch_name_id = blofeld_get_patch_name_id;
 }
