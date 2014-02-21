@@ -325,6 +325,39 @@ on_entry_changed(GtkObject *object, gpointer user_data)
   }
 }
 
+
+gboolean
+on_change_value (GtkObject *object, GtkScrollType scrolltype,
+                 gdouble dvalue, gpointer user_data)
+{
+  GtkRange *gtkrange = GTK_RANGE (object);
+
+  if (gtkrange) {
+    struct adjustor *adjustor = user_data;
+    int new_value = (int) dvalue;
+    int old_value = (int) gtk_range_get_value(gtkrange);
+    int delta = 0;
+
+    dprintf("Change %s, new value %d, old value %d, scrolltype %d, parnum %d\n",
+            gtk_buildable_get_name(GTK_BUILDABLE(gtkrange)),
+            new_value, old_value, scrolltype, adjustor->parnum);
+
+    switch (scrolltype) {
+      case GTK_SCROLL_STEP_BACKWARD:  delta = -1;   break;
+      case GTK_SCROLL_STEP_FORWARD:   delta = 1;   break;
+      case GTK_SCROLL_PAGE_BACKWARD:  delta = -10;  break;
+      case GTK_SCROLL_PAGE_FORWARD:   delta = 10;   break;
+      case GTK_SCROLL_JUMP: /* this happens when dragging mouse pointer */
+      default:                        delta = 0;    break;
+    }
+    int new = param_handler->param_update_value(adjustor->parnum,
+                                                old_value, new_value, delta);
+    gtk_range_set_value(gtkrange, new);
+    return TRUE;
+  }
+  return FALSE;
+}
+
 void
 on_value_changed (GtkObject *object, gpointer user_data)
 {
@@ -336,7 +369,7 @@ on_value_changed (GtkObject *object, gpointer user_data)
     return;
 
   if (gtkrange) {
-    dprintf("Slider %p: name %s, value %d, parnum %d\n",
+    dprintf("Range %p: name %s, value %d, parnum %d\n",
             gtkrange, gtk_buildable_get_name(GTK_BUILDABLE(gtkrange)),
             (int) gtk_range_get_value(gtkrange), adjustor->parnum);
     value = (int) gtk_range_get_value(gtkrange);
@@ -837,7 +870,11 @@ void create_adjustor (gpointer data, gpointer user_data)
         g_object_set(adj, "page-size", (gdouble) 0, NULL);
       } else
         eprintf("Warning: GtkRange %s has no adjustment\n", id);
-      /* Handle parameter updates when value changed */
+
+      /* Handle update of value when user attempts to change value
+       * (be it using mouse or keys) */
+      g_signal_connect(this, "change-value", G_CALLBACK(on_change_value), adjustor);
+      /* Handle parameter updates once value has been changed */
       g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), adjustor);
     }
 
