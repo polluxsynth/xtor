@@ -299,7 +299,8 @@ static void update_parameter(struct adjustor *adjustor, const void *valptr, GtkW
   update_adjustors(adjustor, valptr, widget);
 }
 
-/* TODO: Have all handlers return TRUE to show that signal is handled? */
+/* TODO: Have all handlers return TRUE to show that signal is handled? 
+ * - only for certain handlers; check gtk documentation. */
 void
 on_entry_changed(GtkObject *object, gpointer user_data)
 {
