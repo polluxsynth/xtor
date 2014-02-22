@@ -15828,10 +15828,11 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkEntry" id="entry1">
+                                      <object class="GtkEntry" id="Device Name">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="invisible_char">&#x25CF;</property>
+                                        <signal name="activate" handler="on_Device_Name_activate"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>

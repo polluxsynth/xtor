@@ -129,6 +129,20 @@ on_midi_input (gpointer data, gint fd, GdkInputCondition condition)
 }
 
 
+void
+on_Device_Name_activate(GtkObject *object, gpointer user_data)
+{
+  if (!GTK_IS_ENTRY(object)) return;
+  GtkEntry *device_name_entry = GTK_ENTRY(object);
+
+  /* If user says empty string, go back to parameter handler's default */
+  if (!strcmp(gtk_entry_get_text(device_name_entry), ""))
+    gtk_entry_set_text(device_name_entry, param_handler->remote_midi_device);
+
+  midi_connect(gtk_entry_get_text(device_name_entry));
+}
+
+
 /* Popup menu signal handlers */
 
 /* Show popup menu when mouse right button pressed. */
@@ -1084,6 +1098,9 @@ main (int argc, char *argv[])
   /* Handle scroll events (mouse wheel) when not focused on any widget */
   gtk_widget_add_events(GTK_WIDGET(main_window), GDK_SCROLL_MASK);
   g_signal_connect(main_window, "scroll-event", G_CALLBACK(scroll_event), NULL);
+  GtkEntry *device_name_widget = GTK_ENTRY (gtk_builder_get_object (builder, "Device Name"));
+  if (device_name_widget)
+    gtk_entry_set_text(device_name_widget, param_handler->remote_midi_device);
 
   g_object_unref (G_OBJECT (builder));
 
