@@ -42,6 +42,10 @@ void blofeld_send_dump(int parlist, int dev_no);
 /* General transfer function for parameter dumps */
 int blofeld_xfer_dump(int parlist, int dev_no, send_func sender, int userdata);
 
+/* Load parameter list from buffer.
+ * Return -1 if something wrong, else 0. */
+int blofeld_file_sysex(void *buffer, int len);
+
 /* Copy selected parameters to selected paste buffer */
 void *blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf);
 

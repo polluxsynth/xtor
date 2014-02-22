@@ -966,33 +966,52 @@ void *blofeld_fetch_parameter(int parnum, int buf_no)
   return NULL;
 }
 
-void blofeld_sysex(void *buffer, int len)
+static int receive_sndd(char *buf)
+{
+  int checksum = midi_csum(&buf[SDATA], BLOFELD_PARAMS);
+  int expected = buf[SDATA + BLOFELD_PARAMS];
+  if (checksum != expected) {
+    eprintf("Warning: Incorrect checksum in received data: "
+            "calculated %d, should have been %d\n",
+            checksum, expected);
+   return -1;
+  }
+  update_ui_all(&buf[SDATA], buf[NN]);
+  return 0;
+}
+
+static void blofeld_midi_sysex(void *buffer, int len)
 {
   unsigned char *buf = buffer;
 
   dprintf("Blofeld received sysex, len %d\n", len);
-  if (len > IDE && buf[IDE] == EQUIPMENT_ID_BLOFELD) {
-    switch (buf[IDM]) {
-      case SNDP: update_ui(MIDI_2BYTE(buf[HH], buf[PP]), buf[LL], buf[XX]);
-                 break;
-      case SNDD: if (buf[BB] == EDIT_BUF) {
-                   int checksum = midi_csum(&buf[SDATA], BLOFELD_PARAMS);
-                   int expected = buf[SDATA + BLOFELD_PARAMS];
-                   if (checksum != expected)
-                     eprintf("Warning: Incorrect checksum in received data: "
-                             "calculated %d, should have been %d\n",
-                             checksum, expected);
-                   else
-                     update_ui_all(&buf[SDATA], buf[NN]);
-                 }
-                 break;
-      case SNDR:
-      case GLBR:
-      case GLBD:
-      default: break; /* ignore these */
-    }
+  if (len <= IDE || buf[IDE] != EQUIPMENT_ID_BLOFELD) return;
+  switch (buf[IDM]) {
+    case SNDP: update_ui(MIDI_2BYTE(buf[HH], buf[PP]), buf[LL], buf[XX]);
+               break;
+    case SNDD: if (buf[BB] == EDIT_BUF)
+                 receive_sndd(buf);
+               break;
+    case SNDR:
+    case GLBR:
+    case GLBD:
+    default: break; /* ignore these */
   }
 }
+
+/* It's slightly different when reading from file, as we don't care about
+ * the buffer number (BB) stored in the file, and we only accept sound dumps
+ * (SNDD) */
+int blofeld_file_sysex(void *buffer, int len)
+{
+  unsigned char *buf = buffer;
+
+  dprintf("Blofeld read sound dump from file\n");
+  if (len <= IDE || buf[IDE] != EQUIPMENT_ID_BLOFELD || buf[IDM] != SNDD)
+    return -1;
+  receive_sndd(buf);
+}
+
 
 void blofeld_register_notify_cb(notify_cb cb, void *ref)
 {
@@ -1089,7 +1108,7 @@ void blofeld_init(struct param_handler *param_handler)
     }
   }
 
-  midi_register_sysex(SYSEX_ID_WALDORF, blofeld_sysex, BLOFELD_PARAMS + 10);
+  midi_register_sysex(SYSEX_ID_WALDORF, blofeld_midi_sysex, BLOFELD_PARAMS + 10);
 
   /* Fill in param_handler struct */
 
