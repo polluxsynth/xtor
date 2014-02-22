@@ -28,6 +28,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <gtk/gtk.h>
+#include "dialog.h"
 #include "param.h"
 #include "blofeld_params.h"
 #include "debug.h"
@@ -51,81 +52,6 @@ static int file_send(char *buf, int len, int fd)
     len -= res;
   }
   return -1; /* We won't get here */
-}
-
-/* Read buffer from file fd */
-static int safe_read(int fd, char *buf, int len)
-{
-  int res;
-  while (1) {
-    res = read(fd, buf, len);
-    if (res < 0 && errno != EINTR) return res;
-    if (res == 0 || res == len) return 0;
-    buf += res;
-    len -= res;
-  }
-  return -1; /* We won't get here */
-}
-
-
-/* Convenience functions for dialog boxes. */
-static GtkWidget *file_chooser_dialog(const gchar *title,
-                                      GtkWidget *parent,
-                                      const gchar *do_button_text)
-{
-  return gtk_file_chooser_dialog_new (title,
-                                      GTK_WINDOW(parent),
-                                      GTK_FILE_CHOOSER_ACTION_OPEN,
-                                      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                      do_button_text, GTK_RESPONSE_ACCEPT,
-                                      NULL);
-}
-
-static void report(const gchar *message, const gchar *filename,
-                   GtkMessageType message_type, GtkWidget *parent)
-{
-  GtkWidget *dialog;
-  dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   message_type,
-                                   GTK_BUTTONS_CLOSE,
-                                   message,
-                                   filename, g_strerror (errno));
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
-}
-
-static int query(const gchar *message, const gchar *filename,
-                  GtkWidget *parent)
-{
-  GtkWidget *dialog;
-  dialog = gtk_message_dialog_new (GTK_WINDOW(parent),
-                                    GTK_DIALOG_DESTROY_WITH_PARENT,
-                                    GTK_MESSAGE_QUESTION,
-                                    GTK_BUTTONS_YES_NO,
-                                    message, filename);
-  return gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_YES;
-  /* We don't destroy the dialog here, leave it in sight as a log of
-   * what's happened. */
-}
-
-static int open_with_overwrite_query(char *filename, GtkWidget *parent)
-{
-  int res = open(filename, O_CREAT | O_EXCL | O_RDWR, 0666);
-  if (res < 0 && errno == EEXIST) {
-    if (!query("File %s exists, overwrite?", filename, parent)) {
-      report("Write to %s canceled!", filename, GTK_MESSAGE_ERROR, parent);
-      goto out;
-    }
-    res = unlink(filename);
-    if (res >= 0)
-      res = open(filename, O_CREAT | O_EXCL | O_RDWR, 0666);
-  }
-  if (res < 0)
-    report("Error creating %s: %s", filename, GTK_MESSAGE_ERROR, parent);
-
-out:
-  return res;
 }
 
 void
@@ -156,6 +82,20 @@ out:
   g_free (filename);
 }
 
+
+/* Read buffer from file fd */
+static int safe_read(int fd, char *buf, int len)
+{
+  int res;
+  while (1) {
+    res = read(fd, buf, len);
+    if (res < 0 && errno != EINTR) return res;
+    if (res == 0 || res == len) return 0;
+    buf += res;
+    len -= res;
+  }
+  return -1; /* We won't get here */
+}
 
 void
 on_Patch_Load_pressed (GtkObject *object, gpointer user_data)

@@ -23,8 +23,8 @@
 PROGNAME=midiedit
 PREFIX=/usr/local
 
-OBJS = midiedit.o blofeld_ui.o blofeld_params.o midi.o debug.o
-INCS = param.h blofeld_params.h midi.h debug.h
+OBJS = midiedit.o dialog.o blofeld_ui.o blofeld_params.o midi.o debug.o
+INCS = dialog.h param.h blofeld_params.h midi.h debug.h
 
 all: $(PROGNAME)
 
