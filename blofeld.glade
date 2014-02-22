@@ -84,6 +84,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <signal name="pressed" handler="on_GetDump_pressed"/>
+                    <signal name="activate" handler="on_GetDump_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -15494,6 +15495,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <signal name="pressed" handler="on_SendDump_pressed"/>
+                                        <signal name="activate" handler="on_SendDump_pressed"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">1</property>
@@ -15520,6 +15522,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <signal name="pressed" handler="on_Patch_Copy_pressed"/>
+                                        <signal name="activate" handler="on_Patch_Copy_pressed"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">3</property>
@@ -15535,6 +15538,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <signal name="pressed" handler="on_Patch_Paste_pressed"/>
+                                        <signal name="activate" handler="on_Patch_Paste_pressed"/>
                                       </object>
                                       <packing>
                                         <property name="left_attach">4</property>
@@ -15660,6 +15664,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">True</property>
                                         <signal name="pressed" handler="on_GetDump_pressed"/>
+                                        <signal name="activate" handler="on_GetDump_pressed"/>
                                       </object>
                                       <packing>
                                         <property name="x_options"></property>
