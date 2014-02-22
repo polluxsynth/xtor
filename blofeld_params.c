@@ -659,12 +659,19 @@ void blofeld_get_dump(int buf_no, int devno)
   midi_send_sysex(sndr, sizeof(sndr));
 }
 
-void blofeld_send_dump(int buf_no, int devno)
+static int midi_send(char *buf, int size, int userdata)
+{
+  midi_send_sysex(buf, size);
+
+  return 0;
+}
+
+int blofeld_xfer_dump(int buf_no, int dev_no, send_func sender, int userdata)
 {
   unsigned char sndd[BLOFELD_PARAMS + 9] = { SYSEX,
                                              SYSEX_ID_WALDORF,
                                              EQUIPMENT_ID_BLOFELD,
-                                             devno,
+                                             dev_no,
                                              SNDD,
                                              EDIT_BUF,
                                              buf_no };
@@ -675,7 +682,12 @@ void blofeld_send_dump(int buf_no, int devno)
   sndd[SDATA + BLOFELD_PARAMS] = midi_csum(&sndd[SDATA], BLOFELD_PARAMS);
   sndd[SDATA + BLOFELD_PARAMS + 1] = EOX;
 
-  midi_send_sysex(sndd, sizeof(sndd));
+  return sender(sndd, sizeof(sndd), userdata);
+}
+
+void blofeld_send_dump(int buf_no, int dev_no)
+{
+  blofeld_xfer_dump(buf_no, dev_no, midi_send, 0);
 }
 
 static void send_parameter_update(int parnum, int buf_no, int devno, int value)

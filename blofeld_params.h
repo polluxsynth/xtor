@@ -33,8 +33,14 @@ void blofeld_init(struct param_handler *param_handler);
 /* Fetch parameter dump from Blofeld */
 void blofeld_get_dump(int parlist, int dev_no);
 
+/* Sender function for dumps */
+typedef int (*send_func)(char *buf, int len, int userdata);
+
 /* Send parameter dump to Blofeld */
 void blofeld_send_dump(int parlist, int dev_no);
+
+/* General transfer function for parameter dumps */
+int blofeld_xfer_dump(int parlist, int dev_no, send_func sender, int userdata);
 
 /* Copy selected parameters to selected paste buffer */
 void *blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf);
