@@ -65,7 +65,6 @@ int current_buffer_no;
 /* current patch name */
 char current_patch_name[BLOFELD_PATCH_NAME_LEN_MAX + 1] = { 0 };
 int current_patch_name_max = BLOFELD_PATCH_NAME_LEN_MAX;
-GtkWidget *patch_name_widget;
 
 /* structure for mapping keys to specific widget focus */
 struct keymap {
@@ -319,6 +318,20 @@ static void update_parameter(struct adjustor *adjustor, const void *valptr, GtkW
 /* TODO: Have all handlers return TRUE to show that signal is handled? 
  * - only for certain handlers; check gtk documentation. */
 void
+on_patch_name_changed(GtkObject *object, gpointer user_data)
+{
+  GtkEntry *gtkentry = GTK_ENTRY (object);
+
+  if (gtkentry) {
+    const char *stringptr = gtk_entry_get_text(gtkentry);
+    /* Set our global patch name if respective widget and update title */
+    strncpy(current_patch_name, stringptr, current_patch_name_max);
+    set_title();
+  }
+}
+
+
+void
 on_entry_changed(GtkObject *object, gpointer user_data)
 {
   GtkEntry *gtkentry = GTK_ENTRY (object);
@@ -334,10 +347,6 @@ on_entry_changed(GtkObject *object, gpointer user_data)
             gtkentry, gtk_buildable_get_name(GTK_BUILDABLE(gtkentry)),
             stringptr, adjustor->parnum);
     /* Set our global patch name if respective widget and update title */
-    if (GTK_WIDGET(object) == patch_name_widget) {
-      strncpy(current_patch_name, stringptr, current_patch_name_max);
-      set_title();
-    }
     update_parameter(adjustor, stringptr, GTK_WIDGET(object));
   }
 }
@@ -905,9 +914,9 @@ void create_adjustor (gpointer data, gpointer user_data)
       /* Fetch patch name id (i.e. "Patch Name") if we haven't got it yet */
       if (!patch_name)
         patch_name = param_handler->param_get_patch_name_id();
-      /* If we're looking at that parameter, save widget ref for later. */
+      /* If we're looking at that parameter, handle patch name updates */
       if (!strcmp(id, patch_name))
-        patch_name_widget = this;
+        g_signal_connect(this, "changed", G_CALLBACK(on_patch_name_changed), adjustor);
     }
   }
 
