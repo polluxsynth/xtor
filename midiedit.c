@@ -1,0 +1,1167 @@
+/****************************************************************************
+ * midiedit - GTK based editor for MIDI synthesisers
+ *
+ * midiedit.c - Main program, with most of the synth-agnostic UI
+ *              implementation.
+ * 
+ * Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
+ *
+ * Originally based on:
+ * MIDI Controller - A program that runs MIDI controller GUIs built in Glade
+ * Copyright (C) 2004  Lars Luthman <larsl@users.sourceforge.net>
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ ****************************************************************************/
+
+#include <stdio.h>
+#include <poll.h>
+#include <string.h>
+#include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
+#include "dialog.h"
+#include "param.h"
+#include "blofeld_params.h"
+#include "midi.h"
+
+#include "debug.h"
+
+const char *main_window_name = "Main Window";
+GtkWidget *main_window = NULL;
+
+GtkMenu *popup_menu = NULL;
+GtkWidget *about_window = NULL;
+
+/* Parameter handler */
+struct param_handler phandler;
+struct param_handler *param_handler = &phandler;
+
+struct adjustor {
+  const char *id; /* name of parameter, e.g. "Filter 1 Cutoff" */
+  int parnum;  /* parameter number. Redundant, but practical */
+  GList *widgets; /* list of widgets controlling parameter */
+};
+
+/* List of all adjustors, indexed by parameter number. */
+struct adjustor **adjustors;
+
+/* used to temporarily block updates to MIDI */
+int block_updates;
+
+/* buffer number currently shown */
+int current_buffer_no;
+
+/* current patch name */
+char current_patch_name[BLOFELD_PATCH_NAME_LEN_MAX + 1] = { 0 };
+int current_patch_name_max = BLOFELD_PATCH_NAME_LEN_MAX;
+
+/* structure for mapping keys to specific widget focus */
+struct keymap {
+  const gchar *key_name; /* e.g. "s" */
+  guint keyval;          /* GDK_ code for key */
+  const gchar *param_name;
+  GtkWidget *widget;
+  int param_arg;
+  const gchar *parent_name;
+  GtkWidget *parent;
+  int parent_arg;
+};
+
+GList *keymaps = NULL;
+
+/* How the UI behaves */
+struct ui_settings {
+  int scroll_focused_only;
+  int midiedit_navigation;
+};
+
+struct ui_settings ui_settings = { TRUE, TRUE };
+
+/* Global settings in Popup menu */
+struct setting {
+  int *valueptr;
+  const char *name;
+  GtkWidget *widget;
+};
+
+struct setting settings[] = {
+  { &ui_settings.scroll_focused_only, "Scrollfocus", NULL },
+  { &ui_settings.midiedit_navigation, "Navigation", NULL },
+  { &debug, "Debug", NULL },
+  { NULL, NULL }
+};
+
+
+static char *trim(char *buf)
+{
+  if (!buf) return buf;
+
+  int len = strlen(buf);
+  while (len && buf[len - 1] == ' ')
+    len--;
+  buf[len] = '\0';
+  return buf;
+}
+
+
+void set_title(void)
+{
+  char title[80];
+
+  sprintf(title, "Midiedit %s - %s (Part %d)", 
+          param_handler->name, current_patch_name, current_buffer_no + 1);
+
+  if (main_window && GTK_IS_WINDOW(main_window))
+    gtk_window_set_title(GTK_WINDOW(main_window), title);
+}
+
+/* General signal handlers */
+  
+void 
+on_Main_Window_destroy (GtkObject *object, gpointer user_data)
+{
+  gtk_main_quit();
+}
+
+void
+on_midi_input (gpointer data, gint fd, GdkInputCondition condition)
+{
+  dprintf("Received MIDI data on fd %d\n", fd);
+  midi_input();
+}
+
+
+void
+on_Device_Name_activate(GtkObject *object, gpointer user_data)
+{
+  if (!GTK_IS_ENTRY(object)) return;
+  GtkEntry *device_name_entry = GTK_ENTRY(object);
+
+  /* If user says empty string, go back to parameter handler's default */
+  if (!strcmp(gtk_entry_get_text(device_name_entry), ""))
+    gtk_entry_set_text(device_name_entry, param_handler->remote_midi_device);
+
+  if (midi_connect(gtk_entry_get_text(device_name_entry)) < 0)
+    report("Can't establish MIDI connection!", "", GTK_MESSAGE_ERROR, main_window);
+;
+}
+
+
+/* Popup menu signal handlers */
+
+/* Show popup menu when mouse right button pressed. */
+gboolean
+menu_button_event(GtkWidget *widget, GdkEventButton *event)
+{
+  static int count = 0;
+  dprintf("mouse button %d: %d, state %d, widget is a %s, name %s\n", ++count,
+          event->button, event->state, gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)));
+
+  if (event->button == 3) {
+    gtk_menu_popup(popup_menu, NULL, NULL, NULL, NULL, 0, event->time);
+    return TRUE;
+  }
+ 
+  return FALSE;
+}
+
+gboolean
+activate_About (GtkObject *object, gpointer user_data)
+{
+  dprintf("activate About: object %p is %s\n", object, gtk_widget_get_name(GTK_WIDGET(object)));
+  gtk_window_set_transient_for(GTK_WINDOW(about_window), GTK_WINDOW(main_window));
+  gtk_widget_show(about_window);
+  return TRUE;
+}
+
+/* Need to have this, or the default signal handler destroys the about box */
+gboolean 
+on_About_delete (GtkObject *object, gpointer user_data)
+{
+  dprintf("About deleted\n");
+  gtk_widget_hide(GTK_WIDGET(object));
+  return TRUE;
+}
+
+/* Basically when Closed is pressed, but also ESC or window X */
+gboolean 
+on_About_response (GtkObject *object, gpointer user_data)
+{
+  dprintf("About response\n");
+  gtk_widget_hide(GTK_WIDGET(object));
+  return TRUE;
+}
+
+gboolean
+on_Setting_changed (GtkObject *object, gpointer user_data)
+{
+  dprintf("Setting changed: object is a %s, name %s\n",
+          gtk_widget_get_name(GTK_WIDGET(object)),
+          gtk_buildable_get_name(GTK_BUILDABLE(object)));
+
+  if (!GTK_IS_WIDGET(object)) return;
+
+  GtkWidget *widget = GTK_WIDGET(object);
+  struct setting *setting = settings;
+
+  /* Scan our settings for one with a matching widget pointer */
+  while (setting->valueptr) {
+    if (widget == setting->widget) {
+      if (GTK_IS_CHECK_MENU_ITEM(object)) {
+        *setting->valueptr = 
+          gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(object));
+        dprintf("Setting %s to %d\n", setting->name, *setting->valueptr);
+      }
+      break;
+    }
+    setting++;
+  }
+  return TRUE;
+}
+
+
+/* Popup menu settings */
+
+/* Assign menu item settings to appropriate setting[] */
+void assign_setting(gpointer data, gpointer user_data)
+{
+  struct setting *setting = user_data;
+
+  if (!GTK_IS_CHECK_MENU_ITEM(data)) return;
+  GtkCheckMenuItem *menuitem = data;
+  const char *name = gtk_buildable_get_name(GTK_BUILDABLE(menuitem));
+  dprintf("Scanning settings for %s\n", name);
+
+  while (setting->valueptr) {
+    if (!strcmp(name, setting->name)) {
+      dprintf("Found it!\n");
+      setting->widget = GTK_WIDGET(menuitem);
+      gtk_check_menu_item_set_active(menuitem, *setting->valueptr);
+      return;
+    }
+    setting++;
+  }
+}
+
+/* Set up all settings in the Popup menu to match our settigs[] */  
+void setup_settings(GtkMenu *menu)
+{
+  if (!GTK_IS_CONTAINER(menu)) return;
+
+  g_list_foreach(gtk_container_get_children(GTK_CONTAINER(menu)),
+                 assign_setting, settings);
+}
+
+
+/* Parameter editing */
+
+struct adj_update {
+  GtkWidget *widget; /* widget requesting update, or NULL */
+  const void *valptr; /* pointer to new value to set */
+};
+
+static void
+update_adjustor(gpointer data, gpointer user_data)
+{
+  GtkWidget *widget = data;
+  struct adj_update *adj_update = user_data;
+  const void *valptr = adj_update->valptr;
+
+  /* We only update adjustors that aren't the same as the widget generating 
+   * the update. For updates arriving from MIDI, there is no such widget,
+   * and it is set to NULL, so we update all widgets.
+   */
+  if (widget != adj_update->widget) {
+    if (GTK_IS_RANGE(widget))
+      gtk_range_set_value(GTK_RANGE(widget), *(const int *)valptr);
+    else if (GTK_IS_COMBO_BOX(widget))
+      gtk_combo_box_set_active(GTK_COMBO_BOX(widget), *(const int *)valptr);
+    else if (GTK_IS_TOGGLE_BUTTON(widget))
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), !!*(const int *)valptr);
+    else if (GTK_IS_ENTRY(widget))
+      gtk_entry_set_text(GTK_ENTRY(widget), valptr);
+  }
+}
+
+void update_adjustors(struct adjustor *adjustor, const void *valptr,
+                      GtkWidget *updating_widget)
+{
+  struct adj_update adj_update = { .widget = updating_widget, 
+                                   .valptr = valptr };
+
+  block_updates = 1;
+  g_list_foreach(adjustor->widgets, update_adjustor, &adj_update);
+  block_updates = 0;
+}
+
+/* Called whenever parameter change arrives via MIDI */
+void
+param_changed(int parnum, int buffer_no, void *valptr, void *ref)
+{
+  if (buffer_no == current_buffer_no && valptr) {
+    struct adjustor *adjustor = adjustors[parnum];
+    if (adjustor)
+      update_adjustors(adjustor, valptr, NULL);
+  }
+}
+
+/* Called whenever a widget's value changes.
+ * We send the update via MIDI, but also to other widgets with same parameter
+ * name (e.g. on other editor pages or tabs.)
+ */
+static void update_parameter(struct adjustor *adjustor, const void *valptr, GtkWidget *widget)
+{
+  param_handler->param_update_parameter(adjustor->parnum, current_buffer_no, valptr);
+
+  update_adjustors(adjustor, valptr, widget);
+}
+
+/* TODO: Have all handlers return TRUE to show that signal is handled? 
+ * - only for certain handlers; check gtk documentation. */
+void
+on_patch_name_changed(GtkObject *object, gpointer user_data)
+{
+  GtkEntry *gtkentry = GTK_ENTRY (object);
+
+  if (gtkentry) {
+    const char *stringptr = gtk_entry_get_text(gtkentry);
+    /* Set our global patch name if respective widget and update title */
+    strncpy(current_patch_name, stringptr, current_patch_name_max);
+    trim(current_patch_name);
+    set_title();
+  }
+}
+
+
+void
+on_entry_changed(GtkObject *object, gpointer user_data)
+{
+  GtkEntry *gtkentry = GTK_ENTRY (object);
+  struct adjustor *adjustor = user_data;
+  const char *stringptr;
+
+  if (block_updates)
+    return;
+
+  if (gtkentry) {
+    stringptr = gtk_entry_get_text(gtkentry);
+    dprintf("Entry %p: name %s, value \"%s\", parnum %d\n",
+            gtkentry, gtk_buildable_get_name(GTK_BUILDABLE(gtkentry)),
+            stringptr, adjustor->parnum);
+    /* Set our global patch name if respective widget and update title */
+    update_parameter(adjustor, stringptr, GTK_WIDGET(object));
+  }
+}
+
+
+gboolean
+on_change_value (GtkObject *object, GtkScrollType scrolltype,
+                 gdouble dvalue, gpointer user_data)
+{
+  GtkRange *gtkrange = GTK_RANGE (object);
+
+  if (gtkrange) {
+    struct adjustor *adjustor = user_data;
+    int new_value = (int) dvalue;
+    int old_value = (int) gtk_range_get_value(gtkrange);
+    int delta = 0;
+
+    dprintf("Change %s, new value %d, old value %d, scrolltype %d, parnum %d\n",
+            gtk_buildable_get_name(GTK_BUILDABLE(gtkrange)),
+            new_value, old_value, scrolltype, adjustor->parnum);
+
+    switch (scrolltype) {
+      case GTK_SCROLL_STEP_BACKWARD:  delta = -1;   break;
+      case GTK_SCROLL_STEP_FORWARD:   delta = 1;   break;
+      case GTK_SCROLL_PAGE_BACKWARD:  delta = -10;  break;
+      case GTK_SCROLL_PAGE_FORWARD:   delta = 10;   break;
+      case GTK_SCROLL_JUMP: /* this happens when dragging mouse pointer */
+      default:                        delta = 0;    break;
+    }
+    int new = param_handler->param_update_value(adjustor->parnum,
+                                                old_value, new_value, delta);
+    gtk_range_set_value(gtkrange, new);
+    return TRUE;
+  }
+  return FALSE;
+}
+
+void
+on_value_changed (GtkObject *object, gpointer user_data)
+{
+  GtkRange *gtkrange = GTK_RANGE (object);
+  struct adjustor *adjustor = user_data;
+  int value;
+
+  if (block_updates)
+    return;
+
+  if (gtkrange) {
+    dprintf("Range %p: name %s, value %d, parnum %d\n",
+            gtkrange, gtk_buildable_get_name(GTK_BUILDABLE(gtkrange)),
+            (int) gtk_range_get_value(gtkrange), adjustor->parnum);
+    value = (int) gtk_range_get_value(gtkrange);
+    update_parameter(adjustor, &value, GTK_WIDGET(object));
+  }
+}
+
+void
+on_combobox_changed (GtkObject *object, gpointer user_data)
+{
+  GtkComboBox *cb = GTK_COMBO_BOX (object);
+  struct adjustor *adjustor = user_data;
+  int value;
+
+  if (block_updates)
+    return;
+
+  if (cb) {
+    dprintf("Combobox %p: name %s, value %d, parnum %d\n",
+            cb, gtk_buildable_get_name(GTK_BUILDABLE(cb)),
+            gtk_combo_box_get_active(cb), adjustor->parnum);
+    value = (int) gtk_combo_box_get_active(cb);
+    update_parameter(adjustor, &value, GTK_WIDGET(object));
+  }
+}
+
+void
+on_togglebutton_changed (GtkObject *object, gpointer user_data)
+{
+  GtkToggleButton *tb = GTK_TOGGLE_BUTTON (object);
+  struct adjustor *adjustor = user_data;
+  int value;
+
+  if (block_updates)
+    return;
+
+  if (tb) {
+    dprintf("Togglebutton %p: name %s, value %d, parnum %d\n",
+            tb, gtk_buildable_get_name(GTK_BUILDABLE(tb)),
+            gtk_toggle_button_get_active(tb), adjustor->parnum);
+    value = gtk_toggle_button_get_active(tb);
+    update_parameter(adjustor, &value, GTK_WIDGET(object));
+  }
+}
+
+static gboolean change_value(GtkWidget *what, int shifted, int dir)
+{
+  GtkWidget *parent;
+  int delta;
+  const char *signal = NULL;
+
+  if (dir == 1)
+    delta = shifted ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD;
+  else if (dir == -1)
+    delta = shifted ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_STEP_BACKWARD;
+
+  if (GTK_IS_RANGE(what))
+    signal = "move-slider";
+  if (GTK_IS_SPIN_BUTTON(what))
+    signal = "change-value";
+  else if (GTK_IS_TOGGLE_BUTTON(what) && 
+           (parent = gtk_widget_get_parent(what)) &&
+           GTK_IS_COMBO_BOX(parent)) {
+    what = parent;
+    signal = "move-active";
+  }
+
+  if (what && signal) {
+    g_signal_emit_by_name(GTK_OBJECT(what), signal, delta);
+    return TRUE;
+  }
+  return FALSE;
+}
+
+
+gboolean navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
+{
+  GtkWidget *parent;
+  int shifted = event->state & GDK_SHIFT_MASK;
+  int arg = -1;
+#define SET_ARG(value) if (arg < 0) arg = (value)
+  GtkWidget *what = NULL;
+  const char *signal = NULL;
+  gboolean handled = FALSE;
+
+  switch (event->keyval) {
+    case GDK_Right:
+      arg = GTK_DIR_RIGHT;
+    case GDK_Left:
+      if (arg < 0) arg = GTK_DIR_LEFT;
+    case GDK_Up:
+      if (arg < 0) arg = GTK_DIR_UP;
+    case GDK_Down:
+      if (arg < 0) arg = GTK_DIR_DOWN;
+      what = widget;
+      signal = "move-focus";
+      g_signal_emit_by_name(GTK_OBJECT(what), signal, arg);
+      handled = TRUE;
+      break;
+    case GDK_Forward:
+    case GDK_Page_Up:
+    case GDK_plus:
+      handled = change_value(focus, shifted, 1);
+      break;
+    case GDK_Back:
+    case GDK_Page_Down:
+    case GDK_minus:
+      handled = change_value(focus, shifted, -1);
+    default:
+      break;
+  }
+  return handled;
+}
+
+
+/* Is 'parent' identical to or a parent of 'widget' ? */
+int is_parent(GtkWidget *widget, GtkWidget *parent)
+{
+  do {
+    dprintf("Scanning %s (%p), looking for %s (%p)\n",
+            gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget,
+            gtk_buildable_get_name(GTK_BUILDABLE(parent)), parent);
+    if (widget == parent)
+      return 1;
+  } while (widget = gtk_widget_get_parent(widget));
+  return 0;
+}
+
+/* Used for searching for valid key map given key val and current focus */
+struct key_search_spec {
+  guint keyval;
+  GtkWidget *focus_widget;
+};
+
+/* Used for g_list_find_custom to find key val in keymaps */
+static gint find_keymap(gconstpointer data, gconstpointer user_data)
+{
+  const struct keymap *keymap = data;
+  const struct key_search_spec *search = user_data;
+
+  dprintf("Scan keymap %s: %s\n", keymap->key_name, keymap->param_name);
+  if (keymap->keyval != search->keyval)
+    return 1; /* not the key we're looking for found */
+  if (!keymap->widget)
+    return 1; /* Widget not set, UI specified unknown Param or Parent */
+  dprintf("Found keyval\n");
+  if (!keymap->parent) /* keymap has no parent specified; we're done */
+    return 0; /* found */
+  dprintf("Has parent %s\n", keymap->parent_name);
+  /* If parent is a notebook, then check for the relevant notebook page. */
+  if (GTK_IS_NOTEBOOK(keymap->parent))
+    return gtk_notebook_get_current_page(GTK_NOTEBOOK(keymap->parent)) !=
+           keymap->parent_arg; /* 0 if on correct page */
+  dprintf("Parent is not a notebook\n");
+  /* Otherwise check if the currently focused widget has the same parent
+   * as the parameter specified in the keymap. */
+  return !is_parent(search->focus_widget, keymap->parent); /* 0 if found */
+}
+
+/* Handle keys mapped in UI KeyMapping liststore */  
+gboolean mapped_key(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
+{
+  struct key_search_spec key_search_spec;
+  key_search_spec.keyval = event->keyval; /* event to search for in keymaps */
+  key_search_spec.focus_widget = focus; /* currently focused widget */
+
+  GList *keymap_l = g_list_find_custom(keymaps, &key_search_spec, find_keymap);
+  if (!keymap_l)
+    return FALSE; /* can't find valid key mapping */
+
+  struct keymap *keymap = keymap_l->data;
+  dprintf("Found key map for %s: widget %s (%p)\n",
+          keymap->key_name, keymap->param_name, keymap->widget);
+
+  if (!keymap->widget) /* Can happen if ParamName note found */
+    return FALSE;
+
+  if (GTK_IS_NOTEBOOK(keymap->widget)) {
+    dprintf("Setting notebook page to %d\n", keymap->param_arg);
+    gtk_notebook_set_current_page(GTK_NOTEBOOK(keymap->widget),
+                                  keymap->param_arg);
+    return TRUE;
+  }
+
+  if (GTK_IS_BUTTON(keymap->widget)) {
+    gtk_button_pressed(GTK_BUTTON(keymap->widget));
+    return TRUE;
+  }
+
+  /* All other widget types */
+  gtk_widget_grab_focus(keymap->widget);
+
+  return TRUE; /* key handled */
+}
+
+
+/* Handle all key events arriving in the main window */
+gboolean
+key_event(GtkWidget *widget, GdkEventKey *event)
+{
+  GtkWidget *focus = GTK_WINDOW(widget)->focus_widget;
+
+  dprintf("Key pressed: \"%s\" (0x%08x), widget %p, focus widget %p, "
+          "(main window %p)\n", gdk_keyval_name(event->keyval), event->keyval,
+          widget, focus, main_window);
+  dprintf("Focused widget is a %s, name %s\n",gtk_widget_get_name(focus),
+          gtk_buildable_get_name(GTK_BUILDABLE(focus)));
+
+  if (event->keyval == GDK_F1 || event->keyval == GDK_F10 ||
+      event->keyval == GDK_Menu) {
+    gtk_menu_popup(popup_menu, NULL, NULL, NULL, NULL, 0, event->time);
+    return TRUE;
+  }
+
+  if (GTK_IS_ENTRY(focus) && !GTK_IS_SPIN_BUTTON(focus))
+    return FALSE; /* We let GTK handle all key events for GtkEntries*/
+
+  if (ui_settings.midiedit_navigation && navigation(widget, focus, event))
+    return TRUE;
+
+  if (mapped_key(widget, focus, event))
+    return TRUE;
+
+  return FALSE; /* key not handled - defer to GTK defaults */
+}
+
+
+/* Handle mouse scrolling events arriving in slider widgets */
+gboolean
+scroll_event(GtkWidget *widget, GdkEventScroll *event)
+{
+  static int count = 0;
+  int shifted = 0;
+
+  /* Depending on whether ui_settings.scroll_focused_only is set,
+   * we don't want to scroll the widget currently pointed to, we want
+   * to scroll the one that has focus. */
+  GtkWidget *toplevel = gtk_widget_get_toplevel(widget);
+  if (!toplevel) return FALSE;
+  GtkWidget *focus = GTK_WINDOW(toplevel)->focus_widget;
+  if (!focus) return FALSE;
+
+  dprintf("scroll %d: widget is a %s, name %s, focus is a %s, name %s\n",
+          ++count,
+          gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)),
+          gtk_widget_get_name(focus),
+          gtk_buildable_get_name(GTK_BUILDABLE(focus)));
+
+  /* If UI is set to scroll_focused_only (Midiedit default mode), always
+   * scroll the widget that is focused, regardless of where the mouse
+   * pointer is. Handy when using Midiedit's key based navigation. 
+   * Otherwise, use the Gnome default of scrolling whatever the mouse
+   * pointer points to. Handy when navigating using the mouse, as we 
+   * don't need to left-click to focus an item before scrolling. */
+  if (ui_settings.scroll_focused_only)
+    widget = focus;
+
+  if (event->state & (GDK_SHIFT_MASK | GDK_BUTTON2_MASK))
+    shifted = 1;
+
+  switch (event->direction) {
+    case GDK_SCROLL_UP:
+    case GDK_SCROLL_LEFT:
+      change_value(widget, shifted, 1);
+      break;
+    case GDK_SCROLL_DOWN:
+    case GDK_SCROLL_RIGHT:
+      change_value(widget, shifted, -1);
+      break;
+    default:
+      break;
+  }
+  return TRUE;
+}
+
+
+/* Handle all mouse button events arriving in slider widgets */
+gboolean
+button_event(GtkWidget *widget, GdkEventButton *event)
+{
+  static int count = 0;
+  dprintf("mouse button %d: %d, state %d, widget is a %s, name %s\n", ++count,
+          event->button, event->state, gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)));
+
+  /* What we want to is stop the default action of jumping to the pointed-to
+   * value when the middle button is pressed or released. */
+  if (event->button != 2)
+    return FALSE;
+
+  /* We want to keep the action of setting focus though when pressed. */
+  if (event->type & GDK_BUTTON_PRESS)
+    gtk_widget_grab_focus(widget);
+
+  /* Nothing else to do, just swallow event. */
+  return TRUE;
+}
+
+
+/* A collection of three functions and passing struct that work together
+ * in order to find a widget with a given id in a whole window hierarchy,
+ * starting with the top window.
+ */
+
+/* The union is a hack to get around the fact that the GCompareFunc for
+ * g_list_find_custom has gcoinstpointers for arguments, while we want
+ * to be able to export the resulting GtkWidget out of the whole
+ * kit-n.kaboodle when we've actually found the widget we're looking for. */
+struct find_widget_data {
+  const char *id;
+  union {
+    const GtkWidget **const_ptr;
+    GtkWidget **ptr;
+  } result;
+};
+
+/* Forward declaration since the two following functions call each other. */
+int find_widgets_id(GList *widget_list, const struct find_widget_data *find_widget_data);
+
+/* GCompareFunc for g_list_find_custom: compare the names of the
+ * search element pointed to by data and the find_widget_data pointed
+ * to by user_data. If equal, return 0 and set the result.[const_]ptr of
+ * the find_widget_data. If not found, and the widget is a container,
+ * get a list of its children, and do a new search through the result list. */
+int find_widget_id(gconstpointer data, gconstpointer user_data)
+{
+  const GtkWidget *widget = data;
+  const struct find_widget_data *find_widget_data = user_data;
+  const gchar *widget_id = gtk_buildable_get_name(GTK_BUILDABLE(widget));
+  if (widget_id && !strcmp(find_widget_data->id, widget_id))
+  {
+    *find_widget_data->result.const_ptr = widget; /* only set if found. */
+    return 0; /* found it! */
+  }
+  if (GTK_IS_CONTAINER(widget))
+    return find_widgets_id(gtk_container_get_children(GTK_CONTAINER(widget)), find_widget_data);
+  return 1; /* we didn't find it this time around */
+}
+
+/* Try to find a widget in widget_list with the id in find_widget_data,
+ * recursively. Needs to return an int in order to be useful when called
+ * from a GCompareFunc. */
+int find_widgets_id(GList *widget_list, const struct find_widget_data *find_widget_data)
+{
+  /* return 0 if found */
+  return !g_list_find_custom(widget_list, find_widget_data, find_widget_id);
+}
+
+/* Top level interface for widget search function. Search recursively from
+ * widget and all its children for a widget with the id 'id', and return
+ * the widget. */
+GtkWidget *find_widget_with_id(GtkWidget *widget, const char *id)
+{
+  GtkWidget *result = NULL;
+  struct find_widget_data find_widget_data;
+
+  dprintf("Searching for widget with id %s\n", id);
+  find_widget_data.id = id;
+  find_widget_data.result.ptr = &result;
+  find_widget_id(widget, &find_widget_data);
+  if (result)
+    dprintf("Found it!\n");
+
+  return result;
+}
+
+
+/* GFunc for iterating over keymaps when adding new widgets in
+ * create_adjustor. */
+void add_to_keymap(gpointer data, gpointer user_data)
+{
+  struct keymap *keymap = data; /* current keymap definition */
+  struct keymap *keymap_add = user_data; /* data we want to add to key map */
+
+  if (keymap->param_name && !strcmp(keymap->param_name, keymap_add->param_name))
+  {
+    /* Scan all widgets from the top window and down for a parent with the
+     * name specified in the keymap. If there is no parent_name specified,
+     * that means that the key map is valid in any context. */
+    GtkWidget *parent = NULL;
+    if (keymap->parent_name) {
+      parent = find_widget_with_id(gtk_widget_get_toplevel(keymap_add->widget),
+                                   keymap->parent_name);
+      if (!parent) {
+        eprintf("Warning: Can't find parent %s for key %s map for %s, skipping!\n",
+               keymap->parent_name, keymap->key_name, keymap->param_name);
+        /* We return here to avoid setting an unconditional mapping (since
+         * parent is NULL) which is not what the user intended, and might
+         * screw up other mappings, very confusing. */
+        return;
+      }
+    }
+    if (!keymap->parent_name || parent) { /* no parent specified; or, found */
+      keymap->widget = keymap_add->widget;
+      keymap->parent = parent;
+      dprintf("Mapped key %s to widget %s (%p) arg %d parent %s (%p) arg %d\n",
+              keymap->key_name, keymap->param_name, keymap->widget,
+              keymap->param_arg, keymap->parent_name, keymap->parent,
+              keymap->parent_arg);
+    }
+  }
+}
+
+/* Add widget with id param_name to keymaps, if any key maps reference it. */
+void add_to_keymaps(GList *keymaps, GtkWidget *widget, const char *param_name)
+{
+  struct keymap map_data;
+
+  map_data.param_name = param_name;
+  map_data.widget = widget;
+  g_list_foreach(keymaps, add_to_keymap, &map_data);
+}
+
+
+/* Chop trailing digits off name 
+ * I.e. for "LFO 1 Shape2" return "LFO 1 Shape".
+ * Returned string must be freed.
+ */
+gchar *chop_name(const gchar *name)
+{
+  gchar *new_name = g_strdup(name);
+  if (new_name) {
+    gchar *name_end = new_name + strlen(new_name) - 1;
+    while (name_end >= new_name && g_ascii_isdigit(*name_end))
+      name_end--;
+    name_end[1] = '\0';
+  }
+  return new_name;
+}
+
+void add_adjustors (GList *widget_list, struct adjustor **adjustors);
+
+void create_adjustor (gpointer data, gpointer user_data)
+{
+  GtkWidget *this = data;
+  struct adjustor **adjustors = user_data;
+  int parnum;
+  static const char *patch_name = NULL;
+
+  const gchar *name = gtk_buildable_get_name(GTK_BUILDABLE(this));
+  gchar *id = chop_name(name);
+
+  dprintf("Widget: %s, name %s id %s\n", gtk_widget_get_name(this),
+          name ? name : "none", id ? id : "none");
+
+  /* Scan keymaps, add widget if found */
+  if (name)
+    add_to_keymaps(keymaps, this, name);
+
+  /* We need to have our own signal handlers for scroll events and (middle)
+   * mouse buttons, otherwise the default handler and action will be invoked
+   * so we can't do this at the main window level. */
+
+  /* Handle scroll events (mouse wheel) */
+  g_signal_connect(this, "scroll-event", G_CALLBACK(scroll_event), NULL);
+
+  /* Handle mouse buttons */
+  /* Note that we do this for _all_ widgets, not just those who have
+   * parameters. In the UI file we can have meta parameters, e.g. the
+   * arpeggiator 'all' column, which don't control individual synth params. */
+  /* We want to mask them so we can use middle the mouse button = scroll
+   * wheel button on most mice as a shift key. Since by default pressing or
+   * releasing the middle button causes the value to jump to the value
+   * pointed to by the mouse pointer, we need to suppress this behavior. */
+  gtk_widget_add_events(this, GDK_BUTTON_RELEASE_MASK);
+  g_signal_connect(this, "button-release-event", G_CALLBACK(button_event), NULL);
+  gtk_widget_add_events(this, GDK_BUTTON_PRESS_MASK);
+  g_signal_connect(this, "button-press-event", G_CALLBACK(button_event), NULL);
+
+  if (id && (parnum = param_handler->param_find_index(id)) >= 0) {
+    dprintf("has parameter\n");
+    struct adjustor *adjustor = adjustors[parnum];
+    if (!adjustors[parnum]) {
+      /* no adjustor for this parameter yet; create one */
+      adjustor = g_new0(struct adjustor, 1);
+      adjustor->id = id;
+      adjustor->parnum = parnum;
+      adjustors[parnum] = adjustor;
+    }
+    /* Add our widget to the list of widgets for this parameter */
+    /* prepend is faster than append, and ok since we don't care about order */
+    adjustor->widgets = g_list_prepend(adjustor->widgets, this);
+
+    if (GTK_IS_RANGE(this)) {
+      struct param_properties props;
+      GtkAdjustment *adj = gtk_range_get_adjustment(GTK_RANGE(this));
+      /* It will always have an adjustment, but set all required properties
+       * for it so we don't need to set them in the UI for all parameters.
+       * In effect, this means that in the UI we do not need to set an
+       * adjustment for any parameter. */
+      if (adj) {
+        param_handler->param_get_properties(parnum, &props);
+        g_object_set(adj, "lower", (gdouble) props.ui_min, NULL);
+        g_object_set(adj, "upper", (gdouble) props.ui_max, NULL);
+        g_object_set(adj, "step-increment", (gdouble) props.ui_step, NULL);
+        g_object_set(adj, "page-increment", (gdouble) 10 * props.ui_step, NULL);
+        g_object_set(adj, "page-size", (gdouble) 0, NULL);
+      } else
+        eprintf("Warning: GtkRange %s has no adjustment\n", id);
+
+      /* Handle update of value when user attempts to change value
+       * (be it using mouse or keys) */
+      g_signal_connect(this, "change-value", G_CALLBACK(on_change_value), adjustor);
+      /* Handle parameter updates once value has been changed */
+      g_signal_connect(this, "value-changed", G_CALLBACK(on_value_changed), adjustor);
+    }
+
+    else if (GTK_IS_COMBO_BOX(this))
+      g_signal_connect(this, "changed", G_CALLBACK(on_combobox_changed), adjustor);
+    else if (GTK_IS_TOGGLE_BUTTON(this))
+      g_signal_connect(this, "toggled", G_CALLBACK(on_togglebutton_changed), adjustor);
+
+    else if (GTK_IS_ENTRY(this)) {
+      g_signal_connect(this, "changed", G_CALLBACK(on_entry_changed), adjustor);
+      /* Fetch patch name id (i.e. "Patch Name") if we haven't got it yet */
+      if (!patch_name)
+        patch_name = param_handler->param_get_patch_name_id();
+      /* If we're looking at that parameter, handle patch name updates */
+      if (!strcmp(id, patch_name))
+        g_signal_connect(this, "changed", G_CALLBACK(on_patch_name_changed), adjustor);
+    }
+  }
+
+  g_free(id);
+
+  if (GTK_IS_CONTAINER(this)) {
+     dprintf("It's a container\n");
+     add_adjustors(gtk_container_get_children(GTK_CONTAINER(this)), adjustors);
+  }
+}
+
+void add_adjustors (GList *widget_list, struct adjustor **adjustors)
+{
+  g_list_foreach (widget_list, create_adjustor, adjustors);
+}
+
+
+void display_adjustor(gpointer data, gpointer user_data)
+{
+  GtkWidget *adj = data;
+  
+  if (GTK_IS_RANGE(adj)) {
+    GtkRange *range = GTK_RANGE (adj);
+    dprintf("Slider %p: name %s, value %d\n",
+            range, gtk_buildable_get_name(GTK_BUILDABLE(range)),
+            (int) gtk_range_get_value(range));
+  }
+  else if (GTK_IS_COMBO_BOX(adj)) {
+    GtkComboBox *cb = GTK_COMBO_BOX (adj);
+    dprintf("Combobox %p: name %s, value %d\n",
+            cb, gtk_buildable_get_name(GTK_BUILDABLE(cb)),
+            gtk_combo_box_get_active(cb));
+  }
+  else if (GTK_IS_TOGGLE_BUTTON(adj)) {
+    GtkToggleButton *tb = GTK_TOGGLE_BUTTON (adj);
+    dprintf("Togglebutton %p: name %s, value %d\n",
+            tb, gtk_buildable_get_name(GTK_BUILDABLE(tb)),
+            gtk_toggle_button_get_active(tb));
+  }
+  else if (GTK_IS_ENTRY(adj)) {
+    GtkEntry *e = GTK_ENTRY (adj);
+    dprintf("Entry %p: name %s, value \"%s\"\n",
+            e, gtk_buildable_get_name(GTK_BUILDABLE(e)),
+            gtk_entry_get_text(e));
+  }
+}
+
+void display_adjustors(struct adjustor *adjustor)
+{
+  g_list_foreach(adjustor->widgets, display_adjustor, NULL);
+}
+
+void
+create_adjustors_list (int ui_params, GtkWidget *top_widget)
+{
+  adjustors = g_malloc0_n(ui_params, sizeof(struct adjustor *));
+  if (!adjustors) return;
+  create_adjustor(top_widget, adjustors);
+
+  int i;
+  for (i = 0; i < ui_params; i++) {
+    struct adjustor *adjustor = adjustors[i];
+    if (adjustor)
+      display_adjustors(adjustor);
+  }
+}
+
+
+/* GtkTreeModelForeachFunc to read one row from the KeyMappings liststore
+ * in the UI definition file, and create an entry in the keymaps list for it. */
+static gboolean
+get_liststore_keymap(GtkTreeModel *model,
+                     GtkTreePath *path,
+                     GtkTreeIter *iter,
+                     gpointer user_data)
+{
+  gchar *key, *param_name, *parent_name;
+  int keyval, param_arg, parent_arg;
+  GList **keymaps = user_data;
+
+  gtk_tree_model_get(model, iter, 
+                     0, &key,
+                     1, &param_name,
+                     2, &param_arg,
+                     3, &parent_name,
+                     4, &parent_arg, -1);
+  keyval = gdk_keyval_from_name(key);
+  if (keyval == GDK_VoidSymbol) {
+    g_free(key);
+    g_free(param_name);
+    g_free(parent_name);
+    return FALSE;
+  }
+
+  gchar *tree_path_str = gtk_tree_path_to_string(path); /* TODO: Don't really need this */
+
+  dprintf("Keymap row: %s: key %s mapping %s, arg %d, parent %s, arg %d\n",
+          tree_path_str, key, param_name, param_arg, parent_name, parent_arg);
+
+  /* Empty parent_name string means there is no specified parent.
+   * Easier to manage if just set to NULL rather than having zero-length
+   * string.
+   */
+  if (parent_name && !parent_name[0])
+  {
+    g_free(parent_name);
+    parent_name = NULL;
+  }
+
+  struct keymap *map = g_new0(struct keymap, 1);
+  map->key_name = key;
+  map->keyval = keyval;
+  map->param_name = param_name;
+  map->param_arg = param_arg;
+  map->parent_name = parent_name;
+  map->parent_arg = parent_arg;
+
+  /* We need to use append here, because we want to preserve ordering */
+  *keymaps = g_list_append(*keymaps, map);
+
+  g_free(tree_path_str);
+
+  return FALSE;
+}
+
+/* Load UI KeyMappings liststore into keymaps list */
+static void
+setup_hotkeys(GtkBuilder *builder, const gchar *store_name)
+{
+  GtkListStore *store;
+
+  store = GTK_LIST_STORE( gtk_builder_get_object( builder, "KeyMappings" ) );
+  if (!store) {
+    dprintf("Can't find key mappings in UI file!\n");
+    return;
+  }
+
+  gtk_tree_model_foreach(GTK_TREE_MODEL(store), get_liststore_keymap, &keymaps);
+}
+
+
+static void builder_add_with_path (GtkBuilder *builder, const char *ui_filename)
+{
+  char filename[80] = UI_DIR;
+  if (filename[0] == '.') /* development mode */
+    strcpy(filename, ui_filename);
+  else {
+    strcat(filename, "/");
+    strcat(filename, ui_filename);
+  }
+  gtk_builder_add_from_file (builder, filename, NULL);
+}
+
+int
+main (int argc, char *argv[])
+{
+  GtkBuilder *builder;
+  struct polls *polls;
+  int poll_tag;
+  const char *gladename;
+
+  debug = 0;
+  
+  memset(param_handler, 0, sizeof (*param_handler));
+  blofeld_init(param_handler);
+
+  gladename = param_handler->ui_filename;
+  if (argv[1]) gladename = argv[1];
+
+  gtk_init (&argc, &argv);
+  
+  builder = gtk_builder_new ();
+  builder_add_with_path(builder, gladename);
+  builder_add_with_path(builder, "midiedit.glade");
+
+  main_window = GTK_WIDGET (gtk_builder_get_object (builder, main_window_name));
+  gtk_builder_connect_signals (builder, NULL);
+#if 0 /* example of explicit signal connection */
+  g_signal_connect (main_window, "destroy", G_CALLBACK (on_Main_Window_destroy), NULL);
+#endif
+
+  popup_menu = GTK_MENU(gtk_builder_get_object(builder, "Popup"));
+  /* Not sure why we need to bump the ref counter for the popup menu,
+   * but not for the main window or the About dialog. If we don't though
+   * (or remove the unref call for builder), we get an error message about
+   * popup_menu not being a menu when we try to open it.
+   * Perhaps it's because the menu is not a finished widget but just
+   * a description? */
+  g_object_ref (G_OBJECT(popup_menu));
+
+  about_window = GTK_WIDGET(gtk_builder_get_object(builder, "About"));
+
+  setup_settings(popup_menu);
+
+  /* We want the popup menu to be displayed for right hand mouse button */
+  gtk_widget_add_events(main_window, GDK_BUTTON_PRESS_MASK);
+  g_signal_connect(main_window, "button-press-event", G_CALLBACK(menu_button_event), NULL);
+
+
+  setup_hotkeys(builder, "KeyMappings");
+  g_signal_connect(main_window, "key-press-event", G_CALLBACK(key_event), NULL);
+
+  /* Handle scroll events (mouse wheel) when not focused on any widget */
+  gtk_widget_add_events(GTK_WIDGET(main_window), GDK_SCROLL_MASK);
+  g_signal_connect(main_window, "scroll-event", G_CALLBACK(scroll_event), NULL);
+  GtkEntry *device_name_widget = GTK_ENTRY (gtk_builder_get_object (builder,
+                                 param_handler->param_get_device_name_id()));
+  if (device_name_widget)
+    gtk_entry_set_text(device_name_widget, param_handler->remote_midi_device);
+
+  g_object_unref (G_OBJECT (builder));
+
+  polls = midi_init_alsa();
+  if (!polls)
+    return 2;
+
+  /* TODO: Should really loop over all potential fds */
+  poll_tag = gdk_input_add (polls->pollfds[0].fd, GDK_INPUT_READ, on_midi_input, NULL);
+
+  create_adjustors_list(param_handler->params, main_window);
+
+  param_handler->param_register_notify_cb(param_changed, NULL);
+
+  midi_connect(param_handler->remote_midi_device);
+  
+  block_updates = 0;
+
+  set_title();
+  gtk_widget_show (main_window);       
+  gtk_main ();
+  
+  return 0;
+}
+
