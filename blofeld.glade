@@ -146,8 +146,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 4">
-                    <property name="label" translatable="yes">4</property>
+                  <object class="GtkRadioButton" id="Buffer 3">
+                    <property name="label" translatable="yes">3</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -163,8 +163,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 3">
-                    <property name="label" translatable="yes">3</property>
+                  <object class="GtkRadioButton" id="Buffer 4">
+                    <property name="label" translatable="yes">4</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -10866,7 +10866,7 @@
                                 <child>
                                   <object class="GtkLabel" id="label248">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Timng </property>
+                                    <property name="label" translatable="yes">Timg</property>
                                   </object>
                                   <packing>
                                     <property name="top_attach">5</property>
