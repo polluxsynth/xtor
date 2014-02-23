@@ -84,7 +84,6 @@ on_Patch_Save_pressed (GtkObject *object, gpointer user_data)
     report("Error writing %s: %s", filename, GTK_MESSAGE_ERROR, dialog);
     goto out;
   }
-  report("Patch file %s written!", filename, GTK_MESSAGE_INFO, dialog);
 
 out:
   gtk_widget_destroy (dialog);
@@ -140,7 +139,6 @@ on_Patch_Load_pressed (GtkObject *object, gpointer user_data)
     report("Error in data in %s", filename, GTK_MESSAGE_ERROR, dialog);
     goto out;
   }
-  report("Patch file %s read!", filename, GTK_MESSAGE_INFO, dialog);
 
 out:
   gtk_widget_destroy (dialog);
