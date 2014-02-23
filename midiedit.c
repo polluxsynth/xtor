@@ -106,7 +106,7 @@ void set_title(void)
 {
   char title[80];
 
-  sprintf(title, "%s Editor - %s (Part %d)", 
+  sprintf(title, "Midiedit %s - %s (Part %d)", 
           param_handler->name, current_patch_name, current_buffer_no + 1);
 
   if (main_window && GTK_IS_WINDOW(main_window))
