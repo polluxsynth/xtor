@@ -394,6 +394,8 @@ static gboolean change_value(GtkWidget *what, int shifted, int dir)
 
   if (GTK_IS_RANGE(what))
     signal = "move-slider";
+  if (GTK_IS_SPIN_BUTTON(what))
+    signal = "change-value";
   else if (GTK_IS_TOGGLE_BUTTON(what) && 
            (parent = gtk_widget_get_parent(what)) &&
            GTK_IS_COMBO_BOX(parent)) {
@@ -548,7 +550,7 @@ key_event(GtkWidget *widget, GdkEventKey *event)
     return TRUE;
   }
 
-  if (GTK_IS_ENTRY(focus))
+  if (GTK_IS_ENTRY(focus) && !GTK_IS_SPIN_BUTTON(focus))
     return FALSE; /* We let GTK handle all key events for GtkEntries*/
 
   if (ui_settings.midiedit_navigation && navigation(widget, focus, event))
