@@ -1072,6 +1072,18 @@ setup_hotkeys(GtkBuilder *builder, const gchar *store_name)
 }
 
 
+static void builder_add_with_path (GtkBuilder *builder, const char *ui_filename)
+{
+  char filename[80] = UI_DIR;
+  if (filename[0] == '.') /* development mode */
+    strcpy(filename, ui_filename);
+  else {
+    strcat(filename, "/");
+    strcat(filename, ui_filename);
+  }
+  gtk_builder_add_from_file (builder, filename, NULL);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -1091,8 +1103,8 @@ main (int argc, char *argv[])
   gtk_init (&argc, &argv);
   
   builder = gtk_builder_new ();
-  gtk_builder_add_from_file (builder, gladename, NULL);
-  gtk_builder_add_from_file (builder, "midiedit.glade", NULL);
+  builder_add_with_path(builder, gladename);
+  builder_add_with_path(builder, "midiedit.glade");
 
   main_window = GTK_WIDGET (gtk_builder_get_object (builder, main_window_name));
   gtk_builder_connect_signals (builder, NULL);
