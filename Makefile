@@ -37,7 +37,7 @@ DOC_FILES = README COPYING
 
 all: $(PROGNAME)
 
-%.o: %.c $(INCS)
+%.o: %.c $(INCS) Makefile
 	gcc -ansi -Werror -c -o $@ $< `pkg-config --cflags libglade-2.0 gmodule-2.0 alsa` -DUI_DIR=\"$(UI_DIR)\" -g -O2
 
 $(PROGNAME): $(OBJS)
