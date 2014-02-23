@@ -35,6 +35,7 @@
 
 extern int current_buffer_no;
 extern int device_number;
+extern char current_patch_name[];
 
 extern void set_title(void);
 
@@ -59,9 +60,16 @@ on_Patch_Save_pressed (GtkObject *object, gpointer user_data)
 {
   char *filename = NULL;
   int res;
+  char suggested_filename[BLOFELD_PATCH_NAME_LEN_MAX + 4 + 1];
 
   GtkWidget *dialog = file_chooser_dialog("Save Patch", main_window, 
                                           GTK_FILE_CHOOSER_ACTION_SAVE, "_Save");
+  /* Use the patch name as a suggestion for the file name */
+  strncpy(suggested_filename, current_patch_name, BLOFELD_PATCH_NAME_LEN_MAX);
+  suggested_filename[BLOFELD_PATCH_NAME_LEN_MAX] = '\0';
+  strcat(suggested_filename, ".syx");
+  gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog),
+                                    suggested_filename);
 
   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
