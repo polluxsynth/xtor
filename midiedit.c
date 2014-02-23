@@ -102,6 +102,19 @@ struct setting settings[] = {
   { NULL, NULL }
 };
 
+
+static char *trim(char *buf)
+{
+  if (!buf) return buf;
+
+  int len = strlen(buf);
+  while (len && buf[len - 1] == ' ')
+    len--;
+  buf[len] = '\0';
+  return buf;
+}
+
+
 void set_title(void)
 {
   char title[80];
@@ -326,6 +339,7 @@ on_patch_name_changed(GtkObject *object, gpointer user_data)
     const char *stringptr = gtk_entry_get_text(gtkentry);
     /* Set our global patch name if respective widget and update title */
     strncpy(current_patch_name, stringptr, current_patch_name_max);
+    trim(current_patch_name);
     set_title();
   }
 }
