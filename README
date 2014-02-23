@@ -1,6 +1,393 @@
 Midiedit - an extensable Gtk based MIDI editor
 ==============================================
-RW 140219
+For Midiedit 1.0
+RW 140223
 
 Midiedit is an editor for MIDI synthesizers (or indeed any MIDI device),
-currently configured for the Waldorf Blofeld.
+currently configured (solely) for the Waldorf Blofeld. If offers two way
+communication of both single parameter changes as well as complete patch
+dumps, thus both operating as a visualization as well as graphical editor.
+It is also possible to save and load individual patches to the computer,
+although Midiedit is not intended to be a fully fledged librarian application.
+
+1. Background
+-------------
+
+Looking for an MIDI sysex-based editor for the Waldorf Blofeld, the choice
+narrowed down to the iPad TB MIDI Stuff app, and the cross-platform
+Monstrum Ctrlr-based editor. However, in neither case was the source available
+(as far as I could tell), so I would not be able to add any functionality
+I wanted. Therefore I opted for writing a Gtk based lightweight editor
+which would be fairly easy to work on as well as define a GUI for.
+
+While GUI's with beautiful graphics are impressive, I feel it is more
+purposeful to have a simple graphic interface, such as the Gtk toolkit.
+Especially for machines which do not have a full front panel, there are is
+no graphics concept to copy, and having sliders for parameters is much more
+visibly practical than knobs. Knobs are great when it comes to hardware, but
+for easy overview on a computer screen, sliders are much easier to read and
+their manipulation using a scroll wheel or mouse more intuitive.
+
+2. Build and installation
+-------------------------
+
+Midiedit was written on a machine running Debian Squeeze. The libgtk2.0-dev
+and libglade2-dev packages are required as well as the libasound2-dev package
+which contains ALSA support.
+
+Type 'make' in the Midiedit source directory, followed by 'make install' as
+root in order to install the package. Uninstallation can be performed using
+'make uninstall'.
+
+3. User perspective
+-------------------
+
+Quick start: Plug synth into computer using USB. Connection will be
+automatically established when Get is clicked (or G pressed).
+
+Use arrow keys to navigate between parameters. Forward, Back,
+Page Up, Page Down, + or - change the currently selected parameter value,
+as does the mouse scroll wheel. Pressing shift or middle mouse button
+(scroll wheel button) causes parameter values to change faster.
+
+The mouse can of course also be used for navigation and to drag the sliders
+in order to set values.
+
+Press G or click Get to fetch the current parameter from the synth, 
+requesting the Part specified under Part if the synth is in Multi Mode.
+
+3.1 Basics
+----------
+Starting Midiedit brings up more or less full screen window with the
+synthesiser controls grouped in tabs. Moving the controls sends
+parameter updates to the synth, conversely, changing parameters on the synth
+cause the parameters on the screen to update in real time.
+
+For the Blofeld, the synth is intended to be connected via USB. By default,
+Midiedit tries to connect to a MIDI device whose name starts with 'Waldorf
+Blofeld', but any MIDI device can be set up in the Patch and Settings tab.
+
+The Blofeld UI in Midiedit is designed to run on a screen 1280 (or more)
+pixels wide (the machine on which it was developed has a screen resolution of
+1280x800).
+
+3.2 Navigation and editing
+--------------------------
+
+Apart from the mouse, navigation can be performed using the keyboard.
+By default, Midiedit uses it's native mode, where the arrow keys move
+between the parameters, as does the TAB key. Changing the parameter values
+can be accomplished using the Forward and Back, Page Up and Page Down, or
++ and - keys. It's also possible to use the scroll wheel (or corresponding
+zone on a laptop touch pad). Holding SHIFT or the middle mouse button while
+incrementing or decrementing the values causes them to change at ten times
+the rate.
+
+When the current parameter is a name, such as the Patch Name, the left and
+right arrow keys move the cursor within the name, although the up and
+down keys still perform navigation.
+
+It's also possible to use the standard Gtk naviagation mode, which solely uses
+the TAB key for moving between parameters, with the arrow keys changing the
+values. I find this mode to be less intuitive for a synth editor, hence
+the introduction of the aforementioned Midiedit native mode.
+
+The navigation mode can be selected using the right-hand mouse key popup menu.
+
+3.2.1 Hotkeys
+-------------
+
+In both navigation modes, Midiedit also supports hotkey navigation, where for
+instance the parameter tabs can be reached by pressing the first letter in the
+tab, and parameter groups in each tab reached by pressing the underlined
+character in each group. Normally it is the first letter, although for the case
+of multiple, numbered modules of the same type, for instance the oscillators
+the digit keys 1, 2, 3, etc move between the different instances.
+
+3.2.2 Scroll mode
+-----------------
+
+By default in Midiedit, the scroll wheel on the mouse changes the value
+of the currently focussed parameter. This is the most natural when navigating
+between parameters using the arrow keys. However, normally in Gtk the scroll
+wheel changes the value of the parameter the mouse cursor is on. Using the
+right-hand mouse key popup menu it is possible to disable the Midiedit
+scroll mode thus reverting to the default Gtk method.
+
+3.3 Tabs
+--------
+
+If, as in the case of the Blofeld, there are too many parameters to fit on
+a single page, the parameters are split into several pages, accessible
+using tabs. For the Blofeld the tabs are as follows:
+
+- Sound tab. Sound chain (oscillators, mixer, filters, amplifier) as well
+  as some of the modulators: the filter and amplifier envelopes, as well
+  as two selected modulation routings. The patch name can also be found
+  here.
+- Modulation tab. Envelopes, LFO:s, Modulation matrix and Modifiers.
+  Note that the amplifier and filter envelopes are duplicated in this tab.
+- Arpeggiator and Effects tab.
+- Patch and configuration tab. Send parameter dump to Blofeld, Copy / Paste
+  to and from Clipboard, and Save / Load file. Note that the patch name
+  and category parameters are duplicated in the tab. This page also
+  holds the MIDI configuration: synth Device ID as well as the name of the
+  MIDI interface. The default MIDI interface name is 'Waldorf Blofeld'; if the
+  MIDI Device Name field is emptied, the name is reverted to the default.
+
+Some parameters can appear in multiple tabs, in order to make editing related
+parameters easier. For instance, in the main Sound tab, the filter envelope
+is available, and it is also available in the Modulation tab. Another example
+are the two configurable modulation routings which makes it easier to editing
+a modulation amount while keeping an eye on the corresponding destination
+parameter, there not being space for the full 16 modulation routings in the
+Blofeld in the Sound tab.
+
+3.4 Multiple parts
+------------------
+
+The user interface supports multiple 'parts' in the synth. The currently
+selected part is listed on the left of the main window, as well as in the
+main window title. Selecting a different part automatically performs a
+'Get' operation to load the current patch for the selected part into Midiedit.
+
+3.5 Getting a patch from the synth
+----------------------------------
+
+The Get button to the left in the main window fetches the current
+patch from the synth to the editor. When the synth is in multi mode, the
+corresponding multi part is shown in the radio buttons below. When the
+synth is not in multi mode, part 1 is used.
+
+3.6 Midiedit preferences
+------------------------
+
+Midiedit has a couple of preference settings which are set in a popup
+menu which is activated by the right hand mouse key or the Menu key on the
+keyboard.
+
+The settings include the aformenetioned navigation preferences, as well
+as a Debug mode which emits copious debug texts on stdout during operation.
+
+3.7 Special features and quirks
+-------------------------------
+
+3.7.1 LFO Speed and Clock
+-------------------------
+
+The LFO Speed and Clock parameters are actually the same parameter, the
+interpretation of which is controlled using the LFO Clocked parameter.
+Currently both Speed and Clock are shown at all times, and changing one
+updates the other. Another solution would be to hide the parameter not
+currently in used, however, that would not really save any space in the
+display, and so has not been implemented.
+
+3.7.2 Effects parameters
+------------------------
+
+The effects units also have a couple of parameters with different
+interpretations depending on the effect selected. Also, certain parameters
+are not used for certain effects. Currently the implementation shows
+all parameters at all times. A future improvement would be to only display
+those parameters which are valid for the effect currently selected.
+
+3.7.3 Arpeggiator clipboard
+---------------------------
+
+The arpeggiator features a cliboard, allowing arpeggiator parameters
+(including the User Pattern) to be copied from one patch to another.
+
+3.7.4 Arpegiator User Pattern All column
+----------------------------------------
+
+The Arpeggiator User Pattern box includes an All column at the far right.
+Changing any parameter in this column sets the corresponding parameter
+for all steps to the same value; it is intended for quickly setting up 
+the arpeggiator when all steps are to have the same (or mostly the same)
+value.
+
+3.7.5 Blofeld Multi Mode parameters
+-----------------------------------
+
+While Midiedit supports multi mode in the sense that it can easily switch
+between the 16 available parts, the multi mode parameters such as MIDI
+channel, volume, pan, etc for the different parts are not supported, for
+the simple reason that Waldorf has not (yet) implemented sysex support
+for these parameters.
+
+4. Developer perspective
+------------------------
+
+Midiedit is written entirely in C, although the user interface definition
+is written in XML using the Glade user interface editor.
+
+4.1 Glade files
+---------------
+
+The editing user interface is defined in glade file for the synth in question,
+blofeld.glade at the time of writing. Principally there is a window
+called 'main_window' defined in this file which contains the complete editor
+interface. Common infrastructure UI definitions are held in a file called
+midiedit.glade .
+
+Midiedit uses two glade files, one for the synth itself (e.g. blofeld.glade),
+specifying the parameter layout in the main_wondow, and one for Midiedit
+properties (midiedit.glade), which basically specifies a popup menu activated
+using the right mouse key or the Menu key on the keyboard.
+
+4.2 Parameter names and widget types
+------------------------------------
+
+The names of each parameter widget are mapped by the Midiedit core to the
+4ames of the parameters in the parameter list. Since it's not possible to
+have two widgets with the same name, the Midiedit core disregards any trailing
+digits in the widget names. This is handy, because by default the Glade
+interface editor appends a number to a widget name if it detects a duplicate.
+However, this must be considered when giving names to parameters, as they
+may not end with a digit or they won't be recognized during the mapping.
+
+The following widget types may be used for synth parameters:
+- Horizontal and vertical sliders (GtkRange)
+- Combo boxes (GtkComboBox)
+- Tick boxes (GtkToggleButton)
+(Radio buttons are not supported at this time).
+
+It is not necessary to add GtkAdjustments (specifying min and max values,
+as well as step sizes etc) in the glade file, as this is done automatically
+by the Midiedit core when scanning the available UI parameters, based on the
+min and max values in the parameter list definition.
+
+4.3 Hotkeys
+-----------
+
+Hotkeys are specified using the KeyMapping liststore in the synth glade file.
+The liststore has five columns: the actual hot key value ('Key'), a parameter
+name to focus on ('ParamName'), an optional argument ('ParamArg') (more about
+this later), a conditional focus parent name ('FocusParent'), and optional
+focus parent argument ('ParentArg').
+
+Basically, the idea is that when the key corresponding to the 'Key' is
+pressed, the user interface sets the focus on the 'ParamName' parameter, if
+that parameter is an individual parameter widget (such as filter 1 cutoff). In
+this case the 'ParamArg' is not used (and is normally set to -1).
+
+If the 'ParamName' refers to a GtkNotepad, the tab specified in the
+'ParamArg' column is selected. This is intended for quick jumping between
+the tabs in the UI.
+
+If the 'ParamName' refers to a GtkButton, the corresponding button is
+activated. This is used for instance for the 'Get' button for getting
+the current patch from the synth, which can be activated by pressing the 'G'
+key.
+
+The 'FocusParent' can be used as a conditional if the 'Key' in question should
+only work on a given tab, or when a given widget is in focus (the widgets
+are not limited to parameter widgets, but are rather usually containers
+for groups of parameters, e.g. Osc 1; in that case, the conditional becomes
+true if any child of the container is in focus.
+
+If the 'FocusParent' string is empty, then that conditional is always true.
+
+If 'FocusParent' refers to a GtkNotebook, the 'ParentArg' specified
+the tab that must be active for the conditional to be true. For all
+other widget types, the currently focused widget must be either the
+widget itself or a child of the 'FocusParent'. In this case, the
+'ParentArg' is not used (and is normally set to -1).
+
+The KeyMappings liststore is scanned in order from top to bottom, and the
+first line with a matching 'Key' and a valid 'FocusParent' (and 'ParentArg'
+when applicable (i.e. for GtkNotebooks)) causes the required action to take
+place. The order of the rows in the list store is thus significant, especially
+when the same 'Key' occurs on several rows.
+
+4.4 Hiding parameters
+---------------------
+
+There is no infrastructure for hiding parameters depending on other parameters.
+For the Modulation Selection boxes in the Sound tab, a signal handler
+connected to the Select combo box hides/unhides the relevant modulation
+parameters in the same box.
+
+4.5 Parameters
+--------------
+
+The parameter definitions are held in the synth specific parameter handling
+file. For the Blofeld this is blofeld_params.c .
+
+4.5.1 Blofeld parameters
+------------------------
+
+For the Blofeld there are a number of parameters which are implemented as
+bitfields in the same byte in the parameter dump. In order to handle these
+as separate parameters, the parameter list handling supports so-called
+'bitmap' parameters ("bm_param"). Bitmap parameters are located after the
+ordinary parameters, and they specify the bitfield location in the parent
+parameter. For each parent parameter, there are one or more bitmap parameters
+for the individual bit fields. The bit fields may overlap; this used for
+instance for the LFO frequency which can be represented either as a frequency
+0..127 as well 64 different clock divisors, depending on the the LFO 'Clocked'
+parameter.
+
+The patch name parameters are handled in a similar way. In this case however,
+there is one child parameter with several parent parameters, one parent
+for each character in the patch name.
+
+4.6 File structure
+------------------
+
+The file structure of Midiedit is as follows:
+
+midiedit.c: Main program, signal handlers for all general signals (parameter
+            change, parameter hide), key and mouse event processing.
+dialog.c, .h: Some useful dialog boxes: Yes/No questions, alert boxes, etc.
+blofeld_params.c, .h: Parameter list definition for the Blofeld, conversion
+                      functions between user interface representation and
+                      actual parameter values. Send/receive of sysex data.
+blofeld_ui.c: Blofeld-specific signal handlers.
+params.h: General parameter structure. Embryo for multiple synth support.
+midi.c, .h: Interface to MIDI layer. Receive and send sysex. Currently
+            assumes underlying MIDI layer is ALSA.
+debug.c, .h: Debug printout and control.
+blofeld.glade: User interface definition for main window.
+midiedit.glade: Common user interface widgets: Popup menu and About box.
+
+The idea is that when implementing support for a new synth, files
+corresponding to blofeld_params.[ch], blofeld_ui.c and blofeld.glade need
+to be written, but that the infrastructure defined in midiedit.c should no
+require adaptation. There is currently no support for switching between
+multiple synth defintions, that will have to be added when the need arises. Of
+course, since only support for one synth has been implemented, the
+infrastructure will most likely need updating in order to support features
+needed by new synth definitions, but the resulting changes should be
+general and not specifically support a certain machine.
+
+4.6.1 Development
+-----------------
+
+By default, Midiedit searches for it's UI (glade) files in
+/usr/local/share/midiedit, however, during develpoment it is practical to keep
+all files in the development directory so that it is not necessary to run the
+'install' target every time a glade file is changed. This is accomplished by
+uncommenting the '#UI_DIR=.' line in the Makefile.
+
+The global Debug variable enables all printouts using dprintf(). Printouts
+using eprintf() are printed to stderr at all times, this is inteded for
+error and warning printouts.
+
+4.7 Graphic philosphy
+---------------------
+
+The basic graphic philosophy when designing the Blofeld UI has been to have
+modules as horizontal boxes of parameters. A lot of boxes have two rows,
+the top row being a number of sliders, and the bottom row a number of
+combo boxes, often selecting modulation sources etc whose amount is set by
+the slider just above the combo box.
+
+Vertical sliders are mostly used, as they permit more parameters to be placed
+in the horizontal direction (i.e. side by side). In some cases (Modulation
+amounts in the Modulation matrix, and in the Arpeggiator) horizontal
+sliders fit better with the rest of the graphics.
+
+Parameters have been grouped on the tabs as being the ones most likely
+to be edited together, to minimize switching between tabs. In some cases
+the same parameters have been put on multiple pages for this reason.
