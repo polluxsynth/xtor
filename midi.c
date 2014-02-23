@@ -78,7 +78,7 @@ static int subscribe(snd_seq_port_subscribe_t *sub)
 {
   if (snd_seq_get_port_subscription(seq, sub) == 0) {
     dprintf("Connection between editor and device already established\n");
-    return -1;
+    return 0;
   }
 
   if (snd_seq_subscribe_port(seq, sub) < 0) {
@@ -126,15 +126,16 @@ int midi_connect(const char *remote_device)
   snd_seq_port_subscribe_set_sender(sub, &my_addr);
   snd_seq_port_subscribe_set_dest(sub, &remote_addr);
 
-  subscribe(sub);
+  int res = subscribe(sub);
 
   /* And now, connection in other direction. */ 
   snd_seq_port_subscribe_set_sender(sub, &remote_addr);
   snd_seq_port_subscribe_set_dest(sub, &my_addr);
 
-  subscribe(sub);
+  int res2 = subscribe(sub);
+  if (res == 0) res = res2; /* if first subscribe() had no error */
 
-  return 0;
+  return res;
 }
 
 /* Send sysex buffer (buffer must contain complete sysex msg w/ SYSEX & EOX) */

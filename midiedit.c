@@ -30,6 +30,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include "dialog.h"
 #include "param.h"
 #include "blofeld_params.h"
 #include "midi.h"
@@ -139,7 +140,9 @@ on_Device_Name_activate(GtkObject *object, gpointer user_data)
   if (!strcmp(gtk_entry_get_text(device_name_entry), ""))
     gtk_entry_set_text(device_name_entry, param_handler->remote_midi_device);
 
-  midi_connect(gtk_entry_get_text(device_name_entry));
+  if (midi_connect(gtk_entry_get_text(device_name_entry)) < 0)
+    report("Can't establish MIDI connection!", "", GTK_MESSAGE_ERROR, main_window);
+;
 }
 
 
