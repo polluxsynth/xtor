@@ -50,7 +50,7 @@ struct polls *midi_init_alsa(void)
     return NULL;
   }
   snd_seq_set_client_name(seq, "Controller");
-  seq_port = snd_seq_create_simple_port(seq, "Sysex editor",
+  seq_port = snd_seq_create_simple_port(seq, "Midiedit",
 	 			        SND_SEQ_PORT_CAP_READ | 
 				        SND_SEQ_PORT_CAP_WRITE | 
 				        SND_SEQ_PORT_CAP_SUBS_READ |
