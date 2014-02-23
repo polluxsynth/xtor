@@ -32,6 +32,7 @@ int query(const gchar *message, const gchar *filename, GtkWidget *parent);
 
 /* Throw up a file chooser dialog, specifying text of the 'open' button */
 GtkWidget *file_chooser_dialog(const gchar *title, GtkWidget *parent,
+                               GtkFileChooserAction action,
                                const gchar *do_button_text);
 
 /* Perform a file open with overwrite query if file exists */

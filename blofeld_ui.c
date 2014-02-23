@@ -60,7 +60,8 @@ on_Patch_Save_pressed (GtkObject *object, gpointer user_data)
   char *filename = NULL;
   int res;
 
-  GtkWidget *dialog = file_chooser_dialog("Save Patch", main_window, "_Save");
+  GtkWidget *dialog = file_chooser_dialog("Save Patch", main_window, 
+                                          GTK_FILE_CHOOSER_ACTION_SAVE, "_Save");
 
   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
@@ -104,7 +105,8 @@ on_Patch_Load_pressed (GtkObject *object, gpointer user_data)
   int res;
 #define READ_LEN (BLOFELD_PARAMS + 10)
 
-  GtkWidget *dialog = file_chooser_dialog("Load Patch", main_window, "_Load");
+  GtkWidget *dialog = file_chooser_dialog("Load Patch", main_window,
+                                          GTK_FILE_CHOOSER_ACTION_OPEN, "_Load");
 
   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
     filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));

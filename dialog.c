@@ -56,11 +56,12 @@ int query(const gchar *message, const gchar *filename, GtkWidget *parent)
 
 
 GtkWidget *file_chooser_dialog(const gchar *title, GtkWidget *parent,
+                               GtkFileChooserAction action,
                                const gchar *do_button_text)
 {
   return gtk_file_chooser_dialog_new (title,
                                       GTK_WINDOW(parent),
-                                      GTK_FILE_CHOOSER_ACTION_OPEN,
+                                      action,
                                       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
                                       do_button_text, GTK_RESPONSE_ACCEPT,
                                       NULL);
