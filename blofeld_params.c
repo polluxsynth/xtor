@@ -201,6 +201,7 @@ struct blofeld_bitmap_param patchname = { "Name Char 1", NULL, 0, 16 };
   { "Arp Step Length " #N ".", &threebit, NULL, &arplen ## N }
 
 static char patch_name[] = "Patch Name";
+static char device_name[] = "Device Name";
 
 /* The Parameter Definition List */
 /* Note: Owing to the design of the UI, in order to have the same parameter
@@ -1053,6 +1054,12 @@ const char *blofeld_get_patch_name_id(void)
   return patch_name;
 }
 
+/* Called when ui wants to know what the device name parameter is called */
+const char *blofeld_get_device_name_id(void)
+{
+  return device_name;
+}
+
 void blofeld_init(struct param_handler *param_handler)
 {
   int idx;
@@ -1127,5 +1134,6 @@ void blofeld_init(struct param_handler *param_handler)
   param_handler->param_update_value = blofeld_update_value;
   param_handler->param_fetch_parameter = blofeld_fetch_parameter;
   param_handler->param_get_patch_name_id = blofeld_get_patch_name_id;
+  param_handler->param_get_device_name_id = blofeld_get_device_name_id;
 }
 

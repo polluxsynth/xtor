@@ -1098,7 +1098,8 @@ main (int argc, char *argv[])
   /* Handle scroll events (mouse wheel) when not focused on any widget */
   gtk_widget_add_events(GTK_WIDGET(main_window), GDK_SCROLL_MASK);
   g_signal_connect(main_window, "scroll-event", G_CALLBACK(scroll_event), NULL);
-  GtkEntry *device_name_widget = GTK_ENTRY (gtk_builder_get_object (builder, "Device Name"));
+  GtkEntry *device_name_widget = GTK_ENTRY (gtk_builder_get_object (builder,
+                                 param_handler->param_get_device_name_id()));
   if (device_name_widget)
     gtk_entry_set_text(device_name_widget, param_handler->remote_midi_device);
 

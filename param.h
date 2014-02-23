@@ -54,6 +54,9 @@ struct param_handler {
   /* Called when ui wants to know what the patch name parameter is called */
   const char *(*param_get_patch_name_id)(void);
 
+  /* Called when ui wants to know what the device name parameter is called */
+  const char *(*param_get_device_name_id)(void);
+
   int params; /* tital #params in parameter list (including bitmapped ones) */
   const char *name; /* Name of synth, to be used for window title etc */
   const char *remote_midi_device; /* ID of USB MIDI device */
