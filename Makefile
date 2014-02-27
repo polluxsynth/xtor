@@ -24,7 +24,7 @@
 # and removes the clean target. Intended for binary releases where
 # we don't want the user to be able to mess up the binary by doing a make.
 
-RELEASE = n
+RELEASE = y
 
 PROGNAME = midiedit
 
