@@ -146,8 +146,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 3">
-                    <property name="label" translatable="yes">3</property>
+                  <object class="GtkRadioButton" id="Buffer 4">
+                    <property name="label" translatable="yes">4</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -163,8 +163,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 4">
-                    <property name="label" translatable="yes">4</property>
+                  <object class="GtkRadioButton" id="Buffer 3">
+                    <property name="label" translatable="yes">3</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -13029,6 +13029,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <signal name="pressed" handler="on_Copy_Arp_pressed"/>
+                                    <signal name="activate" handler="on_Copy_Arp_pressed"/>
                                   </object>
                                   <packing>
                                     <property name="left_attach">17</property>
@@ -13044,6 +13045,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
                                     <signal name="pressed" handler="on_Paste_Arp_pressed"/>
+                                    <signal name="activate" handler="on_Paste_Arp_pressed"/>
                                   </object>
                                   <packing>
                                     <property name="left_attach">18</property>
