@@ -1041,9 +1041,10 @@ void *blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_bu
 
   /* update parameter_list ui with pasted parameters */
   for (parnum = par_from; parnum <= par_to; parnum++) {
-    /* Only send UI updates for parameters that differ */
+    /* Only send updates for parameters that differ */
     if (paste_buffer[paste_buf][parnum] != parameter_list[parnum]) {
       update_ui(parnum, buf_no, paste_buffer[paste_buf][parnum]);
+      send_parameter_update(parnum, buf_no, 0, parameter_list[parnum]);
     }
   }
 }
