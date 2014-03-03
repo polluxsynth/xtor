@@ -146,8 +146,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 4">
-                    <property name="label" translatable="yes">4</property>
+                  <object class="GtkRadioButton" id="Buffer 3">
+                    <property name="label" translatable="yes">3</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -163,8 +163,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="Buffer 3">
-                    <property name="label" translatable="yes">3</property>
+                  <object class="GtkRadioButton" id="Buffer 4">
+                    <property name="label" translatable="yes">4</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -1244,7 +1244,7 @@
                             <child type="label">
                               <object class="GtkLabel" id="label46">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;b&gt;&lt;u&gt;O&lt;/u&gt;sc 2&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Osc 2&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -1650,7 +1650,7 @@
                             <child type="label">
                               <object class="GtkLabel" id="label61">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;b&gt;&lt;u&gt;O&lt;/u&gt;sc 3&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Osc 3&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -2196,7 +2196,7 @@
                             <child type="label">
                               <object class="GtkLabel" id="label64">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Osc 2 Mi&lt;u&gt;x&lt;/u&gt;&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Osc 2 Mix&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -2270,7 +2270,7 @@
                             <child type="label">
                               <object class="GtkLabel" id="label67">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Osc 3 Mi&lt;u&gt;x&lt;/u&gt;&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Osc 3 Mix&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -2370,7 +2370,7 @@
                             <child type="label">
                               <object class="GtkLabel" id="Noise Mix">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Noise Mi&lt;u&gt;x&lt;/u&gt;&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Noise Mix&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -2445,7 +2445,7 @@
                             <child type="label">
                               <object class="GtkLabel" id="label84">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Ring mi&lt;u&gt;x&lt;/u&gt;&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Ring mix&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -3482,7 +3482,7 @@
                             <child type="label">
                               <object class="GtkLabel" id="label81">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;b&gt;&lt;u&gt;F&lt;/u&gt;ilter 2&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Filter 2&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -4074,7 +4074,7 @@
                                 <child type="label">
                                   <object class="GtkLabel" id="label129">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">&lt;b&gt;Amplifier &lt;u&gt;E&lt;/u&gt;nvelope&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Amplifier Envelope&lt;/b&gt;</property>
                                     <property name="use_markup">True</property>
                                   </object>
                                 </child>
@@ -6043,7 +6043,7 @@
                                     <child type="label">
                                       <object class="GtkLabel" id="label339">
                                         <property name="visible">True</property>
-                                        <property name="label" translatable="yes">&lt;b&gt;Modulation &lt;u&gt;s&lt;/u&gt;election 2&lt;/b&gt;</property>
+                                        <property name="label" translatable="yes">&lt;b&gt;Modulation selection 2&lt;/b&gt;</property>
                                         <property name="use_markup">True</property>
                                       </object>
                                     </child>
@@ -6939,7 +6939,7 @@
                             <child type="label">
                               <object class="GtkLabel" id="Amplfier Envelope m">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Amplifier &lt;u&gt;E&lt;/u&gt;nvelope&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Amplifier Envelope&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -7238,7 +7238,7 @@
                             <child type="label">
                               <object class="GtkLabel" id="label221">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;b&gt;&lt;u&gt;E&lt;/u&gt;nvelope 3&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Envelope 3&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -7910,7 +7910,7 @@
                                 <child type="label">
                                   <object class="GtkLabel" id="label197">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">&lt;b&gt;&lt;u&gt;E&lt;/u&gt;nvelope 4&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Envelope 4&lt;/b&gt;</property>
                                     <property name="use_markup">True</property>
                                   </object>
                                 </child>
@@ -8554,7 +8554,7 @@
                             <child type="label">
                               <object class="GtkLabel" id="LFO 2">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;b&gt;&lt;u&gt;L&lt;/u&gt;FO 2&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;LFO 2&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -8876,7 +8876,7 @@
                             <child type="label">
                               <object class="GtkLabel" id="LFO 3">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;b&gt;&lt;u&gt;L&lt;/u&gt;FO 3&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;LFO 3&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
@@ -15376,7 +15376,7 @@
                             <child type="label">
                               <object class="GtkLabel" id="label312">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">&lt;b&gt;&lt;u&gt;E&lt;/u&gt;ffect 2&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Effect 2&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </object>
                             </child>
