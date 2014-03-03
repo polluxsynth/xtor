@@ -69,5 +69,5 @@ install: $(PROGNAME) midiedit.glade blofeld.glade README COPYING
 	install $(DOC_FILES) $(DOC_DIR)
 
 uninstall:
-	rm $(BIN_DIR)/$(PROGNAME)
-	rm -r $(UI_DIR) $(DOC_DIR)
+	rm -f $(BIN_DIR)/$(PROGNAME)
+	rm -rf $(UI_DIR) $(DOC_DIR)
