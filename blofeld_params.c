@@ -724,7 +724,14 @@ static int ui_to_param_value(struct blofeld_param *param, int value)
   int range = max + 1 - min;
   if (min == -200) /* keytrack */
     value = (value + 202) * 64 / 200; /* empirically verified against Blofeld */
-  else if (min < 0) /* bipolar parameter */
+  else if (max == 300) { /* arp tempo */
+    if (value > 165)
+      value = value / 5 + 67;
+    else if (value > 90)
+      value = value - 65;
+    else
+      value = (value - 40) / 2;
+  } else if (min < 0) /* bipolar parameter */
     value += 64; /* center around mid range (64) */
   else if (min == 12) /* octave */
     value = 12 * value + 16; /* coding for octave parameters */
@@ -816,7 +823,14 @@ static int param_value_to_ui(struct blofeld_param *param, int value)
   int max = param->limits->max;
   if (min == -200) /* keytrack */
     value = value * 200 / 64 - 200; /* empirically verified against Blofeld */
-  else if (min < 0)
+  else if (max == 300) {/* arp tempo */
+    if (value <= 25)
+      value = value * 2 + 40;
+    else if (value <= 100)
+      value = value + 65;
+    else 
+      value = value * 5 - 335;
+  } else if (min < 0)
     value -= 64;
   else if (min == 12) /* octave */
     value = (value - 16 ) / 12;
@@ -928,7 +942,7 @@ static int blofeld_update_value(int parno, int old_val, int new_val, int delta)
   int max = param->limits->max;
   int range = max - min;
   int bigrange = range >= 127; /* UI range larger than parameter value range */
-                               /* In practice, only keytrack parameters */
+                               /* i.e. keytrack and arp tempo parameters */
   int value;
 
   /* For bigrange parameters, when jumping to a new value (delta == 0), 
