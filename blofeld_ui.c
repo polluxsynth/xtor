@@ -2,19 +2,19 @@
  * midiedit - GTK based editor for MIDI synthesizers
  *
  * blofeld_ui.c - Blofeld-specific UI functions. In practice, signal handlers.
- * 
+ *
  * Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -33,6 +33,8 @@
 #include "blofeld_params.h"
 #include "debug.h"
 
+/* Well-known functions from the main UI core.
+ * TODO: Put these in an include file instead. */
 extern int current_buffer_no;
 extern int device_number;
 extern char current_patch_name[];
@@ -41,8 +43,9 @@ extern void set_title(void);
 
 extern GtkWidget *main_window;
 
-
-static int file_send(char *buf, int len, int fd)
+/* Send a buffer to a file fd, handling interrupted system calls etc */
+static int
+file_send(char *buf, int len, int fd)
 {
   int res;
   while (1) {
@@ -55,6 +58,9 @@ static int file_send(char *buf, int len, int fd)
   return -1; /* We won't get here */
 }
 
+/* Handlers for various Blofeld-specific parts of the UI */
+
+/* When Patch Save pressed: save patch to file */
 void
 on_Patch_Save_pressed (GtkObject *object, gpointer user_data)
 {
@@ -62,7 +68,7 @@ on_Patch_Save_pressed (GtkObject *object, gpointer user_data)
   int res;
   char suggested_filename[BLOFELD_PATCH_NAME_LEN_MAX + 4 + 1];
 
-  GtkWidget *dialog = file_chooser_dialog("Save Patch", main_window, 
+  GtkWidget *dialog = file_chooser_dialog("Save Patch", main_window,
                                           GTK_FILE_CHOOSER_ACTION_SAVE, "_Save");
   /* Use the patch name as a suggestion for the file name */
   strncpy(suggested_filename, current_patch_name, BLOFELD_PATCH_NAME_LEN_MAX);
@@ -105,6 +111,7 @@ static int safe_read(int fd, char *buf, int len)
   return -1; /* We won't get here */
 }
 
+/* When Patch Load pressed: load patch from file */
 void
 on_Patch_Load_pressed (GtkObject *object, gpointer user_data)
 {
@@ -145,6 +152,8 @@ out:
   g_free (filename);
 }
 
+/* When Get Dump (or G) pressed, request dump from Blofeld.
+ * Note that we don't actually wait for the dump to be received here. */
 void
 on_GetDump_pressed (GtkObject *object, gpointer user_data)
 {
@@ -153,6 +162,7 @@ on_GetDump_pressed (GtkObject *object, gpointer user_data)
   blofeld_get_dump(current_buffer_no, device_number);
 }
 
+/* When Send Dump pressed, send patch dump to Blofeld. */
 void
 on_SendDump_pressed (GtkObject *object, gpointer user_data)
 {
@@ -161,13 +171,15 @@ on_SendDump_pressed (GtkObject *object, gpointer user_data)
   blofeld_send_dump(current_buffer_no, device_number);
 }
 
+/* When user presses any one of the 16 Buffer radio buttons:
+ * set buffer number and request patch dump from Blofeld. */
 void
 on_Buffer_pressed (GtkObject *object, gpointer user_data)
 {
   const char *id = gtk_buildable_get_name(GTK_BUILDABLE(object));
   int buffer_no;
 
-  if (sscanf(id, "Buffer %d", &buffer_no) == 1 && 
+  if (sscanf(id, "Buffer %d", &buffer_no) == 1 &&
       buffer_no > 0 && buffer_no <= 16) {
     current_buffer_no = buffer_no - 1;
     set_title();
@@ -177,24 +189,30 @@ on_Buffer_pressed (GtkObject *object, gpointer user_data)
   }
 }
 
+/* When Patch Copy pressed, copy all parameters to paste buffer */
 void
 on_Patch_Copy_pressed (GtkObject *object, gpointer user_data)
 {
   blofeld_copy_to_paste(PARNOS_ALL, current_buffer_no, 0);
 }
 
+/* When Patch Paste pressed, copy all parameters from paste buffer */
 void
 on_Patch_Paste_pressed (GtkObject *object, gpointer user_data)
 {
   blofeld_copy_from_paste(PARNOS_ALL, current_buffer_no, 0);
 }
 
+/* When Arp Copy pressed, copy all arpeggiator parameters to arpeggiator
+ * paste buffer */
 void
 on_Copy_Arp_pressed (GtkObject *object, gpointer user_data)
 {
   blofeld_copy_to_paste(PARNOS_ARPEGGIATOR, current_buffer_no, 1);
 }
 
+/* When Arp Paste pressed, copy all arpeggiator parameters from arpeggiator
+ * paste buffer */
 void
 on_Paste_Arp_pressed (GtkObject *object, gpointer user_data)
 {
@@ -202,13 +220,15 @@ on_Paste_Arp_pressed (GtkObject *object, gpointer user_data)
 }
 
 
+/* Parameter struct for show_hide/on_Modulation_Select_changed */
 struct match {
   const char *prefix;
   int select;
 };
 
 /* Show/hide widget depending on number in parameter name */
-static void show_hide(gpointer data, gpointer user_data)
+static void
+show_hide(gpointer data, gpointer user_data)
 {
   GtkWidget *widget = data;
   struct match *match = user_data;
@@ -283,13 +303,17 @@ on_Modulation_Select_changed (GtkObject *object, gpointer user_data)
 }
 
 
+/* Parameter struct for set_value/on_all_changed */
 struct all_updater {
   const char *format;
   int value;
 };
 
 /* set value of single parameter (foreach) */
-static void set_value(gpointer data, gpointer user_data)
+/* Used to change the value of all arp step values when user changes a value
+ * in the All column. */
+static void
+set_value(gpointer data, gpointer user_data)
 {
   GtkWidget *widget = data;
   struct all_updater *all_updater = user_data;
@@ -359,3 +383,5 @@ on_Device_Number_changed (GtkObject *object, gpointer user_data)
 
   dprintf("User set device number to %d\n", device_number);
 }
+
+/*************************** End of file blofeld_ui.c ***********************/
