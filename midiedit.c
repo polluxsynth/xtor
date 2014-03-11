@@ -498,6 +498,19 @@ change_value(GtkWidget *what, int shifted, int dir)
   int delta;
   const char *signal = NULL;
 
+  /* This takes a bit of explaining: Normally all vertical sliders are 
+   * 'inverted' from Gtk's point of view, meaning that their max value is
+   * upwards. However, for some parameters, such as filter balance, it makes
+   * more sense to have the max value downwards, as -64 corresponds to
+   * Filter 1 and +63 corresponds to Filter 2. This affects the perceived
+   * scroll direction, so we take care of that here.
+   * (For horizontal sliders, Gtk sees them as we do, so we invert the scroll
+   * direction if they are inverted.)
+   */
+  if (GTK_IS_VSCALE(what) && !gtk_range_get_inverted(GTK_RANGE(what)) ||
+      GTK_IS_HSCALE(what) && gtk_range_get_inverted(GTK_RANGE(what)))
+    dir = -dir;
+
   if (dir == 1)
     delta = shifted ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_STEP_FORWARD;
   else if (dir == -1)
