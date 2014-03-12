@@ -30,6 +30,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include "midiedit.h"
 #include "dialog.h"
 #include "param.h"
 #include "blofeld_params.h"

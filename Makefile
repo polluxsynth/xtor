@@ -37,7 +37,7 @@ UI_DIR = $(PREFIX)/share/$(PROGNAME)
 #UI_DIR=.
 
 OBJS = midiedit.o dialog.o blofeld_ui.o blofeld_params.o midi.o debug.o
-INCS = dialog.h param.h blofeld_params.h midi.h debug.h
+INCS = midiedit.h dialog.h param.h blofeld_params.h midi.h debug.h
 UI_FILES = midiedit.glade blofeld.glade
 DOC_FILES = README COPYING
 

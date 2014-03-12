@@ -28,20 +28,11 @@
 #include <unistd.h>
 #include <errno.h>
 #include <gtk/gtk.h>
+#include "midiedit.h"
 #include "dialog.h"
 #include "param.h"
 #include "blofeld_params.h"
 #include "debug.h"
-
-/* Well-known functions from the main UI core.
- * TODO: Put these in an include file instead. */
-extern int current_buffer_no;
-extern int device_number;
-extern char current_patch_name[];
-
-extern void set_title(void);
-
-extern GtkWidget *main_window;
 
 /* Send a buffer to a file fd, handling interrupted system calls etc */
 static int
