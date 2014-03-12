@@ -261,10 +261,10 @@ struct blofeld_param blofeld_params[] = {
   { "Osc 3 Shape Amount", &bipolar, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
-  { "Osc 3 Limit WT", &onoff, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
   { "Osc 3 Brilliance", &norm, NULL, NULL }, /* 48 */
-  { "Osc 2 Sync to Osc 3", &norm, NULL, NULL },
+  { "Osc 2 to 3 Sync", &norm, NULL, NULL },
   { "Osc Pitch Source", &norm, NULL, NULL },
   { "Osc Pitch Amount", &bipolar, NULL, NULL },
   { "reserved", NULL, NULL, NULL },

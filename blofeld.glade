@@ -1050,21 +1050,15 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkCheckButton" id="Osc 2 Limit WT">
-                                            <property name="label" translatable="yes">Sync 3</property>
+                                          <object class="GtkLabel" id="label41">
                                             <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                            <property name="receives_default">False</property>
-                                            <property name="draw_indicator">True</property>
                                           </object>
                                           <packing>
-                                            <property name="expand">False</property>
-                                            <property name="pack_type">end</property>
                                             <property name="position">2</property>
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkCheckButton" id="Osc 3 Limit WT">
+                                          <object class="GtkCheckButton" id="Osc 2 Limit WT">
                                             <property name="label" translatable="yes">Lim WT</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
@@ -1104,10 +1098,16 @@
                                           </packing>
                                         </child>
                                         <child>
-                                          <object class="GtkLabel" id="label41">
+                                          <object class="GtkCheckButton" id="Osc 2 to 3 Sync">
+                                            <property name="label" translatable="yes">Sync 3</property>
                                             <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="draw_indicator">True</property>
                                           </object>
                                           <packing>
+                                            <property name="expand">False</property>
+                                            <property name="pack_type">end</property>
                                             <property name="position">2</property>
                                           </packing>
                                         </child>
@@ -16185,7 +16185,7 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">OFF</col>
+        <col id="0" translatable="yes">OFF          </col>
       </row>
       <row>
         <col id="0" translatable="yes">Pulse</col>
