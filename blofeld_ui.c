@@ -322,7 +322,7 @@ set_value(gpointer data, gpointer user_data)
     gtk_combo_box_set_active(GTK_COMBO_BOX(widget), all_updater->value);
   else if (GTK_IS_TOGGLE_BUTTON(widget))
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), all_updater->value);
-  /* TODO: Add other widget types as needed */
+  /* Add other widget types as needed */
 }
 
 /* When parameters in 'All' column in arpeggiator changed, update the whole
@@ -351,7 +351,7 @@ on_all_changed (GtkObject *object, gpointer user_data)
     all_updater.value = gtk_combo_box_get_active(GTK_COMBO_BOX(object));
   else if (GTK_IS_TOGGLE_BUTTON(object))
     all_updater.value = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(object));
-  /* TODO: Add for other widget types as needed */
+  /* Add other widget types as needed */
 
   /* Now update all children of the parent container */
   /* Actually, we cheat a bit here, we just scan all children of the
