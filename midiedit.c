@@ -352,9 +352,6 @@ update_parameter(struct adjustor *adjustor, const void *valptr,
 
 /* Handlers called when widgets change value. */
 
-/* TODO: Have all handlers return TRUE to show that signal is handled?
- * - only for certain handlers; check gtk documentation. */
-
 void
 on_patch_name_changed(GtkObject *object, gpointer user_data)
 {
