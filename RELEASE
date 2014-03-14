@@ -1,0 +1,12 @@
+Release notes for midiedit 1.2
+
+- Fixed osc Limit WT and Osc Sync: parameter numbers were mixed up.
+- Fixed step range and increment for Arp Tempo parameter.
+- Fixed inverted ranges scrolling wrong way.
+- Fixed part order in UI.
+- Fixed uninstall target so it properly handles case of partial or missing
+  previous installation.
+- Remove cyclic key maps (i.e. pressing o repeatedly to cycle between oscs).
+- Restructured Osc boxes in UI to use tables instead of v/hboxes.
+- Cleaned up function headers and added function comments.
+- Minor clode cleanup, and removed all TODOs in code.
