@@ -1184,8 +1184,8 @@ main(int argc, char *argv[])
 {
   GtkBuilder *builder;
   struct polls *polls;
-  int poll_tag;
   const char *gladename;
+  int i;
 
   debug = 0;
 
@@ -1240,9 +1240,11 @@ main(int argc, char *argv[])
   if (!polls)
     return 2;
 
-  /* TODO: Should really loop over all potential fds */
-  poll_tag = gdk_input_add(polls->pollfds[0].fd, GDK_INPUT_READ,
-                           on_midi_input, NULL);
+  /* Normally we'd only expect one fd here, but just in case we got > 1 */
+  dprintf("Midi poll fds: %d\n", polls->npfd);
+  for (i = 0; i < polls->npfd; i++)
+    /* gdk_input_add() returns a poll_tag which we don't care about */
+    gdk_input_add(polls->pollfds[i].fd, GDK_INPUT_READ, on_midi_input, NULL);
 
   create_adjustors_list(param_handler->params, main_window);
 
