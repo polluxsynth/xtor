@@ -1,21 +1,21 @@
 #
 # Makefile for midiedit.
-# 
+#
 # midiedit - GTK based editor for MIDI synthesizers
 #
 # Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
 # Portions of Makefile Copyright (C) Lars Luthman <larsl@users.sourceforge.net>
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -37,7 +37,7 @@ UI_DIR = $(PREFIX)/share/$(PROGNAME)
 #UI_DIR=.
 
 OBJS = midiedit.o dialog.o blofeld_ui.o blofeld_params.o midi.o debug.o
-INCS = dialog.h param.h blofeld_params.h midi.h debug.h
+INCS = midiedit.h dialog.h param.h blofeld_params.h midi.h debug.h
 UI_FILES = midiedit.glade blofeld.glade
 DOC_FILES = README COPYING
 
@@ -69,5 +69,5 @@ install: $(PROGNAME) midiedit.glade blofeld.glade README COPYING
 	install $(DOC_FILES) $(DOC_DIR)
 
 uninstall:
-	rm $(BIN_DIR)/$(PROGNAME)
-	rm -r $(UI_DIR) $(DOC_DIR)
+	rm -f $(BIN_DIR)/$(PROGNAME)
+	rm -rf $(UI_DIR) $(DOC_DIR)

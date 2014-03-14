@@ -2,19 +2,19 @@
  * midiedit - GTK based editor for MIDI synthesizers
  *
  * midi.c - MIDI subsystem for midiedit.
- * 
+ *
  * Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -26,9 +26,12 @@
 #include "debug.h"
 #include <alloca.h>
 
+/* ALSA related stuff */
 int seq_port;
 snd_seq_t *seq;
 
+/* System exclusive. So far, we handle this at the basic level, managing
+ * up to 128 system exclusive ID's. */
 #define MAX_SYSEX_IDS 128
 
 struct sysex_info {
@@ -39,7 +42,11 @@ struct sysex_info {
 struct sysex_info sysex_receivers[MAX_SYSEX_IDS];
 
 /* Initialize ALSA sequencer interface, and create MIDI port */
-struct polls *midi_init_alsa(void)
+/* Return list of fds that main loop needs to poll() in order to detect
+ * activity. */
+/* Returned structure pointer is allocated using malloc. */
+struct polls *
+midi_init_alsa(void)
 {
   struct polls *polls;
   int npfd;
@@ -51,8 +58,8 @@ struct polls *midi_init_alsa(void)
   }
   snd_seq_set_client_name(seq, "Controller");
   seq_port = snd_seq_create_simple_port(seq, "Midiedit",
-	 			        SND_SEQ_PORT_CAP_READ | 
-				        SND_SEQ_PORT_CAP_WRITE | 
+	 			        SND_SEQ_PORT_CAP_READ |
+				        SND_SEQ_PORT_CAP_WRITE |
 				        SND_SEQ_PORT_CAP_SUBS_READ |
 				        SND_SEQ_PORT_CAP_SUBS_WRITE,
 				        SND_SEQ_PORT_TYPE_APPLICATION);
@@ -60,10 +67,10 @@ struct polls *midi_init_alsa(void)
     dprintf("Couldn't create sequencer port: %s\n", snd_strerror(errno));
     return NULL;
   }
- 
-  /* Fetch poll descriptor(s) for MIDI input (normally only one) */ 
+
+  /* Fetch poll descriptor(s) for MIDI input (normally only one) */
   npfd = snd_seq_poll_descriptors_count(seq, POLLIN);
-  polls = (struct polls *) malloc(sizeof(struct polls) + 
+  polls = (struct polls *) malloc(sizeof(struct polls) +
 				  npfd * sizeof(struct pollfd));
   polls->npfd = npfd;
   snd_seq_poll_descriptors(seq, polls->pollfds, npfd, POLLIN);
@@ -74,7 +81,9 @@ struct polls *midi_init_alsa(void)
 }
 
 
-static int subscribe(snd_seq_port_subscribe_t *sub)
+/* Set up ALSA MIDI subscription according to supplied parameter. */
+static int
+subscribe(snd_seq_port_subscribe_t *sub)
 {
   if (snd_seq_get_port_subscription(seq, sub) == 0) {
     dprintf("Connection between editor and device already established\n");
@@ -90,9 +99,11 @@ static int subscribe(snd_seq_port_subscribe_t *sub)
 }
 
 /* Make bidirectional MIDI connection to specified remote device */
-/* Remote device name is saved after first call; subsequent calls may use
+/* Remote device name is saved after first call (or rather the pointer to it,
+ * so the actual string must not be deallocated); subsequent calls may use
  * NULL as the remote_device. */
-int midi_connect(const char *remote_device)
+int
+midi_connect(const char *remote_device)
 {
   int client;
   snd_seq_port_subscribe_t *sub;
@@ -121,14 +132,17 @@ int midi_connect(const char *remote_device)
     dprintf("Can't locate destination device %s\n", saved_remote_device);
     return -1;
   }
- 
-  /* Set up sender and destination in subscription. */ 
+
+  /* We always attempt to set up subscription in both directions, regardless
+   * of which error occurs when setting up the first direction. */
+
+  /* Set up sender and destination in subscription. */
   snd_seq_port_subscribe_set_sender(sub, &my_addr);
   snd_seq_port_subscribe_set_dest(sub, &remote_addr);
 
   int res = subscribe(sub);
 
-  /* And now, connection in other direction. */ 
+  /* And now, connection in other direction. */
   snd_seq_port_subscribe_set_sender(sub, &remote_addr);
   snd_seq_port_subscribe_set_dest(sub, &my_addr);
 
@@ -138,8 +152,10 @@ int midi_connect(const char *remote_device)
   return res;
 }
 
+
 /* Send sysex buffer (buffer must contain complete sysex msg w/ SYSEX & EOX) */
-int midi_send_sysex(void *buf, int buflen)
+int
+midi_send_sysex(void *buf, int buflen)
 {
   int err;
 
@@ -154,6 +170,9 @@ int midi_send_sysex(void *buf, int buflen)
   return err;
 }
 
+/* Handle sysex event. */
+/* Alsa seems to return sysex data in chunks of 256 bytes, so piece the
+ * chunks together to form the complete message. */
 static void sysex_in(snd_seq_event_t *ev)
 {
   static int srcidx = 0, dstidx = 0;
@@ -187,6 +206,8 @@ static void sysex_in(snd_seq_event_t *ev)
     copy_len -= dstidx + copy_len - max_buflen;
   memcpy(&input_buf[dstidx], data, copy_len);
   dstidx += copy_len;
+
+  /* When EOX received, handle to appropriate receiver */
   if (data[ev->data.ext.len - 1] == EOX) {
     if (sysex_receivers[sysex_id].sysex_receiver)
       sysex_receivers[sysex_id].sysex_receiver(input_buf, dstidx);
@@ -194,7 +215,10 @@ static void sysex_in(snd_seq_event_t *ev)
   }
 }
 
-void midi_input(void)
+/* Handle MIDI input. To be called when poll() call in main loop indicates
+ * that data is available on our fd(s). */
+void
+midi_input(void)
 {
   int midi_status;
   snd_seq_event_t *ev;
@@ -213,6 +237,7 @@ void midi_input(void)
         dprintf("Sysex: length %d\n", ev->data.ext.len);
         sysex_in(ev);
         break;
+      /* Example of ordinary MIDI event. We don't use this. */
       case SND_SEQ_EVENT_CONTROLLER:
         dprintf("CC: ch %d, param %d, val %d\n", ev->data.control.channel + 1,
                 ev->data.control.param, ev->data.control.value);
@@ -223,10 +248,16 @@ void midi_input(void)
   }
 }
 
-void midi_register_sysex(int sysex_id, midi_sysex_receiver receiver, int max_len)
+
+/* Register sysex handler with MIDI sysex subsystem, for handling received
+ * sysex messages. */
+void
+midi_register_sysex(int sysex_id, midi_sysex_receiver receiver, int max_len)
 {
   if (sysex_id < MAX_SYSEX_IDS) {
     sysex_receivers[sysex_id].sysex_receiver = receiver;
     sysex_receivers[sysex_id].max_buflen = max_len;
   }
 }
+
+/**************************** End of file midi.c ****************************/
