@@ -1117,10 +1117,12 @@ get_liststore_keymap(GtkTreeModel *model,
     return FALSE;
   }
 
-  gchar *tree_path_str = gtk_tree_path_to_string(path); /* TODO: Don't really need this */
-
+#ifdef DEBUG
+  gchar *tree_path_str = gtk_tree_path_to_string(path);
   dprintf("Keymap row: %s: key %s mapping %s, arg %d, parent %s, arg %d\n",
           tree_path_str, key, param_name, param_arg, parent_name, parent_arg);
+  g_free(tree_path_str);
+#endif
 
   /* Empty parent_name string means there is no specified parent.
    * Easier to manage if just set to NULL rather than having zero-length
@@ -1142,8 +1144,6 @@ get_liststore_keymap(GtkTreeModel *model,
 
   /* We need to use append here, because we want to preserve ordering */
   *keymaps = g_list_append(*keymaps, map);
-
-  g_free(tree_path_str);
 
   return FALSE;
 }
