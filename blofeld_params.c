@@ -2,19 +2,19 @@
  * midiedit - GTK based editor for MIDI synthesizers
  *
  * blofeld_params.c - Parameter management for Waldorf Blofeld.
- * 
+ *
  * Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -27,6 +27,9 @@
 #include "midi.h"
 
 #include "debug.h"
+
+/* Blofeld patch and parameter dump sysex definitions.
+ * These are taken from blofeld_sysex_v1_04.txt */
 
 #define SYSEX_ID_WALDORF 0x3E
 #define EQUIPMENT_ID_BLOFELD 0x13
@@ -54,9 +57,6 @@
 
 /* Parameter buffers: 00..19h are banks A..Z (not all banks exist) */
 #define EDIT_BUF 0x7f
-
-#define TELL_SYNTH 1
-#define TELL_UI 2
 
 struct limits {
   int min;
@@ -200,6 +200,7 @@ struct blofeld_bitmap_param patchname = { "Name Char 1", NULL, 0, 16 };
   { "Arp Step Timing " #N ".", &threebit, NULL, &arptim ## N }, \
   { "Arp Step Length " #N ".", &threebit, NULL, &arplen ## N }
 
+/* Names of certain parameters, for interfacing with midiedit core. */
 static char patch_name[] = "Patch Name";
 static char device_name[] = "Device Name";
 
@@ -210,7 +211,7 @@ static char device_name[] = "Device Name";
  * This is because glade suffixes widget names with numbers when copying,
  * which we filter out in the main ui driver in order to have widgets
  * with the same base name (i.e. without the number suffix) that control the
- * same parameter. 
+ * same parameter.
  */
 struct blofeld_param blofeld_params[] = {
   /* name, limits, child, bm_param */
@@ -260,10 +261,10 @@ struct blofeld_param blofeld_params[] = {
   { "Osc 3 Shape Amount", &bipolar, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
-  { "Osc 3 Limit WT", &onoff, NULL, NULL },
+  { "reserved", NULL, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
   { "Osc 3 Brilliance", &norm, NULL, NULL }, /* 48 */
-  { "Osc 2 Sync to Osc 3", &norm, NULL, NULL },
+  { "Osc 2 to 3 Sync", &norm, NULL, NULL },
   { "Osc Pitch Source", &norm, NULL, NULL },
   { "Osc Pitch Amount", &bipolar, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
@@ -553,7 +554,15 @@ struct blofeld_param blofeld_params[] = {
   { "reserved", NULL, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
   { "reserved", NULL, NULL, NULL }, /* 382 */
-  /* Bitmap parameters */
+
+  /* Bitmap parameters. Originally devised for parameters which had
+   * bitfields, so that several 'bitmap parameters' would have the same
+   * parent parameter, but referencing different bitfields in the parent.
+   * (Note that the implementation allows for overlapping bitfields as well).
+   * However, the term 'Bitmap parameters' now also includes parameters
+   * which have multiple parents and one single child, which in our case
+   * is the patch name (only). */
+
   { "Unison", &threebit, NULL, &unison },
   { "Allocation", &onoff, NULL, &allocation },
   { "Filter Envelope Mode", &envmode, NULL, &fenvmode },
@@ -590,23 +599,34 @@ struct blofeld_param blofeld_params[] = {
   { "Effect 2 Curve", &filterdrive, NULL, &fx2curve },
   { "Effect 2 Damping", &norm, NULL, &fx2damping },
   { "Effect 2 Polarity", &onoff, NULL, &fx2polarity },
+  /* Not really a bit field, but needs special treatment, so we include it in
+   * the group. */
   { patch_name, NULL, NULL, &patchname },
+  /* End of list marker. Do not remove. */
   { "", NULL, NULL, NULL }
 };
 
+/* These are the parameter values for all parameters, i.e. our Edit Buffer */
 int parameter_list[BLOFELD_PARAMS];
 
+/* We have one global paste buffer, and one for the arpeggiator */
 #define PASTE_BUFFERS 2
 
 int paste_buffer[PASTE_BUFFERS][BLOFELD_PARAMS];
 
+/* Sysex device number */
 int device_number = 0;
 
 /* Callback and parameter for parameter updates */
 notify_cb notify_ui;
 void *notify_ref;
 
-int blofeld_find_index(const char *param_name)
+/* Fint index in parameter list of parameter with a given name. */
+/* Used locally and also from midiedit core during startup to find
+ * parameters corresponding to parameter widgets. */
+/* Not referenced directly, but via struct, hence 'static' */
+static int
+blofeld_find_index(const char *param_name)
 {
   int idx = -1; /* not found */
   int i;
@@ -623,21 +643,27 @@ int blofeld_find_index(const char *param_name)
   return idx;
 }
 
-int blofeld_get_param_properties(int param_num,
-                                 struct param_properties *props)
+/* Get min, max and step sizes for parameter. Used by midiedit core
+ * during setup. */
+/* Not referenced directly, but via struct, hence 'static' */
+int
+blofeld_get_param_properties(int param_num,
+                             struct param_properties *props)
 {
   if (param_num < BLOFELD_PARAMS_ALL && props) {
     props->ui_min = blofeld_params[param_num].limits->min;
     props->ui_max = blofeld_params[param_num].limits->max;
     /* set sane values for step size */
     int range = props->ui_max + 1 - props->ui_min;
-    props->ui_step = (range / 128 > 1) ? 1 : 1; /* TODO adjust for keytrack */
+    props->ui_step = (range / 128 > 1) ? 1 : 1;
     return 0;
   }
   return -1;
 }
 
-static int midi_csum(const unsigned char *buf, int bytes)
+/* Checksum routine, algorithm according to Waldorf. */
+static int
+midi_csum(const unsigned char *buf, int bytes)
 {
   int c = 0;
   while (bytes--)
@@ -646,7 +672,11 @@ static int midi_csum(const unsigned char *buf, int bytes)
   return (c & 127);
 }
 
-void blofeld_get_dump(int buf_no, int devno)
+/* Send patch dump request to Blofeld. We hope to get an answer, but won't
+ * hold our breath (i.e. we process the sound dump when it arrives
+ * and don't hang around here waiting for it). */
+void
+blofeld_get_dump(int buf_no, int devno)
 {
   unsigned char sndr[] = { SYSEX,
                            SYSEX_ID_WALDORF,
@@ -660,14 +690,24 @@ void blofeld_get_dump(int buf_no, int devno)
   midi_send_sysex(sndr, sizeof(sndr));
 }
 
-static int midi_send(char *buf, int size, int userdata)
+/* Patch dump routine for sending to synth.
+ * Used as send_func_sender parameter in call to blofeld_xfer_dump. */
+static int
+midi_send(char *buf, int size, int userdata)
 {
   midi_send_sysex(buf, size);
 
   return 0;
 }
 
-int blofeld_xfer_dump(int buf_no, int dev_no, send_func sender, int userdata)
+/* Send patch dump to Blofeld or file, depending on send_func sender */
+/* By using a function as parameter rather than returning a buffer and let
+ * the caller do it, we can have the send buffer on the stack, rather
+ * than allocate it and hope the caller remembers to free it, or have it
+ * statically allocated. Yeah, really important...but we got to have a bit
+ * of fun. */
+int
+blofeld_xfer_dump(int buf_no, int dev_no, send_func sender, int userdata)
 {
   unsigned char sndd[BLOFELD_PARAMS + 9] = { SYSEX,
                                              SYSEX_ID_WALDORF,
@@ -686,12 +726,16 @@ int blofeld_xfer_dump(int buf_no, int dev_no, send_func sender, int userdata)
   return sender(sndd, sizeof(sndd), userdata);
 }
 
-void blofeld_send_dump(int buf_no, int dev_no)
+/* Send patch dump to Blofeld. Used when user presses Send button in UI. */
+void
+blofeld_send_dump(int buf_no, int dev_no)
 {
   blofeld_xfer_dump(buf_no, dev_no, midi_send, 0);
 }
 
-static void send_parameter_update(int parnum, int buf_no, int devno, int value)
+/* Send single parameter value to Blofeld. */
+static
+void send_parameter_update(int parnum, int buf_no, int devno, int value)
 {
   unsigned char sndp[] = { SYSEX,
                            SYSEX_ID_WALDORF,
@@ -716,15 +760,25 @@ static void update_ui_int_param_children(struct blofeld_param *param,
                                          int buf_no, int value, int mask);
 
 
-/* Convert UI representation of value to parameter value */
-static int ui_to_param_value(struct blofeld_param *param, int value)
+/* Convert UI representation of value to MIDI parameter value */
+static int
+ui_to_param_value(struct blofeld_param *param, int value)
 {
   int min = param->limits->min;
   int max = param->limits->max;
   int range = max + 1 - min;
   if (min == -200) /* keytrack */
     value = (value + 202) * 64 / 200; /* empirically verified against Blofeld */
-  else if (min < 0) /* bipolar parameter */
+  else if (max == 300) { /* arp tempo */
+    /* empirically verified against Blofeld. */
+    /* See param_value_to_ui for algorithm.  */
+    if (value > 165)
+      value = value / 5 + 67;
+    else if (value > 90)
+      value = value - 65;
+    else
+      value = (value - 40) / 2;
+  } else if (min < 0) /* bipolar parameter */
     value += 64; /* center around mid range (64) */
   else if (min == 12) /* octave */
     value = 12 * value + 16; /* coding for octave parameters */
@@ -732,8 +786,9 @@ static int ui_to_param_value(struct blofeld_param *param, int value)
 }
 
 /* Update numeric (integer) parameter and send to Blofeld */
-static void update_int_param(struct blofeld_param *param,
-                             int parnum, int buf_no, int value)
+static void
+update_int_param(struct blofeld_param *param,
+                 int parnum, int buf_no, int value)
 {
   int parval = ui_to_param_value(param, value);
 
@@ -750,7 +805,7 @@ static void update_int_param(struct blofeld_param *param,
     /* mask out non-changed bits, then or with new value */
     parval = (parameter_list[parnum] & ~mask) | (parval << shift);
 
-    /* Update UI for all children that have a bitmask that overlaps, 
+    /* Update UI for all children that have a bitmask that overlaps,
      * (skipping the one we've just received the update for)  */
     /* This happens for for instance LFO Speed vs Clock */
     update_ui_int_param_children(parent, param, buf_no, parval, mask);
@@ -762,10 +817,11 @@ static void update_int_param(struct blofeld_param *param,
 }
 
 /* Update string parameter and send to Blofeld */
-static void update_str_param(struct blofeld_param *param, int parnum,
-                             int buf_no, const unsigned char *string)
+static void
+update_str_param(struct blofeld_param *param, int parnum,
+                 int buf_no, const unsigned char *string)
 {
-  /* String parameters must be bitmap parameters, and bitmask must be == 0 */
+  /* String parameters must be 'bitmap' parameters, and bitmask must be == 0 */
   if (!param->bm_param || param->bm_param->bitmask)
     return;
 
@@ -795,7 +851,9 @@ static void update_str_param(struct blofeld_param *param, int parnum,
 }
 
 /* called from UI when parameter updated */
-void blofeld_update_param(int parnum, int buf_no, const void *valptr)
+/* Not referenced directly, but via struct, hence 'static' */
+static void
+blofeld_update_param(int parnum, int buf_no, const void *valptr)
 {
   if (parnum >= BLOFELD_PARAMS_ALL || !valptr) /* sanity check */
     return;
@@ -810,28 +868,43 @@ void blofeld_update_param(int parnum, int buf_no, const void *valptr)
 }
 
 /* Convert parameter value to UI representation of value */
-static int param_value_to_ui(struct blofeld_param *param, int value)
+static int
+param_value_to_ui(struct blofeld_param *param, int value)
 {
   int min = param->limits->min;
   int max = param->limits->max;
   if (min == -200) /* keytrack */
     value = value * 200 / 64 - 200; /* empirically verified against Blofeld */
-  else if (min < 0)
+  else if (max == 300) {/* arp tempo */
+    /* empirically verified against Blofeld */
+    if (value <= 25)
+      /* 0..25 map to 40..90 BPM in steps of 2 */
+      value = value * 2 + 40;
+    else if (value <= 100)
+      /* 26..100 map to 91..165 in steps of 1 */
+      value = value + 65;
+    else
+      /* 101..127 map to 170..400 in steps of 5 */
+      value = (value - 67) * 5;
+  } else if (min < 0)
     value -= 64;
   else if (min == 12) /* octave */
     value = (value - 16 ) / 12;
   return value;
 }
 
-/* Notify UI of new parameter value */
-static void update_ui_int_param(struct blofeld_param *param, int buf_no, int parval)
+/* Update integer parameter in UI. (I.e. all parameters except patch name.) */
+static void
+update_ui_int_param(struct blofeld_param *param, int buf_no, int parval)
 {
   int parnum = param - blofeld_params;
   int value = param_value_to_ui(param, parval);
   notify_ui(parnum, buf_no, &value, notify_ref);
 }
 
-static void update_ui_str_param(struct blofeld_param *param, int buf_no)
+/* Update string parameter in UI. (Only one we have is patch name.) */
+static void
+update_ui_str_param(struct blofeld_param *param, int buf_no)
 {
   /* here we assume the caller has validated that we are a bm/str parameter */
   int len = param->bm_param->bitshift;
@@ -846,18 +919,19 @@ static void update_ui_str_param(struct blofeld_param *param, int buf_no)
   notify_ui(parnum, buf_no, string, notify_ref);
 }
 
-/* update the ui for all children of the supplied param but only if the 
+/* update the ui for all children of the supplied param but only if the
  * bitmask overlaps with the supplied mask. */
-static void update_ui_int_param_children(struct blofeld_param *param,
-                                         struct blofeld_param *excepted_child,
-                                         int buf_no, int value, int mask)
+static void
+update_ui_int_param_children(struct blofeld_param *param,
+                             struct blofeld_param *excepted_child,
+                             int buf_no, int value, int mask)
 {
   struct blofeld_param *child = param->child;
   if (!child) return; /* We shouldn't be called in this case, but .. */
   dprintf("Updating ui for children of %s, mask %d\n", param->name, mask);
   /* Children of same parent are always grouped together. Parent points
    * to first child, so we just keep examining children until we find one
-   * with a different parent. 
+   * with a different parent.
    */
   do {
     int bitmask = child->bm_param->bitmask;
@@ -873,7 +947,8 @@ static void update_ui_int_param_children(struct blofeld_param *param,
 
 
 /* called from MIDI (or paste buf) when parameter updated */
-void update_ui(int parnum, int buf_no, int value)
+static void
+update_ui(int parnum, int buf_no, int value)
 {
   if (parnum >= BLOFELD_PARAMS) /* sanity check */
     return;
@@ -902,7 +977,9 @@ void update_ui(int parnum, int buf_no, int value)
   update_ui_int_param_children(param, NULL, buf_no, value, 0x7f);
 }
 
-static void update_ui_all(unsigned char *param_buf, int buf_no)
+/* Update all parameter values in UI when sound dump received. */
+static void
+update_ui_all(unsigned char *param_buf, int buf_no)
 {
   int parnum;
   static int force = 1; /* force complete update first time called */
@@ -916,10 +993,25 @@ static void update_ui_all(unsigned char *param_buf, int buf_no)
   force = 0;
 }
 
+/* Cap a value at min and max limits */
 #define CAP(value, min, max) \
   if (value < (min)) value = (min); else if (value > (max)) value = (max)
 
-static int blofeld_update_value(int parno, int old_val, int new_val, int delta)
+/* Send parameter update to Blofeld when value changed in UI. */
+/* This routine is a bit tricky to do the fact that it needs to map values
+ * suggested by the UI to values which can actually be acheived. This involves
+ * capping values at min/max, but also for parameters whose displayed range
+ * is larger than number of steps available in a 0..127 MIDI parameter,
+ * it involves mapping the suggested value to one that is actually acheivable.
+ * The mapping is handled slightly differently depending on whether we
+ * are just jumping to a new value, or attempting increase/decrease the
+ * existing value from a given old value.
+ * 'delta' is 0 when the UI attempts to jump to a certain value (in new_val)
+ * and != 0 for increments/decrements.
+ * Thus, when delta != 0 we don't really use the old_val. */
+/* Not referenced directly, but via struct, hence 'static' */
+static int
+blofeld_update_value(int parno, int old_val, int new_val, int delta)
 {
   if (parno >= BLOFELD_PARAMS_ALL) return old_val; /* sanity check */
 
@@ -928,10 +1020,10 @@ static int blofeld_update_value(int parno, int old_val, int new_val, int delta)
   int max = param->limits->max;
   int range = max - min;
   int bigrange = range >= 127; /* UI range larger than parameter value range */
-                               /* In practice, only keytrack parameters */
+                               /* i.e. keytrack and arp tempo parameters */
   int value;
 
-  /* For bigrange parameters, when jumping to a new value (delta == 0), 
+  /* For bigrange parameters, when jumping to a new value (delta == 0),
    * we want to CAP the value before locking it to the available values,
    * as the ui_to_param_value() is not required to be valid for overrange
    * values. For incremental changes, we start with the old value, which
@@ -960,14 +1052,22 @@ static int blofeld_update_value(int parno, int old_val, int new_val, int delta)
   return value;
 }
 
-void *blofeld_fetch_parameter(int parnum, int buf_no)
+/* Return pointer to parameter list for given parameter number. */
+/* We return this as a pointer, so that all parameter references, including
+ * strings, can use the same type (void *) without too much type casting. */
+/* Not referenced directly, but via struct, hence 'static' */
+void *
+blofeld_fetch_parameter(int parnum, int buf_no)
 {
   if (parnum < BLOFELD_PARAMS)
     return &parameter_list[parnum];
   return NULL;
 }
 
-static int receive_sndd(char *buf)
+/* Take sysex sound dump and update UI with all values. */
+/* Length checks etc expected to have been carried out by caller. */
+static int
+receive_sndd(char *buf)
 {
   int checksum = midi_csum(&buf[SDATA], BLOFELD_PARAMS);
   int expected = buf[SDATA + BLOFELD_PARAMS];
@@ -981,7 +1081,11 @@ static int receive_sndd(char *buf)
   return 0;
 }
 
-static void blofeld_midi_sysex(void *buffer, int len)
+/* Function to register with MIDI handler to process incoming sysex.
+ * MIDI handler has alreday verified sysex id when we get called. */
+/* Not referenced directly, but via function pointer, hence 'static' */
+static void
+blofeld_midi_sysex(void *buffer, int len)
 {
   unsigned char *buf = buffer;
 
@@ -1000,10 +1104,11 @@ static void blofeld_midi_sysex(void *buffer, int len)
   }
 }
 
-/* It's slightly different when reading from file, as we don't care about
- * the buffer number (BB) stored in the file, and we only accept sound dumps
- * (SNDD) */
-int blofeld_file_sysex(void *buffer, int len)
+/* Reading patch dumps from file is slightly different than from MIDI,
+ * as we don't care about the buffer number (BB) stored in the file,
+ * and we only accept sound dumps (SNDD), not single parameter updates */
+int
+blofeld_file_sysex(void *buffer, int len)
 {
   unsigned char *buf = buffer;
 
@@ -1014,14 +1119,20 @@ int blofeld_file_sysex(void *buffer, int len)
 }
 
 
-void blofeld_register_notify_cb(notify_cb cb, void *ref)
+/* Called at UI startup to register UI callback which will be called when
+ * we need to update parameter in UI (as a result of receiving parameter
+ * update from Blofeld (single parameter update or patch dump), from file,
+ * or from Paste operation. */
+void
+blofeld_register_notify_cb(notify_cb cb, void *ref)
 {
   notify_ui = cb;
   notify_ref = ref;
 }
 
 /* Copy selected parameters to selected paste buffer */
-void *blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf)
+void *
+blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf)
 {
   if (paste_buf >= PASTE_BUFFERS) return;
 
@@ -1033,7 +1144,8 @@ void *blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf)
 }
 
 /* Copy selected parameters from selected paste buffer */
-void *blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_buf)
+void *
+blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_buf)
 {
   int parnum;
 
@@ -1050,18 +1162,24 @@ void *blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_bu
 }
 
 /* Called when ui wants to know what the patch name parameter is called */
-const char *blofeld_get_patch_name_id(void)
+/* Not referenced directly, but via struct, hence 'static' */
+static const char *
+blofeld_get_patch_name_id(void)
 {
   return patch_name;
 }
 
 /* Called when ui wants to know what the device name parameter is called */
-const char *blofeld_get_device_name_id(void)
+/* Not referenced directly, but via struct, hence 'static' */
+static const char *
+blofeld_get_device_name_id(void)
 {
   return device_name;
 }
 
-void blofeld_init(struct param_handler *param_handler)
+/* Initialize Blofeld-specific functionality */
+void
+blofeld_init(struct param_handler *param_handler)
 {
   int idx;
 
@@ -1069,11 +1187,11 @@ void blofeld_init(struct param_handler *param_handler)
    * bm_param member !NULL (it's pointing to the struct blofeld_bitmap_param
    * for the parameter).
    * For each bm_param, we then fill in the parent, and fill in the current
-   * parameter as the child for the parent, if it is the first child 
+   * parameter as the child for the parent, if it is the first child
    * (the rest of the parameters with the same parent are assumed to lie)
    * sequentially after the first one).
    */
-  for (idx = 0; 
+  for (idx = 0;
        idx < sizeof(blofeld_params) / sizeof(struct blofeld_param);
        idx++) {
     struct blofeld_param *param = &blofeld_params[idx];
@@ -1116,18 +1234,21 @@ void blofeld_init(struct param_handler *param_handler)
     }
   }
 
-  midi_register_sysex(SYSEX_ID_WALDORF, blofeld_midi_sysex, BLOFELD_PARAMS + 10);
+  /* Tell MIDI handler we want to receive sysex. */
+  midi_register_sysex(SYSEX_ID_WALDORF, blofeld_midi_sysex,
+                      BLOFELD_PARAMS + 10);
 
   /* Fill in param_handler struct */
 
-  /* # parameters we have, including derived (e.g. bitmapped) types */
+  /* # parameters we have, including derived (e.g. "bitmapped") types */
   param_handler->params = sizeof(blofeld_params)/sizeof(blofeld_params[0]);
 
+  /* Names of things */
   param_handler->remote_midi_device = "Waldorf Blofeld";
   param_handler->name = "Blofeld";
   param_handler->ui_filename = "blofeld.glade";
 
-  /* Fill in function pointers */
+  /* Function pointers */
   param_handler->param_register_notify_cb = blofeld_register_notify_cb;
   param_handler->param_find_index = blofeld_find_index;
   param_handler->param_get_properties = blofeld_get_param_properties;
@@ -1138,3 +1259,4 @@ void blofeld_init(struct param_handler *param_handler)
   param_handler->param_get_device_name_id = blofeld_get_device_name_id;
 }
 
+/************************* End of file blofeld_params.c *********************/
