@@ -1,7 +1,7 @@
 /****************************************************************************
  * midiedit - GTK based editor for MIDI synthesizers
  *
- * dialog.h - Convenience functions for dialog boxes.
+ * midiedit.h - Core functionality used by synth-specific UI functions.
  *
  * Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
  *
@@ -20,24 +20,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ****************************************************************************/
 
-#ifndef _DIALOG_H_
-#define _DIALOG_H_
+#ifndef _MIDIEDIT_H_
+#define _MIDIEDIT_H_
 
-/* Throw up a simple report (good or bad depending on message_type) */
-void report(const gchar *message, const gchar *argument,
-            GtkMessageType message_type, GtkWidget *parent);
+/* Variables */
+extern int current_buffer_no; /* In effect, part number on the synth */
+extern int device_number; /* Sysex device number or similar specifier */
+extern char current_patch_name[];
 
-/* Ask user a question, and return TRUE if answer is affirmative (YES) */
-int query(const gchar *message, const gchar *filename, GtkWidget *parent);
+extern GtkWidget *main_window; /* Used for specifying parents, for instance */
 
-/* Throw up a file chooser dialog, specifying text of the 'open' button */
-GtkWidget *file_chooser_dialog(const gchar *title, GtkWidget *parent,
-                               GtkFileChooserAction action,
-                               const gchar *do_button_text);
+/* Functions */
+extern void set_title(void); /* Set main window title from patch name, etc. */
 
-/* Perform a file open with overwrite query if file exists */
-int open_with_overwrite_query(char *filename, GtkWidget *parent);
+#endif /* _MIDIEDIT_H_ */
 
-#endif /* _DIALOG_H_ */
-
-/**************************** End of file dialog.h **************************/
+/*************************** End of file midiedit.h ************************/
