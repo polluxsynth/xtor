@@ -906,7 +906,7 @@ chop_name(const gchar *name)
 }
 
 /* Forward declaration as this function is called from create_adjustor */
-static void add_adjustors (GList *widget_list, struct adjustor **adjustors);
+static void add_adjustors(GList *widget_list, struct adjustor **adjustors);
 
 /* Foreach function for add_adjustor, thus this function is called as a
  * result of the pre-mainloop scanning of all widgets.
@@ -1025,7 +1025,7 @@ create_adjustor(gpointer data, gpointer user_data)
 
 /* Recursively create adjustors for each parameter widget in the list */
 static void
-add_adjustors (GList *widget_list, struct adjustor **adjustors)
+add_adjustors(GList *widget_list, struct adjustor **adjustors)
 {
   g_list_foreach (widget_list, create_adjustor, adjustors);
 }
@@ -1154,7 +1154,7 @@ setup_hotkeys(GtkBuilder *builder, const gchar *store_name)
 {
   GtkListStore *store;
 
-  store = GTK_LIST_STORE( gtk_builder_get_object( builder, "KeyMappings" ) );
+  store = GTK_LIST_STORE(gtk_builder_get_object(builder, "KeyMappings"));
   if (!store) {
     dprintf("Can't find key mappings in UI file!\n");
     return;
@@ -1201,7 +1201,7 @@ main(int argc, char *argv[])
   builder_add_with_path(builder, gladename);
   builder_add_with_path(builder, "midiedit.glade");
 
-  main_window = GTK_WIDGET(gtk_builder_get_object (builder, main_window_name));
+  main_window = GTK_WIDGET(gtk_builder_get_object(builder, main_window_name));
   gtk_builder_connect_signals(builder, NULL);
 
   popup_menu = GTK_MENU(gtk_builder_get_object(builder, "Popup"));
@@ -1256,7 +1256,7 @@ main(int argc, char *argv[])
 
   set_title();
   gtk_widget_show (main_window);
-  gtk_main ();
+  gtk_main();
 
   return 0;
 }
