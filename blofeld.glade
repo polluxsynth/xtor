@@ -121,6 +121,7 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -138,6 +139,7 @@
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -155,6 +157,7 @@
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -172,6 +175,7 @@
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -188,7 +192,8 @@
                     <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
-                    <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="clicked" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -206,6 +211,7 @@
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -223,6 +229,7 @@
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -240,6 +247,7 @@
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -257,6 +265,7 @@
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -274,6 +283,7 @@
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -291,6 +301,7 @@
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -308,6 +319,7 @@
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -325,6 +337,7 @@
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -342,6 +355,7 @@
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -359,6 +373,7 @@
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -376,6 +391,7 @@
                     <property name="draw_indicator">True</property>
                     <property name="group">Buffer 1</property>
                     <signal name="pressed" handler="on_Buffer_pressed"/>
+                    <signal name="activate" handler="on_Buffer_pressed"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
