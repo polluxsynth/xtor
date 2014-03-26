@@ -679,7 +679,7 @@ key_event(GtkWidget *widget, GdkEventKey *event)
   }
 
   if (GTK_IS_ENTRY(focus) && !GTK_IS_SPIN_BUTTON(focus))
-    return FALSE; /* We let GTK handle all key events for GtkEntries*/
+    return FALSE; /* We let GTK handle all key events for GtkEntries. */
 
   if (ui_settings.midiedit_navigation && navigation(widget, focus, event))
     return TRUE;
@@ -890,8 +890,7 @@ add_to_keymaps(GList *keymaps, GtkWidget *widget, const char *param_name)
 
 /* Chop trailing digits off name
  * I.e. for "LFO 1 Shape2" return "LFO 1 Shape".
- * Returned string must be freed.
- */
+ * Returned string must be g_freed. */
 static gchar *
 chop_name(const gchar *name)
 {
@@ -908,7 +907,7 @@ chop_name(const gchar *name)
 /* Forward declaration as this function is called from create_adjustor */
 static void add_adjustors(GList *widget_list, struct adjustor **adjustors);
 
-/* Foreach function for add_adjustor, thus this function is called as a
+/* Foreach function for add_adjustors, thus this function is called as a
  * result of the pre-mainloop scanning of all widgets.
  * Originally, we just set up a GtkAdjustment for GtkRange parameters,
  * allowing them to be changed in the UI, and also setting min and max values,
