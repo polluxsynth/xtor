@@ -1,3 +1,12 @@
+Release notes for midiedit 1.3
+
+- Restructured Sound page so that oscillator level/balance is in the osc
+  boxes, rather than in separate mixer boxes, so the controls line up
+  with the oscillators.
+- Fix get buffer when selecting part number with keys. Need to press 
+  ENTER in order to cause the part to be fetched though.
+- Minor cosmetic cleanups in the code.
+
 Release notes for midiedit 1.2
 
 - Fixed osc Limit WT and Osc Sync: parameter numbers were mixed up.
