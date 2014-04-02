@@ -27,7 +27,7 @@
 #include <alloca.h>
 
 /* ALSA related stuff */
-int seq_port;
+int synth_port;
 snd_seq_t *seq;
 
 /* System exclusive. So far, we handle this at the basic level, managing
@@ -56,15 +56,15 @@ midi_init_alsa(void)
     dprintf("Couldn't open ALSA sequencer: %s\n", snd_strerror(errno));
     return NULL;
   }
-  snd_seq_set_client_name(seq, "Controller");
-  seq_port = snd_seq_create_simple_port(seq, "Midiedit",
-	 			        SND_SEQ_PORT_CAP_READ |
-				        SND_SEQ_PORT_CAP_WRITE |
-				        SND_SEQ_PORT_CAP_SUBS_READ |
-				        SND_SEQ_PORT_CAP_SUBS_WRITE,
-				        SND_SEQ_PORT_TYPE_APPLICATION);
-  if (seq_port < 0) {
-    dprintf("Couldn't create sequencer port: %s\n", snd_strerror(errno));
+  snd_seq_set_client_name(seq, "Midiedit");
+  synth_port = snd_seq_create_simple_port(seq, "Midiedit synth port",
+                                          SND_SEQ_PORT_CAP_READ |
+                                          SND_SEQ_PORT_CAP_WRITE |
+                                          SND_SEQ_PORT_CAP_SUBS_READ |
+                                          SND_SEQ_PORT_CAP_SUBS_WRITE,
+                                          SND_SEQ_PORT_TYPE_APPLICATION);
+  if (synth_port < 0) {
+    dprintf("Couldn't create synth port: %s\n", snd_strerror(errno));
     return NULL;
   }
 
@@ -119,13 +119,13 @@ midi_connect(const char *remote_device)
     dprintf("Can't get client_id: %d\n", client);
     return client;
   }
-  dprintf("Client address %d:%d\n", client, seq_port);
+  dprintf("Client address %d:%d\n", client, synth_port);
 
   snd_seq_port_subscribe_alloca(&sub);
 
   /* My address */
   my_addr.client = client;
-  my_addr.port = seq_port;
+  my_addr.port = synth_port;
 
   /* Other devices address */
   if (snd_seq_parse_address(seq, &remote_addr, saved_remote_device) < 0) {
