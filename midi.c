@@ -27,8 +27,9 @@
 #include <alloca.h>
 
 /* ALSA related stuff */
-int synth_port;
 snd_seq_t *seq;
+
+int ports[MAX_PORTS];
 
 /* System exclusive. So far, we handle this at the basic level, managing
  * up to 128 system exclusive ID's. */
@@ -39,7 +40,7 @@ struct sysex_info {
   int max_buflen;
 };
 
-struct sysex_info sysex_receivers[MAX_SYSEX_IDS];
+static struct sysex_info sysex_receivers[MAX_PORTS][MAX_SYSEX_IDS] = { 0 };
 
 /* Initialize ALSA sequencer interface, and create MIDI port */
 /* Return list of fds that main loop needs to poll() in order to detect
@@ -50,6 +51,7 @@ midi_init_alsa(void)
 {
   struct polls *polls;
   int npfd;
+  int synth_port;
   int i;
 
   if (snd_seq_open(&seq, "default", SND_SEQ_OPEN_DUPLEX, 0) < 0) {
@@ -67,6 +69,7 @@ midi_init_alsa(void)
     dprintf("Couldn't create synth port: %s\n", snd_strerror(errno));
     return NULL;
   }
+  ports[SYNTH_PORT] = synth_port;
 
   /* Fetch poll descriptor(s) for MIDI input (normally only one) */
   npfd = snd_seq_poll_descriptors_count(seq, POLLIN);
@@ -103,13 +106,17 @@ subscribe(snd_seq_port_subscribe_t *sub)
  * so the actual string must not be deallocated); subsequent calls may use
  * NULL as the remote_device. */
 int
-midi_connect(const char *remote_device)
+midi_connect(int port, const char *remote_device)
 {
   int client;
   snd_seq_port_subscribe_t *sub;
   snd_seq_addr_t my_addr;
   snd_seq_addr_t remote_addr;
   static const char *saved_remote_device = "";
+
+  if (port >= MAX_PORTS) return -1;
+
+  port = ports[port];
 
   if (remote_device)
     saved_remote_device = remote_device;
@@ -119,13 +126,13 @@ midi_connect(const char *remote_device)
     dprintf("Can't get client_id: %d\n", client);
     return client;
   }
-  dprintf("Client address %d:%d\n", client, synth_port);
+  dprintf("Client address %d:%d\n", client, port);
 
   snd_seq_port_subscribe_alloca(&sub);
 
   /* My address */
   my_addr.client = client;
-  my_addr.port = synth_port;
+  my_addr.port = port;
 
   /* Other devices address */
   if (snd_seq_parse_address(seq, &remote_addr, saved_remote_device) < 0) {
@@ -155,11 +162,13 @@ midi_connect(const char *remote_device)
 
 /* Send sysex buffer (buffer must contain complete sysex msg w/ SYSEX & EOX) */
 int
-midi_send_sysex(void *buf, int buflen)
+midi_send_sysex(int port, void *buf, int buflen)
 {
   int err;
-
   snd_seq_event_t sendev;
+
+  if (port >= MAX_PORTS) return -1;
+ 
   snd_seq_ev_clear(&sendev);
   snd_seq_ev_set_subs(&sendev);
   snd_seq_ev_set_sysex(&sendev, buflen, buf);
@@ -181,6 +190,7 @@ static void sysex_in(snd_seq_event_t *ev)
   static unsigned char *input_buf = NULL;
   int copy_len;
   unsigned char *data = (unsigned char *)ev->data.ext.ptr;
+  int port = ev->dest.port; /* which port it was sent to */
 
 #ifdef DEBUG
   {
@@ -194,7 +204,7 @@ static void sysex_in(snd_seq_event_t *ev)
   if (data[0] == SYSEX) { /* start of dump */
     dstidx = 0;
     sysex_id = data[1];
-    max_buflen = sysex_receivers[sysex_id].max_buflen;
+    max_buflen = sysex_receivers[port][sysex_id].max_buflen;
     input_buf = malloc(max_buflen);
   }
   if (sysex_id < 0) /* Just to be safe: exit if not reading sysex */
@@ -209,8 +219,8 @@ static void sysex_in(snd_seq_event_t *ev)
 
   /* When EOX received, handle to appropriate receiver */
   if (data[ev->data.ext.len - 1] == EOX) {
-    if (sysex_receivers[sysex_id].sysex_receiver)
-      sysex_receivers[sysex_id].sysex_receiver(input_buf, dstidx);
+    if (sysex_receivers[port][sysex_id].sysex_receiver)
+      sysex_receivers[port][sysex_id].sysex_receiver(input_buf, dstidx);
     sysex_id = -1;
   }
 }
@@ -239,7 +249,8 @@ midi_input(void)
         break;
       /* Example of ordinary MIDI event. We don't use this. */
       case SND_SEQ_EVENT_CONTROLLER:
-        dprintf("CC: ch %d, param %d, val %d\n", ev->data.control.channel + 1,
+        dprintf("CC: dest cli:port %d:%d, ch %d, param %d, val %d\n", 
+                ev->dest.client, ev->dest.port, ev->data.control.channel + 1,
                 ev->data.control.param, ev->data.control.value);
         break;
       default:
@@ -252,11 +263,13 @@ midi_input(void)
 /* Register sysex handler with MIDI sysex subsystem, for handling received
  * sysex messages. */
 void
-midi_register_sysex(int sysex_id, midi_sysex_receiver receiver, int max_len)
+midi_register_sysex(int port, int sysex_id, midi_sysex_receiver receiver,
+                    int max_len)
 {
-  if (sysex_id < MAX_SYSEX_IDS) {
-    sysex_receivers[sysex_id].sysex_receiver = receiver;
-    sysex_receivers[sysex_id].max_buflen = max_len;
+  if (port < MAX_PORTS && sysex_id < MAX_SYSEX_IDS) {
+    port = ports[port];
+    sysex_receivers[port][sysex_id].sysex_receiver = receiver;
+    sysex_receivers[port][sysex_id].max_buflen = max_len;
   }
 }
 

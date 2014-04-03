@@ -687,7 +687,7 @@ blofeld_get_dump(int buf_no, int devno)
                            buf_no,
                            EOX };
 
-  midi_send_sysex(sndr, sizeof(sndr));
+  midi_send_sysex(SYNTH_PORT, sndr, sizeof(sndr));
 }
 
 /* Patch dump routine for sending to synth.
@@ -695,7 +695,7 @@ blofeld_get_dump(int buf_no, int devno)
 static int
 midi_send(char *buf, int size, int userdata)
 {
-  midi_send_sysex(buf, size);
+  midi_send_sysex(SYNTH_PORT, buf, size);
 
   return 0;
 }
@@ -750,7 +750,7 @@ void send_parameter_update(int parnum, int buf_no, int devno, int value)
   dprintf("Blofeld update param: parnum %d, buf %d, value %d\n",
           parnum, buf_no, value);
   if (parnum < BLOFELD_PARAMS)
-    midi_send_sysex(sndp, sizeof(sndp));
+    midi_send_sysex(SYNTH_PORT, sndp, sizeof(sndp));
 }
 
 
@@ -1235,7 +1235,7 @@ blofeld_init(struct param_handler *param_handler)
   }
 
   /* Tell MIDI handler we want to receive sysex. */
-  midi_register_sysex(SYSEX_ID_WALDORF, blofeld_midi_sysex,
+  midi_register_sysex(SYNTH_PORT, SYSEX_ID_WALDORF, blofeld_midi_sysex,
                       BLOFELD_PARAMS + 10);
 
   /* Fill in param_handler struct */

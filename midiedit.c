@@ -156,7 +156,7 @@ on_Device_Name_activate(GtkObject *object, gpointer user_data)
   if (!strcmp(gtk_entry_get_text(device_name_entry), ""))
     gtk_entry_set_text(device_name_entry, param_handler->remote_midi_device);
 
-  if (midi_connect(gtk_entry_get_text(device_name_entry)) < 0)
+  if (midi_connect(SYNTH_PORT, gtk_entry_get_text(device_name_entry)) < 0)
     report("Can't establish MIDI connection!", "", GTK_MESSAGE_ERROR, main_window);
 ;
 }
@@ -1249,7 +1249,7 @@ main(int argc, char *argv[])
 
   param_handler->param_register_notify_cb(param_changed, NULL);
 
-  midi_connect(param_handler->remote_midi_device);
+  midi_connect(SYNTH_PORT, param_handler->remote_midi_device);
 
   block_updates = 0;
 
