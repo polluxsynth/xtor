@@ -51,7 +51,7 @@ midi_init_alsa(void)
 {
   struct polls *polls;
   int npfd;
-  int synth_port;
+  int synth_port, ctrlr_port;
   int i;
 
   if (snd_seq_open(&seq, "default", SND_SEQ_OPEN_DUPLEX, 0) < 0) {
@@ -70,6 +70,18 @@ midi_init_alsa(void)
     return NULL;
   }
   ports[SYNTH_PORT] = synth_port;
+
+  ctrlr_port = snd_seq_create_simple_port(seq, "Midiedit controller port",
+                                          SND_SEQ_PORT_CAP_READ |
+                                          SND_SEQ_PORT_CAP_WRITE |
+                                          SND_SEQ_PORT_CAP_SUBS_READ |
+                                          SND_SEQ_PORT_CAP_SUBS_WRITE,
+                                          SND_SEQ_PORT_TYPE_APPLICATION);
+  if (ctrlr_port < 0) {
+    dprintf("Couldn't create controller port: %s\n", snd_strerror(errno));
+    return NULL;
+  }
+  ports[CTRLR_PORT] = ctrlr_port;
 
   /* Fetch poll descriptor(s) for MIDI input (normally only one) */
   npfd = snd_seq_poll_descriptors_count(seq, POLLIN);
@@ -112,14 +124,17 @@ midi_connect(int port, const char *remote_device)
   snd_seq_port_subscribe_t *sub;
   snd_seq_addr_t my_addr;
   snd_seq_addr_t remote_addr;
-  static const char *saved_remote_device = "";
+  static const char *saved_remote_device[MAX_PORTS] = { 0 };
 
   if (port >= MAX_PORTS) return -1;
 
   port = ports[port];
 
   if (remote_device)
-    saved_remote_device = remote_device;
+    saved_remote_device[port] = remote_device;
+  else if (!saved_remote_device[port])
+    /* Set to "" if first call does not intitialize it to remote_device */
+    saved_remote_device[port] = "";
 
   client = snd_seq_client_id(seq);
   if (client < 0) {
@@ -135,8 +150,8 @@ midi_connect(int port, const char *remote_device)
   my_addr.port = port;
 
   /* Other devices address */
-  if (snd_seq_parse_address(seq, &remote_addr, saved_remote_device) < 0) {
-    dprintf("Can't locate destination device %s\n", saved_remote_device);
+  if (snd_seq_parse_address(seq, &remote_addr, saved_remote_device[port]) < 0) {
+    dprintf("Can't locate destination device %s\n", saved_remote_device[port]);
     return -1;
   }
 
