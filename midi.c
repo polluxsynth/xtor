@@ -42,6 +42,12 @@ struct sysex_info {
 
 static struct sysex_info sysex_receivers[MAX_PORTS][MAX_SYSEX_IDS] = { 0 };
 
+struct cc_info {
+  midi_cc_receiver cc_receiver;
+};
+
+static struct cc_info cc_receivers[MAX_PORTS] = { 0 };
+
 /* Initialize ALSA sequencer interface, and create MIDI port */
 /* Return list of fds that main loop needs to poll() in order to detect
  * activity. */
@@ -262,11 +268,15 @@ midi_input(void)
         dprintf("Sysex: length %d\n", ev->data.ext.len);
         sysex_in(ev);
         break;
-      /* Example of ordinary MIDI event. We don't use this. */
       case SND_SEQ_EVENT_CONTROLLER:
         dprintf("CC: dest cli:port %d:%d, ch %d, param %d, val %d\n", 
                 ev->dest.client, ev->dest.port, ev->data.control.channel + 1,
                 ev->data.control.param, ev->data.control.value);
+        int port = ev->dest.port;
+        if (cc_receivers[port].cc_receiver)
+          cc_receivers[port].cc_receiver(ev->data.control.channel,
+                                         ev->data.control.param,
+                                         ev->data.control.value);
         break;
       default:
         break;
@@ -275,8 +285,8 @@ midi_input(void)
 }
 
 
-/* Register sysex handler with MIDI sysex subsystem, for handling received
- * sysex messages. */
+/* Register sysex handler with MIDI subsystem, for handling received sysex
+ * messages. */
 void
 midi_register_sysex(int port, int sysex_id, midi_sysex_receiver receiver,
                     int max_len)
@@ -285,6 +295,18 @@ midi_register_sysex(int port, int sysex_id, midi_sysex_receiver receiver,
     port = ports[port];
     sysex_receivers[port][sysex_id].sysex_receiver = receiver;
     sysex_receivers[port][sysex_id].max_buflen = max_len;
+  }
+}
+
+
+/* Register control change handler with MIDI subsystem, for handling received
+ * control change messages. */
+void
+midi_register_cc(int port, midi_cc_receiver receiver)
+{
+  if (port < MAX_PORTS) {
+    port = ports[port];
+    cc_receivers[port].cc_receiver = receiver;
   }
 }
 

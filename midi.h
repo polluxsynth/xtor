@@ -45,6 +45,9 @@ struct polls
 /* Sysex receiver type */
 typedef void (*midi_sysex_receiver)(void *buf, int len);
 
+/* Control change receiver type */
+typedef void (*midi_cc_receiver)(int chan, int controller_no, int value);
+
 /* Initialize ALSA sequencer interface, and create MIDI port */
 struct polls *midi_init_alsa(void);
 
@@ -60,6 +63,9 @@ int midi_connect(int port, const char *remote_device);
 /* Register sysex receiver */
 void midi_register_sysex(int port, int sysex_id, midi_sysex_receiver receiver,
                          int max_len);
+
+/* Register sysex receiver */
+void midi_register_cc(int port, midi_cc_receiver receiver);
 
 #endif /* _MIDI_H_ */
 
