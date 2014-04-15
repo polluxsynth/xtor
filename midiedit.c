@@ -34,6 +34,8 @@
 #include "dialog.h"
 #include "param.h"
 #include "blofeld_params.h"
+#include "controller.h"
+#include "nocturn.h"
 #include "midi.h"
 
 #include "debug.h"
@@ -47,6 +49,10 @@ GtkWidget *about_window = NULL;
 /* Parameter handler */
 struct param_handler phandler;
 struct param_handler *param_handler = &phandler;
+
+/* MIDI controller surface */
+struct controller ctrler;
+struct controller *controller = &ctrler;
 
 struct adjustor {
   const char *id; /* name of parameter, e.g. "Filter 1 Cutoff" */
@@ -1190,6 +1196,9 @@ main(int argc, char *argv[])
 
   memset(param_handler, 0, sizeof(*param_handler));
   blofeld_init(param_handler);
+
+  memset(controller, 0, sizeof(*controller));
+  nocturn_init(controller);
 
   gladename = param_handler->ui_filename;
   if (argv[1]) gladename = argv[1];
