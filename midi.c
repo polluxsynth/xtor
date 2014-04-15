@@ -48,6 +48,17 @@ struct cc_info {
 
 static struct cc_info cc_receivers[MAX_PORTS] = { 0 };
 
+/* Convert port id from ALSA to local port index 0 .. */
+static int
+myport(int port)
+{
+  int i;
+
+  for (i = 0; i < MAX_PORTS; i++)
+    if (ports[i] == port) return i;
+  return -1;
+}
+
 /* Initialize ALSA sequencer interface, and create MIDI port */
 /* Return list of fds that main loop needs to poll() in order to detect
  * activity. */
@@ -134,8 +145,6 @@ midi_connect(int port, const char *remote_device)
 
   if (port >= MAX_PORTS) return -1;
 
-  port = ports[port];
-
   if (remote_device)
     saved_remote_device[port] = remote_device;
   else if (!saved_remote_device[port])
@@ -153,7 +162,7 @@ midi_connect(int port, const char *remote_device)
 
   /* My address */
   my_addr.client = client;
-  my_addr.port = port;
+  my_addr.port = ports[port];
 
   /* Other devices address */
   if (snd_seq_parse_address(seq, &remote_addr, saved_remote_device[port]) < 0) {
@@ -211,7 +220,8 @@ static void sysex_in(snd_seq_event_t *ev)
   static unsigned char *input_buf = NULL;
   int copy_len;
   unsigned char *data = (unsigned char *)ev->data.ext.ptr;
-  int port = ev->dest.port; /* which port it was sent to */
+  int port = myport(ev->dest.port); /* which port it was sent to */
+  if (port < 0) return; /* port not found */
 
 #ifdef DEBUG
   {
@@ -272,11 +282,13 @@ midi_input(void)
         dprintf("CC: dest cli:port %d:%d, ch %d, param %d, val %d\n", 
                 ev->dest.client, ev->dest.port, ev->data.control.channel + 1,
                 ev->data.control.param, ev->data.control.value);
-        int port = ev->dest.port;
-        if (cc_receivers[port].cc_receiver)
+        int port = myport(ev->dest.port);
+        if (port < 0) break; /* port not found */
+        if (cc_receivers[port].cc_receiver) {
           cc_receivers[port].cc_receiver(ev->data.control.channel,
                                          ev->data.control.param,
                                          ev->data.control.value);
+        }
         break;
       default:
         break;
@@ -292,7 +304,6 @@ midi_register_sysex(int port, int sysex_id, midi_sysex_receiver receiver,
                     int max_len)
 {
   if (port < MAX_PORTS && sysex_id < MAX_SYSEX_IDS) {
-    port = ports[port];
     sysex_receivers[port][sysex_id].sysex_receiver = receiver;
     sysex_receivers[port][sysex_id].max_buflen = max_len;
   }
@@ -305,7 +316,6 @@ void
 midi_register_cc(int port, midi_cc_receiver receiver)
 {
   if (port < MAX_PORTS) {
-    port = ports[port];
     cc_receivers[port].cc_receiver = receiver;
   }
 }
