@@ -1259,6 +1259,7 @@ main(int argc, char *argv[])
   param_handler->param_register_notify_cb(param_changed, NULL);
 
   midi_connect(SYNTH_PORT, param_handler->remote_midi_device);
+  midi_connect(CTRLR_PORT, controller->remote_midi_device);
 
   block_updates = 0;
 

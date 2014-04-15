@@ -29,11 +29,21 @@
 
 #include "debug.h"
 
+static void
+nocturn_cc_receiver(int chan, int controller_no, int value)
+{
+  if (controller_no == NOCTURN_CC_SPEED_DIAL)
+    printf("Receive chan %d, CC %d:%d\n", chan, controller_no, value);
+}
+
 void
 nocturn_init(struct controller *controller)
 {
+  /* Tell MIDI handler we want to receive CC. */
+  midi_register_cc(CTRLR_PORT, nocturn_cc_receiver);
+
   controller->remote_midi_device = "Nocturn";
   controller->map_filename = "nocturn.glade";
 }
 
-/************************* End of file nocturn.h ****************************/
+/************************* End of file nocturn.c ****************************/
