@@ -29,13 +29,23 @@
 
 #include "debug.h"
 
+static controller_notify_cb notify_ui = NULL;
+static void *notify_ref;
+
+static void
+nocturn_register_notify_cb(controller_notify_cb cb, void *ref)
+{
+  notify_ui = cb;
+  notify_ref = ref;
+}
+
 static void
 nocturn_cc_receiver(int chan, int controller_no, int value)
 {
   if (controller_no == NOCTURN_CC_SPEED_DIAL) {
     printf("Receive chan %d, CC %d:%d\n", chan, controller_no, value);
     if (value & 64) value = value - 128; /* sign extend */
-    controller_increment(value);
+    if (notify_ui) notify_ui(controller_no, value, notify_ref);
   }
 }
 
@@ -44,6 +54,8 @@ nocturn_init(struct controller *controller)
 {
   /* Tell MIDI handler we want to receive CC. */
   midi_register_cc(CTRLR_PORT, nocturn_cc_receiver);
+
+  controller->controller_register_notify_cb = nocturn_register_notify_cb;
 
   controller->remote_midi_device = "Nocturn";
   controller->map_filename = "nocturn.glade";

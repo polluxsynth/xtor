@@ -698,8 +698,8 @@ key_event(GtkWidget *widget, GdkEventKey *event)
 
 
 /* Handle increment/decrement from MIDI controller */
-void
-controller_increment(int delta)
+static void
+controller_increment(int controller_number, int delta, void *ref)
 {
   int dir = 1;
   int steps;
@@ -1282,6 +1282,8 @@ main(int argc, char *argv[])
   create_adjustors_list(param_handler->params, main_window);
 
   param_handler->param_register_notify_cb(param_changed, NULL);
+
+  controller->controller_register_notify_cb(controller_increment, NULL);
 
   midi_connect(SYNTH_PORT, param_handler->remote_midi_device);
   midi_connect(CTRLR_PORT, controller->remote_midi_device);
