@@ -618,7 +618,7 @@ int paste_buffer[PASTE_BUFFERS][BLOFELD_PARAMS];
 int device_number = 0;
 
 /* Callback and parameter for parameter updates */
-notify_cb notify_ui;
+notify_cb notify_ui = NULL;
 void *notify_ref;
 
 /* Fint index in parameter list of parameter with a given name. */
@@ -899,7 +899,7 @@ update_ui_int_param(struct blofeld_param *param, int buf_no, int parval)
 {
   int parnum = param - blofeld_params;
   int value = param_value_to_ui(param, parval);
-  notify_ui(parnum, buf_no, &value, notify_ref);
+  if (notify_ui) notify_ui(parnum, buf_no, &value, notify_ref);
 }
 
 /* Update string parameter in UI. (Only one we have is patch name.) */
@@ -916,7 +916,7 @@ update_ui_str_param(struct blofeld_param *param, int buf_no)
   for (i = 0; i < len; i++)
     string[i] = (unsigned char) parameter_list[parent_parnum + i];
   string[len] = '\0';
-  notify_ui(parnum, buf_no, string, notify_ref);
+  if (notify_ui) notify_ui(parnum, buf_no, string, notify_ref);
 }
 
 /* update the ui for all children of the supplied param but only if the
