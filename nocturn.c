@@ -32,8 +32,11 @@
 static void
 nocturn_cc_receiver(int chan, int controller_no, int value)
 {
-  if (controller_no == NOCTURN_CC_SPEED_DIAL)
+  if (controller_no == NOCTURN_CC_SPEED_DIAL) {
     printf("Receive chan %d, CC %d:%d\n", chan, controller_no, value);
+    if (value & 64) value = value - 128; /* sign extend */
+    controller_increment(value);
+  }
 }
 
 void

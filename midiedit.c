@@ -697,6 +697,31 @@ key_event(GtkWidget *widget, GdkEventKey *event)
 }
 
 
+/* Handle increment/decrement from MIDI controller */
+void
+controller_increment(int delta)
+{
+  int dir = 1;
+  int steps;
+
+  if (!main_window) return;
+  GtkWidget *focus = GTK_WINDOW(main_window)->focus_widget;
+  if (!focus) return;
+
+  dprintf("Controller increment %d, focus %s, name %s\n", delta,
+          gtk_widget_get_name(focus),
+          gtk_buildable_get_name(GTK_BUILDABLE(focus)));
+
+  if (delta < 0) {
+    dir = -1;
+    delta = -delta;
+  }
+
+  for (steps = 0; steps < delta; steps++)
+    change_value(focus, 0, dir);
+}
+
+
 /* Handle mouse scrolling events arriving in slider widgets */
 static gboolean
 scroll_event(GtkWidget *widget, GdkEventScroll *event)
