@@ -39,13 +39,26 @@ nocturn_register_notify_cb(controller_notify_cb cb, void *ref)
   notify_ref = ref;
 }
 
+/* Scale factor for speed dial. Every click seems to produce two steps */
+int speed_dial_scale = 2;
+/* When turning quickly, incrementors output steps larger than 1, but
+ * not that much larger, so apply an accelleration factor in this case. */
+int incrementor_acceleration = 10;
+
 static void
 nocturn_cc_receiver(int chan, int controller_no, int value)
 {
+  static speed_dial_accumulator = 0;
   if (controller_no == NOCTURN_CC_SPEED_DIAL) {
     printf("Receive chan %d, CC %d:%d\n", chan, controller_no, value);
     if (value & 64) value = value - 128; /* sign extend */
+    if (value > 1 || value < -1) value *= incrementor_acceleration;
+    speed_dial_accumulator += value;
+    if (speed_dial_accumulator > -speed_dial_scale &&
+        speed_dial_accumulator < speed_dial_scale) return;
+    value = speed_dial_accumulator / speed_dial_scale;
     if (notify_ui) notify_ui(controller_no, value, notify_ref);
+    speed_dial_accumulator -= value * speed_dial_scale;
   }
 }
 
