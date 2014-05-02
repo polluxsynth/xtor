@@ -961,7 +961,6 @@ find_widget_with_id(GtkWidget *widget, const char *id)
   return result;
 }
 
-
 /* GFunc for iterating over keymaps when adding new widgets in
  * create_adjustor. */
 static void
@@ -1011,6 +1010,28 @@ add_to_keymaps(GList *keymaps, GtkWidget *widget, const char *param_name)
 }
 
 
+/* Add new widget and associated adjustor to the current knobmap */
+/* Basically, each UI frame has a knobmap mapping controller knobs to widgets */
+static void *
+add_knobmap(void *knobmap, GtkWidget *widget, struct adjustor *adjustor)
+{
+  struct knob_descriptor *knob_description = g_new0(struct knob_descriptor, 1);
+  knob_description->widget = widget;
+  knob_description->ref = adjustor;
+  return knob_mapper->container_add_widget(knobmap, knob_description);
+}
+
+/* Add new frame / knob map mapping to our list of frame-knobs maps */
+static GList *
+add_new_f_k_map(GList *f_k_maps, GtkFrame *frame, struct f_k_map *knobmap)
+{
+ struct f_k_map *new_f_k_map = g_new0(struct f_k_map, 1);
+ new_f_k_map->frame = frame;
+ new_f_k_map->knobmap = knobmap;
+ return g_list_prepend(f_k_maps, new_f_k_map);
+}
+
+
 /* Chop trailing digits off name
  * I.e. for "LFO 1 Shape2" return "LFO 1 Shape".
  * Returned string must be g_freed. */
@@ -1025,17 +1046,6 @@ chop_name(const gchar *name)
     name_end[1] = '\0';
   }
   return new_name;
-}
-
- /* Add new frame / knob map mapping to our list of frame-knobs maps */
-static GList *
-add_new_f_k_map(GList *f_k_maps, GtkFrame *current_frame,
-                struct f_k_map *current_knobmap)
-{
- struct f_k_map *new_f_k_map = g_new0(struct f_k_map, 1);
- new_f_k_map->frame = current_frame;
- new_f_k_map->knobmap = current_knobmap;
- return g_list_prepend(f_k_maps, new_f_k_map);
 }
 
 /* Forward declaration as this function is called from create_adjustor */
@@ -1128,12 +1138,8 @@ printf("%s belongs to %s\n", gtk_buildable_get_name(GTK_BUILDABLE(this)), curren
       } else
         eprintf("Warning: GtkRange %s has no adjustment\n", id);
 
-      struct knob_descriptor *knob_description =
-        g_new0(struct knob_descriptor, 1);
-      knob_description->widget = this;
-      knob_description->ref = adjustor;
-      current_knobmap = knob_mapper->container_add_widget(current_knobmap,
-                                                          knob_description);
+      /* Add it to current knobmap */
+      current_knobmap = add_knobmap(current_knobmap, this, adjustor);
 
       /* Handle update of value when user attempts to change value
        * (be it using mouse or keys) */
