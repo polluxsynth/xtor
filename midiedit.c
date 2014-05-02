@@ -35,6 +35,7 @@
 #include "param.h"
 #include "blofeld_params.h"
 #include "controller.h"
+#include "knob_mapper.h"
 #include "nocturn.h"
 #include "midi.h"
 
@@ -54,6 +55,13 @@ struct param_handler *param_handler = &phandler;
 struct controller ctrler;
 struct controller *controller = &ctrler;
 
+/* Controller knob mapping */
+struct knob_mapper kmap;
+struct knob_mapper *knob_mapper = &kmap;
+
+/* Each adjustor represent a synth parameter, and contains a list of
+ * widgets which govern that parameter, making it possible to have
+ * the same parameter adjusted by widgets in different places. */
 struct adjustor {
   const char *id; /* name of parameter, e.g. "Filter 1 Cutoff" */
   int parnum;  /* parameter number. Redundant, but practical */
@@ -62,6 +70,16 @@ struct adjustor {
 
 /* List of all adjustors, indexed by parameter number. */
 struct adjustor **adjustors;
+
+/* A f_k_map contains a frame, representing a synth module such as
+ * Osc 1 or Filt Env, and a reference to a knob map for that frame. */
+struct f_k_map {
+  GtkFrame *frame;
+  void *knobmap;
+};
+
+/* List of all frame maps */
+GList *f_k_maps = NULL;
 
 /* used to temporarily block updates to MIDI */
 int block_updates;
@@ -696,8 +714,61 @@ key_event(GtkWidget *widget, GdkEventKey *event)
   return FALSE; /* key not handled - defer to GTK defaults */
 }
 
+/* GCompareFunc for find_frame_in_knob_maps */
+static int
+same_frame(gconstpointer data, gconstpointer user_data)
+{
+  const struct f_k_map *f_k_map = data;
+  const GtkFrame *searched_frame = user_data;
+
+  return !(f_k_map->frame == searched_frame);
+}
+
+/* Find frame in our list of frame-knobs maps mapping given frame */
+static struct f_k_map *
+find_frame_in_knob_maps(GList *f_k_maps, GtkFrame *frame)
+{
+  GList *found_map = g_list_find_custom(f_k_maps, frame, same_frame);
+  if (!found_map) return NULL;
+  return found_map->data;
+}
+
+
+static GtkWidget *
+get_parent_frame(GtkWidget *widget)
+{
+  printf("Scanning for parent for %s (%p)\n",
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
+  do {
+    widget = gtk_widget_get_parent(widget);
+  } while (widget && !GTK_IS_FRAME(widget));
+
+  if (widget)
+    printf("Found %s: %s (%p)\n",
+            gtk_widget_get_name(widget),
+            gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
+
+  return widget;
+}
+
+#if 0 /* need this ? */
+static void
+show_widget(gpointer data, gpointer user_data)
+{
+  if (!GTK_IS_WIDGET(data)) return;
+
+  GtkWidget *widget = data;
+
+  printf("%s: %s (%p)\n",
+         gtk_widget_get_name(widget),
+         gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
+}
+#endif
 
 /* Handle increment/decrement from MIDI controller */
+/* Controller #0 controls the currently focused widget,
+ * controllers #1..8 control the leftmost adjustments in the current frame.
+ */
 static void
 controller_increment(int controller_number, int delta, void *ref)
 {
@@ -708,7 +779,8 @@ controller_increment(int controller_number, int delta, void *ref)
   GtkWidget *focus = GTK_WINDOW(main_window)->focus_widget;
   if (!focus) return;
 
-  dprintf("Controller increment %d, focus %s, name %s\n", delta,
+  dprintf("Controller #%d increment %d, focus %s, name %s\n",
+          controller_number, delta,
           gtk_widget_get_name(focus),
           gtk_buildable_get_name(GTK_BUILDABLE(focus)));
 
@@ -717,8 +789,28 @@ controller_increment(int controller_number, int delta, void *ref)
     delta = -delta;
   }
 
-  for (steps = 0; steps < delta; steps++)
-    change_value(focus, 0, dir);
+  if (controller_number == 0) { /* focused parameter */
+    for (steps = 0; steps < delta; steps++)
+      change_value(focus, 0, dir);
+    return;
+  }
+
+  GtkWidget *parent_frame = get_parent_frame(focus);
+printf("Parent frame %p:%s\n", parent_frame, gtk_buildable_get_name(GTK_BUILDABLE(parent_frame)));
+  if (!parent_frame || !GTK_IS_FRAME(parent_frame)) return;
+  struct f_k_map *f_k_map = find_frame_in_knob_maps(f_k_maps, GTK_FRAME(parent_frame));
+printf("Frame map %p\n", f_k_map);
+  if (!f_k_map) return;
+printf("Frame map: frame %p:%s:%s, knobmap %p\n", f_k_map->frame, gtk_widget_get_name(GTK_WIDGET(f_k_map->frame)), gtk_buildable_get_name(GTK_BUILDABLE(f_k_map->frame)), f_k_map->knobmap);
+  struct knob_descriptor *knob_descriptor = knob_mapper->knob(f_k_map->knobmap, controller_number - 1);
+printf("Knob descriptor %p\n", knob_descriptor);
+  if (!knob_descriptor) return;
+printf("Widget %p, ref %p\n", knob_descriptor->widget, knob_descriptor->ref);
+  struct adjustor *adj = knob_descriptor->ref;
+  printf("Controller %d referencing %s:%s, parno %d\n", controller_number,
+         gtk_widget_get_name(knob_descriptor->widget),
+         gtk_buildable_get_name(GTK_BUILDABLE(knob_descriptor->widget)),
+         0); /*adj->parnum); */ 
 }
 
 
@@ -935,6 +1027,17 @@ chop_name(const gchar *name)
   return new_name;
 }
 
+ /* Add new frame / knob map mapping to our list of frame-knobs maps */
+static GList *
+add_new_f_k_map(GList *f_k_maps, GtkFrame *current_frame,
+                struct f_k_map *current_knobmap)
+{
+ struct f_k_map *new_f_k_map = g_new0(struct f_k_map, 1);
+ new_f_k_map->frame = current_frame;
+ new_f_k_map->knobmap = current_knobmap;
+ return g_list_prepend(f_k_maps, new_f_k_map);
+}
+
 /* Forward declaration as this function is called from create_adjustor */
 static void add_adjustors(GList *widget_list, struct adjustor **adjustors);
 
@@ -960,6 +1063,8 @@ create_adjustor(gpointer data, gpointer user_data)
   struct adjustor **adjustors = user_data;
   int parnum;
   static const char *patch_name = NULL;
+  static GtkFrame *current_frame = NULL;
+  static void *current_knobmap;
 
   const gchar *name = gtk_buildable_get_name(GTK_BUILDABLE(this));
   gchar *id = chop_name(name);
@@ -993,6 +1098,7 @@ create_adjustor(gpointer data, gpointer user_data)
 
   if (id && (parnum = param_handler->param_find_index(id)) >= 0) {
     dprintf("has parameter\n");
+printf("%s belongs to %s\n", gtk_buildable_get_name(GTK_BUILDABLE(this)), current_frame ? gtk_buildable_get_name(GTK_BUILDABLE(current_frame)) : "nothing");
     struct adjustor *adjustor = adjustors[parnum];
     if (!adjustors[parnum]) {
       /* no adjustor for this parameter yet; create one */
@@ -1022,6 +1128,13 @@ create_adjustor(gpointer data, gpointer user_data)
       } else
         eprintf("Warning: GtkRange %s has no adjustment\n", id);
 
+      struct knob_descriptor *knob_description =
+        g_new0(struct knob_descriptor, 1);
+      knob_description->widget = this;
+      knob_description->ref = adjustor;
+      current_knobmap = knob_mapper->container_add_widget(current_knobmap,
+                                                          knob_description);
+
       /* Handle update of value when user attempts to change value
        * (be it using mouse or keys) */
       g_signal_connect(this, "change-value", G_CALLBACK(on_change_value), adjustor);
@@ -1049,7 +1162,30 @@ create_adjustor(gpointer data, gpointer user_data)
 
   if (GTK_IS_CONTAINER(this)) {
      dprintf("It's a container\n");
+
+     if (GTK_IS_FRAME(this)) {
+       /* We expect there to be no frames within frames in our UI, as a frame
+        * constitutes a 'synth module'. If we need to change this, we need
+        * to augment this test with something, such as the buildable_name
+        * ending with "Frame" for instance. */
+       printf("Found %s: %s (%p)\n",
+              gtk_widget_get_name(this),
+              gtk_buildable_get_name(GTK_BUILDABLE(this)), this);
+       current_knobmap = knob_mapper->container_new(GTK_CONTAINER(this));
+       current_frame = GTK_FRAME(this);
+     }
+
      add_adjustors(gtk_container_get_children(GTK_CONTAINER(this)), adjustors);
+
+     if (GTK_IS_FRAME(this)) {
+       printf("Done with %s: %s (%p)\n",
+              gtk_widget_get_name(this),
+              gtk_buildable_get_name(GTK_BUILDABLE(this)), this);
+       current_knobmap = knob_mapper->container_done(current_knobmap);
+       if (current_knobmap)
+         f_k_maps = add_new_f_k_map(f_k_maps, current_frame, current_knobmap);
+       current_frame = NULL;
+     }
   }
 }
 
@@ -1224,6 +1360,9 @@ main(int argc, char *argv[])
 
   memset(controller, 0, sizeof(*controller));
   nocturn_init(controller);
+
+  memset(knob_mapper, 0, sizeof(*knob_mapper));
+  blofeld_knobs_init(knob_mapper);
 
   gladename = param_handler->ui_filename;
   if (argv[1]) gladename = argv[1];

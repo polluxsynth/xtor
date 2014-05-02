@@ -25,6 +25,13 @@
 
 #include <gtk/gtk.h>
 
+/* Description of a knob in our context. */
+struct knob_descriptor {
+  GtkWidget *widget; /* Pointer to widget corresponding to this knob. */
+  void *ref; /* Ultimately a pointer to the adjustor (see midiedit.c),
+              * but as a knob mapper we don't really know that. */
+};
+
 /* Callback for notifying UI of incoming parameter value changes */
 typedef void (*knob_notify_cb)(void *widget_ref, int delta, void *ref);
 
@@ -36,12 +43,13 @@ typedef void (*knob_notify_cb)(void *widget_ref, int delta, void *ref);
 
 struct knob_mapper {
   /* Start-up-time configuraton */
-  void (*new_frame)(GtkWidget *frame);
-  void *(*frame_done)(GtkWidget *frame);
-  void (*frame_add)(GtkWidget *frame, void *widget_ref);
+  void *(*container_new)(GtkContainer *frame);
+  void *(*container_done)(void *knobmap);
+  void *(*container_add_widget)(void *knobmap,
+                                struct knob_descriptor* knob_description);
   void (*register_notify_cb)(knob_notify_cb cb, void *ref);
   /* Run-time mapping */
-  void (*knob)(void *ref, int knob_no);
+  struct knob_descriptor *(*knob)(void *ref, int knob_no);
 };
 
 #endif /* _KNOBS_H_ */
