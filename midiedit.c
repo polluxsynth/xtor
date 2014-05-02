@@ -726,7 +726,7 @@ same_frame(gconstpointer data, gconstpointer user_data)
 
 /* Find frame in our list of frame-knobs maps mapping given frame */
 static struct f_k_map *
-find_frame_in_knob_maps(GList *f_k_maps, GtkFrame *frame)
+find_frame_in_f_k_maps(GList *f_k_maps, GtkFrame *frame)
 {
   GList *found_map = g_list_find_custom(f_k_maps, frame, same_frame);
   if (!found_map) return NULL;
@@ -765,6 +765,38 @@ show_widget(gpointer data, gpointer user_data)
 }
 #endif
 
+/* Get widget corresponding to currently turned knob */
+static GtkWidget *
+get_knob_widget(GtkWidget *parent_frame, int controller_number)
+{
+/* TODO: optimize this so we don't go through the whole rigmarole each time */
+printf("Parent frame %p:%s\n", parent_frame, gtk_buildable_get_name(GTK_BUILDABLE(parent_frame)));
+
+  /* Search our f_k_maps for the current frame */
+  struct f_k_map *f_k_map = find_frame_in_f_k_maps(f_k_maps, GTK_FRAME(parent_frame));
+printf("f_k_map %p\n", f_k_map);
+  if (!f_k_map) return NULL;
+printf("f_k_map: frame %p:%s:%s, knobmap %p\n", f_k_map->frame, gtk_widget_get_name(GTK_WIDGET(f_k_map->frame)), gtk_buildable_get_name(GTK_BUILDABLE(f_k_map->frame)), f_k_map->knobmap);
+
+  /* Get the knob_descriptor for the current knob (controller_number)
+   * from the knob_mapper. */
+  struct knob_descriptor *knob_descriptor = 
+    knob_mapper->knob(f_k_map->knobmap, controller_number - 1);
+printf("Knob descriptor %p\n", knob_descriptor);
+  if (!knob_descriptor) return NULL;
+
+  /* Finally, extract the widget from the knob_descriptor */
+  GtkWidget *widget = knob_descriptor->widget;
+  struct adjustor *adj = knob_descriptor->ref;
+printf("Widget %p, ref %p\n", widget, adj);
+  printf("Controller %d referencing %s:%s, parno %d\n", controller_number,
+         gtk_widget_get_name(widget),
+         gtk_buildable_get_name(GTK_BUILDABLE(widget)),
+         adj->parnum);
+
+  return widget;
+}
+
 /* Handle increment/decrement from MIDI controller */
 /* Controller #0 controls the currently focused widget,
  * controllers #1..8 control the leftmost adjustments in the current frame.
@@ -796,21 +828,12 @@ controller_increment(int controller_number, int delta, void *ref)
   }
 
   GtkWidget *parent_frame = get_parent_frame(focus);
-printf("Parent frame %p:%s\n", parent_frame, gtk_buildable_get_name(GTK_BUILDABLE(parent_frame)));
-  if (!parent_frame || !GTK_IS_FRAME(parent_frame)) return;
-  struct f_k_map *f_k_map = find_frame_in_knob_maps(f_k_maps, GTK_FRAME(parent_frame));
-printf("Frame map %p\n", f_k_map);
-  if (!f_k_map) return;
-printf("Frame map: frame %p:%s:%s, knobmap %p\n", f_k_map->frame, gtk_widget_get_name(GTK_WIDGET(f_k_map->frame)), gtk_buildable_get_name(GTK_BUILDABLE(f_k_map->frame)), f_k_map->knobmap);
-  struct knob_descriptor *knob_descriptor = knob_mapper->knob(f_k_map->knobmap, controller_number - 1);
-printf("Knob descriptor %p\n", knob_descriptor);
-  if (!knob_descriptor) return;
-printf("Widget %p, ref %p\n", knob_descriptor->widget, knob_descriptor->ref);
-  struct adjustor *adj = knob_descriptor->ref;
-  printf("Controller %d referencing %s:%s, parno %d\n", controller_number,
-         gtk_widget_get_name(knob_descriptor->widget),
-         gtk_buildable_get_name(GTK_BUILDABLE(knob_descriptor->widget)),
-         0); /*adj->parnum); */ 
+  if (!parent_frame) return;
+
+  GtkWidget *editing_widget = get_knob_widget(parent_frame, controller_number);
+  if (!editing_widget) return;
+
+  change_value(editing_widget, 0, dir);
 }
 
 
