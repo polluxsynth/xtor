@@ -57,8 +57,15 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
     if (speed_dial_accumulator > -speed_dial_scale &&
         speed_dial_accumulator < speed_dial_scale) return;
     value = speed_dial_accumulator / speed_dial_scale;
-    if (notify_ui) notify_ui(controller_no, value, notify_ref);
+    if (notify_ui) notify_ui(0, value, notify_ref);
     speed_dial_accumulator -= value * speed_dial_scale;
+  } else if (controller_no >= NOCTURN_CC_INCREMENTOR(0) &&
+             controller_no <= NOCTURN_CC_INCREMENTOR(7))
+  {
+    printf("Receive chan %d, CC %d:%d\n", chan, controller_no, value);
+    if (value & 64) value = value - 128; /* sign extend */
+    if (notify_ui) notify_ui(controller_no - NOCTURN_CC_INCREMENTOR0 + 1,
+                            value, notify_ref);
   }
 }
 
