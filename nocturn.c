@@ -39,8 +39,10 @@ nocturn_register_notify_cb(controller_notify_cb cb, void *ref)
   notify_ref = ref;
 }
 
-/* Scale factor for speed dial. Every click seems to produce two steps */
-int speed_dial_scale = 2;
+/* Scale factor for knobs. 
+ * For speed dial, every click seems to produce two steps; use same
+ * scaling for all */
+int knob_scale = 2;
 /* When turning quickly, incrementors output steps larger than 1, but
  * not that much larger, so apply an accelleration factor in this case. */
 int incrementor_acceleration = 10;
@@ -48,24 +50,26 @@ int incrementor_acceleration = 10;
 static void
 nocturn_cc_receiver(int chan, int controller_no, int value)
 {
+  int knob = -1;
   static speed_dial_accumulator = 0;
-  if (controller_no == NOCTURN_CC_SPEED_DIAL) {
+  static knob_accumulator[NOCTURN_CC_INCREMENTORS + 1] = { 0 };
+
+  if (controller_no == NOCTURN_CC_SPEED_DIAL)
+    knob = 0;
+  else if (controller_no >= NOCTURN_CC_INCREMENTOR(0) &&
+           controller_no <= NOCTURN_CC_INCREMENTOR(7))
+    knob = controller_no - NOCTURN_CC_INCREMENTOR(0) + 1;
+
+  if (knob >= 0) {
     printf("Receive chan %d, CC %d:%d\n", chan, controller_no, value);
     if (value & 64) value = value - 128; /* sign extend */
     if (value > 1 || value < -1) value *= incrementor_acceleration;
-    speed_dial_accumulator += value;
-    if (speed_dial_accumulator > -speed_dial_scale &&
-        speed_dial_accumulator < speed_dial_scale) return;
-    value = speed_dial_accumulator / speed_dial_scale;
-    if (notify_ui) notify_ui(0, value, notify_ref);
-    speed_dial_accumulator -= value * speed_dial_scale;
-  } else if (controller_no >= NOCTURN_CC_INCREMENTOR(0) &&
-             controller_no <= NOCTURN_CC_INCREMENTOR(7))
-  {
-    printf("Receive chan %d, CC %d:%d\n", chan, controller_no, value);
-    if (value & 64) value = value - 128; /* sign extend */
-    if (notify_ui) notify_ui(controller_no - NOCTURN_CC_INCREMENTOR0 + 1,
-                            value, notify_ref);
+    knob_accumulator[knob] += value;
+    if (knob_accumulator[knob] > -knob_scale &&
+        knob_accumulator[knob] < knob_scale) return;
+    value = knob_accumulator[knob] / knob_scale;
+    if (notify_ui) notify_ui(knob, value, notify_ref);
+    knob_accumulator[knob] -= value * knob_scale;
   }
 }
 
