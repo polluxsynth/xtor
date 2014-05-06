@@ -44,6 +44,10 @@
 const char *main_window_name = "Main Window";
 GtkWidget *main_window = NULL;
 
+/* Currently focused widget and its parent frame */
+GtkWidget *focus_widget = NULL;
+GtkWidget *focus_parent_frame = NULL;
+
 GtkMenu *popup_menu = NULL;
 GtkWidget *about_window = NULL;
 
@@ -80,6 +84,9 @@ struct f_k_map {
 
 /* List of all frame maps */
 GList *f_k_maps = NULL;
+
+/* f_k_map if the frame containing currently focused parameter */
+struct f_k_map *focus_f_k_map = NULL;
 
 /* used to temporarily block updates to MIDI */
 int block_updates;
@@ -155,6 +162,42 @@ set_title(void)
     gtk_window_set_title(GTK_WINDOW(main_window), title);
 }
 
+/* GCompareFunc for find_frame_in_knob_maps */
+static int
+same_frame(gconstpointer data, gconstpointer user_data)
+{
+  const struct f_k_map *f_k_map = data;
+  const GtkFrame *searched_frame = user_data;
+
+  return !(f_k_map->frame == searched_frame);
+}
+
+/* Find frame in our list of frame-knobs maps mapping given frame */
+static struct f_k_map *
+find_frame_in_f_k_maps(GList *f_k_maps, GtkFrame *frame)
+{
+  GList *found_map = g_list_find_custom(f_k_maps, frame, same_frame);
+  if (!found_map) return NULL;
+  return found_map->data;
+}
+
+
+static GtkWidget *
+get_parent_frame(GtkWidget *widget)
+{
+  printf("Scanning for parent for %s (%p)\n",
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
+  do {
+    widget = gtk_widget_get_parent(widget);
+  } while (widget && !GTK_IS_FRAME(widget));
+
+  if (widget)
+    printf("Found %s: %s (%p)\n",
+            gtk_widget_get_name(widget),
+            gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
+
+  return widget;
+}
 /* General signal handlers */
 
 void
@@ -168,6 +211,45 @@ on_midi_input (gpointer data, gint fd, GdkInputCondition condition)
 {
   dprintf("Received MIDI data on fd %d\n", fd);
   midi_input();
+}
+
+#if 0
+void
+on_Focus_Set(GtkObject *object, gpointer user_data)
+{
+  GtkWindow *window = GTK_WINDOW(object);
+  GtkWidget *focus_widget = gtk_window_get_focus(window);
+  printf("Focus set in %s:%s (%p) to %s:%s (%p)\n",
+         gtk_widget_get_name(GTK_WIDGET(window)), gtk_buildable_get_name(GTK_BUILDABLE(window)), window,
+         gtk_widget_get_name(focus_widget), gtk_buildable_get_name(GTK_BUILDABLE(focus_widget)), focus_widget);
+
+}
+#endif
+
+gboolean
+on_Get_Focus(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+{
+  printf("Focus set to %s:%s (%p)\n",
+         gtk_widget_get_name(widget), gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
+
+  focus_widget = widget;
+  if (!widget) {
+    /* No focus, so nothing to edit */
+    focus_parent_frame = NULL;
+    focus_f_k_map = NULL;
+    goto out;
+  }
+  focus_parent_frame = get_parent_frame(widget);
+  if (!focus_parent_frame) {
+    /* No parent frame, so nothing to edit (except focused parameter) */
+    focus_f_k_map = NULL;
+    goto out;
+  }
+  focus_f_k_map = find_frame_in_f_k_maps(f_k_maps,
+                                         GTK_FRAME(focus_parent_frame));
+
+out:
+  return FALSE; /* Let rest of handlers process signal */
 }
 
 void
@@ -714,42 +796,6 @@ key_event(GtkWidget *widget, GdkEventKey *event)
   return FALSE; /* key not handled - defer to GTK defaults */
 }
 
-/* GCompareFunc for find_frame_in_knob_maps */
-static int
-same_frame(gconstpointer data, gconstpointer user_data)
-{
-  const struct f_k_map *f_k_map = data;
-  const GtkFrame *searched_frame = user_data;
-
-  return !(f_k_map->frame == searched_frame);
-}
-
-/* Find frame in our list of frame-knobs maps mapping given frame */
-static struct f_k_map *
-find_frame_in_f_k_maps(GList *f_k_maps, GtkFrame *frame)
-{
-  GList *found_map = g_list_find_custom(f_k_maps, frame, same_frame);
-  if (!found_map) return NULL;
-  return found_map->data;
-}
-
-
-static GtkWidget *
-get_parent_frame(GtkWidget *widget)
-{
-  printf("Scanning for parent for %s (%p)\n",
-          gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
-  do {
-    widget = gtk_widget_get_parent(widget);
-  } while (widget && !GTK_IS_FRAME(widget));
-
-  if (widget)
-    printf("Found %s: %s (%p)\n",
-            gtk_widget_get_name(widget),
-            gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
-
-  return widget;
-}
 
 #if 0 /* need this ? */
 static void
@@ -767,21 +813,14 @@ show_widget(gpointer data, gpointer user_data)
 
 /* Get widget corresponding to currently turned knob */
 static GtkWidget *
-get_knob_widget(GtkWidget *parent_frame, int controller_number)
+get_knob_widget(struct f_k_map *f_k_map, int controller_number)
 {
-/* TODO: optimize this so we don't go through the whole rigmarole each time */
-printf("Parent frame %p:%s\n", parent_frame, gtk_buildable_get_name(GTK_BUILDABLE(parent_frame)));
-
-  /* Search our f_k_maps for the current frame */
-  struct f_k_map *f_k_map = find_frame_in_f_k_maps(f_k_maps, GTK_FRAME(parent_frame));
-printf("f_k_map %p\n", f_k_map);
-  if (!f_k_map) return NULL;
-printf("f_k_map: frame %p:%s:%s, knobmap %p\n", f_k_map->frame, gtk_widget_get_name(GTK_WIDGET(f_k_map->frame)), gtk_buildable_get_name(GTK_BUILDABLE(f_k_map->frame)), f_k_map->knobmap);
+printf("f_k_map: frame %p:%s:%s, knobmap %p\n", focus_f_k_map->frame, gtk_widget_get_name(GTK_WIDGET(focus_f_k_map->frame)), gtk_buildable_get_name(GTK_BUILDABLE(focus_f_k_map->frame)), focus_f_k_map->knobmap);
 
   /* Get the knob_descriptor for the current knob (controller_number)
    * from the knob_mapper. */
   struct knob_descriptor *knob_descriptor = 
-    knob_mapper->knob(f_k_map->knobmap, controller_number - 1);
+    knob_mapper->knob(focus_f_k_map->knobmap, controller_number - 1);
 printf("Knob descriptor %p\n", knob_descriptor);
   if (!knob_descriptor) return NULL;
 
@@ -807,14 +846,10 @@ controller_increment(int controller_number, int delta, void *ref)
   int dir = 1;
   int steps;
 
-  if (!main_window) return;
-  GtkWidget *focus = GTK_WINDOW(main_window)->focus_widget;
-  if (!focus) return;
-
   dprintf("Controller #%d increment %d, focus %s, name %s\n",
           controller_number, delta,
-          gtk_widget_get_name(focus),
-          gtk_buildable_get_name(GTK_BUILDABLE(focus)));
+          gtk_widget_get_name(focus_widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(focus_widget)));
 
   if (delta < 0) {
     dir = -1;
@@ -822,15 +857,16 @@ controller_increment(int controller_number, int delta, void *ref)
   }
 
   if (controller_number == 0) { /* focused parameter */
+    if (!focus_widget) return; /* No focus */
     for (steps = 0; steps < delta; steps++)
-      change_value(focus, 0, dir);
+      change_value(focus_widget, 0, dir);
     return;
   }
 
-  GtkWidget *parent_frame = get_parent_frame(focus);
-  if (!parent_frame) return;
+  /* Now we handle all other parameters in the current frame. */
+  if (!focus_f_k_map) return; /* No f_k_map, so nothing to edit */
 
-  GtkWidget *editing_widget = get_knob_widget(parent_frame, controller_number);
+  GtkWidget *editing_widget = get_knob_widget(focus_f_k_map, controller_number);
   if (!editing_widget) return;
 
   change_value(editing_widget, 0, dir);
@@ -1129,6 +1165,10 @@ create_adjustor(gpointer data, gpointer user_data)
   gtk_widget_add_events(this, GDK_BUTTON_PRESS_MASK);
   g_signal_connect(this, "button-press-event", G_CALLBACK(button_event), NULL);
 
+  /* Handle change of focus */
+  gtk_widget_add_events(this, GDK_FOCUS_CHANGE_MASK);
+  g_signal_connect(this, "focus-in-event", G_CALLBACK(on_Get_Focus), NULL);
+
   if (id && (parnum = param_handler->param_find_index(id)) >= 0) {
     dprintf("has parameter\n");
 printf("%s belongs to %s\n", gtk_buildable_get_name(GTK_BUILDABLE(this)), current_frame ? gtk_buildable_get_name(GTK_BUILDABLE(current_frame)) : "nothing");
@@ -1426,6 +1466,10 @@ main(int argc, char *argv[])
 
   setup_hotkeys(builder, "KeyMappings");
   g_signal_connect(main_window, "key-press-event", G_CALLBACK(key_event), NULL);
+
+#if 0
+  g_signal_connect(main_window, "set-focus", G_CALLBACK(on_Focus_Set), NULL);
+#endif
 
   /* Handle scroll events (mouse wheel) when not focused on any widget */
   gtk_widget_add_events(GTK_WIDGET(main_window), GDK_SCROLL_MASK);
