@@ -797,6 +797,80 @@ key_event(GtkWidget *widget, GdkEventKey *event)
 }
 
 
+/* Handle mouse scrolling events arriving in slider widgets */
+static gboolean
+scroll_event(GtkWidget *widget, GdkEventScroll *event)
+{
+  static int count = 0;
+  int shifted = 0;
+
+  /* Depending on whether ui_settings.scroll_focused_only is set,
+   * we don't want to scroll the widget currently pointed to, we want
+   * to scroll the one that has focus. */
+  GtkWidget *toplevel = gtk_widget_get_toplevel(widget);
+  if (!toplevel) return FALSE;
+  GtkWidget *focus = GTK_WINDOW(toplevel)->focus_widget;
+  if (!focus) return FALSE;
+
+  dprintf("scroll %d: widget is a %s, name %s, focus is a %s, name %s\n",
+          ++count,
+          gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)),
+          gtk_widget_get_name(focus),
+          gtk_buildable_get_name(GTK_BUILDABLE(focus)));
+
+  /* If UI is set to scroll_focused_only (Midiedit default mode), always
+   * scroll the widget that is focused, regardless of where the mouse
+   * pointer is. Handy when using Midiedit's key based navigation.
+   * Otherwise, use the Gnome default of scrolling whatever the mouse
+   * pointer points to. Handy when navigating using the mouse, as we
+   * don't need to left-click to focus an item before scrolling. */
+  if (ui_settings.scroll_focused_only)
+    widget = focus;
+
+  if (event->state & (GDK_SHIFT_MASK | GDK_BUTTON2_MASK))
+    shifted = 1;
+
+  switch (event->direction) {
+    case GDK_SCROLL_UP:
+    case GDK_SCROLL_LEFT:
+      change_value(widget, shifted, 1);
+      break;
+    case GDK_SCROLL_DOWN:
+    case GDK_SCROLL_RIGHT:
+      change_value(widget, shifted, -1);
+      break;
+    default:
+      break;
+  }
+  return TRUE;
+}
+
+
+/* Handle all mouse button events arriving in slider widgets */
+static gboolean
+button_event(GtkWidget *widget, GdkEventButton *event)
+{
+  static int count = 0;
+  dprintf("mouse button %d: %d, state %d, widget is a %s, name %s\n", ++count,
+          event->button, event->state, gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)));
+
+  /* What we want to is stop the default action of jumping to the pointed-to
+   * value when the middle button is pressed or released, so get out of
+   * here if we're not dealing with the middle button. */
+  if (event->button != 2)
+    return FALSE;
+
+  /* We want to keep the action of setting focus however when pressed. */
+  if (event->type & GDK_BUTTON_PRESS)
+    gtk_widget_grab_focus(widget);
+
+  /* Nothing else to do, just swallow event. */
+  return TRUE;
+}
+
+
 #if 0 /* need this ? */
 static void
 show_widget(gpointer data, gpointer user_data)
@@ -870,80 +944,6 @@ controller_increment(int controller_number, int delta, void *ref)
   if (!editing_widget) return;
 
   change_value(editing_widget, 0, dir);
-}
-
-
-/* Handle mouse scrolling events arriving in slider widgets */
-static gboolean
-scroll_event(GtkWidget *widget, GdkEventScroll *event)
-{
-  static int count = 0;
-  int shifted = 0;
-
-  /* Depending on whether ui_settings.scroll_focused_only is set,
-   * we don't want to scroll the widget currently pointed to, we want
-   * to scroll the one that has focus. */
-  GtkWidget *toplevel = gtk_widget_get_toplevel(widget);
-  if (!toplevel) return FALSE;
-  GtkWidget *focus = GTK_WINDOW(toplevel)->focus_widget;
-  if (!focus) return FALSE;
-
-  dprintf("scroll %d: widget is a %s, name %s, focus is a %s, name %s\n",
-          ++count,
-          gtk_widget_get_name(widget),
-          gtk_buildable_get_name(GTK_BUILDABLE(widget)),
-          gtk_widget_get_name(focus),
-          gtk_buildable_get_name(GTK_BUILDABLE(focus)));
-
-  /* If UI is set to scroll_focused_only (Midiedit default mode), always
-   * scroll the widget that is focused, regardless of where the mouse
-   * pointer is. Handy when using Midiedit's key based navigation.
-   * Otherwise, use the Gnome default of scrolling whatever the mouse
-   * pointer points to. Handy when navigating using the mouse, as we
-   * don't need to left-click to focus an item before scrolling. */
-  if (ui_settings.scroll_focused_only)
-    widget = focus;
-
-  if (event->state & (GDK_SHIFT_MASK | GDK_BUTTON2_MASK))
-    shifted = 1;
-
-  switch (event->direction) {
-    case GDK_SCROLL_UP:
-    case GDK_SCROLL_LEFT:
-      change_value(widget, shifted, 1);
-      break;
-    case GDK_SCROLL_DOWN:
-    case GDK_SCROLL_RIGHT:
-      change_value(widget, shifted, -1);
-      break;
-    default:
-      break;
-  }
-  return TRUE;
-}
-
-
-/* Handle all mouse button events arriving in slider widgets */
-static gboolean
-button_event(GtkWidget *widget, GdkEventButton *event)
-{
-  static int count = 0;
-  dprintf("mouse button %d: %d, state %d, widget is a %s, name %s\n", ++count,
-          event->button, event->state, gtk_widget_get_name(widget),
-          gtk_buildable_get_name(GTK_BUILDABLE(widget)));
-
-  /* What we want to is stop the default action of jumping to the pointed-to
-   * value when the middle button is pressed or released, so get out of
-   * here if we're not dealing with the middle button. */
-  if (event->button != 2)
-    return FALSE;
-
-  /* We want to keep the action of setting focus however when pressed. */
-  if (event->type & GDK_BUTTON_PRESS)
-    gtk_widget_grab_focus(widget);
-
-  /* Nothing else to do, just swallow event. */
-  return TRUE;
 }
 
 
