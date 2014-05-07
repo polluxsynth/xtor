@@ -5,6 +5,13 @@
  *
  * Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
  *
+ * Portions of this file derived from the GTK toolkit:
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
+
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -51,6 +58,12 @@ struct knob_mapper {
   /* Run-time mapping */
   struct knob_descriptor *(*knob)(void *knobmap_in, int knob_no);
 };
+
+/* Functions intended primarily for use by knob mappers. */
+gboolean get_allocation_coords (GtkContainer  *container,
+                                GtkWidget     *widget,
+                                GdkRectangle  *allocation);
+
 
 #endif /* _KNOBS_H_ */
 

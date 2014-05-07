@@ -35,7 +35,7 @@
 /* Get coordinates of @widget's allocation with respect to
  * allocation of @container.
  */
-static gboolean
+gboolean
 get_allocation_coords (GtkContainer  *container,
 		       GtkWidget     *widget,
 		       GdkRectangle  *allocation)

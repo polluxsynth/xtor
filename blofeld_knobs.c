@@ -34,14 +34,25 @@
 struct knobmap {
   GtkContainer *container;
   GList *knoblist;
+  int sorted;
 };
 
 /* Structure build time variables */
 static GtkContainer *current_container = NULL;
 
+/* Callback for notifying gui when knob value has changed. */
 static knob_notify_cb notify_ui = NULL;
 static void *notify_ref;
 
+/* From gtkcontainer.c */
+struct CompareInfo
+{
+  GtkContainer *container;
+  gboolean reverse;
+};
+
+
+/* Callback management */
 static void
 register_notify_cb(knob_notify_cb cb, void *ref)
 {
@@ -49,6 +60,75 @@ register_notify_cb(knob_notify_cb cb, void *ref)
   notify_ref = ref;
 }
 
+/* Originally from gtkcontainer.c */
+/* GCompareDataFunc to compare left-right positions of widgets a and b. */
+static gint
+left_right_compare (gconstpointer a, gconstpointer b, gpointer data)
+{
+  GtkWidget *widget_1 = (GtkWidget *)a;
+  GtkWidget *widget_2 = (GtkWidget *)b;
+  GdkRectangle allocation1;
+  GdkRectangle allocation2;
+  struct CompareInfo *compare = data;
+  gint x1, x2;
+
+  /* Translate coordinates to be relative to container.
+   * We probably don't need this, comers from the original gtkcontainer.c
+   * function. */
+  get_allocation_coords (compare->container, widget_1, &allocation1);
+  get_allocation_coords (compare->container, widget_2, &allocation2);
+
+  dprintf("In %s:%s comparing %s:%s (%d,%d,%d,%d) with %s:%s (%d,%d,%d,%d)\n",
+          gtk_widget_get_name(GTK_WIDGET(compare->container)),
+          gtk_buildable_get_name(GTK_BUILDABLE(compare->container)),
+          gtk_widget_get_name(widget_1),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget_1)),
+          allocation1.x, allocation1.y, allocation1.width, allocation1.height,
+          gtk_widget_get_name(widget_2),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget_2)),
+          allocation2.x, allocation2.y, allocation2.width, allocation2.height);
+
+  x1 = allocation1.x + allocation1.width / 2;
+  x2 = allocation2.x + allocation2.width / 2;
+
+  if (x1 == x2)
+    {
+      gint y1 = allocation1.y + allocation1.height / 2;
+      gint y2 = allocation2.y + allocation2.height / 2;
+
+      if (compare->reverse)
+        return (y1 < y2) ? 1 : ((y1 == y2) ? 0 : -1);
+      else
+        return (y1 < y2) ? -1 : ((y1 == y2) ? 0 : 1);
+    }
+  else
+    return (x1 < x2) ? -1 : 1;
+}
+
+/* GCompareDatafunc for comparing knob_descriptors. */
+static gint
+left_right_compare_knobmap (gconstpointer a, gconstpointer b, gpointer data)
+{
+  return left_right_compare(((struct knob_descriptor *)a)->widget,
+                            ((struct knob_descriptor *)b)->widget,
+                            data);
+}
+
+/* Sort knobs in knobmap in left-right order */
+static void
+sort_knobs(struct knobmap *knobmap)
+{
+  struct CompareInfo compare;
+
+  compare.container = knobmap->container;
+  compare.reverse = FALSE;
+
+  knobmap->knoblist = g_list_sort_with_data (knobmap->knoblist, left_right_compare_knobmap, &compare);
+}
+
+/* Knob map build time functions */
+
+/* Create a new map for container */
 static void *
 blofeld_knobs_container_new(GtkContainer *container)
 {
@@ -66,6 +146,7 @@ blofeld_knobs_container_new(GtkContainer *container)
   return knobmap;
 }
 
+/* Finish creating map for container */
 static void *
 blofeld_knobs_container_done(void *knobmap_in)
 {
@@ -76,11 +157,11 @@ blofeld_knobs_container_done(void *knobmap_in)
     return NULL;
   }
 
-  /* TODO: sort list in left-right order */
   current_container = NULL;
   return knobmap;
 }
 
+/* Add widget to map for container */
 static void *
 blofeld_knobs_container_add_widget(void *knobmap_in,
                                    struct knob_descriptor *knob_description)
@@ -97,15 +178,23 @@ blofeld_knobs_container_add_widget(void *knobmap_in,
   return knobmap;
 }
 
+/* Return knob_descriptor for knob no knob_no in the knobmap_in knob map */
 static struct knob_descriptor *
 blofeld_knob(void *knobmap_in, int knob_no)
 {
   if (!knobmap_in) return NULL;
 
   struct knobmap *knobmap = knobmap_in;
+
+  if (!knobmap->sorted) {
+    sort_knobs(knobmap);
+    knobmap->sorted = 1;
+  }
+
   return g_list_nth_data(knobmap->knoblist, knob_no);
 }
 
+/* Initialize knob mapper. */
 void
 blofeld_knobs_init(struct knob_mapper *knob_mapper)
 {
