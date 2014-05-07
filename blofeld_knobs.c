@@ -28,11 +28,19 @@
 
 #include "debug.h"
 
-static knob_notify_cb notify_ui = NULL;
-static void *notify_ref;
+/* We keep this structure local, as its contents depends on what we as a
+ * specific knob mapper implementation require.
+ * Use void * for communicating it externally. */
+struct knobmap {
+  GtkContainer *container;
+  GList *knoblist;
+};
 
 /* Structure build time variables */
 static GtkContainer *current_container = NULL;
+
+static knob_notify_cb notify_ui = NULL;
+static void *notify_ref;
 
 static void
 register_notify_cb(knob_notify_cb cb, void *ref)
@@ -44,17 +52,25 @@ register_notify_cb(knob_notify_cb cb, void *ref)
 static void *
 blofeld_knobs_container_new(GtkContainer *container)
 {
+  struct knobmap *knobmap = g_new0(struct knobmap, 1);
+
   if (current_container)
     eprintf("WARNING: %s called with container set\n", __func__);
   /* Save the container as the current one */
   current_container = container;
 
-  return NULL; /* empty GList */
+  /* Initialize knobmap structure */
+  knobmap->container = container;
+  /* knobnap->knoblist = NULL; done by g_new0() */
+
+  return knobmap;
 }
 
 static void *
-blofeld_knobs_container_done(void *knobmap)
+blofeld_knobs_container_done(void *knobmap_in)
 {
+  struct knobmap *knobmap = knobmap_in;
+
   if (!current_container) {
     eprintf("WARNING: %s called with no container set\n", __func__);
     return NULL;
@@ -66,26 +82,28 @@ blofeld_knobs_container_done(void *knobmap)
 }
 
 static void *
-blofeld_knobs_container_add_widget(void *knobmap,
+blofeld_knobs_container_add_widget(void *knobmap_in,
                                    struct knob_descriptor *knob_description)
 {
+  struct knobmap *knobmap = knobmap_in;
+
   if (!knob_description) return knobmap;
 
   /* We only handle ranges (sliders) for now. */
   if (!GTK_IS_RANGE(knob_description->widget)) return knobmap;
 
-  knobmap = g_list_prepend(knobmap, knob_description);
+  knobmap->knoblist = g_list_prepend(knobmap->knoblist, knob_description);
 
   return knobmap;
 }
 
 static struct knob_descriptor *
-blofeld_knob(void *ref, int knob_no)
+blofeld_knob(void *knobmap_in, int knob_no)
 {
-  if (!ref) return;
+  if (!knobmap_in) return NULL;
 
-  GList *knob_map = ref;
-  return g_list_nth_data(knob_map, knob_no);
+  struct knobmap *knobmap = knobmap_in;
+  return g_list_nth_data(knobmap->knoblist, knob_no);
 }
 
 void

@@ -44,12 +44,12 @@ typedef void (*knob_notify_cb)(void *widget_ref, int delta, void *ref);
 struct knob_mapper {
   /* Start-up-time configuraton */
   void *(*container_new)(GtkContainer *frame);
-  void *(*container_done)(void *knobmap);
-  void *(*container_add_widget)(void *knobmap,
+  void *(*container_done)(void *knobmap_in);
+  void *(*container_add_widget)(void *knobmap_in,
                                 struct knob_descriptor* knob_description);
   void (*register_notify_cb)(knob_notify_cb cb, void *ref);
   /* Run-time mapping */
-  struct knob_descriptor *(*knob)(void *ref, int knob_no);
+  struct knob_descriptor *(*knob)(void *knobmap_in, int knob_no);
 };
 
 #endif /* _KNOBS_H_ */
