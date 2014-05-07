@@ -44,14 +44,6 @@ static GtkContainer *current_container = NULL;
 static knob_notify_cb notify_ui = NULL;
 static void *notify_ref;
 
-/* From gtkcontainer.c */
-struct CompareInfo
-{
-  GtkContainer *container;
-  gboolean reverse;
-};
-
-
 /* Callback management */
 static void
 register_notify_cb(knob_notify_cb cb, void *ref)
@@ -61,69 +53,25 @@ register_notify_cb(knob_notify_cb cb, void *ref)
 }
 
 /* Originally from gtkcontainer.c */
-/* GCompareDataFunc to compare left-right positions of widgets a and b. */
+/* GCompareFunc to compare left-right positions of widgets a and b. */
 static gint
-left_right_compare (gconstpointer a, gconstpointer b, gpointer data)
+left_right_compare (gconstpointer a, gconstpointer b)
 {
-  GtkWidget *widget_1 = (GtkWidget *)a;
-  GtkWidget *widget_2 = (GtkWidget *)b;
-  GdkRectangle allocation1;
-  GdkRectangle allocation2;
-  struct CompareInfo *compare = data;
-  gint x1, x2;
+  GtkWidget *widget1 = ((struct knob_descriptor *)a)->widget;
+  GtkWidget *widget2 = ((struct knob_descriptor *)b)->widget;
 
-  /* Translate coordinates to be relative to container.
-   * We probably don't need this, comers from the original gtkcontainer.c
-   * function. */
-  get_allocation_coords (compare->container, widget_1, &allocation1);
-  get_allocation_coords (compare->container, widget_2, &allocation2);
-
-  dprintf("In %s:%s comparing %s:%s (%d,%d,%d,%d) with %s:%s (%d,%d,%d,%d)\n",
-          gtk_widget_get_name(GTK_WIDGET(compare->container)),
-          gtk_buildable_get_name(GTK_BUILDABLE(compare->container)),
-          gtk_widget_get_name(widget_1),
-          gtk_buildable_get_name(GTK_BUILDABLE(widget_1)),
-          allocation1.x, allocation1.y, allocation1.width, allocation1.height,
-          gtk_widget_get_name(widget_2),
-          gtk_buildable_get_name(GTK_BUILDABLE(widget_2)),
-          allocation2.x, allocation2.y, allocation2.width, allocation2.height);
-
-  x1 = allocation1.x + allocation1.width / 2;
-  x2 = allocation2.x + allocation2.width / 2;
+  gint x1 = widget1->allocation.x + widget1->allocation.width / 2;
+  gint x2 = widget2->allocation.x + widget2->allocation.width / 2;
 
   if (x1 == x2)
     {
-      gint y1 = allocation1.y + allocation1.height / 2;
-      gint y2 = allocation2.y + allocation2.height / 2;
+      gint y1 = widget1->allocation.y + widget1->allocation.height / 2;
+      gint y2 = widget2->allocation.y + widget2->allocation.height / 2;
 
-      if (compare->reverse)
-        return (y1 < y2) ? 1 : ((y1 == y2) ? 0 : -1);
-      else
-        return (y1 < y2) ? -1 : ((y1 == y2) ? 0 : 1);
+      return (y1 < y2) ? -1 : ((y1 == y2) ? 0 : 1);
     }
   else
     return (x1 < x2) ? -1 : 1;
-}
-
-/* GCompareDatafunc for comparing knob_descriptors. */
-static gint
-left_right_compare_knobmap (gconstpointer a, gconstpointer b, gpointer data)
-{
-  return left_right_compare(((struct knob_descriptor *)a)->widget,
-                            ((struct knob_descriptor *)b)->widget,
-                            data);
-}
-
-/* Sort knobs in knobmap in left-right order */
-static void
-sort_knobs(struct knobmap *knobmap)
-{
-  struct CompareInfo compare;
-
-  compare.container = knobmap->container;
-  compare.reverse = FALSE;
-
-  knobmap->knoblist = g_list_sort_with_data (knobmap->knoblist, left_right_compare_knobmap, &compare);
 }
 
 /* Knob map build time functions */
@@ -187,7 +135,7 @@ blofeld_knob(void *knobmap_in, int knob_no)
   struct knobmap *knobmap = knobmap_in;
 
   if (!knobmap->sorted) {
-    sort_knobs(knobmap);
+    knobmap->knoblist = g_list_sort(knobmap->knoblist, left_right_compare);
     knobmap->sorted = 1;
   }
 
