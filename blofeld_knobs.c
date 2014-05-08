@@ -172,9 +172,21 @@ blofeld_knobs_container_add_widget(void *knobmap_in,
 static struct knob_descriptor *
 blofeld_knob(void *knobmap_in, int knob_no)
 {
+  static int prev_knob_no = -1;
+  static struct knobmap *prev_knobmap = NULL;
+  static struct knob_descriptor *knob_descriptor = NULL;
+
   if (!knobmap_in) return NULL;
 
   struct knobmap *knobmap = knobmap_in;
+
+  /* Caching: if called with same inparams as last tie, and the knobmap
+   * is still sorted (i.e. has not been invalidated), return same
+   * knob_descriptor as last time. */
+  if (knob_no == prev_knob_no &&
+      knobmap == prev_knobmap &&
+      knobmap->sorted)
+    return knob_descriptor;
 
   if (!knobmap->sorted) {
     if (knobmap->actives) {
@@ -189,7 +201,7 @@ blofeld_knob(void *knobmap_in, int knob_no)
     knobmap->sorted = 1;
   }
 
-  return g_list_nth_data(knobmap->actives, knob_no);
+  return knob_descriptor = g_list_nth_data(knobmap->actives, knob_no);
 }
 
 /* Invalidate current active knobmap, forcing blofeld_knob to create a new
