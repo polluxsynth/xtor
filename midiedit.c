@@ -198,16 +198,17 @@ get_parent_frame(GtkWidget *widget)
 
   return widget;
 }
+
 /* General signal handlers */
 
 void
-on_Main_Window_destroy (GtkObject *object, gpointer user_data)
+on_Main_Window_destroy(GtkObject *object, gpointer user_data)
 {
   gtk_main_quit();
 }
 
 void
-on_midi_input (gpointer data, gint fd, GdkInputCondition condition)
+on_midi_input(gpointer data, gint fd, GdkInputCondition condition)
 {
   dprintf("Received MIDI data on fd %d\n", fd);
   midi_input();
@@ -288,7 +289,7 @@ menu_button_event(GtkWidget *widget, GdkEventButton *event)
 }
 
 gboolean
-activate_About (GtkObject *object, gpointer user_data)
+activate_About(GtkObject *object, gpointer user_data)
 {
   dprintf("activate About: object %p is %s\n", object, gtk_widget_get_name(GTK_WIDGET(object)));
   /* Set which window to be our parant. This places the About box in the
@@ -300,7 +301,7 @@ activate_About (GtkObject *object, gpointer user_data)
 
 /* Need to have this, or the default signal handler destroys the About box */
 gboolean
-on_About_delete (GtkObject *object, gpointer user_data)
+on_About_delete(GtkObject *object, gpointer user_data)
 {
   dprintf("About deleted\n");
   gtk_widget_hide(GTK_WIDGET(object));
@@ -309,7 +310,7 @@ on_About_delete (GtkObject *object, gpointer user_data)
 
 /* Basically when Closed is pressed in About box, but also ESC or window X */
 gboolean
-on_About_response (GtkObject *object, gpointer user_data)
+on_About_response(GtkObject *object, gpointer user_data)
 {
   dprintf("About response\n");
   gtk_widget_hide(GTK_WIDGET(object));
@@ -318,7 +319,7 @@ on_About_response (GtkObject *object, gpointer user_data)
 
 /* Change underlying value when setting changed in popup menu. */
 gboolean
-on_Setting_changed (GtkObject *object, gpointer user_data)
+on_Setting_changed(GtkObject *object, gpointer user_data)
 {
   dprintf("Setting changed: object is a %s, name %s\n",
           gtk_widget_get_name(GTK_WIDGET(object)),
@@ -1503,7 +1504,7 @@ main(int argc, char *argv[])
   block_updates = 0;
 
   set_title();
-  gtk_widget_show (main_window);
+  gtk_widget_show(main_window);
   gtk_main();
 
   return 0;
