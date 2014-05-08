@@ -57,6 +57,7 @@ struct knob_mapper {
   void (*register_notify_cb)(knob_notify_cb cb, void *ref);
   /* Run-time mapping */
   struct knob_descriptor *(*knob)(void *knobmap_in, int knob_no);
+  void (*invalidate)(void *knobmap_in);
 };
 
 /* Functions intended primarily for use by knob mappers. */

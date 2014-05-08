@@ -34,6 +34,7 @@
 struct knobmap {
   GtkContainer *container;
   GList *knoblist;
+  GList *actives;
   int sorted;
 };
 
@@ -66,7 +67,7 @@ static void
 print_knobmap(struct knobmap *knobmap)
 {
   printf("Frame %s:\n", gtk_buildable_get_name(GTK_BUILDABLE(knobmap->container)));
-  g_list_foreach(knobmap->knoblist, print_knob, NULL);
+  g_list_foreach(knobmap->actives, print_knob, NULL);
 }
 #endif
 
@@ -91,6 +92,29 @@ left_right_compare (gconstpointer a, gconstpointer b)
   else
     return (x1 < x2) ? -1 : 1;
 }
+
+/* Add knob_descriptor data to list pointed to by user_data, but 
+ * only if the corresponding widget is VISIBLE */
+static void
+add_if_active(gpointer data, gpointer user_data)
+{
+  struct knob_descriptor *knob_descriptor = data;
+  GList **actives_ptr = user_data;
+
+  if (GTK_WIDGET_VISIBLE(knob_descriptor->widget))
+    *actives_ptr = g_list_prepend(*actives_ptr, knob_descriptor);
+}
+
+/* Copy knob_descriptors with visible widgets to new list */
+static GList *
+copy_active(GList *knoblist)
+{
+  GList *actives = NULL;
+  g_list_foreach(knoblist, add_if_active, &actives);
+
+  return actives;
+}
+
 
 /* Knob map build time functions */
 
@@ -153,14 +177,30 @@ blofeld_knob(void *knobmap_in, int knob_no)
   struct knobmap *knobmap = knobmap_in;
 
   if (!knobmap->sorted) {
-    knobmap->knoblist = g_list_sort(knobmap->knoblist, left_right_compare);
+    if (knobmap->actives) {
+      g_list_free(knobmap->actives);
+      knobmap->actives = NULL;
+    }
+    knobmap->actives = copy_active(knobmap->knoblist);
+    knobmap->actives = g_list_sort(knobmap->actives, left_right_compare);
 #ifdef DEBUG
     print_knobmap(knobmap);
 #endif
     knobmap->sorted = 1;
   }
 
-  return g_list_nth_data(knobmap->knoblist, knob_no);
+  return g_list_nth_data(knobmap->actives, knob_no);
+}
+
+/* Invalidate current active knobmap, forcing blofeld_knob to create a new
+ * list next the time a knob within the frame is moved, the most important
+ * consequence of is that the visibility of the widgets is considered. */
+static void
+blofeld_invalidate(void *knobmap_in)
+{
+  struct knobmap *knobmap = knobmap_in;
+
+  knobmap->sorted = FALSE;
 }
 
 /* Initialize knob mapper. */
@@ -173,6 +213,7 @@ blofeld_knobs_init(struct knob_mapper *knob_mapper)
   knob_mapper->container_add_widget = blofeld_knobs_container_add_widget;
   /* Run-time mapping */
   knob_mapper->knob = blofeld_knob;
+  knob_mapper->invalidate = blofeld_invalidate;
 };
 
 /********************** End of file blofeld_knobs.c **************************/
