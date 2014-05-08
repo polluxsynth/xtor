@@ -44,10 +44,6 @@
 const char *main_window_name = "Main Window";
 GtkWidget *main_window = NULL;
 
-/* Currently focused widget and its parent frame */
-GtkWidget *focus_widget = NULL;
-GtkWidget *focus_parent_frame = NULL;
-
 GtkMenu *popup_menu = NULL;
 GtkWidget *about_window = NULL;
 
@@ -84,9 +80,6 @@ struct f_k_map {
 
 /* List of all frame maps */
 GList *f_k_maps = NULL;
-
-/* f_k_map if the frame containing currently focused parameter */
-struct f_k_map *focus_f_k_map = NULL;
 
 /* used to temporarily block updates to MIDI */
 int block_updates;
@@ -225,45 +218,6 @@ on_midi_input(gpointer data, gint fd, GdkInputCondition condition)
 {
   dprintf("Received MIDI data on fd %d\n", fd);
   midi_input();
-}
-
-#if 0
-void
-on_Focus_Set(GtkObject *object, gpointer user_data)
-{
-  GtkWindow *window = GTK_WINDOW(object);
-  GtkWidget *focus_widget = gtk_window_get_focus(window);
-  printf("Focus set in %s:%s (%p) to %s:%s (%p)\n",
-         gtk_widget_get_name(GTK_WIDGET(window)), gtk_buildable_get_name(GTK_BUILDABLE(window)), window,
-         gtk_widget_get_name(focus_widget), gtk_buildable_get_name(GTK_BUILDABLE(focus_widget)), focus_widget);
-
-}
-#endif
-
-gboolean
-on_Get_Focus(GtkWidget *widget, GdkEvent *event, gpointer user_data)
-{
-  printf("Focus set to %s:%s (%p)\n",
-         gtk_widget_get_name(widget), gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
-
-  focus_widget = widget;
-  if (!widget) {
-    /* No focus, so nothing to edit */
-    focus_parent_frame = NULL;
-    focus_f_k_map = NULL;
-    goto out;
-  }
-  focus_parent_frame = get_parent_frame(widget);
-  if (!focus_parent_frame) {
-    /* No parent frame, so nothing to edit (except focused parameter) */
-    focus_f_k_map = NULL;
-    goto out;
-  }
-  focus_f_k_map = find_frame_in_f_k_maps(f_k_maps,
-                                         GTK_FRAME(focus_parent_frame));
-
-out:
-  return FALSE; /* Let rest of handlers process signal */
 }
 
 void
@@ -903,12 +857,12 @@ show_widget(gpointer data, gpointer user_data)
 static GtkWidget *
 get_knob_widget(struct f_k_map *f_k_map, int controller_number)
 {
-printf("f_k_map: frame %p:%s:%s, knobmap %p\n", focus_f_k_map->frame, gtk_widget_get_name(GTK_WIDGET(focus_f_k_map->frame)), gtk_buildable_get_name(GTK_BUILDABLE(focus_f_k_map->frame)), focus_f_k_map->knobmap);
+printf("f_k_map: frame %p:%s:%s, knobmap %p\n", f_k_map->frame, gtk_widget_get_name(GTK_WIDGET(f_k_map->frame)), gtk_buildable_get_name(GTK_BUILDABLE(f_k_map->frame)), f_k_map->knobmap);
 
   /* Get the knob_descriptor for the current knob (controller_number)
    * from the knob_mapper. */
   struct knob_descriptor *knob_descriptor = 
-    knob_mapper->knob(focus_f_k_map->knobmap, controller_number - 1);
+    knob_mapper->knob(f_k_map->knobmap, controller_number - 1);
 printf("Knob descriptor %p\n", knob_descriptor);
   if (!knob_descriptor) return NULL;
 
@@ -924,6 +878,47 @@ printf("Widget %p, ref %p\n", widget, adj);
   return widget;
 }
 
+struct focus {
+  GtkWidget *widget;
+  GtkWidget *parent_frame;
+  struct f_k_map *f_k_map;
+};
+
+struct focus *current_focus(GtkWidget *new_focus)
+{
+  /* Currently focused widget, parent frame and frame-knob map */
+  static struct focus focus = { 0 };
+
+  /* When focus changes, we set new focus_widget, and recalculate
+   * focus_parent_frame and focus_f_k_map. We only do this when changing
+   * focus to avoid loading the CPU with having to do it every time. */
+  if (new_focus == focus.widget)
+    goto out; /* nothing changed, so leave everything as it was */
+  focus.widget = new_focus;
+  printf("Focus set to %s:%s\n",
+         gtk_widget_get_name(new_focus),
+         gtk_buildable_get_name(GTK_BUILDABLE(new_focus)));
+  if (!focus.widget) { /* No focus, so nothing to edit */
+    focus.parent_frame = NULL;
+    focus.f_k_map = NULL;
+    goto out;
+  }
+  GtkWidget *new_parent_frame = get_parent_frame(focus.widget);
+  if (new_parent_frame == focus.parent_frame) /* same parent frame */
+    goto out;
+  focus.parent_frame = new_parent_frame;
+  if (!focus.parent_frame) {
+    /* No parent frame, so nothing to edit (except focused parameter) */
+    focus.f_k_map = NULL;
+    goto out;
+  }
+ focus.f_k_map = find_frame_in_f_k_maps(f_k_maps,
+                                        GTK_FRAME(focus.parent_frame));
+
+out:
+  return &focus;
+}
+
 /* Handle increment/decrement from MIDI controller */
 /* Controller #0 controls the currently focused widget,
  * controllers #1..8 control the leftmost adjustments in the current frame.
@@ -933,11 +928,14 @@ controller_increment(int controller_number, int delta, void *ref)
 {
   int dir = 1;
   int steps;
+  GtkWidget *focus_widget = GTK_WINDOW(main_window)->focus_widget;
 
   dprintf("Controller #%d increment %d, focus %s, name %s\n",
           controller_number, delta,
           gtk_widget_get_name(focus_widget),
           gtk_buildable_get_name(GTK_BUILDABLE(focus_widget)));
+
+  struct focus *focus = current_focus(focus_widget);
 
   if (delta < 0) {
     dir = -1;
@@ -945,16 +943,17 @@ controller_increment(int controller_number, int delta, void *ref)
   }
 
   if (controller_number == 0) { /* focused parameter */
-    if (!focus_widget) return; /* No focus */
+    if (!focus->widget) return; /* No focus */
     for (steps = 0; steps < delta; steps++)
-      change_value(focus_widget, 0, dir);
+      change_value(focus->widget, 0, dir);
     return;
   }
 
   /* Now we handle all other parameters in the current frame. */
-  if (!focus_f_k_map) return; /* No f_k_map, so nothing to edit */
+  if (!focus->f_k_map) return; /* No f_k_map, so nothing to edit */
 
-  GtkWidget *editing_widget = get_knob_widget(focus_f_k_map, controller_number);
+  GtkWidget *editing_widget = get_knob_widget(focus->f_k_map,
+                                              controller_number);
   if (!editing_widget) return;
 
   change_value(editing_widget, 0, dir);
@@ -1178,10 +1177,6 @@ create_adjustor(gpointer data, gpointer user_data)
   g_signal_connect(this, "button-release-event", G_CALLBACK(button_event), NULL);
   gtk_widget_add_events(this, GDK_BUTTON_PRESS_MASK);
   g_signal_connect(this, "button-press-event", G_CALLBACK(button_event), NULL);
-
-  /* Handle change of focus */
-  gtk_widget_add_events(this, GDK_FOCUS_CHANGE_MASK);
-  g_signal_connect(this, "focus-in-event", G_CALLBACK(on_Get_Focus), NULL);
 
   if (id && (parnum = param_handler->param_find_index(id)) >= 0) {
     dprintf("has parameter\n");
@@ -1480,10 +1475,6 @@ main(int argc, char *argv[])
 
   setup_hotkeys(builder, "KeyMappings");
   g_signal_connect(main_window, "key-press-event", G_CALLBACK(key_event), NULL);
-
-#if 0
-  g_signal_connect(main_window, "set-focus", G_CALLBACK(on_Focus_Set), NULL);
-#endif
 
   /* Handle scroll events (mouse wheel) when not focused on any widget */
   gtk_widget_add_events(GTK_WIDGET(main_window), GDK_SCROLL_MASK);
