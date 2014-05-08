@@ -82,6 +82,14 @@ Inspired by midicontroller by Lars Luthman</property>
       </object>
     </child>
     <child>
+      <object class="GtkCheckMenuItem" id="Knobsfocus">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">_Knobs grab focus</property>
+        <property name="use_underline">True</property>
+        <signal name="toggled" handler="on_Setting_changed"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="separator1">
         <property name="visible">True</property>
       </object>

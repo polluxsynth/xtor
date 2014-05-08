@@ -109,9 +109,10 @@ GList *keymaps = NULL;
 struct ui_settings {
   int scroll_focused_only;
   int midiedit_navigation;
+  int knobs_grab_focus;
 };
 
-struct ui_settings ui_settings = { TRUE, TRUE };
+struct ui_settings ui_settings = { TRUE, TRUE, TRUE };
 
 /* Global settings in Popup menu */
 struct setting {
@@ -123,6 +124,7 @@ struct setting {
 struct setting settings[] = {
   { &ui_settings.scroll_focused_only, "Scrollfocus", NULL },
   { &ui_settings.midiedit_navigation, "Navigation", NULL },
+  { &ui_settings.knobs_grab_focus, "Knobsfocus", NULL },
   { &debug, "Debug", NULL },
   { NULL, NULL }
 };
@@ -957,6 +959,9 @@ controller_increment(int controller_number, int delta, void *ref)
   if (!editing_widget) return;
 
   change_value(editing_widget, 0, dir);
+
+  if (ui_settings.knobs_grab_focus)
+    gtk_widget_grab_focus(editing_widget);
 }
 
 
