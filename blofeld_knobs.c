@@ -52,6 +52,24 @@ register_notify_cb(knob_notify_cb cb, void *ref)
   notify_ref = ref;
 }
 
+#ifdef DEBUG
+static void
+print_knob(gpointer data, gpointer user_data)
+{
+  struct knob_descriptor *knob_description = data;
+  GtkWidget *widget = knob_description->widget;
+  printf("Widget %s:%s (%d,%d): %s\n",
+         gtk_widget_get_name(widget), gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget->allocation.x, widget->allocation.y, GTK_WIDGET_VISIBLE(widget) ? "visible" : "hidden");
+}
+
+static void
+print_knobmap(struct knobmap *knobmap)
+{
+  printf("Frame %s:\n", gtk_buildable_get_name(GTK_BUILDABLE(knobmap->container)));
+  g_list_foreach(knobmap->knoblist, print_knob, NULL);
+}
+#endif
+
 /* Originally from gtkcontainer.c */
 /* GCompareFunc to compare left-right positions of widgets a and b. */
 static gint
@@ -136,6 +154,9 @@ blofeld_knob(void *knobmap_in, int knob_no)
 
   if (!knobmap->sorted) {
     knobmap->knoblist = g_list_sort(knobmap->knoblist, left_right_compare);
+#ifdef DEBUG
+    print_knobmap(knobmap);
+#endif
     knobmap->sorted = 1;
   }
 
