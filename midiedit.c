@@ -187,9 +187,10 @@ get_parent_frame(GtkWidget *widget)
 {
   printf("Scanning for parent for %s (%p)\n",
           gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
-  do {
+
+  while (widget && !GTK_IS_FRAME(widget)) {
     widget = gtk_widget_get_parent(widget);
-  } while (widget && !GTK_IS_FRAME(widget));
+  }
 
   if (widget)
     printf("Found %s: %s (%p)\n",
@@ -197,6 +198,18 @@ get_parent_frame(GtkWidget *widget)
             gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
 
   return widget;
+}
+
+void
+invalidate_knob_mappings(GtkWidget *widget)
+{
+  widget = get_parent_frame(widget);
+  if (!widget) return;
+
+  struct f_k_map *f_k_map = find_frame_in_f_k_maps(f_k_maps, GTK_FRAME(widget));
+  if (!f_k_map) return;
+
+  knob_mapper->invalidate(f_k_map->knobmap);
 }
 
 /* General signal handlers */

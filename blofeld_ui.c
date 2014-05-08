@@ -292,6 +292,10 @@ on_Modulation_Select_changed (GtkObject *object, gpointer user_data)
   GList *container_children = gtk_container_get_children(GTK_CONTAINER(container));
 
   g_list_foreach(container_children, show_hide, &match);
+
+  /* Finally, any knob mappings related to the modulation selected must be
+   * redone to correspond with the mappings now visible. */
+  invalidate_knob_mappings(container);
 }
 
 
