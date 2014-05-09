@@ -35,7 +35,7 @@ struct knobmap {
   GtkContainer *container;
   GList *knoblist;
   GList *actives;
-  int sorted;
+  gboolean sorted;
 };
 
 /* Structure build time variables */
@@ -176,11 +176,11 @@ blofeld_knob(void *knobmap_in, int knob_no)
   static struct knobmap *prev_knobmap = NULL;
   static struct knob_descriptor *knob_descriptor = NULL;
 
-  if (!knobmap_in) return NULL;
-
   struct knobmap *knobmap = knobmap_in;
 
-  /* Caching: if called with same inparams as last tie, and the knobmap
+  if (!knobmap) return NULL;
+
+  /* Caching: if called with same inparams as last time, and the knobmap
    * is still sorted (i.e. has not been invalidated), return same
    * knob_descriptor as last time. */
   if (knob_no == prev_knob_no &&
@@ -198,7 +198,7 @@ blofeld_knob(void *knobmap_in, int knob_no)
 #ifdef DEBUG
     print_knobmap(knobmap);
 #endif
-    knobmap->sorted = 1;
+    knobmap->sorted = TRUE;
   }
 
   return knob_descriptor = g_list_nth_data(knobmap->actives, knob_no);
@@ -212,6 +212,8 @@ blofeld_invalidate(void *knobmap_in)
 {
   struct knobmap *knobmap = knobmap_in;
 
+  if (!knobmap) return;
+
   knobmap->sorted = FALSE;
 }
 
@@ -219,6 +221,7 @@ blofeld_invalidate(void *knobmap_in)
 void
 blofeld_knobs_init(struct knob_mapper *knob_mapper)
 {
+  /* Start-up-time configuraton */
   knob_mapper->register_notify_cb = register_notify_cb;
   knob_mapper->container_new = blofeld_knobs_container_new;
   knob_mapper->container_done = blofeld_knobs_container_done;
