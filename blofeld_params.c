@@ -265,16 +265,16 @@ struct blofeld_param blofeld_params[] = {
   { "reserved", NULL, NULL, NULL },
   { "Osc 3 Brilliance", &norm, NULL, NULL }, /* 48 */
   { "Osc 2 to 3 Sync", &norm, NULL, NULL },
-  { "Osc Pitch Source", &norm, NULL, NULL },
-  { "Osc Pitch Amount", &bipolar, NULL, NULL },
+  { "Osc Common Pitch Source", &norm, NULL, NULL },
+  { "Osc Common Pitch Amount", &bipolar, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
-  { "Glide", &norm, NULL, NULL },
+  { "Osc Common Glide Enable", &norm, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
-  { "Glide Mode", &norm, NULL, NULL },
-  { "Glide Rate", &norm, NULL, NULL },
+  { "Osc Common Glide Mode", &norm, NULL, NULL },
+  { "Osc Common Glide Rate", &norm, NULL, NULL },
   { "Allocation Mode", NULL, NULL, NULL },
-  { "Unison Detune", &norm, NULL, NULL },
+  { "Osc Common Unison Amount", &norm, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
   { "Osc 1 Level", &norm, NULL, NULL },
   { "Osc 1 Balance", &bipolar, NULL, NULL },
@@ -563,8 +563,8 @@ struct blofeld_param blofeld_params[] = {
    * which have multiple parents and one single child, which in our case
    * is the patch name (only). */
 
-  { "Unison", &threebit, NULL, &unison },
-  { "Allocation", &onoff, NULL, &allocation },
+  { "Osc Common Unison Mode", &threebit, NULL, &unison },
+  { "Osc Common Allocation", &onoff, NULL, &allocation },
   { "Filter Envelope Mode", &envmode, NULL, &fenvmode },
   { "Filter Envelope Trig", &onoff, NULL, &fenvtrig },
   { "Amplifier Envelope Mode", &envmode, NULL, &aenvmode },

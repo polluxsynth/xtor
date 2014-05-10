@@ -1867,7 +1867,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkComboBox" id="Osc Pitch Source">
+                                  <object class="GtkComboBox" id="Osc Common Pitch Source">
                                     <property name="visible">True</property>
                                     <property name="model">modsource</property>
                                     <property name="active">0</property>
@@ -1901,7 +1901,7 @@
                                     <property name="visible">True</property>
                                     <property name="orientation">vertical</property>
                                     <child>
-                                      <object class="GtkVScale" id="Osc Pitch Amount">
+                                      <object class="GtkVScale" id="Osc Common Pitch Amount">
                                         <property name="height_request">80</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
@@ -1919,7 +1919,7 @@
                                   <object class="GtkHBox" id="hbox28">
                                     <property name="visible">True</property>
                                     <child>
-                                      <object class="GtkComboBox" id="Unison">
+                                      <object class="GtkComboBox" id="Osc Common Unison Mode">
                                         <property name="visible">True</property>
                                         <property name="model">allocmode</property>
                                         <property name="active">0</property>
@@ -1935,7 +1935,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkCheckButton" id="Allocation">
+                                      <object class="GtkCheckButton" id="Osc Common Allocation">
                                         <property name="label" translatable="yes">Mono</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
@@ -1955,7 +1955,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkVScale" id="Unison Detune">
+                                  <object class="GtkVScale" id="Osc Common Unison Amount">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="orientation">vertical</property>
@@ -1995,7 +1995,7 @@
                                   <object class="GtkHBox" id="hbox38">
                                     <property name="visible">True</property>
                                     <child>
-                                      <object class="GtkComboBox" id="Glide Mode">
+                                      <object class="GtkComboBox" id="Osc Common Glide Mode">
                                         <property name="visible">True</property>
                                         <property name="model">glidemode</property>
                                         <property name="active">0</property>
@@ -2011,7 +2011,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkCheckButton" id="Glide">
+                                      <object class="GtkCheckButton" id="Osc Common Glide Enable">
                                         <property name="label" translatable="yes">On</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
@@ -2031,7 +2031,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkVScale" id="Glide Rate">
+                                  <object class="GtkVScale" id="Osc Common Glide Rate">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="orientation">vertical</property>
@@ -6145,7 +6145,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkFrame" id="Ring Frame">
+                      <object class="GtkFrame" id="Ringmod Frame">
                         <property name="height_request">150</property>
                         <property name="visible">True</property>
                         <property name="label_xalign">0</property>
@@ -18205,7 +18205,7 @@ Osc 2</property>
       </row>
       <row>
         <col id="0" translatable="yes">c</col>
-        <col id="1" translatable="yes">Osc Pitch Amount</col>
+        <col id="1" translatable="yes">Osc Common Pitch Amount</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
         <col id="4">0</col>
