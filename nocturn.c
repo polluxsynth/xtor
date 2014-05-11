@@ -68,7 +68,7 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
     if (knob_accumulator[knob] > -knob_scale &&
         knob_accumulator[knob] < knob_scale) return;
     value = knob_accumulator[knob] / knob_scale;
-    if (notify_ui) notify_ui(knob, value, notify_ref);
+    if (notify_ui) notify_ui(knob, INCREMENTOR, value, notify_ref);
     knob_accumulator[knob] -= value * knob_scale;
   }
 }

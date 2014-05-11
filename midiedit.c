@@ -921,23 +921,26 @@ out:
   return &focus;
 }
 
-/* Handle increment/decrement from MIDI controller */
-/* Controller #0 controls the currently focused widget,
- * controllers #1..8 control the leftmost adjustments in the current frame.
+/* Handle controller changes from MIDI controller */
+/* Incrementor #0 controls the currently focused widget,
+ * Incrementor #1..8 control the leftmost adjustments in the current frame.
  */
 static void
-controller_increment(int controller_number, int delta, void *ref)
+controller_change(int controller_number, enum controller_type controller_type,
+                  int value, void *ref)
 {
   int dir = 1;
   int steps;
   GtkWidget *focus_widget = GTK_WINDOW(main_window)->focus_widget;
 
-  dprintf("Controller #%d increment %d, focus %s, name %s\n",
-          controller_number, delta,
+  dprintf("Controller #%d type %d, value %d, focus %s, name %s\n",
+          controller_number, controller_type, value,
           gtk_widget_get_name(focus_widget),
           gtk_buildable_get_name(GTK_BUILDABLE(focus_widget)));
 
   struct focus *focus = current_focus(focus_widget);
+
+  int delta = value;
 
   if (delta < 0) {
     dir = -1;
@@ -1505,7 +1508,7 @@ main(int argc, char *argv[])
 
   param_handler->param_register_notify_cb(param_changed, NULL);
 
-  controller->controller_register_notify_cb(controller_increment, NULL);
+  controller->controller_register_notify_cb(controller_change, NULL);
 
   midi_connect(SYNTH_PORT, param_handler->remote_midi_device);
   midi_connect(CTRLR_PORT, controller->remote_midi_device);

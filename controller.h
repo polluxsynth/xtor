@@ -23,9 +23,12 @@
 #ifndef _CONTROLLER_H_
 #define _CONTROLLER_H_
 
+enum controller_type { INCREMENTOR, POTENTIOMETER, BUTTON };
+
 /* Callback for notifying UI of incoming parameter value changes */
-typedef void (*controller_notify_cb)(int controller_number, int delta,
-                                     void *ref);
+typedef void (*controller_notify_cb)(int controller_number,
+                                     enum controller_type controller_type,
+                                     int delta, void *ref);
 
 /* Struct for specifying controller-specific functions and values, intended
  * to be filled in by controller-specific initialization routines. */
