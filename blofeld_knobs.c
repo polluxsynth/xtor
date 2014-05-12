@@ -35,6 +35,8 @@ struct knobmap {
   GtkContainer *container;
   GList *potlist;
   GList *active_pots;
+  GList *buttonlist;
+  GList *active_buttons;
   gboolean sorted;
 };
 
@@ -66,8 +68,10 @@ print_knob(gpointer data, gpointer user_data)
 static void
 print_knobmap(struct knobmap *knobmap)
 {
-  printf("Frame %s:\n", gtk_buildable_get_name(GTK_BUILDABLE(knobmap->container)));
+  printf("Frame %s: Pots:\n", gtk_buildable_get_name(GTK_BUILDABLE(knobmap->container)));
   g_list_foreach(knobmap->active_pots, print_knob, NULL);
+  printf("Buttons:\n");
+  g_list_foreach(knobmap->active_buttons, print_knob, NULL);
 }
 #endif
 
@@ -131,7 +135,7 @@ blofeld_knobs_container_new(GtkContainer *container)
 
   /* Initialize knobmap structure */
   knobmap->container = container;
-  /* knobnap->potlist = NULL; done by g_new0() */
+  /* knobnap->potlist and knobmap->buttonlist = NULL; done by g_new0() */
 
   return knobmap;
 }
@@ -160,17 +164,31 @@ blofeld_knobs_container_add_widget(void *knobmap_in,
 
   if (!knob_description) return knobmap;
 
-  if (!GTK_IS_RANGE(knob_description->widget))
+  if (GTK_IS_RANGE(knob_description->widget))
     knobmap->potlist = g_list_prepend(knobmap->potlist, knob_description);
+  else if (GTK_IS_COMBO_BOX(knob_description->widget) ||
+           GTK_IS_TOGGLE_BUTTON(knob_description->widget))
+    knobmap->buttonlist = g_list_prepend(knobmap->buttonlist, knob_description);
 
   return knobmap;
 }
 
+static GList *sort_knobs(GList *knoblist, GList *active_list)
+{
+  if (active_list)
+     g_list_free(active_list);
+  active_list = copy_active(knoblist);
+  active_list = g_list_sort(active_list, left_right_compare);
+
+  return active_list;
+}
+
 /* Return knob_descriptor for knob no knob_no in the knobmap_in knob map */
 static struct knob_descriptor *
-blofeld_knob(void *knobmap_in, int knob_no)
+blofeld_knob(void *knobmap_in, int knob_no, enum controller_type type)
 {
   static int prev_knob_no = -1;
+  static enum controller_type prev_type;
   static struct knobmap *prev_knobmap = NULL;
   static struct knob_descriptor *knob_descriptor = NULL;
 
@@ -183,24 +201,24 @@ blofeld_knob(void *knobmap_in, int knob_no)
    * knob_descriptor as last time. */
   if (knob_no == prev_knob_no &&
       knobmap == prev_knobmap &&
+      type == prev_type &&
       knobmap->sorted)
     return knob_descriptor;
 
   if (!knobmap->sorted) {
-    if (knobmap->active_pots) {
-      g_list_free(knobmap->active_pots);
-      knobmap->active_pots = NULL;
-    }
-    knobmap->active_pots = copy_active(knobmap->potlist);
-    knobmap->active_pots = g_list_sort(knobmap->active_pots,
-                                       left_right_compare);
+    knobmap->active_pots = sort_knobs(knobmap->potlist,
+                                      knobmap->active_pots);
+    knobmap->active_buttons = sort_knobs(knobmap->buttonlist,
+                                         knobmap->active_buttons);
 #ifdef DEBUG
     print_knobmap(knobmap);
 #endif
     knobmap->sorted = TRUE;
   }
 
-  return knob_descriptor = g_list_nth_data(knobmap->active_pots, knob_no);
+  return knob_descriptor = g_list_nth_data(type == BUTTON ? 
+                                           knobmap->active_buttons : 
+                                           knobmap->active_pots, knob_no);
 }
 
 /* Invalidate current active knobmap, forcing blofeld_knob to create a new

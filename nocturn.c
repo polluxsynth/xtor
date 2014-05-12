@@ -29,6 +29,16 @@
 
 #include "debug.h"
 
+#undef TEST_BUTTONS_TO_INCREMENTORS
+
+/* For parameter control, we consider the top button in the two rows to be
+ * increment and the bottom button to be decrement. */
+#define NOCTURN_BUTTON_ROWS 2
+#define NOCTURN_BUTTON_GROUP_SIZE (NOCTURN_CC_BUTTONS / NOCTURN_BUTTON_ROWS)
+#define INCREMENT_CC_BUTTON(BUTTON) NOCTURN_CC_BUTTON(BUTTON)
+#define DECREMENT_CC_BUTTON(BUTTON) \
+        NOCTURN_CC_BUTTON(BUTTON + NOCTURN_BUTTON_GROUP_SIZE)
+
 static controller_notify_cb notify_ui = NULL;
 static void *notify_ref;
 
@@ -54,7 +64,27 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
   static speed_dial_accumulator = 0;
   static knob_accumulator[NOCTURN_CC_INCREMENTORS + 1] = { 0 };
 
-  if (controller_no == NOCTURN_CC_SPEED_DIAL)
+  if (controller_no >= INCREMENT_CC_BUTTON(0) &&
+      controller_no < INCREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE) &&
+      value == 127) {
+#ifdef TEST_BUTTONS_TO_INCREMENTORS
+    if (notify_ui) notify_ui(controller_no - INCREMENT_CC_BUTTON(0) + 1,
+                             INCREMENTOR, 1, notify_ref);
+#else
+    if (notify_ui) notify_ui(controller_no - INCREMENT_CC_BUTTON(0) + 1,
+                             BUTTON, 1, notify_ref);
+#endif
+  } else if (controller_no >= DECREMENT_CC_BUTTON(0) &&
+             controller_no < DECREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE) &&
+             value == 127) {
+#ifdef TEST_BUTTONS_TO_INCREMENTORS
+    if (notify_ui) notify_ui(controller_no - DECREMENT_CC_BUTTON(0) + 1,
+                            INCREMENTOR, -1, notify_ref);
+#else
+    if (notify_ui) notify_ui(controller_no - DECREMENT_CC_BUTTON(0) + 1,
+                            BUTTON, -1, notify_ref);
+#endif
+  } else if (controller_no == NOCTURN_CC_SPEED_DIAL)
     knob = 0;
   else if (controller_no >= NOCTURN_CC_INCREMENTOR(0) &&
            controller_no <= NOCTURN_CC_INCREMENTOR(7))

@@ -571,6 +571,9 @@ change_value(GtkWidget *what, int shifted, int dir)
   int delta;
   const char *signal = NULL;
 
+  dprintf("Change value for %s:%s\n", gtk_widget_get_name(what),
+          gtk_buildable_get_name(GTK_BUILDABLE(what)));
+
   /* This takes a bit of explaining: Normally all vertical sliders are 
    * 'inverted' from Gtk's point of view, meaning that their max value is
    * upwards. However, for some parameters, such as filter balance, it makes
@@ -593,12 +596,18 @@ change_value(GtkWidget *what, int shifted, int dir)
     signal = "move-slider";
   if (GTK_IS_SPIN_BUTTON(what))
     signal = "change-value";
+  /* When called with a widget in focus, the focus will be on a toggle button */
   else if (GTK_IS_TOGGLE_BUTTON(what) &&
            (parent = gtk_widget_get_parent(what)) &&
            GTK_IS_COMBO_BOX(parent)) {
     what = parent;
     signal = "move-active";
-  }
+  /* When called from a controller update, we'll be called with the actual
+   * combo box widget. */
+  } else if (GTK_IS_COMBO_BOX(what))
+    signal ="move-active";
+  else if (GTK_IS_TOGGLE_BUTTON(what)) /* including check button */
+    signal = "activate";
 
   if (what && signal) {
     g_signal_emit_by_name(GTK_OBJECT(what), signal, delta);
@@ -857,14 +866,15 @@ show_widget(gpointer data, gpointer user_data)
 
 /* Get widget corresponding to currently turned knob */
 static GtkWidget *
-get_knob_widget(struct f_k_map *f_k_map, int controller_number)
+get_knob_widget(struct f_k_map *f_k_map, int controller_number,
+                enum controller_type type)
 {
 printf("f_k_map: frame %p:%s:%s, knobmap %p\n", f_k_map->frame, gtk_widget_get_name(GTK_WIDGET(f_k_map->frame)), gtk_buildable_get_name(GTK_BUILDABLE(f_k_map->frame)), f_k_map->knobmap);
 
   /* Get the knob_descriptor for the current knob (controller_number)
    * from the knob_mapper. */
   struct knob_descriptor *knob_descriptor = 
-    knob_mapper->knob(f_k_map->knobmap, controller_number - 1);
+    knob_mapper->knob(f_k_map->knobmap, controller_number - 1, type);
 printf("Knob descriptor %p\n", knob_descriptor);
   if (!knob_descriptor) return NULL;
 
@@ -926,7 +936,7 @@ out:
  * Incrementor #1..8 control the leftmost adjustments in the current frame.
  */
 static void
-controller_change(int controller_number, enum controller_type controller_type,
+controller_change(int controller_number, enum controller_type type,
                   int value, void *ref)
 {
   int dir = 1;
@@ -934,10 +944,11 @@ controller_change(int controller_number, enum controller_type controller_type,
   GtkWidget *focus_widget = GTK_WINDOW(main_window)->focus_widget;
 
   dprintf("Controller #%d type %d, value %d, focus %s, name %s\n",
-          controller_number, controller_type, value,
+          controller_number, type, value,
           gtk_widget_get_name(focus_widget),
           gtk_buildable_get_name(GTK_BUILDABLE(focus_widget)));
 
+  /* Get parent frame and f_k_map for current focus, if available */
   struct focus *focus = current_focus(focus_widget);
 
   int delta = value;
@@ -947,24 +958,23 @@ controller_change(int controller_number, enum controller_type controller_type,
     delta = -delta;
   }
 
+  GtkWidget *editing_widget;
+
   if (controller_number == 0) { /* focused parameter */
-    if (!focus->widget) return; /* No focus */
-    for (steps = 0; steps < delta; steps++)
-      change_value(focus->widget, 0, dir);
-    return;
+    editing_widget = focus->widget;
+  } else { /* use map */
+    /* Parameters in current frame */
+    if (!focus->f_k_map) return; /* No f_k_map, so nothing to edit */
+    editing_widget = get_knob_widget(focus->f_k_map, controller_number, type);
+
+    if (editing_widget && ui_settings.knobs_grab_focus)
+      gtk_widget_grab_focus(editing_widget);
   }
 
-  /* Now we handle all other parameters in the current frame. */
-  if (!focus->f_k_map) return; /* No f_k_map, so nothing to edit */
-
-  GtkWidget *editing_widget = get_knob_widget(focus->f_k_map,
-                                              controller_number);
   if (!editing_widget) return;
 
-  change_value(editing_widget, 0, dir);
-
-  if (ui_settings.knobs_grab_focus)
-    gtk_widget_grab_focus(editing_widget);
+  for (steps = 0; steps < delta; steps++)
+    change_value(editing_widget, 0, dir);
 }
 
 
@@ -1201,6 +1211,9 @@ printf("%s belongs to %s\n", gtk_buildable_get_name(GTK_BUILDABLE(this)), curren
     /* prepend is faster than append, and ok since we don't care about order */
     adjustor->widgets = g_list_prepend(adjustor->widgets, this);
 
+    /* Add it to current knobmap */
+    current_knobmap = add_knobmap(current_knobmap, this, adjustor);
+
     if (GTK_IS_RANGE(this)) {
       struct param_properties props;
       GtkAdjustment *adj = gtk_range_get_adjustment(GTK_RANGE(this));
@@ -1217,9 +1230,6 @@ printf("%s belongs to %s\n", gtk_buildable_get_name(GTK_BUILDABLE(this)), curren
         g_object_set(adj, "page-size", (gdouble) 0, NULL);
       } else
         eprintf("Warning: GtkRange %s has no adjustment\n", id);
-
-      /* Add it to current knobmap */
-      current_knobmap = add_knobmap(current_knobmap, this, adjustor);
 
       /* Handle update of value when user attempts to change value
        * (be it using mouse or keys) */
