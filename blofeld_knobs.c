@@ -3,7 +3,19 @@
  *
  * blofeld_knobs.c - Map Blofeld UI parameters to controller knobs.
  *
+ * For the Blofeld, most UI frames consist of a row of sliders above and
+ * a row of comboboxes ("buttons" in this file) below. So we assume the
+ * controller has two rows too. So far focus is on the Nocturn which has
+ * one row of knobs and one (double) row of buttons.
+ *
  * Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
+ *
+ * Portions of this file derived from the GTK toolkit:
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
