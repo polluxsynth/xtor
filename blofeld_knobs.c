@@ -28,15 +28,18 @@
 
 #include "debug.h"
 
+struct knoblist {
+  GList *build;
+  GList *active;
+};
+
 /* We keep this structure local, as its contents depends on what we as a
  * specific knob mapper implementation require.
  * Use void * for communicating it externally. */
 struct knobmap {
   GtkContainer *container;
-  GList *potlist;
-  GList *active_pots;
-  GList *buttonlist;
-  GList *active_buttons;
+  struct knoblist pots;
+  struct knoblist buttons;
   gboolean sorted;
 };
 
@@ -69,9 +72,9 @@ static void
 print_knobmap(struct knobmap *knobmap)
 {
   printf("Frame %s: Pots:\n", gtk_buildable_get_name(GTK_BUILDABLE(knobmap->container)));
-  g_list_foreach(knobmap->active_pots, print_knob, NULL);
+  g_list_foreach(knobmap->pots.active, print_knob, NULL);
   printf("Buttons:\n");
-  g_list_foreach(knobmap->active_buttons, print_knob, NULL);
+  g_list_foreach(knobmap->buttons.active, print_knob, NULL);
 }
 #endif
 
@@ -103,20 +106,20 @@ static void
 add_if_active(gpointer data, gpointer user_data)
 {
   struct knob_descriptor *knob_descriptor = data;
-  GList **active_pots = user_data;
+  GList **active_list = user_data;
 
   if (GTK_WIDGET_VISIBLE(knob_descriptor->widget))
-    *active_pots = g_list_prepend(*active_pots, knob_descriptor);
+    *active_list = g_list_prepend(*active_list, knob_descriptor);
 }
 
 /* Copy knob_descriptors with visible widgets to new list */
 static GList *
 copy_active(GList *knoblist)
 {
-  GList *active_pots = NULL;
-  g_list_foreach(knoblist, add_if_active, &active_pots);
+  GList *active_list = NULL;
+  g_list_foreach(knoblist, add_if_active, &active_list);
 
-  return active_pots;
+  return active_list;
 }
 
 
@@ -135,7 +138,7 @@ blofeld_knobs_container_new(GtkContainer *container)
 
   /* Initialize knobmap structure */
   knobmap->container = container;
-  /* knobnap->potlist and knobmap->buttonlist = NULL; done by g_new0() */
+  /* knobnap->pots and knobmap->buttons = NULL; done by g_new0() */
 
   return knobmap;
 }
@@ -165,22 +168,22 @@ blofeld_knobs_container_add_widget(void *knobmap_in,
   if (!knob_description) return knobmap;
 
   if (GTK_IS_RANGE(knob_description->widget))
-    knobmap->potlist = g_list_prepend(knobmap->potlist, knob_description);
+    knobmap->pots.build = g_list_prepend(knobmap->pots.build,
+                                         knob_description);
   else if (GTK_IS_COMBO_BOX(knob_description->widget) ||
            GTK_IS_TOGGLE_BUTTON(knob_description->widget))
-    knobmap->buttonlist = g_list_prepend(knobmap->buttonlist, knob_description);
+    knobmap->buttons.build = g_list_prepend(knobmap->buttons.build,
+                                            knob_description);
 
   return knobmap;
 }
 
-static GList *sort_knobs(GList *knoblist, GList *active_list)
+static void sort_knobs(struct knoblist *knobs)
 {
-  if (active_list)
-     g_list_free(active_list);
-  active_list = copy_active(knoblist);
-  active_list = g_list_sort(active_list, left_right_compare);
-
-  return active_list;
+  if (knobs->active)
+     g_list_free(knobs->active);
+  knobs->active = copy_active(knobs->build);
+  knobs->active = g_list_sort(knobs->active, left_right_compare);
 }
 
 /* Return knob_descriptor for knob no knob_no in the knobmap_in knob map */
@@ -206,10 +209,8 @@ blofeld_knob(void *knobmap_in, int knob_no, enum controller_type type)
     return knob_descriptor;
 
   if (!knobmap->sorted) {
-    knobmap->active_pots = sort_knobs(knobmap->potlist,
-                                      knobmap->active_pots);
-    knobmap->active_buttons = sort_knobs(knobmap->buttonlist,
-                                         knobmap->active_buttons);
+    sort_knobs(&knobmap->pots);
+    sort_knobs(&knobmap->buttons);
 #ifdef DEBUG
     print_knobmap(knobmap);
 #endif
@@ -217,12 +218,12 @@ blofeld_knob(void *knobmap_in, int knob_no, enum controller_type type)
   }
 
   return knob_descriptor = g_list_nth_data(type == BUTTON ? 
-                                           knobmap->active_buttons : 
-                                           knobmap->active_pots, knob_no);
+                                           knobmap->buttons.active : 
+                                           knobmap->pots.active, knob_no);
 }
 
-/* Invalidate current active knobmap, forcing blofeld_knob to create a new
- * list next the time a knob within the frame is moved, the most important
+/* Invalidate current active knobmap, forcing blofeld_knob to create new
+ * lists next the time a knob within the frame is moved, the most important
  * consequence of is that the visibility of the widgets is considered. */
 static void
 blofeld_invalidate(void *knobmap_in)
