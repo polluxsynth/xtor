@@ -208,6 +208,10 @@ blofeld_knob(void *knobmap_in, int knob_no, enum controller_type type)
       knobmap->sorted)
     return knob_descriptor;
 
+  prev_knob_no = knob_no;
+  prev_knobmap = knobmap;
+  prev_type = type;
+
   if (!knobmap->sorted) {
     sort_knobs(&knobmap->pots);
     sort_knobs(&knobmap->buttons);
