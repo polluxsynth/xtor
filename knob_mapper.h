@@ -31,7 +31,6 @@
 #define _KNOBS_H_
 
 #include <gtk/gtk.h>
-#include "controller.h"
 
 /* Description of a knob in our context. */
 struct knob_descriptor {
@@ -57,8 +56,7 @@ struct knob_mapper {
                                 struct knob_descriptor* knob_description);
   void (*register_notify_cb)(knob_notify_cb cb, void *ref);
   /* Run-time mapping */
-  struct knob_descriptor *(*knob)(void *knobmap_in, int knob_no,
-                                  enum controller_type type);
+  struct knob_descriptor *(*knob)(void *knobmap_in, int knob_no, int row);
   void (*invalidate)(void *knobmap_in);
 };
 

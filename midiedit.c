@@ -866,15 +866,14 @@ show_widget(gpointer data, gpointer user_data)
 
 /* Get widget corresponding to currently turned knob */
 static GtkWidget *
-get_knob_widget(struct f_k_map *f_k_map, int controller_number,
-                enum controller_type type)
+get_knob_widget(struct f_k_map *f_k_map, int controller_number, int row)
 {
 printf("f_k_map: frame %p:%s:%s, knobmap %p\n", f_k_map->frame, gtk_widget_get_name(GTK_WIDGET(f_k_map->frame)), gtk_buildable_get_name(GTK_BUILDABLE(f_k_map->frame)), f_k_map->knobmap);
 
   /* Get the knob_descriptor for the current knob (controller_number)
    * from the knob_mapper. */
   struct knob_descriptor *knob_descriptor = 
-    knob_mapper->knob(f_k_map->knobmap, controller_number - 1, type);
+    knob_mapper->knob(f_k_map->knobmap, controller_number - 1, row);
 printf("Knob descriptor %p\n", knob_descriptor);
   if (!knob_descriptor) return NULL;
 
@@ -936,15 +935,14 @@ out:
  * Incrementor #1..8 control the leftmost adjustments in the current frame.
  */
 static void
-controller_change(int controller_number, enum controller_type type,
-                  int value, void *ref)
+controller_change(int controller_number, int row, int value, void *ref)
 {
   int dir = 1;
   int steps;
   GtkWidget *focus_widget = GTK_WINDOW(main_window)->focus_widget;
 
-  dprintf("Controller #%d type %d, value %d, focus %s, name %s\n",
-          controller_number, type, value,
+  dprintf("Controller #%d row %d, value %d, focus %s, name %s\n",
+          controller_number, row, value,
           gtk_widget_get_name(focus_widget),
           gtk_buildable_get_name(GTK_BUILDABLE(focus_widget)));
 
@@ -965,7 +963,7 @@ controller_change(int controller_number, enum controller_type type,
   } else { /* use map */
     /* Parameters in current frame */
     if (!focus->f_k_map) return; /* No f_k_map, so nothing to edit */
-    editing_widget = get_knob_widget(focus->f_k_map, controller_number, type);
+    editing_widget = get_knob_widget(focus->f_k_map, controller_number, row);
 
     if (editing_widget && ui_settings.knobs_grab_focus)
       gtk_widget_grab_focus(editing_widget);

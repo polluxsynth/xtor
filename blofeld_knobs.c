@@ -200,10 +200,10 @@ static void sort_knobs(struct knoblist *knobs)
 
 /* Return knob_descriptor for knob no knob_no in the knobmap_in knob map */
 static struct knob_descriptor *
-blofeld_knob(void *knobmap_in, int knob_no, enum controller_type type)
+blofeld_knob(void *knobmap_in, int knob_no, int row)
 {
   static int prev_knob_no = -1;
-  static enum controller_type prev_type;
+  static int prev_row = -1;
   static struct knobmap *prev_knobmap = NULL;
   static struct knob_descriptor *knob_descriptor = NULL;
 
@@ -216,13 +216,13 @@ blofeld_knob(void *knobmap_in, int knob_no, enum controller_type type)
    * knob_descriptor as last time. */
   if (knob_no == prev_knob_no &&
       knobmap == prev_knobmap &&
-      type == prev_type &&
+      row == prev_row &&
       knobmap->sorted)
     return knob_descriptor;
 
   prev_knob_no = knob_no;
   prev_knobmap = knobmap;
-  prev_type = type;
+  prev_row = row;
 
   if (!knobmap->sorted) {
     sort_knobs(&knobmap->pots);
@@ -233,9 +233,9 @@ blofeld_knob(void *knobmap_in, int knob_no, enum controller_type type)
     knobmap->sorted = TRUE;
   }
 
-  return knob_descriptor = g_list_nth_data(type == BUTTON ? 
-                                           knobmap->buttons.active : 
-                                           knobmap->pots.active, knob_no);
+  return knob_descriptor = g_list_nth_data(row == 0 ? 
+                                           knobmap->pots.active : 
+                                           knobmap->buttons.active, knob_no);
 }
 
 /* Invalidate current active knobmap, forcing blofeld_knob to create new

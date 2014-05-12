@@ -31,6 +31,13 @@
 
 #undef TEST_BUTTONS_TO_INCREMENTORS
 
+#define KNOB_ROW 0
+#ifdef TEST_BUTTONS_TO_INCREMENTORS
+#define INCREMENTOR_ROW 0
+#else
+#define INCREMENTOR_ROW 1
+#endif
+
 /* For parameter control, we consider the top button in the two rows to be
  * increment and the bottom button to be decrement. */
 #define NOCTURN_BUTTON_ROWS 2
@@ -67,23 +74,13 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
   if (controller_no >= INCREMENT_CC_BUTTON(0) &&
       controller_no < INCREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE) &&
       value == 127) {
-#ifdef TEST_BUTTONS_TO_INCREMENTORS
     if (notify_ui) notify_ui(controller_no - INCREMENT_CC_BUTTON(0) + 1,
-                             INCREMENTOR, 1, notify_ref);
-#else
-    if (notify_ui) notify_ui(controller_no - INCREMENT_CC_BUTTON(0) + 1,
-                             BUTTON, 1, notify_ref);
-#endif
+                             INCREMENTOR_ROW, 1, notify_ref);
   } else if (controller_no >= DECREMENT_CC_BUTTON(0) &&
              controller_no < DECREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE) &&
              value == 127) {
-#ifdef TEST_BUTTONS_TO_INCREMENTORS
     if (notify_ui) notify_ui(controller_no - DECREMENT_CC_BUTTON(0) + 1,
-                            INCREMENTOR, -1, notify_ref);
-#else
-    if (notify_ui) notify_ui(controller_no - DECREMENT_CC_BUTTON(0) + 1,
-                            BUTTON, -1, notify_ref);
-#endif
+                            INCREMENTOR_ROW, -1, notify_ref);
   } else if (controller_no == NOCTURN_CC_SPEED_DIAL)
     knob = 0;
   else if (controller_no >= NOCTURN_CC_INCREMENTOR(0) &&
@@ -98,7 +95,7 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
     if (knob_accumulator[knob] > -knob_scale &&
         knob_accumulator[knob] < knob_scale) return;
     value = knob_accumulator[knob] / knob_scale;
-    if (notify_ui) notify_ui(knob, INCREMENTOR, value, notify_ref);
+    if (notify_ui) notify_ui(knob, KNOB_ROW, value, notify_ref);
     knob_accumulator[knob] -= value * knob_scale;
   }
 }
