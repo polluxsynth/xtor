@@ -33,8 +33,8 @@
  * Use void * for communicating it externally. */
 struct knobmap {
   GtkContainer *container;
-  GList *knoblist;
-  GList *actives;
+  GList *potlist;
+  GList *active_pots;
   gboolean sorted;
 };
 
@@ -67,7 +67,7 @@ static void
 print_knobmap(struct knobmap *knobmap)
 {
   printf("Frame %s:\n", gtk_buildable_get_name(GTK_BUILDABLE(knobmap->container)));
-  g_list_foreach(knobmap->actives, print_knob, NULL);
+  g_list_foreach(knobmap->active_pots, print_knob, NULL);
 }
 #endif
 
@@ -99,20 +99,20 @@ static void
 add_if_active(gpointer data, gpointer user_data)
 {
   struct knob_descriptor *knob_descriptor = data;
-  GList **actives_ptr = user_data;
+  GList **active_pots = user_data;
 
   if (GTK_WIDGET_VISIBLE(knob_descriptor->widget))
-    *actives_ptr = g_list_prepend(*actives_ptr, knob_descriptor);
+    *active_pots = g_list_prepend(*active_pots, knob_descriptor);
 }
 
 /* Copy knob_descriptors with visible widgets to new list */
 static GList *
 copy_active(GList *knoblist)
 {
-  GList *actives = NULL;
-  g_list_foreach(knoblist, add_if_active, &actives);
+  GList *active_pots = NULL;
+  g_list_foreach(knoblist, add_if_active, &active_pots);
 
-  return actives;
+  return active_pots;
 }
 
 
@@ -131,7 +131,7 @@ blofeld_knobs_container_new(GtkContainer *container)
 
   /* Initialize knobmap structure */
   knobmap->container = container;
-  /* knobnap->knoblist = NULL; done by g_new0() */
+  /* knobnap->potlist = NULL; done by g_new0() */
 
   return knobmap;
 }
@@ -160,10 +160,8 @@ blofeld_knobs_container_add_widget(void *knobmap_in,
 
   if (!knob_description) return knobmap;
 
-  /* We only handle ranges (sliders) for now. */
-  if (!GTK_IS_RANGE(knob_description->widget)) return knobmap;
-
-  knobmap->knoblist = g_list_prepend(knobmap->knoblist, knob_description);
+  if (!GTK_IS_RANGE(knob_description->widget))
+    knobmap->potlist = g_list_prepend(knobmap->potlist, knob_description);
 
   return knobmap;
 }
@@ -189,19 +187,20 @@ blofeld_knob(void *knobmap_in, int knob_no)
     return knob_descriptor;
 
   if (!knobmap->sorted) {
-    if (knobmap->actives) {
-      g_list_free(knobmap->actives);
-      knobmap->actives = NULL;
+    if (knobmap->active_pots) {
+      g_list_free(knobmap->active_pots);
+      knobmap->active_pots = NULL;
     }
-    knobmap->actives = copy_active(knobmap->knoblist);
-    knobmap->actives = g_list_sort(knobmap->actives, left_right_compare);
+    knobmap->active_pots = copy_active(knobmap->potlist);
+    knobmap->active_pots = g_list_sort(knobmap->active_pots,
+                                       left_right_compare);
 #ifdef DEBUG
     print_knobmap(knobmap);
 #endif
     knobmap->sorted = TRUE;
   }
 
-  return knob_descriptor = g_list_nth_data(knobmap->actives, knob_no);
+  return knob_descriptor = g_list_nth_data(knobmap->active_pots, knob_no);
 }
 
 /* Invalidate current active knobmap, forcing blofeld_knob to create a new
