@@ -182,10 +182,11 @@ blofeld_knobs_container_add_widget(void *knobmap_in,
   if (GTK_IS_RANGE(knob_description->widget))
     knobmap->pots.build = g_list_prepend(knobmap->pots.build,
                                          knob_description);
-  else if (GTK_IS_COMBO_BOX(knob_description->widget) ||
-           GTK_IS_TOGGLE_BUTTON(knob_description->widget))
+  else if (GTK_IS_COMBO_BOX(knob_description->widget))
     knobmap->buttons.build = g_list_prepend(knobmap->buttons.build,
                                             knob_description);
+  /* We don't map toggle buttons or check buttons as it messes up the
+   * ordering in for example the oscillator frames. */
 
   return knobmap;
 }
