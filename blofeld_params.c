@@ -1244,7 +1244,7 @@ blofeld_init(struct param_handler *param_handler)
   param_handler->params = sizeof(blofeld_params)/sizeof(blofeld_params[0]);
 
   /* Names of things */
-  param_handler->remote_midi_device = "Waldorf Blofeld";
+  param_handler->remote_midi_device = "Blofeld";
   param_handler->name = "Blofeld";
   param_handler->ui_filename = "blofeld.glade";
 
