@@ -61,10 +61,15 @@ struct knob_mapper {
 };
 
 /* Functions intended primarily for use by knob mappers. */
+
+/* Get coordinates of @widget's allocation with respect to
+ * allocation of @container.  */
 gboolean get_allocation_coords (GtkContainer  *container,
                                 GtkWidget     *widget,
                                 GdkRectangle  *allocation);
 
+/* GCompareFunc to compare left-right positions of widgets a and b. */
+gint left_right_compare (gconstpointer a, gconstpointer b);
 
 #endif /* _KNOBS_H_ */
 

@@ -90,28 +90,6 @@ print_knobmap(struct knobmap *knobmap)
 }
 #endif
 
-/* Originally from gtkcontainer.c */
-/* GCompareFunc to compare left-right positions of widgets a and b. */
-static gint
-left_right_compare (gconstpointer a, gconstpointer b)
-{
-  GtkWidget *widget1 = ((struct knob_descriptor *)a)->widget;
-  GtkWidget *widget2 = ((struct knob_descriptor *)b)->widget;
-
-  gint x1 = widget1->allocation.x + widget1->allocation.width / 2;
-  gint x2 = widget2->allocation.x + widget2->allocation.width / 2;
-
-  if (x1 == x2)
-    {
-      gint y1 = widget1->allocation.y + widget1->allocation.height / 2;
-      gint y2 = widget2->allocation.y + widget2->allocation.height / 2;
-
-      return (y1 < y2) ? -1 : ((y1 == y2) ? 0 : 1);
-    }
-  else
-    return (x1 < x2) ? -1 : 1;
-}
-
 /* Add knob_descriptor data to list pointed to by user_data, but 
  * only if the corresponding widget is VISIBLE */
 static void
