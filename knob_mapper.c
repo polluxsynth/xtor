@@ -36,20 +36,20 @@
  * allocation of @container.
  */
 gboolean
-get_allocation_coords (GtkContainer  *container,
-		       GtkWidget     *widget,
-		       GdkRectangle  *allocation)
+get_allocation_coords(GtkContainer  *container,
+		      GtkWidget     *widget,
+		      GdkRectangle  *allocation)
 {
   *allocation = widget->allocation;
 
-  return gtk_widget_translate_coordinates (widget, GTK_WIDGET (container),
-					   0, 0, &allocation->x, &allocation->y);
+  return gtk_widget_translate_coordinates(widget, GTK_WIDGET (container),
+					  0, 0, &allocation->x, &allocation->y);
 }
 
 /* From gtkcontainer.c */
 /* GCompareFunc to compare left-right positions of widgets a and b. */
 gint
-left_right_compare (gconstpointer a, gconstpointer b)
+left_right_compare(gconstpointer a, gconstpointer b)
 {
   GtkWidget *widget1 = ((struct knob_descriptor *)a)->widget;
   GtkWidget *widget2 = ((struct knob_descriptor *)b)->widget;

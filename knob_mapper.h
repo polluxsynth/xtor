@@ -27,8 +27,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ****************************************************************************/
 
-#ifndef _KNOBS_H_
-#define _KNOBS_H_
+#ifndef _KNOB_MAPPER_H_
+#define _KNOB_MAPPER_H_
 
 #include <gtk/gtk.h>
 
@@ -64,13 +64,13 @@ struct knob_mapper {
 
 /* Get coordinates of @widget's allocation with respect to
  * allocation of @container.  */
-gboolean get_allocation_coords (GtkContainer  *container,
-                                GtkWidget     *widget,
-                                GdkRectangle  *allocation);
+gboolean get_allocation_coords(GtkContainer  *container,
+                               GtkWidget     *widget,
+                               GdkRectangle  *allocation);
 
 /* GCompareFunc to compare left-right positions of widgets a and b. */
-gint left_right_compare (gconstpointer a, gconstpointer b);
+gint left_right_compare(gconstpointer a, gconstpointer b);
 
-#endif /* _KNOBS_H_ */
+#endif /* _KNOB_MAPPER_H_ */
 
 /********************** End of file knob_mapper.h ***************************/
