@@ -77,7 +77,8 @@ accelerate(int knob, int value)
   if (value > 1 || value < -1) value *= incrementor_acceleration;
   knob_accumulator[knob] += value;
   if (knob_accumulator[knob] > -knob_scale &&
-      knob_accumulator[knob] < knob_scale) return;
+      knob_accumulator[knob] < knob_scale)
+    return 0;
   value = knob_accumulator[knob] / knob_scale;
   knob_accumulator[knob] -= value * knob_scale;
 
