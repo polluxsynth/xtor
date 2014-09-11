@@ -94,7 +94,8 @@ int current_patch_name_max = BLOFELD_PATCH_NAME_LEN_MAX;
 /* structure for mapping keys to specific widget focus */
 struct keymap {
   const gchar *key_name; /* e.g. "s" */
-  guint keyval;          /* GDK_ code for key */
+  guint keyval;          /* GDK_ code for key_name */
+  const gchar *jump_button; /* e.g. "P1" */
   const gchar *param_name;
   GtkWidget *widget;
   int param_arg;
@@ -1359,7 +1360,7 @@ get_liststore_keymap(GtkTreeModel *model,
                      GtkTreeIter *iter,
                      gpointer user_data)
 {
-  gchar *key, *param_name, *parent_name;
+  gchar *key, *param_name, *parent_name, *jump_button;
   int keyval, param_arg, parent_arg;
   GList **keymaps = user_data;
 
@@ -1368,12 +1369,14 @@ get_liststore_keymap(GtkTreeModel *model,
                      1, &param_name,
                      2, &param_arg,
                      3, &parent_name,
-                     4, &parent_arg, -1);
+                     4, &parent_arg,
+                     5, &jump_button, -1);
   keyval = gdk_keyval_from_name(key);
   if (keyval == GDK_VoidSymbol) {
     g_free(key);
     g_free(param_name);
     g_free(parent_name);
+    g_free(jump_button);
     return FALSE;
   }
 
@@ -1397,6 +1400,7 @@ get_liststore_keymap(GtkTreeModel *model,
   struct keymap *map = g_new0(struct keymap, 1);
   map->key_name = key;
   map->keyval = keyval;
+  map->jump_button = jump_button;
   map->param_name = param_name;
   map->param_arg = param_arg;
   map->parent_name = parent_name;
