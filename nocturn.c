@@ -49,6 +49,9 @@
 static controller_notify_cb notify_ui = NULL;
 static void *notify_ref;
 
+static int shift_state = 0; /* bitmask of button state */
+static int shifted = 0; /* set to 1 when more than one button pressed */
+
 static void
 nocturn_register_notify_cb(controller_notify_cb cb, void *ref)
 {
@@ -90,18 +93,28 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
 {
   int knob = -1;
 
+  if (controller_no >= INCREMENT_CC_BUTTON(0) &&
+      controller_no < INCREMENT_CC_BUTTON(NOCTURN_CC_BUTTONS)) {
+    if (value) {
+      if (shift_state) shifted = 1;
+      shift_state |= 1 << (controller_no - INCREMENT_CC_BUTTON(0));
+    } else
+      shift_state &= ~(1 << (controller_no - INCREMENT_CC_BUTTON(0)));
+printf("shift state %04x shifted %d\n", shift_state, shifted);
+  }
+
   /* 'Increment' buttons = top row */
   if (controller_no >= INCREMENT_CC_BUTTON(0) &&
-      controller_no < INCREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE) &&
-      value == 127) {
-    if (notify_ui) notify_ui(controller_no - INCREMENT_CC_BUTTON(0) + 1,
-                             INCREMENTOR_ROW, 1, notify_ref);
+      controller_no < INCREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE)) {
+    if (value == 0 && !shifted)
+      if (notify_ui) notify_ui(controller_no - INCREMENT_CC_BUTTON(0) + 1,
+                               INCREMENTOR_ROW, 1, notify_ref);
   /* 'Decrement' buttons = top row */
   } else if (controller_no >= DECREMENT_CC_BUTTON(0) &&
-             controller_no < DECREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE) &&
-             value == 127) {
-    if (notify_ui) notify_ui(controller_no - DECREMENT_CC_BUTTON(0) + 1,
-                            INCREMENTOR_ROW, -1, notify_ref);
+             controller_no < DECREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE)) {
+    if (value == 0 && !shifted)
+      if (notify_ui) notify_ui(controller_no - DECREMENT_CC_BUTTON(0) + 1,
+                               INCREMENTOR_ROW, -1, notify_ref);
   /* Speed dial */
   } else if (controller_no == NOCTURN_CC_SPEED_DIAL)
     knob = 0;
@@ -114,6 +127,8 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
     if (notify_ui)
       notify_ui(knob, KNOB_ROW, accelerate(knob, value), notify_ref);
   }
+
+  if (!shift_state) shifted = 0;
 }
 
 void
