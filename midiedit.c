@@ -710,7 +710,7 @@ find_keymap(gconstpointer data, gconstpointer user_data)
 
 /* Handle keys mapped in UI KeyMapping liststore ("hotkeys") */
 static gboolean
-mapped_key(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
+mapped_key(GtkWidget *focus, GdkEventKey *event)
 {
   struct key_search_spec key_search_spec;
   key_search_spec.keyval = event->keyval; /* event to search for in keymaps */
@@ -770,7 +770,7 @@ key_event(GtkWidget *widget, GdkEventKey *event)
   if (ui_settings.midiedit_navigation && navigation(widget, focus, event))
     return TRUE;
 
-  if (mapped_key(widget, focus, event))
+  if (mapped_key(focus, event))
     return TRUE;
 
   return FALSE; /* key not handled - defer to GTK defaults */
