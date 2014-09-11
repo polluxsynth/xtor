@@ -678,8 +678,9 @@ is_parent(GtkWidget *widget, GtkWidget *parent)
 
 /* Used for searching for valid key map given key val and current focus */
 struct key_search_spec {
-  guint keyval;
-  GtkWidget *focus_widget;
+  gchar *button_name; /* NULL for key search mode, else button string */
+  guint keyval; /* GDK_ value in key search mode */
+  GtkWidget *focus_widget; /* currently focused widget */
 };
 
 /* Used for g_list_find_custom to find key val in keymaps */
@@ -690,8 +691,15 @@ find_keymap(gconstpointer data, gconstpointer user_data)
   const struct key_search_spec *search = user_data;
 
   dprintf("Scan keymap %s: %s\n", keymap->key_name, keymap->param_name);
-  if (keymap->keyval != search->keyval)
-    return 1; /* not the key we're looking for found */
+  if (search->button_name) { /* jump button search mode */
+    if (!keymap->jump_button || !*keymap->jump_button)
+      return 1; /* no jump button specified, or zero length */
+    if (strcmp(keymap->jump_button, search->button_name))
+      return 1;
+  } else { /* key search mode */
+     if (keymap->keyval != search->keyval)
+      return 1; /* not the key we're looking for */
+  }
   if (!keymap->widget)
     return 1; /* Widget not set, UI specified unknown Param or Parent */
   dprintf("Found keyval\n");
@@ -713,6 +721,7 @@ static gboolean
 mapped_key(GtkWidget *focus, GdkEventKey *event)
 {
   struct key_search_spec key_search_spec;
+  key_search_spec.button_name = NULL; /* set key search mode */
   key_search_spec.keyval = event->keyval; /* event to search for in keymaps */
   key_search_spec.focus_widget = focus; /* currently focused widget */
 
