@@ -228,7 +228,7 @@ static void sysex_in(snd_seq_event_t *ev)
     int i;
     for (i = 0; i < ev->data.ext.len; i++)
       dprintf("%d ", data[i]);
-     printf("\n");
+    dprintf("\n");
   }
 #endif
 
