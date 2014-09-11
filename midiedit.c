@@ -690,19 +690,20 @@ find_keymap(gconstpointer data, gconstpointer user_data)
   const struct keymap *keymap = data;
   const struct key_search_spec *search = user_data;
 
-  dprintf("Scan keymap %s: %s\n", keymap->key_name, keymap->param_name);
+  dprintf("Scan keymap %s: %s: %s\n", keymap->key_name, keymap->param_name,
+          keymap->jump_button);
   if (search->button_name) { /* jump button search mode */
     if (!keymap->jump_button || !*keymap->jump_button)
       return 1; /* no jump button specified, or zero length */
     if (strcmp(keymap->jump_button, search->button_name))
-      return 1;
+      return 1; /* not this one */
   } else { /* key search mode */
      if (keymap->keyval != search->keyval)
       return 1; /* not the key we're looking for */
   }
   if (!keymap->widget)
     return 1; /* Widget not set, UI specified unknown Param or Parent */
-  dprintf("Found keyval\n");
+  dprintf("Found keymap\n");
   if (!keymap->parent) /* keymap has no parent specified; we're done */
     return 0; /* found */
   dprintf("Has parent %s\n", keymap->parent_name);
@@ -793,6 +794,23 @@ key_event(GtkWidget *widget, GdkEventKey *event)
     return TRUE;
 
   return FALSE; /* key not handled - defer to GTK defaults */
+}
+
+
+/* Handle jump buttons from MIDI controller */
+static void
+jump_button(enum jump_button_type type, int button_no, void *ref)
+{
+  struct key_search_spec key_search_spec;
+  GtkWidget *focus = GTK_WINDOW(main_window)->focus_widget;
+  char jump_button_name[20];
+
+  sprintf(jump_button_name, "%c%d", type == JUMP_PAGE ? 'P' : 'M', button_no);
+
+  key_search_spec.button_name = jump_button_name;
+  key_search_spec.focus_widget = focus; /* currently focused widget */
+
+  hotkey(&key_search_spec);
 }
 
 
@@ -1540,6 +1558,7 @@ main(int argc, char *argv[])
   param_handler->param_register_notify_cb(param_changed, NULL);
 
   controller->controller_register_notify_cb(controller_change, NULL);
+  controller->controller_register_jump_button_cb(jump_button, NULL);
 
   midi_connect(SYNTH_PORT, param_handler->remote_midi_device);
   midi_connect(CTRLR_PORT, controller->remote_midi_device);

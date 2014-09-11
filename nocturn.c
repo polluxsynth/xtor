@@ -46,8 +46,14 @@
 #define DECREMENT_CC_BUTTON(BUTTON) \
         NOCTURN_CC_BUTTON((BUTTON) + NOCTURN_BUTTON_GROUP_SIZE)
 
+/* Button mask definitions */
+#define NOCTURN_LEARN_BUTTON_MASK 0x0100
+
 static controller_notify_cb notify_ui = NULL;
 static void *notify_ref;
+
+static controller_jump_button_cb jump_button_ui = NULL;
+static void *jump_button_ref;
 
 static int shift_state = 0; /* bitmask of button state */
 static int shifted = 0; /* set to 1 when more than one button pressed */
@@ -57,6 +63,13 @@ nocturn_register_notify_cb(controller_notify_cb cb, void *ref)
 {
   notify_ui = cb;
   notify_ref = ref;
+}
+
+static void
+nocturn_register_jump_button_cb(controller_jump_button_cb cb, void *ref)
+{
+  jump_button_ui = cb;
+  jump_button_ref = ref;
 }
 
 /* Scale factor for knobs. 
@@ -87,34 +100,36 @@ accelerate(int knob, int value)
 
   return value;
 }
- 
+
 static void
 nocturn_cc_receiver(int chan, int controller_no, int value)
 {
   int knob = -1;
 
-  if (controller_no >= INCREMENT_CC_BUTTON(0) &&
-      controller_no < INCREMENT_CC_BUTTON(NOCTURN_CC_BUTTONS)) {
-    if (value) {
-      if (shift_state) shifted = 1;
-      shift_state |= 1 << (controller_no - INCREMENT_CC_BUTTON(0));
-    } else
-      shift_state &= ~(1 << (controller_no - INCREMENT_CC_BUTTON(0)));
-printf("shift state %04x shifted %d\n", shift_state, shifted);
-  }
-
   /* 'Increment' buttons = top row */
   if (controller_no >= INCREMENT_CC_BUTTON(0) &&
       controller_no < INCREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE)) {
-    if (value == 0 && !shifted)
+    if (value == 0 && !shifted) {
       if (notify_ui) notify_ui(controller_no - INCREMENT_CC_BUTTON(0) + 1,
                                INCREMENTOR_ROW, 1, notify_ref);
+    } else if (value && shift_state == NOCTURN_LEARN_BUTTON_MASK) {
+      if (jump_button_ui)
+        jump_button_ui(JUMP_MODULE, 
+                       controller_no - INCREMENT_CC_BUTTON(0) + 1,
+                       jump_button_ref);
+    }
   /* 'Decrement' buttons = top row */
   } else if (controller_no >= DECREMENT_CC_BUTTON(0) &&
              controller_no < DECREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE)) {
-    if (value == 0 && !shifted)
+    if (value == 0 && !shifted) {
       if (notify_ui) notify_ui(controller_no - DECREMENT_CC_BUTTON(0) + 1,
                                INCREMENTOR_ROW, -1, notify_ref);
+    } else if (value && shift_state == NOCTURN_LEARN_BUTTON_MASK) {
+      if (jump_button_ui)
+        jump_button_ui(JUMP_PAGE, 
+                       controller_no - DECREMENT_CC_BUTTON(1) + 1,
+                       jump_button_ref);
+    }
   /* Speed dial */
   } else if (controller_no == NOCTURN_CC_SPEED_DIAL)
     knob = 0;
@@ -128,7 +143,17 @@ printf("shift state %04x shifted %d\n", shift_state, shifted);
       notify_ui(knob, KNOB_ROW, accelerate(knob, value), notify_ref);
   }
 
-  if (!shift_state) shifted = 0;
+  if (controller_no >= INCREMENT_CC_BUTTON(0) &&
+      controller_no < INCREMENT_CC_BUTTON(NOCTURN_CC_BUTTONS)) {
+    if (value) {
+      if (shift_state) shifted = 1;
+      shift_state |= 1 << (controller_no - INCREMENT_CC_BUTTON(0));
+    } else
+      shift_state &= ~(1 << (controller_no - INCREMENT_CC_BUTTON(0)));
+printf("shift state %04x shifted %d\n", shift_state, shifted);
+  }
+  if (!shift_state) shifted = 0; /* when all buttons released */
+
 }
 
 void
@@ -137,7 +162,10 @@ nocturn_init(struct controller *controller)
   /* Tell MIDI handler we want to receive CC. */
   midi_register_cc(CTRLR_PORT, nocturn_cc_receiver);
 
-  controller->controller_register_notify_cb = nocturn_register_notify_cb;
+  controller->controller_register_notify_cb =
+    nocturn_register_notify_cb;
+  controller->controller_register_jump_button_cb = 
+    nocturn_register_jump_button_cb;
 
   controller->remote_midi_device = "Nocturn";
   controller->map_filename = "nocturn.glade";
