@@ -678,7 +678,7 @@ is_parent(GtkWidget *widget, GtkWidget *parent)
 
 /* Used for searching for valid key map given key val and current focus */
 struct key_search_spec {
-  gchar *button_name; /* NULL for key search mode, else button string */
+  const gchar *button_name; /* NULL for key search mode, else button string */
   guint keyval; /* GDK_ value in key search mode */
   GtkWidget *focus_widget; /* currently focused widget */
 };
@@ -716,20 +716,16 @@ find_keymap(gconstpointer data, gconstpointer user_data)
   return !is_parent(search->focus_widget, keymap->parent); /* 0 if found */
 }
 
-/* Handle keys mapped in UI KeyMapping liststore ("hotkeys") */
+/* Handle hotkey, once it has been found in keymaps */
 static gboolean
-mapped_key(GtkWidget *focus, GdkEventKey *event)
+hotkey(struct key_search_spec *key_search_spec)
 {
-  struct key_search_spec key_search_spec;
-  key_search_spec.button_name = NULL; /* set key search mode */
-  key_search_spec.keyval = event->keyval; /* event to search for in keymaps */
-  key_search_spec.focus_widget = focus; /* currently focused widget */
-
-  GList *keymap_l = g_list_find_custom(keymaps, &key_search_spec, find_keymap);
+  GList *keymap_l = g_list_find_custom(keymaps, key_search_spec, find_keymap);
   if (!keymap_l)
     return FALSE; /* can't find valid key mapping */
 
   struct keymap *keymap = keymap_l->data;
+
   dprintf("Found key map for %s: widget %s (%p)\n",
           keymap->key_name, keymap->param_name, keymap->widget);
 
@@ -752,6 +748,20 @@ mapped_key(GtkWidget *focus, GdkEventKey *event)
   gtk_widget_grab_focus(keymap->widget);
 
   return TRUE; /* key handled */
+}
+
+
+/* Handle keys mapped in UI KeyMapping liststore ("hotkeys") */
+static gboolean
+mapped_key(GtkWidget *focus, GdkEventKey *event)
+{
+  struct key_search_spec key_search_spec;
+
+  key_search_spec.button_name = NULL; /* set key search mode */
+  key_search_spec.keyval = event->keyval; /* event to search for in keymaps */
+  key_search_spec.focus_widget = focus; /* currently focused widget */
+
+  return hotkey(&key_search_spec);
 }
 
 
