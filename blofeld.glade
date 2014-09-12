@@ -16604,9 +16604,6 @@ Osc 2</property>
       <row>
         <col id="0" translatable="yes">Env 4</col>
       </row>
-      <row>
-        <col id="0" translatable="yes">A env</col>
-      </row>
     </data>
   </object>
   <object class="GtkListStore" id="moddest">
