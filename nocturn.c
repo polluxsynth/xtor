@@ -115,7 +115,7 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
     } else if (value && shift_state == NOCTURN_LEARN_BUTTON_MASK) {
       if (jump_button_ui)
         jump_button_ui(JUMP_MODULE, 
-                       controller_no - INCREMENT_CC_BUTTON(0) + 1,
+                       1, controller_no - INCREMENT_CC_BUTTON(0) + 1,
                        jump_button_ref);
     }
   /* 'Decrement' buttons = bottom row */
@@ -127,7 +127,7 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
     } else if (value && shift_state == NOCTURN_LEARN_BUTTON_MASK) {
       if (jump_button_ui)
         jump_button_ui(JUMP_PAGE, 
-                       controller_no - DECREMENT_CC_BUTTON(1) + 1,
+                       2, controller_no - DECREMENT_CC_BUTTON(1) + 1,
                        jump_button_ref);
     }
   /* Speed dial */

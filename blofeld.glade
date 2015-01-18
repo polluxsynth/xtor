@@ -18004,7 +18004,7 @@ Osc 2</property>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
         <col id="4">0</col>
-	<col id="5" translatable="no">M5</col>
+	<col id="5" translatable="no">M15</col>
       </row>
       <row>
         <col id="0" translatable="yes">f</col>
@@ -18012,7 +18012,7 @@ Osc 2</property>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
         <col id="4">0</col>
-	<col id="5" translatable="no">M6</col>
+	<col id="5" translatable="no">M16</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18180,7 +18180,7 @@ Osc 2</property>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
         <col id="4">0</col>
-	<col id="5" translatable="no">M1</col>
+	<col id="5" translatable="no">M11</col>
       </row>
       <row>
         <col id="0" translatable="yes">o</col>
@@ -18188,7 +18188,7 @@ Osc 2</property>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
         <col id="4">0</col>
-	<col id="5" translatable="no">M2</col>
+	<col id="5" translatable="no">M12</col>
       </row>
       <row>
         <col id="0" translatable="yes">o</col>
@@ -18196,7 +18196,7 @@ Osc 2</property>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
         <col id="4">0</col>
-	<col id="5" translatable="no">M3</col>
+	<col id="5" translatable="no">M13</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
@@ -18732,7 +18732,7 @@ Osc 2</property>
         <col id="2">0</col>
         <col id="3" translatable="yes"></col>
         <col id="4">-1</col>
-	<col id="5" translatable="no">P1</col>
+	<col id="5" translatable="no">P21</col>
       </row>
       <row>
         <col id="0" translatable="yes">m</col>
@@ -18740,7 +18740,7 @@ Osc 2</property>
         <col id="2">1</col>
         <col id="3" translatable="yes"></col>
         <col id="4">-1</col>
-	<col id="5" translatable="no">P2</col>
+	<col id="5" translatable="no">P22</col>
       </row>
       <row>
         <col id="0" translatable="yes">a</col>
@@ -18748,7 +18748,7 @@ Osc 2</property>
         <col id="2">2</col>
         <col id="3" translatable="yes"></col>
         <col id="4">-1</col>
-	<col id="5" translatable="no">P3</col>
+	<col id="5" translatable="no">P23</col>
       </row>
       <row>
         <col id="0" translatable="yes">p</col>
@@ -18756,7 +18756,7 @@ Osc 2</property>
         <col id="2">3</col>
         <col id="3" translatable="yes"></col>
         <col id="4">-1</col>
-	<col id="5" translatable="no">P4</col>
+	<col id="5" translatable="no">P24</col>
       </row>
       <row>
         <col id="0" translatable="yes">g</col>

@@ -31,7 +31,7 @@ typedef void (*controller_notify_cb)(int controller_number, int row,
 
 /* Callback for notifying UI of jump buttons pressed */
 typedef void (*controller_jump_button_cb)(enum jump_button_type,
-                                          int button_no, void *ref);
+                                          int button_row, int button_no, void *ref);
 
 /* Struct for specifying controller-specific functions and values, intended
  * to be filled in by controller-specific initialization routines. */
