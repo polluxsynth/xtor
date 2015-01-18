@@ -38,6 +38,9 @@
 #define INCREMENTOR_ROW 1
 #endif
 
+#define TOP_BUTTON_ROW 0
+#define BOTTOM_BUTTON_ROW 1
+
 /* For parameter control, we consider the top button in the two rows to be
  * increment and the bottom button to be decrement. */
 #define NOCTURN_BUTTON_ROWS 2
@@ -48,15 +51,14 @@
 
 /* Button mask definitions */
 #define NOCTURN_LEARN_BUTTON_MASK 0x0100
+#define NOCTURN_TOP_ROW_BUTTONS_MASK 0x00ff
+#define NOCTURN_BOTTOM_ROW_BUTTONS_MASK 0xff00
 
 static controller_notify_cb notify_ui = NULL;
 static void *notify_ref;
 
 static controller_jump_button_cb jump_button_ui = NULL;
 static void *jump_button_ref;
-
-static int shift_state = 0; /* bitmask of button state */
-static int shifted = 0; /* set to 1 when more than one button pressed */
 
 static void
 nocturn_register_notify_cb(controller_notify_cb cb, void *ref)
@@ -104,31 +106,40 @@ accelerate(int knob, int value)
 static void
 nocturn_cc_receiver(int chan, int controller_no, int value)
 {
-  int knob = -1;
+  static int shift_state = 0; /* bitmask of button state */
+  static int shifted = 0; /* set to shift_state when more than one button pressed */
+  int knob = -1, shifted_button = -1, shifted_row = -1;
+
+  /* Handle button shifts, i.e. more than one button pressed together */
+  if (controller_no >= INCREMENT_CC_BUTTON(0) &&
+      controller_no < INCREMENT_CC_BUTTON(NOCTURN_CC_BUTTONS)) {
+    if (value) {
+      if (shift_state) shifted = shift_state; /* > one button pressed at same time */
+      shift_state |= 1 << (controller_no - INCREMENT_CC_BUTTON(0));
+    } else
+      shift_state &= ~(1 << (controller_no - INCREMENT_CC_BUTTON(0)));
+printf("shift state %04x shifted %d\n", shift_state, shifted);
+  }
 
   /* 'Increment' buttons = top row */
   if (controller_no >= INCREMENT_CC_BUTTON(0) &&
       controller_no < INCREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE)) {
-    if (value == 0 && !shifted) {
+    if (!value && !shifted) { /* inc/dec when button released, so we can handle shifts */
       if (notify_ui) notify_ui(controller_no - INCREMENT_CC_BUTTON(0) + 1,
                                INCREMENTOR_ROW, 1, notify_ref);
-    } else if (value && shift_state == NOCTURN_LEARN_BUTTON_MASK) {
-      if (jump_button_ui)
-        jump_button_ui(JUMP_MODULE, 
-                       1, controller_no - INCREMENT_CC_BUTTON(0) + 1,
-                       jump_button_ref);
+    } else if (value && shifted) { /* jump when button pressed, for faster response */
+      shifted_button = controller_no - INCREMENT_CC_BUTTON(0);
+      shifted_row = TOP_BUTTON_ROW;
     }
   /* 'Decrement' buttons = bottom row */
   } else if (controller_no >= DECREMENT_CC_BUTTON(0) &&
              controller_no < DECREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE)) {
-    if (value == 0 && !shifted) {
+    if (!value && !shifted) { /* inc/dec when button released, so we can handle shifts */
       if (notify_ui) notify_ui(controller_no - DECREMENT_CC_BUTTON(0) + 1,
                                INCREMENTOR_ROW, -1, notify_ref);
-    } else if (value && shift_state == NOCTURN_LEARN_BUTTON_MASK) {
-      if (jump_button_ui)
-        jump_button_ui(JUMP_PAGE, 
-                       2, controller_no - DECREMENT_CC_BUTTON(1) + 1,
-                       jump_button_ref);
+    } else if (value && shifted) { /* jump when button pressed, for faster response */
+      shifted_button = controller_no - DECREMENT_CC_BUTTON(0);
+      shifted_row = BOTTOM_BUTTON_ROW;
     }
   /* Speed dial */
   } else if (controller_no == NOCTURN_CC_SPEED_DIAL) {
@@ -139,23 +150,19 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
     knob = controller_no - NOCTURN_CC_INCREMENTOR(0) + 1;
   }
 
+  /* Handle events percolated from above */
   if (knob >= 0) { /* knob turned */
     if (notify_ui)
       notify_ui(knob, KNOB_ROW, accelerate(knob, value), notify_ref);
+  } else if (shifted_button >= 0) { /* button pressed while shift pressed => jump */
+    if (jump_button_ui)
+      jump_button_ui(shifted & NOCTURN_TOP_ROW_BUTTONS_MASK ? JUMP_MODULE : JUMP_PAGE,
+                     shifted_row + 1, shifted_button + 1, jump_button_ref);
   }
 
-  /* Handle button shifts, i.e. more than one button pressed together */
-  if (controller_no >= INCREMENT_CC_BUTTON(0) &&
-      controller_no < INCREMENT_CC_BUTTON(NOCTURN_CC_BUTTONS)) {
-    if (value) {
-      if (shift_state) shifted = 1; /* more than one button pressed at same time */
-      shift_state |= 1 << (controller_no - INCREMENT_CC_BUTTON(0));
-    } else
-      shift_state &= ~(1 << (controller_no - INCREMENT_CC_BUTTON(0)));
-printf("shift state %04x shifted %d\n", shift_state, shifted);
-  }
+  /* We need to do this after all button processing, or a released shift key will
+   * be considered on its own merit (i.e. as an increment/decrement operation) */
   if (!shift_state) shifted = 0; /* when all buttons released */
-
 }
 
 void
