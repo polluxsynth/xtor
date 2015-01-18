@@ -118,7 +118,7 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
                        controller_no - INCREMENT_CC_BUTTON(0) + 1,
                        jump_button_ref);
     }
-  /* 'Decrement' buttons = top row */
+  /* 'Decrement' buttons = bottom row */
   } else if (controller_no >= DECREMENT_CC_BUTTON(0) &&
              controller_no < DECREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE)) {
     if (value == 0 && !shifted) {
@@ -131,22 +131,24 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
                        jump_button_ref);
     }
   /* Speed dial */
-  } else if (controller_no == NOCTURN_CC_SPEED_DIAL)
+  } else if (controller_no == NOCTURN_CC_SPEED_DIAL) {
     knob = 0;
   /* Rest of the knobs */
-  else if (controller_no >= NOCTURN_CC_INCREMENTOR(0) &&
-           controller_no <= NOCTURN_CC_INCREMENTOR(7))
+  } else if (controller_no >= NOCTURN_CC_INCREMENTOR(0) &&
+             controller_no <= NOCTURN_CC_INCREMENTOR(7)) {
     knob = controller_no - NOCTURN_CC_INCREMENTOR(0) + 1;
+  }
 
-  if (knob >= 0) {
+  if (knob >= 0) { /* knob turned */
     if (notify_ui)
       notify_ui(knob, KNOB_ROW, accelerate(knob, value), notify_ref);
   }
 
+  /* Handle button shifts, i.e. more than one button pressed together */
   if (controller_no >= INCREMENT_CC_BUTTON(0) &&
       controller_no < INCREMENT_CC_BUTTON(NOCTURN_CC_BUTTONS)) {
     if (value) {
-      if (shift_state) shifted = 1;
+      if (shift_state) shifted = 1; /* more than one button pressed at same time */
       shift_state |= 1 << (controller_no - INCREMENT_CC_BUTTON(0));
     } else
       shift_state &= ~(1 << (controller_no - INCREMENT_CC_BUTTON(0)));
