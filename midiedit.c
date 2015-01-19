@@ -918,12 +918,10 @@ printf("Knob descriptor %p\n", knob_descriptor);
 
   /* Finally, extract the widget from the knob_descriptor */
   GtkWidget *widget = knob_descriptor->widget;
-  struct adjustor *adj = knob_descriptor->ref;
-printf("Widget %p, ref %p\n", widget, adj);
-  printf("Controller %d referencing %s:%s, parno %d\n", controller_number,
+printf("Widget %p\n", widget);
+  printf("Controller %d referencing %s:%s\n", controller_number,
          gtk_widget_get_name(widget),
-         gtk_buildable_get_name(GTK_BUILDABLE(widget)),
-         adj->parnum);
+         gtk_buildable_get_name(GTK_BUILDABLE(widget)));
 
   return widget;
 }
@@ -1140,11 +1138,11 @@ add_to_keymaps(GList *keymaps, GtkWidget *widget, const char *param_name)
 /* Add new widget and associated adjustor to the current knobmap */
 /* Basically, each UI frame has a knobmap mapping controller knobs to widgets */
 static void *
-add_knobmap(void *knobmap, GtkWidget *widget, struct adjustor *adjustor)
+add_to_knobmap(void *knobmap, GtkWidget *widget)
 {
   struct knob_descriptor *knob_description = g_new0(struct knob_descriptor, 1);
   knob_description->widget = widget;
-  knob_description->ref = adjustor;
+  knob_description->ref = NULL; /* not used */
   return knob_mapper->container_add_widget(knobmap, knob_description);
 }
 
@@ -1233,6 +1231,10 @@ create_adjustor(gpointer data, gpointer user_data)
   gtk_widget_add_events(this, GDK_BUTTON_PRESS_MASK);
   g_signal_connect(this, "button-press-event", G_CALLBACK(button_event), NULL);
 
+  /* Add it to current knobmap */
+  if (id && GTK_IS_RANGE(this) || GTK_IS_COMBO_BOX(this) || GTK_IS_TOGGLE_BUTTON(this))
+    current_knobmap = add_to_knobmap(current_knobmap, this);
+
   if (id && (parnum = param_handler->param_find_index(id)) >= 0) {
     dprintf("has parameter\n");
 printf("%s belongs to %s\n", gtk_buildable_get_name(GTK_BUILDABLE(this)), current_frame ? gtk_buildable_get_name(GTK_BUILDABLE(current_frame)) : "nothing");
@@ -1247,9 +1249,6 @@ printf("%s belongs to %s\n", gtk_buildable_get_name(GTK_BUILDABLE(this)), curren
     /* Add our widget to the list of widgets for this parameter */
     /* prepend is faster than append, and ok since we don't care about order */
     adjustor->widgets = g_list_prepend(adjustor->widgets, this);
-
-    /* Add it to current knobmap */
-    current_knobmap = add_knobmap(current_knobmap, this, adjustor);
 
     if (GTK_IS_RANGE(this)) {
       struct param_properties props;
