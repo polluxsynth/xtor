@@ -777,91 +777,6 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkVScale" id="Osc 1 Level">
-                                    <property name="height_request">78</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="orientation">vertical</property>
-                                    <property name="inverted">True</property>
-                                    <property name="digits">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">9</property>
-                                    <property name="right_attach">10</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVScale" id="Osc 1 Balance">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="orientation">vertical</property>
-                                    <property name="digits">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">10</property>
-                                    <property name="right_attach">11</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label28">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Lvl</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">9</property>
-                                    <property name="right_attach">10</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label29">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Bal </property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">10</property>
-                                    <property name="right_attach">11</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVSeparator" id="vseparator54">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">8</property>
-                                    <property name="right_attach">9</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVSeparator" id="vseparator55">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">8</property>
-                                    <property name="right_attach">9</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label64">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Mi_x</property>
-                                    <property name="use_underline">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">9</property>
-                                    <property name="right_attach">11</property>
-                                    <property name="top_attach">3</property>
-                                    <property name="bottom_attach">4</property>
-                                  </packing>
-                                </child>
-                                <child>
                                   <placeholder/>
                                 </child>
                                 <child>
@@ -892,9 +807,87 @@
                         </child>
                       </object>
                       <packing>
+                        <property name="right_attach">2</property>
+                      </packing>
+                    </child>
+
+                    <child>
+                      <object class="GtkFrame" id="Osc Mix 1 Frame">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">out</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment33">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkTable" id="table10">
+                                <property name="visible">True</property>
+                                <property name="n_rows">4</property>
+                                <property name="n_columns">2</property>
+                                <child>
+                                  <object class="GtkVScale" id="Osc 1 Level">
+                                    <property name="height_request">78</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="inverted">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="right_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkVScale" id="Osc 1 Balance">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label28">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Lvl</property>
+                                  </object>
+                                  <packing>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label29">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Bal </property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label355">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Mi&lt;u&gt;x&lt;/u&gt; 1&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
                         <property name="right_attach">3</property>
                       </packing>
                     </child>
+
                     <child>
                       <object class="GtkFrame" id="Osc 2 Frame">
                         <property name="visible">True</property>
@@ -1266,90 +1259,6 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkVScale" id="Osc 2 Level">
-                                    <property name="height_request">78</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="orientation">vertical</property>
-                                    <property name="inverted">True</property>
-                                    <property name="digits">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">9</property>
-                                    <property name="right_attach">10</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVScale" id="Osc 2 Balance">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="orientation">vertical</property>
-                                    <property name="digits">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">10</property>
-                                    <property name="right_attach">11</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label62">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Lvl</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">9</property>
-                                    <property name="right_attach">10</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label57">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Bal </property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">10</property>
-                                    <property name="right_attach">11</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVSeparator" id="vseparator58">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">8</property>
-                                    <property name="right_attach">9</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVSeparator" id="vseparator59">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">8</property>
-                                    <property name="right_attach">9</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label65">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Mix</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">9</property>
-                                    <property name="right_attach">11</property>
-                                    <property name="top_attach">3</property>
-                                    <property name="bottom_attach">4</property>
-                                  </packing>
-                                </child>
-                                <child>
                                   <placeholder/>
                                 </child>
                                 <child>
@@ -1374,11 +1283,91 @@
                         </child>
                       </object>
                       <packing>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                      </packing>
+                    </child>
+
+                    <child>
+                      <object class="GtkFrame" id="Osc Mix 2 Frame">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">out</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment34">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkTable" id="table11">
+                                <property name="visible">True</property>
+                                <property name="n_rows">4</property>
+                                <property name="n_columns">2</property>
+                                <child>
+                                  <object class="GtkVScale" id="Osc 2 Level">
+                                    <property name="height_request">78</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="inverted">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="right_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkVScale" id="Osc 2 Balance">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label62">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Lvl</property>
+                                  </object>
+                                  <packing>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label57">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Bal </property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label356">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Mix 2&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
                         <property name="right_attach">3</property>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
                       </packing>
                     </child>
+
                     <child>
                       <object class="GtkFrame" id="Osc 3 Frame">
                         <property name="visible">True</property>
@@ -1718,90 +1707,6 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkLabel" id="label56">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Lvl</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">9</property>
-                                    <property name="right_attach">10</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label66">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Bal </property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">10</property>
-                                    <property name="right_attach">11</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVScale" id="Osc 3 Level">
-                                    <property name="height_request">78</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="orientation">vertical</property>
-                                    <property name="inverted">True</property>
-                                    <property name="digits">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">9</property>
-                                    <property name="right_attach">10</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVScale" id="Osc 3 Balance">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="orientation">vertical</property>
-                                    <property name="digits">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">10</property>
-                                    <property name="right_attach">11</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVSeparator" id="vseparator56">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">8</property>
-                                    <property name="right_attach">9</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVSeparator" id="vseparator57">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">8</property>
-                                    <property name="right_attach">9</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label67">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Mix</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">9</property>
-                                    <property name="right_attach">11</property>
-                                    <property name="top_attach">3</property>
-                                    <property name="bottom_attach">4</property>
-                                  </packing>
-                                </child>
-                                <child>
                                   <placeholder/>
                                 </child>
                                 <child>
@@ -1838,11 +1743,91 @@
                         </child>
                       </object>
                       <packing>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
+                      </packing>
+                    </child>
+
+                    <child>
+                      <object class="GtkFrame" id="Osc Mix 3 Frame">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">out</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment35">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkTable" id="table16">
+                                <property name="visible">True</property>
+                                <property name="n_rows">4</property>
+                                <property name="n_columns">2</property>
+                                <child>
+                                  <object class="GtkVScale" id="Osc 3 Level">
+                                    <property name="height_request">78</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="inverted">True</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="right_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkVScale" id="Osc 3 Balance">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="digits">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label56">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Lvl</property>
+                                  </object>
+                                  <packing>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label66">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Bal </property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">2</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label357">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Mix 3&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
                         <property name="right_attach">3</property>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
                       </packing>
                     </child>
+
                     <child>
                       <object class="GtkFrame" id="Osc Common Frame">
                         <property name="visible">True</property>
