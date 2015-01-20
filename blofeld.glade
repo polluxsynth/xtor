@@ -2317,101 +2317,6 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkVSeparator" id="vseparator1">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">4</property>
-                                    <property name="right_attach">5</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVSeparator" id="vseparator2">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">4</property>
-                                    <property name="right_attach">5</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVSeparator" id="vseparator3">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">4</property>
-                                    <property name="right_attach">5</property>
-                                    <property name="top_attach">2</property>
-                                    <property name="bottom_attach">3</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkHBox" id="hbox10">
-                                    <property name="visible">True</property>
-                                    <child>
-                                      <object class="GtkLabel" id="label47">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">Pan</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label48">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">Amount</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">5</property>
-                                    <property name="right_attach">6</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkHBox" id="hbox24">
-                                    <property name="visible">True</property>
-                                    <child>
-                                      <object class="GtkVScale" id="Filter 1 Pan">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="orientation">vertical</property>
-                                        <property name="digits">0</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkVScale" id="Filter 1 Pan Amount">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="orientation">vertical</property>
-                                        <property name="inverted">True</property>
-                                        <property name="digits">0</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">5</property>
-                                    <property name="right_attach">6</property>
-                                  </packing>
-                                </child>
-                                <child>
                                   <object class="GtkVScale" id="Filter 1 FM Amount">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
@@ -2574,43 +2479,6 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkVBox" id="vbox11">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                    <child>
-                                      <object class="GtkComboBox" id="Filter 1 Pan Source">
-                                        <property name="visible">True</property>
-                                        <property name="model">modsource</property>
-                                        <property name="active">0</property>
-                                        <child>
-                                          <object class="GtkCellRendererText" id="cellrenderertext16"/>
-                                          <attributes>
-                                            <attribute name="text">0</attribute>
-                                          </attributes>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label53">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">Pan mod</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">5</property>
-                                    <property name="right_attach">6</property>
-                                    <property name="top_attach">2</property>
-                                    <property name="bottom_attach">3</property>
-                                  </packing>
-                                </child>
-                                <child>
                                   <object class="GtkTable" id="table20">
                                     <property name="visible">True</property>
                                     <property name="n_rows">2</property>
@@ -2693,6 +2561,132 @@
                         <property name="right_attach">7</property>
                       </packing>
                     </child>
+
+                    <child>
+                      <object class="GtkFrame" id="Filter 1 Pan Frame">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">out</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment36">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkTable" id="table39">
+                                <property name="visible">True</property>
+                                <property name="n_rows">4</property>
+                                <property name="n_columns">1</property>
+                                <child>
+                                  <object class="GtkHBox" id="hbox24">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkVScale" id="Filter 1 Pan">
+                                        <property name="height_request">80</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="digits">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkVScale" id="Filter 1 Pan Amount">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="inverted">True</property>
+                                        <property name="digits">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="bottom_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHBox" id="hbox10">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label47">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Pan</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label48">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Amount</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkVBox" id="vbox11">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <child>
+                                      <object class="GtkComboBox" id="Filter 1 Pan Source">
+                                        <property name="visible">True</property>
+                                        <property name="model">modsource</property>
+                                        <property name="active">0</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="cellrenderertext16"/>
+                                          <attributes>
+                                            <attribute name="text">0</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label53">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Pan mod</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">2</property>
+                                    <property name="bottom_attach">3</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label364">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Filter 1 &lt;u&gt;P&lt;/u&gt;an&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">7</property>
+                        <property name="right_attach">8</property>
+                      </packing>
+                    </child>
+
                     <child>
                       <object class="GtkFrame" id="Filter 2 Frame">
                         <property name="visible">True</property>
@@ -3011,146 +3005,6 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkHBox" id="hbox27">
-                                    <property name="visible">True</property>
-                                    <child>
-                                      <object class="GtkVScale" id="Filter 2 Pan">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="orientation">vertical</property>
-                                        <property name="digits">0</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkVScale" id="Filter 2 Pan Amount">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="orientation">vertical</property>
-                                        <property name="inverted">True</property>
-                                        <property name="digits">0</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">5</property>
-                                    <property name="right_attach">6</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkHBox" id="hbox29">
-                                    <property name="visible">True</property>
-                                    <child>
-                                      <object class="GtkLabel" id="label78">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">Pan</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkLabel" id="label79">
-                                        <property name="visible">True</property>
-                                        <property name="label" translatable="yes">Amount</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">5</property>
-                                    <property name="right_attach">6</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="Filter 2 Pan Source">
-                                    <property name="visible">True</property>
-                                    <property name="model">modsource</property>
-                                    <property name="active">0</property>
-                                    <child>
-                                      <object class="GtkCellRendererText" id="cellrenderertext23"/>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">5</property>
-                                    <property name="right_attach">6</property>
-                                    <property name="top_attach">2</property>
-                                    <property name="bottom_attach">3</property>
-                                    <property name="x_options">GTK_EXPAND</property>
-                                    <property name="y_options">GTK_EXPAND</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="label80">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Pan mod</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">5</property>
-                                    <property name="right_attach">6</property>
-                                    <property name="top_attach">3</property>
-                                    <property name="bottom_attach">4</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVSeparator" id="vseparator5">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">4</property>
-                                    <property name="right_attach">5</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVSeparator" id="vseparator6">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">4</property>
-                                    <property name="right_attach">5</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVSeparator" id="vseparator7">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">4</property>
-                                    <property name="right_attach">5</property>
-                                    <property name="top_attach">2</property>
-                                    <property name="bottom_attach">3</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkVSeparator" id="vseparator8">
-                                    <property name="visible">True</property>
-                                    <property name="orientation">vertical</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">4</property>
-                                    <property name="right_attach">5</property>
-                                    <property name="top_attach">3</property>
-                                    <property name="bottom_attach">4</property>
-                                  </packing>
-                                </child>
-                                <child>
                                   <object class="GtkComboBox" id="Filter 2 Type">
                                     <property name="visible">True</property>
                                     <property name="model">filtertype</property>
@@ -3188,6 +3042,134 @@
                         <property name="bottom_attach">2</property>
                       </packing>
                     </child>
+
+                    <child>
+                      <object class="GtkFrame" id="Filter 2 Pan Frame">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">out</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment37">
+                            <property name="visible">True</property>
+                            <child>
+                              <object class="GtkTable" id="table40">
+                                <property name="visible">True</property>
+                                <property name="n_rows">4</property>
+                                <property name="n_columns">1</property>
+                                <child>
+                                  <object class="GtkHBox" id="hbox27">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkVScale" id="Filter 2 Pan">
+                                        <property name="height_request">80</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="digits">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkVScale" id="Filter 2 Pan Amount">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="inverted">True</property>
+                                        <property name="digits">0</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="bottom_attach">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHBox" id="hbox29">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label78">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Pan</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label79">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Amount</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkVBox" id="vbox21">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <child>
+                                      <object class="GtkComboBox" id="Filter 2 Pan Source">
+                                        <property name="visible">True</property>
+                                        <property name="model">modsource</property>
+                                        <property name="active">0</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="cellrenderertext23"/>
+                                          <attributes>
+                                            <attribute name="text">0</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="label80">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Pan mod</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">2</property>
+                                    <property name="bottom_attach">3</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label365">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Filter 2 Pan&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                        <property name="left_attach">7</property>
+                        <property name="right_attach">8</property>
+                      </packing>
+                    </child>
+
                     <child>
                       <object class="GtkFrame" id="Filter Envelope Frame">
                         <property name="visible">True</property>
@@ -4049,7 +4031,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">6</property>
-                        <property name="right_attach">7</property>
+                        <property name="right_attach">8</property>
                         <property name="top_attach">3</property>
                         <property name="bottom_attach">4</property>
                       </packing>
@@ -6023,7 +6005,7 @@
                       </object>
                       <packing>
                         <property name="left_attach">5</property>
-                        <property name="right_attach">7</property>
+                        <property name="right_attach">8</property>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
                       </packing>
@@ -18022,14 +18004,6 @@
 	<col id="5" translatable="no">M15</col>
       </row>
       <row>
-        <col id="0" translatable="yes">f</col>
-        <col id="1" translatable="yes">Filter 2 Cutoff</col>
-        <col id="2">-1</col>
-        <col id="3" translatable="yes">Main Notebook</col>
-        <col id="4">0</col>
-	<col id="5" translatable="no">M16</col>
-      </row>
-      <row>
         <col id="0" translatable="yes">2</col>
         <col id="1" translatable="yes">Filter 2 Cutoff</col>
         <col id="2">-1</col>
@@ -18046,10 +18020,26 @@
 	<col id="5" translatable="no"></col>
       </row>
       <row>
-        <col id="0" translatable="yes">1</col>
-        <col id="1" translatable="yes">Osc 1 Level</col>
+        <col id="0" translatable="yes">p</col>
+        <col id="1" translatable="yes">Filter 1 Pan</col>
         <col id="2">-1</col>
-        <col id="3" translatable="yes">Osc 1 Level</col>
+        <col id="3" translatable="yes">Main Notebook</col>
+        <col id="4">0</col>
+	<col id="5" translatable="no"></col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1</col>
+        <col id="1" translatable="yes">Filter 1 Pan</col>
+        <col id="2">-1</col>
+        <col id="3" translatable="yes">Filter 2 Pan Frame</col>
+        <col id="4">-1</col>
+	<col id="5" translatable="no"></col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2</col>
+        <col id="1" translatable="yes">Filter 2 Pan</col>
+        <col id="2">-1</col>
+        <col id="3" translatable="yes">Filter 1 Pan Frame</col>
         <col id="4">-1</col>
 	<col id="5" translatable="no"></col>
       </row>
@@ -18066,14 +18056,6 @@
         <col id="1" translatable="yes">Osc 1 Level</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 3 Level</col>
-        <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">1</col>
-        <col id="1" translatable="yes">Osc 1 Balance</col>
-        <col id="2">-1</col>
-        <col id="3" translatable="yes">Osc 1 Balance</col>
         <col id="4">-1</col>
 	<col id="5" translatable="no"></col>
       </row>
@@ -18105,14 +18087,6 @@
         <col id="0" translatable="yes">2</col>
         <col id="1" translatable="yes">Osc 2 Level</col>
         <col id="2">-1</col>
-        <col id="3" translatable="yes">Osc 2 Level</col>
-        <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">2</col>
-        <col id="1" translatable="yes">Osc 2 Level</col>
-        <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 1 Level</col>
         <col id="4">-1</col>
 	<col id="5" translatable="no"></col>
@@ -18122,14 +18096,6 @@
         <col id="1" translatable="yes">Osc 2 Balance</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 3 Balance</col>
-        <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">2</col>
-        <col id="1" translatable="yes">Osc 2 Balance</col>
-        <col id="2">-1</col>
-        <col id="3" translatable="yes">Osc 2 Balance</col>
         <col id="4">-1</col>
 	<col id="5" translatable="no"></col>
       </row>
@@ -18159,14 +18125,6 @@
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
-        <col id="1" translatable="yes">Osc 3 Level</col>
-        <col id="2">-1</col>
-        <col id="3" translatable="yes">Osc 3 Level</col>
-        <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">3</col>
         <col id="1" translatable="yes">Osc 3 Balance</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 1 Balance</col>
@@ -18178,14 +18136,6 @@
         <col id="1" translatable="yes">Osc 3 Balance</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 2 Balance</col>
-        <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">3</col>
-        <col id="1" translatable="yes">Osc 3 Balance</col>
-        <col id="2">-1</col>
-        <col id="3" translatable="yes">Osc 3 Balance</col>
         <col id="4">-1</col>
 	<col id="5" translatable="no"></col>
       </row>
@@ -18196,22 +18146,6 @@
         <col id="3" translatable="yes">Main Notebook</col>
         <col id="4">0</col>
 	<col id="5" translatable="no">M11</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">o</col>
-        <col id="1" translatable="yes">Osc 2 Semitone</col>
-        <col id="2">-1</col>
-        <col id="3" translatable="yes">Main Notebook</col>
-        <col id="4">0</col>
-	<col id="5" translatable="no">M12</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">o</col>
-        <col id="1" translatable="yes">Osc 3 Semitone</col>
-        <col id="2">-1</col>
-        <col id="3" translatable="yes">Main Notebook</col>
-        <col id="4">0</col>
-	<col id="5" translatable="no">M13</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
@@ -18294,7 +18228,7 @@
 	<col id="5" translatable="no">M21</col>
       </row>
       <row>
-        <col id="0" translatable="yes">2</col>
+        <col id="0" translatable="yes"></col>
         <col id="1" translatable="yes">Osc 2 Level</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18798,7 +18732,7 @@
 	<col id="5" translatable="no">P23</col>
       </row>
       <row>
-        <col id="0" translatable="yes">p</col>
+        <col id="0" translatable="yes">t</col>
         <col id="1" translatable="yes">Main Notebook</col>
         <col id="2">3</col>
         <col id="3" translatable="yes"></col>
