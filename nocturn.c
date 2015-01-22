@@ -156,8 +156,11 @@ printf("shift state %04x shifted %d\n", shift_state, shifted);
       notify_ui(knob, KNOB_ROW, accelerate(knob, value), notify_ref);
   } else if (shifted_button >= 0) { /* button pressed while shift pressed => jump */
     if (jump_button_ui)
-      jump_button_ui(shifted & NOCTURN_TOP_ROW_BUTTONS_MASK ? JUMP_MODULE : JUMP_PAGE,
-                     shifted_row + 1, shifted_button + 1, jump_button_ref);
+      /* Bottom row shift is intended mainly for page jumps, which are to be
+       * kept on the lower two rows of an imaginary 4-row (8x4) jump button matrix. */
+      jump_button_ui(shifted_row + 1 + 
+                     ((shifted & NOCTURN_BOTTOM_ROW_BUTTONS_MASK) ? 2 : 0),
+                     shifted_button + 1, jump_button_ref);
   }
 
   /* We need to do this after all button processing, or a released shift key will

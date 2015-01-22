@@ -799,14 +799,13 @@ key_event(GtkWidget *widget, GdkEventKey *event)
 
 /* Handle jump buttons from MIDI controller */
 static void
-jump_button(enum jump_button_type type, int button_row, int button_no, void *ref)
+jump_button(int button_row, int button_no, void *ref)
 {
   struct key_search_spec key_search_spec;
   GtkWidget *focus = GTK_WINDOW(main_window)->focus_widget;
   char jump_button_name[20];
 
-  sprintf(jump_button_name, "%c%d%d", type == JUMP_PAGE ? 'P' : 'M',
-                            button_row, button_no);
+  sprintf(jump_button_name, "J%d%d", button_row, button_no);
 
   key_search_spec.button_name = jump_button_name;
   key_search_spec.focus_widget = focus; /* currently focused widget */

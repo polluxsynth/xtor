@@ -23,15 +23,12 @@
 #ifndef _CONTROLLER_H_
 #define _CONTROLLER_H_
 
-enum jump_button_type { JUMP_PAGE, JUMP_MODULE };
-
 /* Callback for notifying UI of incoming parameter value changes */
 typedef void (*controller_notify_cb)(int controller_number, int row,
                                      int delta, void *ref);
 
 /* Callback for notifying UI of jump buttons pressed */
-typedef void (*controller_jump_button_cb)(enum jump_button_type,
-                                          int button_row, int button_no, void *ref);
+typedef void (*controller_jump_button_cb)(int button_row, int button_no, void *ref);
 
 /* Struct for specifying controller-specific functions and values, intended
  * to be filled in by controller-specific initialization routines. */
