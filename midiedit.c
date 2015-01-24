@@ -936,13 +936,15 @@ struct focus {
   struct f_k_map *f_k_map;
 };
 
-struct focus *current_focus(GtkWidget *new_focus)
+/* Get parent frame and f_k_map for widget, if available */
+static struct focus *
+current_focus(GtkWidget *new_focus)
 {
   /* Currently focused widget, parent frame and frame-knob map */
   static struct focus focus = { 0 };
 
   /* When focus changes, we set new focus_widget, and recalculate
-   * focus_parent_frame and focus_f_k_map. We only do this when changing
+   * focus.parent_frame and focus.f_k_map. We only do this when changing
    * focus to avoid loading the CPU with having to do it every time. */
   if (new_focus == focus.widget)
     goto out; /* nothing changed, so leave everything as it was */
@@ -964,8 +966,7 @@ struct focus *current_focus(GtkWidget *new_focus)
     focus.f_k_map = NULL;
     goto out;
   }
- focus.f_k_map = find_frame_in_f_k_maps(f_k_maps,
-                                        GTK_FRAME(focus.parent_frame));
+  focus.f_k_map = find_frame_in_f_k_maps(f_k_maps, GTK_FRAME(focus.parent_frame));
 
 out:
   return &focus;
