@@ -18665,7 +18665,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
         <col id="4">2</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">J11</col>
       </row>
       <row>
         <col id="0" translatable="yes">u</col>
@@ -18673,7 +18673,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
         <col id="4">2</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">J12</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
@@ -18761,7 +18761,15 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
         <col id="4">2</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">J13</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes"></col>
+        <col id="1" translatable="yes">Effect 2 Type</col>
+        <col id="2">-1</col>
+        <col id="3" translatable="yes">Main Notebook</col>
+        <col id="4">2</col>
+	<col id="5" translatable="no">J14</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
