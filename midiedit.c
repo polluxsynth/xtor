@@ -566,7 +566,7 @@ on_togglebutton_changed (GtkObject *object, gpointer user_data)
 /* We call this when we need to emit a 'change value' signal as a result
  * of a key press or mouse scroll event. */
 static gboolean
-change_value(GtkWidget *what, int shifted, int dir)
+change_value(GtkWidget *what, int shifted, int dir, int compensate)
 {
   GtkWidget *parent;
   int delta;
@@ -584,8 +584,9 @@ change_value(GtkWidget *what, int shifted, int dir)
    * (For horizontal sliders, Gtk sees them as we do, so we invert the scroll
    * direction if they are inverted.)
    */
-  if (GTK_IS_VSCALE(what) && !gtk_range_get_inverted(GTK_RANGE(what)) ||
-      GTK_IS_HSCALE(what) && gtk_range_get_inverted(GTK_RANGE(what)))
+  if (compensate &&
+      (GTK_IS_VSCALE(what) && !gtk_range_get_inverted(GTK_RANGE(what)) ||
+       GTK_IS_HSCALE(what) && gtk_range_get_inverted(GTK_RANGE(what))))
     dir = -dir;
 
   if (dir == 1)
@@ -649,12 +650,12 @@ navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
     case GDK_Forward:
     case GDK_Page_Up:
     case GDK_plus:
-      handled = change_value(focus, shifted, 1);
+      handled = change_value(focus, shifted, 1, 1);
       break;
     case GDK_Back:
     case GDK_Page_Down:
     case GDK_minus:
-      handled = change_value(focus, shifted, -1);
+      handled = change_value(focus, shifted, -1, 1);
     default:
       break;
   }
@@ -851,11 +852,11 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
   switch (event->direction) {
     case GDK_SCROLL_UP:
     case GDK_SCROLL_LEFT:
-      change_value(widget, shifted, 1);
+      change_value(widget, shifted, 1, 1);
       break;
     case GDK_SCROLL_DOWN:
     case GDK_SCROLL_RIGHT:
-      change_value(widget, shifted, -1);
+      change_value(widget, shifted, -1, 1);
       break;
     default:
       break;
@@ -1008,7 +1009,10 @@ controller_change(int controller_number, int row, int value, void *ref)
   if (!editing_widget) return;
 
   for (steps = 0; steps < delta; steps++)
-    change_value(editing_widget, 0, dir);
+    /* We set the compensate parameter to change_value to 0, as balance pots, which
+     * in contrast to ordinary pots are not inverted, have left upwards, and
+     * it is most natural to set left by turning knobs left. */
+    change_value(editing_widget, 0, dir, 0);
 }
 
 
