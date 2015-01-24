@@ -113,7 +113,9 @@ struct ui_settings {
   int knobs_grab_focus;
 };
 
-struct ui_settings ui_settings = { TRUE, TRUE, TRUE };
+/* Enabling knobs_grab_focus causes focus flutter if more than one knob is
+ * Technically it is not a problem, but it doesn't look nice on the screen. */
+struct ui_settings ui_settings = { TRUE, TRUE, FALSE };
 
 /* Global settings in Popup menu */
 struct setting {
