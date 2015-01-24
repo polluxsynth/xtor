@@ -181,17 +181,17 @@ find_frame_in_f_k_maps(GList *f_k_maps, GtkFrame *frame)
 static GtkWidget *
 get_parent_frame(GtkWidget *widget)
 {
-  printf("Scanning for parent for %s (%p)\n",
-          gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
+  dprintf("Scanning for parent for %s (%p)\n",
+           gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
 
   while (widget && !GTK_IS_FRAME(widget)) {
     widget = gtk_widget_get_parent(widget);
   }
 
   if (widget)
-    printf("Found %s: %s (%p)\n",
-            gtk_widget_get_name(widget),
-            gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
+    dprintf("Found %s: %s (%p)\n",
+             gtk_widget_get_name(widget),
+             gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
 
   return widget;
 }
@@ -897,9 +897,9 @@ show_widget(gpointer data, gpointer user_data)
 
   GtkWidget *widget = data;
 
-  printf("%s: %s (%p)\n",
-         gtk_widget_get_name(widget),
-         gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
+  dprintf("%s: %s (%p)\n",
+          gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
 }
 #endif
 
@@ -907,21 +907,23 @@ show_widget(gpointer data, gpointer user_data)
 static GtkWidget *
 get_knob_widget(struct f_k_map *f_k_map, int controller_number, int row)
 {
-printf("f_k_map: frame %p:%s:%s, knobmap %p\n", f_k_map->frame, gtk_widget_get_name(GTK_WIDGET(f_k_map->frame)), gtk_buildable_get_name(GTK_BUILDABLE(f_k_map->frame)), f_k_map->knobmap);
+  dprintf("f_k_map: frame %p:%s:%s, knobmap %p\n", f_k_map->frame,
+          gtk_widget_get_name(GTK_WIDGET(f_k_map->frame)),
+          gtk_buildable_get_name(GTK_BUILDABLE(f_k_map->frame)), f_k_map->knobmap);
 
   /* Get the knob_descriptor for the current knob (controller_number)
    * from the knob_mapper. */
   struct knob_descriptor *knob_descriptor = 
     knob_mapper->knob(f_k_map->knobmap, controller_number - 1, row);
-printf("Knob descriptor %p\n", knob_descriptor);
+  dprintf("Knob descriptor %p\n", knob_descriptor);
   if (!knob_descriptor) return NULL;
 
   /* Finally, extract the widget from the knob_descriptor */
   GtkWidget *widget = knob_descriptor->widget;
-printf("Widget %p\n", widget);
-  printf("Controller %d referencing %s:%s\n", controller_number,
-         gtk_widget_get_name(widget),
-         gtk_buildable_get_name(GTK_BUILDABLE(widget)));
+  dprintf("Widget %p\n", widget);
+  dprintf("Controller %d referencing %s:%s\n", controller_number,
+          gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)));
 
   return widget;
 }
@@ -943,9 +945,9 @@ struct focus *current_focus(GtkWidget *new_focus)
   if (new_focus == focus.widget)
     goto out; /* nothing changed, so leave everything as it was */
   focus.widget = new_focus;
-  printf("Focus set to %s:%s\n",
-         gtk_widget_get_name(new_focus),
-         gtk_buildable_get_name(GTK_BUILDABLE(new_focus)));
+  dprintf("Focus set to %s:%s\n",
+          gtk_widget_get_name(new_focus),
+          gtk_buildable_get_name(GTK_BUILDABLE(new_focus)));
   if (!focus.widget) { /* No focus, so nothing to edit */
     focus.parent_frame = NULL;
     focus.f_k_map = NULL;
@@ -1239,8 +1241,10 @@ create_adjustor(gpointer data, gpointer user_data)
     current_knobmap = add_to_knobmap(current_knobmap, this);
 
   if (id && (parnum = param_handler->param_find_index(id)) >= 0) {
-    dprintf("has parameter\n");
-printf("%s belongs to %s\n", gtk_buildable_get_name(GTK_BUILDABLE(this)), current_frame ? gtk_buildable_get_name(GTK_BUILDABLE(current_frame)) : "nothing");
+    dprintf("%s has parameter, belongs to %s\n",
+            gtk_buildable_get_name(GTK_BUILDABLE(this)),
+            current_frame ? gtk_buildable_get_name(GTK_BUILDABLE(current_frame)) :
+                            "nothing");
     struct adjustor *adjustor = adjustors[parnum];
     if (!adjustors[parnum]) {
       /* no adjustor for this parameter yet; create one */
@@ -1303,9 +1307,9 @@ printf("%s belongs to %s\n", gtk_buildable_get_name(GTK_BUILDABLE(this)), curren
         * constitutes a 'synth module'. If we need to change this, we need
         * to augment this test with something, such as the buildable_name
         * ending with "Frame" for instance. */
-       printf("Found %s: %s (%p)\n",
-              gtk_widget_get_name(this),
-              gtk_buildable_get_name(GTK_BUILDABLE(this)), this);
+       dprintf("Found %s: %s (%p)\n",
+               gtk_widget_get_name(this),
+               gtk_buildable_get_name(GTK_BUILDABLE(this)), this);
        current_knobmap = knob_mapper->container_new(GTK_CONTAINER(this));
        current_frame = GTK_FRAME(this);
      }
@@ -1313,9 +1317,9 @@ printf("%s belongs to %s\n", gtk_buildable_get_name(GTK_BUILDABLE(this)), curren
      add_adjustors(gtk_container_get_children(GTK_CONTAINER(this)), adjustors);
 
      if (GTK_IS_FRAME(this)) {
-       printf("Done with %s: %s (%p)\n",
-              gtk_widget_get_name(this),
-              gtk_buildable_get_name(GTK_BUILDABLE(this)), this);
+       dprintf("Done with %s: %s (%p)\n",
+               gtk_widget_get_name(this),
+               gtk_buildable_get_name(GTK_BUILDABLE(this)), this);
        current_knobmap = knob_mapper->container_done(current_knobmap);
        if (current_knobmap)
          f_k_maps = add_new_f_k_map(f_k_maps, current_frame, current_knobmap);

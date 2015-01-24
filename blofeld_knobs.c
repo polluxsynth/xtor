@@ -77,16 +77,21 @@ print_knob(gpointer data, gpointer user_data)
   struct knob_descriptor *knob_description = data;
   GtkWidget *widget = knob_description->widget;
   printf("Widget %s:%s (%d,%d): %s\n",
-         gtk_widget_get_name(widget), gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget->allocation.x, widget->allocation.y, GTK_WIDGET_VISIBLE(widget) ? "visible" : "hidden");
+         gtk_widget_get_name(widget), gtk_buildable_get_name(GTK_BUILDABLE(widget)),
+         widget->allocation.x, widget->allocation.y,
+         GTK_WIDGET_VISIBLE(widget) ? "visible" : "hidden");
 }
 
 static void
 print_knobmap(struct knobmap *knobmap)
 {
-  printf("Frame %s: Pots:\n", gtk_buildable_get_name(GTK_BUILDABLE(knobmap->container)));
-  g_list_foreach(knobmap->pots.active, print_knob, NULL);
-  printf("Buttons:\n");
-  g_list_foreach(knobmap->buttons.active, print_knob, NULL);
+  if (debug) {
+    printf("Frame %s: Knobs:\n",
+           gtk_buildable_get_name(GTK_BUILDABLE(knobmap->container)));
+    g_list_foreach(knobmap->pots.active, print_knob, NULL);
+    printf("Buttons:\n");
+    g_list_foreach(knobmap->buttons.active, print_knob, NULL);
+  }
 }
 #endif
 
