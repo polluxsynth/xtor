@@ -630,6 +630,7 @@ navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
 {
   GtkWidget *parent;
   int shifted = event->state & GDK_SHIFT_MASK;
+  int ctrl = event->state & GDK_CONTROL_MASK;
   int arg = -1;
 #define SET_ARG(value) if (arg < 0) arg = (value)
   GtkWidget *what = NULL;
@@ -654,11 +655,15 @@ navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
     case GDK_Page_Up:
     case GDK_plus:
       handled = change_value(focus, shifted, 1, 1);
+      if (ctrl && starred_widget)
+        handled |= change_value(starred_widget, shifted, 1, 1);
       break;
     case GDK_Back:
     case GDK_Page_Down:
     case GDK_minus:
       handled = change_value(focus, shifted, -1, 1);
+      if (ctrl && starred_widget)
+        handled |= change_value(starred_widget, shifted, -1, 1);
       break;
     case GDK_asterisk:
       starred_widget = GTK_WINDOW(widget)->focus_widget;
@@ -837,6 +842,7 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
 {
   static int count = 0;
   int shifted = 0;
+  int ctrl = 0;
 
   /* Depending on whether ui_settings.scroll_focused_only is set,
    * we don't want to scroll the widget currently pointed to, we want
@@ -864,15 +870,21 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
 
   if (event->state & (GDK_SHIFT_MASK | GDK_BUTTON2_MASK))
     shifted = 1;
+  if (event->state & GDK_CONTROL_MASK)
+    ctrl = 1;
 
   switch (event->direction) {
     case GDK_SCROLL_UP:
     case GDK_SCROLL_LEFT:
       change_value(widget, shifted, 1, 1);
+      if (ctrl && starred_widget)
+        change_value(starred_widget, shifted, 1, 1);
       break;
     case GDK_SCROLL_DOWN:
     case GDK_SCROLL_RIGHT:
       change_value(widget, shifted, -1, 1);
+      if (ctrl && starred_widget)
+        change_value(starred_widget, shifted, -1, 1);
       break;
     default:
       break;
