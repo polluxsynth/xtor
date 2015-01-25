@@ -132,6 +132,7 @@ struct setting settings[] = {
   { NULL, NULL }
 };
 
+GtkWidget *starred_widget = NULL;
 
 /* Trim spaces from end of string, returning string. */
 static char *
@@ -658,6 +659,19 @@ navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
     case GDK_Page_Down:
     case GDK_minus:
       handled = change_value(focus, shifted, -1, 1);
+      break;
+    case GDK_asterisk:
+      starred_widget = GTK_WINDOW(widget)->focus_widget;
+      handled = 1;
+      break;
+    case GDK_space:
+      what = starred_widget;
+      if (what) {
+        starred_widget = GTK_WINDOW(widget)->focus_widget;
+        gtk_widget_grab_focus(what);
+      }
+      handled = 1;
+      break;
     default:
       break;
   }
