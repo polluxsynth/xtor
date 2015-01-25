@@ -54,18 +54,17 @@ left_right_compare(gconstpointer a, gconstpointer b)
   GtkWidget *widget1 = ((struct knob_descriptor *)a)->widget;
   GtkWidget *widget2 = ((struct knob_descriptor *)b)->widget;
 
-  gint x1 = widget1->allocation.x + widget1->allocation.width / 2;
-  gint x2 = widget2->allocation.x + widget2->allocation.width / 2;
-
-  if (x1 == x2)
+  gint y1 = widget1->allocation.y + widget1->allocation.height / 2;
+  gint y2 = widget2->allocation.y + widget2->allocation.height / 2;
+  if (y1 == y2)
     {
-      gint y1 = widget1->allocation.y + widget1->allocation.height / 2;
-      gint y2 = widget2->allocation.y + widget2->allocation.height / 2;
+      gint x1 = widget1->allocation.x + widget1->allocation.width / 2;
+      gint x2 = widget2->allocation.x + widget2->allocation.width / 2;
 
-      return (y1 < y2) ? -1 : ((y1 == y2) ? 0 : 1);
+      return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
     }
   else
-    return (x1 < x2) ? -1 : 1;
+    return (y1 < y2) ? -1 : 1;
 }
 
 /************************ End of file knob_mapper.c **************************/
