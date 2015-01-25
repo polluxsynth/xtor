@@ -6300,7 +6300,8 @@
                 <child type="tab">
                   <object class="GtkLabel" id="Sound">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">Sound</property>
+                    <property name="label" translatable="yes">&lt;u&gt;S&lt;/u&gt;ound</property>
+                    <property name="use_markup">True</property>
                   </object>
                   <packing>
                     <property name="position">2</property>
@@ -10146,7 +10147,8 @@
                 <child type="tab">
                   <object class="GtkLabel" id="Modulation">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">Modulation</property>
+                    <property name="label" translatable="yes">&lt;u&gt;M&lt;/u&gt;odulation</property>
+                    <property name="use_markup">True</property>
                   </object>
                   <packing>
                     <property name="position">2</property>
@@ -15451,7 +15453,8 @@
                 <child type="tab">
                   <object class="GtkLabel" id="Arpeggiator">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">Arpeggiator + Effects</property>
+                    <property name="label" translatable="yes">&lt;u&gt;A&lt;/u&gt;rpeggiator + Effects</property>
+                    <property name="use_markup">True</property>
                   </object>
                   <packing>
                     <property name="position">3</property>
@@ -15905,7 +15908,8 @@
                 <child type="tab">
                   <object class="GtkLabel" id="Patch and Config">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes">Patch and Config</property>
+                    <property name="label" translatable="yes">Pa&lt;u&gt;t&lt;/u&gt;ch and Config</property>
+                    <property name="use_markup">True</property>
                   </object>
                   <packing>
                     <property name="position">4</property>
