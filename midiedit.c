@@ -132,7 +132,7 @@ struct setting settings[] = {
   { NULL, NULL }
 };
 
-GtkWidget *starred_widget = NULL;
+GtkWidget *ticked_widget = NULL;
 
 /* Trim spaces from end of string, returning string. */
 static char *
@@ -655,24 +655,24 @@ navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
     case GDK_Page_Up:
     case GDK_plus:
       handled = change_value(focus, shifted, 1, 1);
-      if (ctrl && starred_widget)
-        handled |= change_value(starred_widget, shifted, 1, 1);
+      if (ctrl && ticked_widget)
+        handled |= change_value(ticked_widget, shifted, 1, 1);
       break;
     case GDK_Back:
     case GDK_Page_Down:
     case GDK_minus:
       handled = change_value(focus, shifted, -1, 1);
-      if (ctrl && starred_widget)
-        handled |= change_value(starred_widget, shifted, -1, 1);
+      if (ctrl && ticked_widget)
+        handled |= change_value(ticked_widget, shifted, -1, 1);
       break;
-    case GDK_asterisk:
-      starred_widget = GTK_WINDOW(widget)->focus_widget;
+    case GDK_apostrophe:
+      ticked_widget = GTK_WINDOW(widget)->focus_widget;
       handled = 1;
       break;
     case GDK_space:
-      what = starred_widget;
+      what = ticked_widget;
       if (what) {
-        starred_widget = GTK_WINDOW(widget)->focus_widget;
+        ticked_widget = GTK_WINDOW(widget)->focus_widget;
         gtk_widget_grab_focus(what);
       }
       handled = 1;
@@ -877,14 +877,14 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
     case GDK_SCROLL_UP:
     case GDK_SCROLL_LEFT:
       change_value(widget, shifted, 1, 1);
-      if (ctrl && starred_widget)
-        change_value(starred_widget, shifted, 1, 1);
+      if (ctrl && ticked_widget)
+        change_value(ticked_widget, shifted, 1, 1);
       break;
     case GDK_SCROLL_DOWN:
     case GDK_SCROLL_RIGHT:
       change_value(widget, shifted, -1, 1);
-      if (ctrl && starred_widget)
-        change_value(starred_widget, shifted, -1, 1);
+      if (ctrl && ticked_widget)
+        change_value(ticked_widget, shifted, -1, 1);
       break;
     default:
       break;
