@@ -29,6 +29,7 @@
 /* ALSA related stuff */
 snd_seq_t *seq;
 
+int client;
 int ports[MAX_PORTS];
 
 /* System exclusive. So far, we handle this at the basic level, managing
@@ -76,6 +77,14 @@ midi_init_alsa(void)
     return NULL;
   }
   snd_seq_set_client_name(seq, "Midiedit");
+
+  client = snd_seq_client_id(seq);
+  if (client < 0) {
+    dprintf("Can't get client_id: %d\n", client);
+    return NULL;
+  }
+  dprintf("Client address %d\n", client);
+
   synth_port = snd_seq_create_simple_port(seq, "Midiedit synth port",
                                           SND_SEQ_PORT_CAP_READ |
                                           SND_SEQ_PORT_CAP_WRITE |
@@ -137,7 +146,6 @@ subscribe(snd_seq_port_subscribe_t *sub)
 int
 midi_connect(int port, const char *remote_device)
 {
-  int client;
   snd_seq_port_subscribe_t *sub;
   snd_seq_addr_t my_addr;
   snd_seq_addr_t remote_addr;
@@ -151,11 +159,6 @@ midi_connect(int port, const char *remote_device)
     /* Set to "" if first call does not intitialize it to remote_device */
     saved_remote_device[port] = "";
 
-  client = snd_seq_client_id(seq);
-  if (client < 0) {
-    dprintf("Can't get client_id: %d\n", client);
-    return client;
-  }
   dprintf("Client address %d:%d\n", client, port);
 
   snd_seq_port_subscribe_alloca(&sub);
@@ -200,6 +203,7 @@ midi_send_sysex(int port, void *buf, int buflen)
   if (port >= MAX_PORTS) return -1;
  
   snd_seq_ev_clear(&sendev);
+  snd_seq_ev_set_source(&sendev, ports[port]);
   snd_seq_ev_set_subs(&sendev);
   snd_seq_ev_set_sysex(&sendev, buflen, buf);
   snd_seq_ev_set_direct(&sendev);
