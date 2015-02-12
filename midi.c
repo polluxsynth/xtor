@@ -209,7 +209,7 @@ midi_send_sysex(int port, void *buf, int buflen)
   snd_seq_ev_set_direct(&sendev);
   err = snd_seq_event_output_direct(seq, &sendev);
   if (err < 0)
-    dprintf("Couldn't send MIDI sysex: %s\n", snd_strerror(err));
+    eprintf("Couldn't send MIDI sysex: %s\n", snd_strerror(err));
   return err;
 }
 
