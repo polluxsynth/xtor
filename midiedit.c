@@ -1530,7 +1530,10 @@ main(int argc, char *argv[])
   blofeld_init(param_handler);
 
   memset(controller, 0, sizeof(*controller));
+#if 0
   nocturn_init(controller);
+#endif
+  beatstep_init(controller);
 
   memset(knob_mapper, 0, sizeof(*knob_mapper));
   blofeld_knobs_init(knob_mapper);
@@ -1598,6 +1601,9 @@ main(int argc, char *argv[])
 
   midi_connect(SYNTH_PORT, param_handler->remote_midi_device);
   midi_connect(CTRLR_PORT, controller->remote_midi_device);
+
+extern void beatstep_controls_init(void);
+beatstep_controls_init();
 
   block_updates = 0;
 
