@@ -1599,7 +1599,7 @@ main(int argc, char *argv[])
   controller->controller_register_notify_cb(controller_change, NULL);
   controller->controller_register_jump_button_cb(jump_button, NULL);
 
-  midi_connect(SYNTH_PORT, param_handler->remote_midi_device);
+  param_handler->param_midi_init(param_handler);
   controller->controller_midi_init(controller);
 
   block_updates = 0;

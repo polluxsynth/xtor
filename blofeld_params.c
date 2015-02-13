@@ -1177,6 +1177,18 @@ blofeld_get_device_name_id(void)
   return device_name;
 }
 
+/* Called at end of main initialization when all is set up and time to
+ * go and init MIDI. */
+static void
+blofeld_midi_init(struct param_handler *param_handler)
+{
+  midi_connect(SYNTH_PORT, param_handler->remote_midi_device);
+
+  /* Tell MIDI handler we want to receive sysex. */
+  midi_register_sysex(SYNTH_PORT, SYSEX_ID_WALDORF, blofeld_midi_sysex,
+                      BLOFELD_PARAMS + 10);
+}
+
 /* Initialize Blofeld-specific functionality */
 void
 blofeld_init(struct param_handler *param_handler)
@@ -1234,10 +1246,6 @@ blofeld_init(struct param_handler *param_handler)
     }
   }
 
-  /* Tell MIDI handler we want to receive sysex. */
-  midi_register_sysex(SYNTH_PORT, SYSEX_ID_WALDORF, blofeld_midi_sysex,
-                      BLOFELD_PARAMS + 10);
-
   /* Fill in param_handler struct */
 
   /* # parameters we have, including derived (e.g. "bitmapped") types */
@@ -1257,6 +1265,7 @@ blofeld_init(struct param_handler *param_handler)
   param_handler->param_fetch_parameter = blofeld_fetch_parameter;
   param_handler->param_get_patch_name_id = blofeld_get_patch_name_id;
   param_handler->param_get_device_name_id = blofeld_get_device_name_id;
+  param_handler->param_midi_init = blofeld_midi_init;
 }
 
 /************************* End of file blofeld_params.c *********************/
