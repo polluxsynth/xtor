@@ -169,15 +169,21 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
 }
 
 void
-nocturn_init(struct controller *controller)
+nocturn_midi_init(struct controller *controller)
 {
+  midi_connect(CTRLR_PORT, controller->remote_midi_device);
   /* Tell MIDI handler we want to receive CC. */
   midi_register_cc(CTRLR_PORT, nocturn_cc_receiver);
+}
 
+void
+nocturn_init(struct controller *controller)
+{
   controller->controller_register_notify_cb =
     nocturn_register_notify_cb;
   controller->controller_register_jump_button_cb = 
     nocturn_register_jump_button_cb;
+  controller->controller_midi_init = nocturn_midi_init;
 
   controller->remote_midi_device = "Nocturn";
   controller->map_filename = "nocturn.glade";

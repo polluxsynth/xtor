@@ -36,6 +36,7 @@ struct controller {
   void (*controller_register_notify_cb)(controller_notify_cb cb, void *ref);
   void (*controller_register_jump_button_cb)(controller_jump_button_cb cb,
                                              void *ref);
+  void (*controller_midi_init)(struct controller *controller);
 
   const char *remote_midi_device; /* ID of MIDI device */
   const char *map_filename; /* name of glade file with mapping definitions */

@@ -113,7 +113,7 @@ beatstep_set_ccbutton(int beatstep_control, int control_no)
                         BEATSTEP_BUTTON_MODE_CC_BEHAVIOR_GATE);
 }
 
-/* static */ void
+static void
 beatstep_controls_init(void)
 {
   int knob, button;
@@ -218,16 +218,22 @@ beatstep_cc_receiver(int chan, int controller_no, int value)
   }
 }
 
+static void beatstep_midi_init(struct controller *controller)
+{
+  /* Tell MIDI handler we want to receive CC. */
+  midi_connect(CTRLR_PORT, controller->remote_midi_device);
+  midi_register_cc(CTRLR_PORT, beatstep_cc_receiver);
+  beatstep_controls_init();
+}
+
 void
 beatstep_init(struct controller *controller)
 {
-  /* Tell MIDI handler we want to receive CC. */
-  midi_register_cc(CTRLR_PORT, beatstep_cc_receiver);
-
   controller->controller_register_notify_cb =
     beatstep_register_notify_cb;
   controller->controller_register_jump_button_cb = 
     beatstep_register_jump_button_cb;
+  controller->controller_midi_init = beatstep_midi_init;
 
   controller->remote_midi_device = "Arturia BeatStep";
   controller->map_filename = "beatstep.glade"; /* not used */

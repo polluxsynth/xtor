@@ -1600,10 +1600,7 @@ main(int argc, char *argv[])
   controller->controller_register_jump_button_cb(jump_button, NULL);
 
   midi_connect(SYNTH_PORT, param_handler->remote_midi_device);
-  midi_connect(CTRLR_PORT, controller->remote_midi_device);
-
-extern void beatstep_controls_init(void);
-beatstep_controls_init();
+  controller->controller_midi_init(controller);
 
   block_updates = 0;
 
