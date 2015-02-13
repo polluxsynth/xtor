@@ -37,6 +37,7 @@
 #include "controller.h"
 #include "knob_mapper.h"
 #include "nocturn.h"
+#include "beatstep.h"
 #include "midi.h"
 
 #include "debug.h"
@@ -1515,6 +1516,22 @@ builder_add_with_path(GtkBuilder *builder, const char *ui_filename)
   gtk_builder_add_from_file(builder, filename, NULL);
 }
 
+/* It would be nice to have function pointers directly in list below, but
+ * having a struct makes it easier to read and manage. */
+struct controller_init
+{
+  const char *name;
+  controller_initfunc controller_init;
+};
+
+/* List of controllers we can use. */
+struct controller_init controller_initfuncs[] =
+{
+  { .name = "nocturn", .controller_init = nocturn_init },
+  { .name = "beatstep", .controller_init = beatstep_init },
+  { .name = NULL, .controller_init = NULL } /* sentinel */
+};
+
 /* Our main function */
 int
 main(int argc, char *argv[])
@@ -1531,11 +1548,23 @@ main(int argc, char *argv[])
   memset(param_handler, 0, sizeof(*param_handler));
   blofeld_init(param_handler);
 
+  char *controller_name = "beatstep"; /* default controller */
+  if (argv[1]) controller_name = argv[1];
+
   memset(controller, 0, sizeof(*controller));
-#if 0
-  nocturn_init(controller);
-#endif
-  beatstep_init(controller);
+
+  /* Scan controller list for the one we want. */
+  struct controller_init *init = &controller_initfuncs[0];
+  while (init->name) {
+     if (!strcmp(init->name, controller_name)) /* found it! */
+       break;
+     init++;
+  }
+  if (!init->controller_init) {
+    eprintf("Controller %s not supported, exiting.\n", controller_name);
+    return 1;
+  }
+  init->controller_init(controller);
 
   memset(knob_mapper, 0, sizeof(*knob_mapper));
   blofeld_knobs_init(knob_mapper);
@@ -1543,7 +1572,6 @@ main(int argc, char *argv[])
   /* Initialize UI */
 
   gladename = param_handler->ui_filename;
-  if (argv[1]) gladename = argv[1];
 
   gtk_init (&argc, &argv);
 
