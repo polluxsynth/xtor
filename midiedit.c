@@ -1526,6 +1526,8 @@ main(int argc, char *argv[])
 
   debug = 0;
 
+  /* Here we do a basic initialization of structures etc. */
+
   memset(param_handler, 0, sizeof(*param_handler));
   blofeld_init(param_handler);
 
@@ -1537,6 +1539,8 @@ main(int argc, char *argv[])
 
   memset(knob_mapper, 0, sizeof(*knob_mapper));
   blofeld_knobs_init(knob_mapper);
+
+  /* Initialize UI */
 
   gladename = param_handler->ui_filename;
   if (argv[1]) gladename = argv[1];
@@ -1568,7 +1572,6 @@ main(int argc, char *argv[])
   g_signal_connect(main_window, "button-press-event",
                    G_CALLBACK(menu_button_event), NULL);
 
-
   setup_hotkeys(builder, "KeyMappings");
   g_signal_connect(main_window, "key-press-event", G_CALLBACK(key_event), NULL);
 
@@ -1582,6 +1585,8 @@ main(int argc, char *argv[])
 
   g_object_unref(G_OBJECT(builder));
 
+  /* Start ALSA MIDI */
+
   polls = midi_init_alsa();
   if (!polls)
     return 2;
@@ -1592,6 +1597,8 @@ main(int argc, char *argv[])
     /* gdk_input_add() returns a poll_tag which we don't care about */
     gdk_input_add(polls->pollfds[i].fd, GDK_INPUT_READ, on_midi_input, NULL);
 
+  /* UI and MIDI set up, we can now initialize UI dependent stuff. */
+
   create_adjustors_list(param_handler->params, main_window);
 
   param_handler->param_register_notify_cb(param_changed, NULL);
@@ -1599,12 +1606,19 @@ main(int argc, char *argv[])
   controller->controller_register_notify_cb(controller_change, NULL);
   controller->controller_register_jump_button_cb(jump_button, NULL);
 
+  /* All is set up, we can now let everyone do their MIDI initialization. */
+
   param_handler->param_midi_init(param_handler);
   controller->controller_midi_init(controller);
+
+  /* Final things we haven't done before. */
 
   block_updates = 0;
 
   set_title();
+
+  /* Let's go! */
+
   gtk_widget_show(main_window);
   gtk_main();
 
