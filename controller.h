@@ -42,6 +42,9 @@ struct controller {
   const char *map_filename; /* name of glade file with mapping definitions */
 };
 
+/* Initialization function */
+typedef void (*controller_initfunc)(struct controller *);
+
 #endif /* _CONTROLLER_H_ */
 
 /************************** End of file contoller.h *************************/

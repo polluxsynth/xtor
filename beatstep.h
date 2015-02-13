@@ -23,6 +23,8 @@
 #ifndef _BEATSTEP_H_
 #define _BEATSTEP_H_
 
+#include "controller.h"
+
 /* Incrementors, not counting volume dial */
 #define BEATSTEP_INCREMENTORS 16
 /* Buttons, not counting start and stop */
@@ -171,6 +173,8 @@
 /* The following would seem to conflict with SEQ_PATTERN_LEN ? */
 #define BEATSTEP_GLOBAL_SETTING_MIDI_CHANNEL			0x06 /* 0..15 */
 #define BEATSTEP_GLOBAL_SETTING_CVGATE_CHANNEL			0x0c /* 0..15 */
+
+void beatstep_init(struct controller *controller);
 
 #endif /* _BEATSTEP_H_ */
 

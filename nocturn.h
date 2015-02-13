@@ -23,6 +23,8 @@
 #ifndef _NOCTURN_H_
 #define _NOCTURN_H_
 
+#include "controller.h"
+
 /*
  * CC definitions for Nocturn:
  * Note that since this isn't really MIDI, some of the CC's overlap with
@@ -96,6 +98,8 @@
 /* Buttons */
 #define NOCTURN_BUTTON_ON			127
 #define NOCTURN_BUTTON_OFF			0
+
+void nocturn_init(struct controller *controller);
 
 #endif /* _NOCTURN_H_ */
 
