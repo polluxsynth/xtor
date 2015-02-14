@@ -1543,6 +1543,12 @@ main(int argc, char *argv[])
 
   debug = 0;
 
+  /* We initialize gtk early, even if we don't initialize the rest of the UI
+   * until later, because we want to grab gtk-specific arguments before
+   * processing our own. */
+
+  gtk_init(&argc, &argv);
+
   /* Here we do a basic initialization of structures etc. */
 
   memset(param_handler, 0, sizeof(*param_handler));
@@ -1572,8 +1578,6 @@ main(int argc, char *argv[])
   /* Initialize UI */
 
   gladename = param_handler->ui_filename;
-
-  gtk_init (&argc, &argv);
 
   builder = gtk_builder_new();
   builder_add_with_path(builder, gladename);
