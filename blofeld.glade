@@ -7292,7 +7292,7 @@
                                     <child>
                                       <object class="GtkComboBox" id="Modifier 1 Source B">
                                         <property name="visible">True</property>
-                                        <property name="model">modsource</property>
+                                        <property name="model">bsource</property>
                                         <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext96"/>
@@ -7379,7 +7379,7 @@
                                     <child>
                                       <object class="GtkComboBox" id="Modifier 2 Source B">
                                         <property name="visible">True</property>
-                                        <property name="model">modsource</property>
+                                        <property name="model">bsource</property>
                                         <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext40"/>
@@ -7400,7 +7400,7 @@
                                     <child>
                                       <object class="GtkComboBox" id="Modifier 3 Source B">
                                         <property name="visible">True</property>
-                                        <property name="model">modsource</property>
+                                        <property name="model">bsource</property>
                                         <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext41"/>
@@ -7421,7 +7421,7 @@
                                     <child>
                                       <object class="GtkComboBox" id="Modifier 4 Source B">
                                         <property name="visible">True</property>
-                                        <property name="model">modsource</property>
+                                        <property name="model">bsource</property>
                                         <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext42"/>
@@ -16462,6 +16462,107 @@
     <data>
       <row>
         <col id="0" translatable="yes">off</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LFO1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LFO1*MW</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LFO 2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LFO2*Aft</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">LFO 3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">FilterEnv</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">AmpEnv</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Env3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Env4</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Keytrack</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Velocity</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Rel. Velo</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Pressure</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Poly Press</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Pitch Bend</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Mod Wheel</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Sustain</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Foot Ctrl</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">BreathCtrl</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Control W</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Control X</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Control Y</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Control Z</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Unisono V.</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Modifier 1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Modifier 2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Modifier 3</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Modifier 4</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">minimum</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">MAXIMUM</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="bsource">
+    <columns>
+      <!-- column-name modsource -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">constant</col>
       </row>
       <row>
         <col id="0" translatable="yes">LFO1</col>
