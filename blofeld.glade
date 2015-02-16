@@ -7999,7 +7999,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkVScale" id="Filter Envelope Decay 1">
+                                              <object class="GtkVScale" id="Filter Envelope Decay Two1">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="orientation">vertical</property>
@@ -8012,7 +8012,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkVScale" id="Filter Envelope Sustain 1">
+                                              <object class="GtkVScale" id="Filter Envelope Sustain Two1">
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">True</property>
                                                 <property name="orientation">vertical</property>
