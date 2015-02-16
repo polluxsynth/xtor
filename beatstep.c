@@ -154,33 +154,6 @@ beatstep_register_jump_button_cb(controller_jump_button_cb cb, void *ref)
   jump_button_ref = ref;
 }
 
-/* Scale factor for knobs. */
-static int knob_scale = 1;
-/* When turning quickly, incrementors output steps larger than 1, but
- * not that much larger, so apply an acceleration factor in this case. */
-static int incrementor_acceleration = 1;
-
-/* Perform conversion 7-bit 2's complement (i.e. MIDI 2's complement)
- * to true 2's complement, scaling (knob_scale steps correspond to one
- * UI step) and handle knob acceleration. */
-static int
-accelerate(int knob, int value)
-{
-  static knob_accumulator[BEATSTEP_INCREMENTORS + 1] = { 0 };
-
-  dprintf("Accellerate knob %d:%d\n", knob, value);
-  value -= 64; /* Beatstep relative1 mode CC values are offset from 64 */
-  if (value > 1 || value < -1) value *= incrementor_acceleration;
-  knob_accumulator[knob] += value;
-  if (knob_accumulator[knob] > -knob_scale &&
-      knob_accumulator[knob] < knob_scale)
-    return 0;
-  value = knob_accumulator[knob] / knob_scale;
-  knob_accumulator[knob] -= value * knob_scale;
-
-  return value;
-}
-
 static void
 beatstep_cc_receiver(int chan, int controller_no, int value)
 {
@@ -209,7 +182,7 @@ beatstep_cc_receiver(int chan, int controller_no, int value)
       alt_knob = knob;
       knob -= BOTTOM_INCREMENTOR_ROW;
     }
-    NOTIFY_UI(knob, row, accelerate(knob, value), notify_ref);
+    NOTIFY_UI(knob, row, value-64, notify_ref);
   } else if (jump_button >= 0) {
     /* Jump button matrix conceptually 4 rows (8x4), with bottom 2 rows
      * intended for page jumps. For the Beatstep, pressing STOP (= shift)
