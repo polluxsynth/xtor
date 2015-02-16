@@ -934,7 +934,8 @@ show_widget(gpointer data, gpointer user_data)
 
 /* Get widget corresponding to currently turned knob */
 static GtkWidget *
-get_knob_widget(struct f_k_map *f_k_map, int controller_number, int row)
+get_knob_widget(struct f_k_map *f_k_map, int control_no, int alt_control_no,
+                int row)
 {
   dprintf("f_k_map: frame %p:%s:%s, knobmap %p\n", f_k_map->frame,
           gtk_widget_get_name(GTK_WIDGET(f_k_map->frame)),
@@ -943,14 +944,14 @@ get_knob_widget(struct f_k_map *f_k_map, int controller_number, int row)
   /* Get the knob_descriptor for the current knob (controller_number)
    * from the knob_mapper. */
   struct knob_descriptor *knob_descriptor = 
-    knob_mapper->knob(f_k_map->knobmap, controller_number - 1, row);
+    knob_mapper->knob(f_k_map->knobmap, control_no-1, alt_control_no-1, row);
   dprintf("Knob descriptor %p\n", knob_descriptor);
   if (!knob_descriptor) return NULL;
 
   /* Finally, extract the widget from the knob_descriptor */
   GtkWidget *widget = knob_descriptor->widget;
   dprintf("Widget %p\n", widget);
-  dprintf("Controller %d referencing %s:%s\n", controller_number,
+  dprintf("Control %d (alt %d) referencing %s:%s\n", control_no, alt_control_no,
           gtk_widget_get_name(widget),
           gtk_buildable_get_name(GTK_BUILDABLE(widget)));
 
@@ -1004,14 +1005,15 @@ out:
  * Incrementor #1..8 control the leftmost adjustments in the current frame.
  */
 static void
-controller_change(int controller_number, int row, int value, void *ref)
+controller_change(int control_no, int alt_control_no, int row, int value,
+                  void *ref)
 {
   int dir = 1;
   int steps;
   GtkWidget *focus_widget = GTK_WINDOW(main_window)->focus_widget;
 
-  dprintf("Controller #%d row %d, value %d, focus %s, name %s\n",
-          controller_number, row, value,
+  dprintf("Control #%d alt #%d row %d, value %d, focus %s, name %s\n",
+          control_no, alt_control_no, row, value,
           gtk_widget_get_name(focus_widget),
           gtk_buildable_get_name(GTK_BUILDABLE(focus_widget)));
 
@@ -1027,12 +1029,13 @@ controller_change(int controller_number, int row, int value, void *ref)
 
   GtkWidget *editing_widget;
 
-  if (controller_number == 0) { /* focused parameter */
+  if (control_no == 0) { /* focused parameter */
     editing_widget = focus->widget;
   } else { /* use map */
     /* Parameters in current frame */
     if (!focus->f_k_map) return; /* No f_k_map, so nothing to edit */
-    editing_widget = get_knob_widget(focus->f_k_map, controller_number, row);
+    editing_widget = get_knob_widget(focus->f_k_map, control_no,
+                                     alt_control_no, row);
 
     if (editing_widget && ui_settings.knobs_grab_focus)
       gtk_widget_grab_focus(editing_widget);

@@ -179,10 +179,12 @@ beatstep_cc_receiver(int chan, int controller_no, int value)
   if (knob >= 0) { /* volume dial or other knob turned */
     int row = knob >= BOTTOM_INCREMENTOR_ROW + 1 ? BUTTON_ROW : INCREMENTOR_ROW;
     if (row == BUTTON_ROW) {
+      /* Alternative interpretation: all 16 knobs map to up to 16 variable
+       * parameters, rather than 8 variable and 8 stepped. */
       alt_knob = knob;
       knob -= BOTTOM_INCREMENTOR_ROW;
     }
-    NOTIFY_UI(knob, row, value-64, notify_ref);
+    NOTIFY_UI(knob, alt_knob, row, value-64, notify_ref);
   } else if (jump_button >= 0) {
     /* Jump button matrix conceptually 4 rows (8x4), with bottom 2 rows
      * intended for page jumps. For the Beatstep, pressing STOP (= shift)

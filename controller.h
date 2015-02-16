@@ -24,8 +24,8 @@
 #define _CONTROLLER_H_
 
 /* Callback for notifying UI of incoming parameter value changes */
-typedef void (*controller_notify_cb)(int controller_number, int row,
-                                     int delta, void *ref);
+typedef void (*controller_notify_cb)(int control_no, int alt_control_no,
+                                     int row, int delta, void *ref);
 
 /* Callback for notifying UI of jump buttons pressed */
 typedef void (*controller_jump_button_cb)(int button_row, int button_no, void *ref);
