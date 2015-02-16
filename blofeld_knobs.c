@@ -222,12 +222,15 @@ blofeld_knob(void *knobmap_in, int knob_no, int alt_knob_no, int row)
    * This happens for the modulation matrix for instance.
    * Note that we expect alt_knob_no only to be >= 0 under these circumstances.
    */
-  if (alt_knob_no >= 0 && g_list_length(knobmap->pots.active) > alt_knob_no) {
-printf("Alt: row %d knob %d alt %d\n", row, knob_no, alt_knob_no);
+  int pots = g_list_length(knobmap->pots.active);
+  if (alt_knob_no >= 0 && pots > alt_knob_no) {
     row = 0;
     knob_no = alt_knob_no;
+  } else if (pots == 0) { /* no pots => map all knobs as buttons */
+    row = 1;
+    if (alt_knob_no >= 0)
+      knob_no = alt_knob_no;
   }
-printf("Row %d knob %d len %d\n", row, knob_no, g_list_length(knobmap->pots.active));
   return knob_descriptor = g_list_nth_data(row == 0 ? 
                                            knobmap->pots.active : 
                                            knobmap->buttons.active, knob_no);
