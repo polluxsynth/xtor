@@ -134,6 +134,10 @@ beatstep_controls_init(void)
                           BEATSTEP_BUTTON(button));
   /* We will use the SHIFT button for page jump shift. */
   beatstep_set_ccbutton(BEATSTEP_BUTTON_SHIFT, BEATSTEP_BUTTON_SHIFT);
+  /* Set knob acceleration to medium */
+  beatstep_send_setting(BEATSTEP_GLOBAL_CTRLR_SETTING,
+                        BEATSTEP_GLOBAL_CTRLR_SETTING_ACCELERATION,
+                        BEATSTEP_GLOBAL_CTRLR_SETTING_ACCELERATION_FAST);
 }
 
 static void
