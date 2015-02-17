@@ -1,7 +1,7 @@
 Midiedit - an extensable Gtk based MIDI editor
 ==============================================
-For Midiedit 1.0
-RW 140223
+For Midiedit 1.4
+RW 140223,150217
 
 Midiedit is an editor for MIDI synthesizers (or indeed any MIDI device),
 currently configured (solely) for the Waldorf Blofeld. If offers two way
@@ -9,6 +9,10 @@ communication of both single parameter changes as well as complete patch
 dumps, thus both operating as a visualization as well as graphical editor.
 It is also possible to save and load individual patches to the computer,
 although Midiedit is not intended to be a fully fledged librarian application.
+
+A control surface is also supported for more hands-on editing. As of version
+1.4, Midiedit supports the Arturia Beatstep and the Novation Nocturn. The
+latter however requires a separate application to map the Nocturn to MIDI.
 
 1. Background
 -------------
@@ -28,12 +32,16 @@ visibly practical than knobs. Knobs are great when it comes to hardware, but
 for easy overview on a computer screen, sliders are much easier to read and
 their manipulation using a scroll wheel or mouse more intuitive.
 
+In addition to the GUI, using physical knobs makes editing much more intuitive
+and direct. Midiedit 1.4 therefore allows the use of an external control
+surface which is mapped onto the currently selected parameter group.
+
 2. Build and installation
 -------------------------
 
-Midiedit was written on a machine running Debian Squeeze. The libgtk2.0-dev
-and libglade2-dev packages are required as well as the libasound2-dev package
-which contains ALSA support.
+Midiedit was initially written on a machine running Debian Squeeze. The
+libgtk2.0-dev and libglade2-dev packages are required as well as the
+libasound2-dev package which contains ALSA support.
 
 Type 'make' in the Midiedit source directory, followed by 'make install' as
 root in order to install the package. Uninstallation can be performed using
@@ -42,8 +50,14 @@ root in order to install the package. Uninstallation can be performed using
 3. User perspective
 -------------------
 
-Quick start: Plug synth into computer using USB. Connection will be
-automatically established when Get is clicked (or G pressed).
+Quick start: Plug synth (and control surface if so desired) into computer using
+USB. Connection with the synth will be automatically established when Get is
+clicked (or G pressed). Connection with the control surface will be
+automatically established when Midiedit starts.
+
+The sole argument to the application is the name of the control surface.
+For 1.4 the choices are beatstep and nocturn, with beatstep being the default
+if no argument is given.
 
 Use arrow keys to navigate between parameters. Forward, Back,
 Page Up, Page Down, + or - change the currently selected parameter value,
@@ -56,8 +70,19 @@ in order to set values.
 Press G or click Get to fetch the current parameter from the synth, 
 requesting the Part specified under Part if the synth is in Multi Mode.
 
+The currently selected module (i.e. a module on the screen where one of the
+parameters has been selected for focus) will be automaticaly mapped to the
+control surface. The top row of buttons/knobs will be mapped to as many
+sliders as there are in the module, with the bottom row of buttons/knobs
+being mapped to the combo boxes on the lower row in each module.
+
+In order to not have to move between control surface and computer keyboard,
+it is also possible to select which module is in focus using buttons on the
+control surface, as well as jump between the editor pages.
+
 3.1 Basics
 ----------
+
 Starting Midiedit brings up more or less full screen window with the
 synthesiser controls grouped in tabs. Moving the controls sends
 parameter updates to the synth, conversely, changing parameters on the synth
@@ -98,13 +123,24 @@ The navigation mode can be selected using the right-hand mouse key popup menu.
 -------------
 
 In both navigation modes, Midiedit also supports hotkey navigation, where for
-instance the parameter tabs can be reached by pressing the first letter in the
-tab, and parameter groups in each tab reached by pressing the underlined
-character in each group. Normally it is the first letter, although for the case
-of multiple, numbered modules of the same type, for instance the oscillators
-the digit keys 1, 2, 3, etc move between the different instances.
+instance the parameter tabs can be reached by pressing the underlined letter in
+the tab heading, and parameter groups in each tab reached by pressing the
+underlined character in each group. Normally it is the first letter, although
+for the case of multiple, numbered modules of the same type, for instance the
+oscillators the digit keys 1, 2, 3, etc move between the different instances.
 
-3.2.2 Scroll mode
+3.2.2 Control surface
+---------------------
+
+Changing focus to the different modules on the screen can be accomplished by
+using 'jump keys' on the control surface. For the Beatstep, the pads function
+as jump keys, with SHIFT on the Beatstep being used as a prefix key for page
+jumps (and certain module jumps when there are more than 16 modules on a page).
+For the Nocturn, any one of the upper buttons functions as a shift key for
+module jumps, with any of the lower buttons function as a shift key for page
+jumps. 
+
+3.2.3 Scroll mode
 -----------------
 
 By default in Midiedit, the scroll wheel on the mouse changes the value
@@ -142,6 +178,12 @@ are the two configurable modulation routings which makes it easier to editing
 a modulation amount while keeping an eye on the corresponding destination
 parameter, there not being space for the full 16 modulation routings in the
 Blofeld in the Sound tab.
+
+Tabs can be reached by using 'page jumps' on the control surface. For the
+Beatstep, the SHIFT key works as a prefix key for page jumps, with the
+four pages being on the lower row of buttons. For the Nocturn, holding any
+key on the bottom row while pressing one of the for leftmost keys on the
+buttom row will jump to the corresponding page.
 
 3.4 Multiple parts
 ------------------
@@ -213,13 +255,62 @@ While Midiedit supports multi mode in the sense that it can easily switch
 between the 16 available parts, the multi mode parameters such as MIDI
 channel, volume, pan, etc for the different parts are not supported, for
 the simple reason that Waldorf has not (yet) implemented sysex support
-for these parameters.
+for editing these parameters individually.
+
+3.8 Starring
+------------
+
+Pressing the * key causes Midiedit to remember the currently selected
+parameter. After navigating to another parameter, the remembered parameter can
+be jumped to by pressing the space bar. Doing so causes Midiedit to remember
+the other parameter instead, meaning that it's possible to quickly jump back
+and forth betwen two parameters using the space bar, once one of them has been
+'starred'.
+
+Furthermore, if the CTRL key is held while adjusting the value of the
+parameter, the starred parameter is updated as well. This is very useful for
+instance if the two Blofeld filters are working in parallel, feeding separate
+output channels, and one wants to adjust the cutoff frequency of both filters
+at the same time.
+
+3.9 Control surface mapping
+---------------------------
+
+The control surface is automatically mapped to the module where a parameter
+has focus. For the Blofeld, normally, the upper row of knobs map to the
+sliders, whereas the lower row of knobs (or the buttons if there's only one
+row of knobs as on the Nocturn) map to the combo boxes.
+
+In order to support this, most modules have at the most 8 sliders.
+
+For modules that have more than 8 sliders, for example the modulation matrix,
+all the sliders in the module are mapped to the knobs, if the control surface
+has more than 8 knobs, as is the case with the Beatstep. Conversely, if
+there are no sliders in a module, for instance the arpeggiator User Pattern,
+all the knobs are mapped to the top line of combo boxes, again assuming the
+control surface has more than 8 knobs.
+
+Some control surfaces have a knob which is not part of the main control array;
+the Nocturn has the Speed Dial knob and the Beatstep has the Volume knob.
+This knob is then always mapped to the currently focused parameter, and may
+thus be used instead of the scroll wheel in conjunction with hotkey or arrow
+navigation.
+
+The mapping of control surface controls to parameters is automatic, and takes
+place in a left-to-right manner, individually for the slider and combo box
+rows in a module. Thus, parameters which line up vertically in the UI do
+not necessarily end up on knobs/buttons that are in line.
 
 4. Developer perspective
 ------------------------
 
 Midiedit is written entirely in C, although the user interface definition
-is written in XML using the Glade user interface editor.
+is written in XML using the Glade user interface editor. An object oriented
+approach is largely adopted, making it possible to cleanly support more
+synths and control surfaces in the future.
+
+glib is heavily utilized for list processing, and Gtk2+ is used for the graphic
+environment.
 
 4.1 Glade files
 ---------------
@@ -239,7 +330,7 @@ using the right mouse key or the Menu key on the keyboard.
 ------------------------------------
 
 The names of each parameter widget are mapped by the Midiedit core to the
-4ames of the parameters in the parameter list. Since it's not possible to
+names of the parameters in the parameter list. Since it's not possible to
 have two widgets with the same name, the Midiedit core disregards any trailing
 digits in the widget names. This is handy, because by default the Glade
 interface editor appends a number to a widget name if it detects a duplicate.
@@ -261,10 +352,11 @@ min and max values in the parameter list definition.
 -----------
 
 Hotkeys are specified using the KeyMapping liststore in the synth glade file.
-The liststore has five columns: the actual hot key value ('Key'), a parameter
+The liststore has six columns: the actual hot key value ('Key'), a parameter
 name to focus on ('ParamName'), an optional argument ('ParamArg') (more about
-this later), a conditional focus parent name ('FocusParent'), and optional
-focus parent argument ('ParentArg').
+this later), a conditional focus parent name ('FocusParent'), an optional
+focus parent argument ('ParentArg'), and finally a jump button specifier
+('JumpButton').
 
 Basically, the idea is that when the key corresponding to the 'Key' is
 pressed, the user interface sets the focus on the 'ParamName' parameter, if
@@ -284,7 +376,7 @@ The 'FocusParent' can be used as a conditional if the 'Key' in question should
 only work on a given tab, or when a given widget is in focus (the widgets
 are not limited to parameter widgets, but are rather usually containers
 for groups of parameters, e.g. Osc 1; in that case, the conditional becomes
-true if any child of the container is in focus.
+true if any child of the container is in focus.)
 
 If the 'FocusParent' string is empty, then that conditional is always true.
 
@@ -294,11 +386,21 @@ other widget types, the currently focused widget must be either the
 widget itself or a child of the 'FocusParent'. In this case, the
 'ParentArg' is not used (and is normally set to -1).
 
-The KeyMappings liststore is scanned in order from top to bottom, and the
-first line with a matching 'Key' and a valid 'FocusParent' (and 'ParentArg'
-when applicable (i.e. for GtkNotebooks)) causes the required action to take
-place. The order of the rows in the list store is thus significant, especially
-when the same 'Key' occurs on several rows.
+The 'JumpButton' specifies a control surface jump key that will perform
+the same duty as the 'Key'. Jump buttons are specified using a string of the
+form 'J<row><column>', where row is the row number of a conceptual 4x8 matrix
+of buttons, starting at 1 from the top. Column is the column number, again
+starting at 1. Normally module jumps are on rows 1 and 2, with page jumps
+being on row 4. For control surfaces that have fewer than 4x8 buttons, some
+form of shift mechanism is used to access the lower two rows (rows 3 and 4).
+The shift mechanism is different for different control surfaces, depending
+on their capabilities.
+
+The KeyMappings liststore is scanned in order from top to bottom, and the first
+line with a matching 'Key' or 'JumpButton', and a valid 'FocusParent' (and
+'ParentArg' when applicable (i.e. for GtkNotebooks)) causes the required action
+to take place. The order of the rows in the list store is thus significant,
+especially when the same 'Key' occurs on several rows.
 
 4.4 Hiding parameters
 ---------------------
@@ -332,7 +434,61 @@ The patch name parameters are handled in a similar way. In this case however,
 there is one child parameter with several parent parameters, one parent
 for each character in the patch name.
 
-4.6 File structure
+4.6 Control surfaces
+--------------------
+
+Control surfaces are managed using two concepts: knob mappers and controllers.
+
+A knob mapper maps controls from a generalized control surface having two
+rows of controls to the parameters in a module. Since technically the graphic
+appearance of modules can vary depending on the synth being controlled,
+the knob mapper must be written with the specific synth in mind, although
+given enough similarity between the graphic appearance of different synth UI's,
+it's conceivable that a knob mapper may be shared between several synths.
+
+A controller receives control surface data and calls callbacks in midiedit
+to inform it of knobs or button activation. Midiedit then consults the current
+knob mapper on how to map the controls to parameters in the current module.
+A controller may also initialize the control surface; for instance, the
+beatstep.c sends sysex strings to the Beatstep during startup in order to
+configure the controls to generate the messages expected by Midiedit
+(various MIDI Control Change messages on channel 1).
+
+Currently, only relative controls are supported by the Midiedit framework,
+i.e. controls that emit increment or decrement messages. Controls that
+emit absolut values (i.e. potentiometers) are not supported.
+
+4.6.1 Beatstep
+--------------
+
+The Beatstep control surface is configured by Midiedit so that the knobs
+emit relative CC values when turned, and the pads emit CC messages when
+pressed and released. For simplicity, the CC number is the same as the buttons
+reference id in the setup data, and the MIDI channel is 1.
+
+The SHIFT key on the Beatstep is used as a prefix key for accessing jump
+button rows 3 and 4. It may be held prior to pressing a pad, or pressed
+momentarily before pressing the pad.
+
+4.6.2 Nocturn
+-------------
+
+The Nocturn does not per se register itself as a MIDI USB device. In order
+for Midiedit to recognize the Nocturn, a special application must be run
+which converts the Nocturn USB data to MIDI. As it turns out, the actual data
+sent from the Nocturn is actually MIDI (or very similar) and consists of
+various control change messages, some with control change numbers that would
+not be used in orderinary MIDI communication (for instance 127, which is
+one of the mode messages).
+
+The 16 buttons on the Nocturn are mapped as two rows of increment and
+decrement buttons, respectively. Normally the buttons are mapped to the
+combo boxes in modules in Midiedit. To access the module jump function,
+any button in the top row can be used as a shift key, this 16 buttons are
+available for the jump destination. To access the page jump function,
+any button in the bottom row can be used as the shift key.
+
+4.7 File structure
 ------------------
 
 The file structure of Midiedit is as follows:
@@ -343,8 +499,19 @@ dialog.c, .h: Some useful dialog boxes: Yes/No questions, alert boxes, etc.
 blofeld_params.c, .h: Parameter list definition for the Blofeld, conversion
                       functions between user interface representation and
                       actual parameter values. Send/receive of sysex data.
+blofeld_knobs.c: Implementation of the knob mapper class for the Blofeld.
+                 Sets up mapping between generalized control surface knobs
+                 and Blofeld parameters.
 blofeld_ui.c: Blofeld-specific signal handlers.
-params.h: General parameter structure. Embryo for multiple synth support.
+beatstep.c: Implementation of the controller class for the Arturia Beatstep
+nocturn.c: Implementation of the controller class for the Novation Nocturn.
+controller.h: Represents a controller class which represents a control
+              surface.
+knob_mapper.h: Represents a knob mapper class for mapping between controls on
+               a control surface and parameters.
+knob_mapper.c: Helper functions for knob mappers.
+param.h: General parameter structure. Represents a param handler class.
+         Embryo for multiple synth support.
 midi.c, .h: Interface to MIDI layer. Receive and send sysex. Currently
             assumes underlying MIDI layer is ALSA.
 debug.c, .h: Debug printout and control.
@@ -361,10 +528,16 @@ infrastructure will most likely need updating in order to support features
 needed by new synth definitions, but the resulting changes should be
 general and not specifically support a certain machine.
 
+Similarily, when implementing support for a new control surface, a file
+similar to beatstep.c or nocturn.c must be written. Note that the controller
+class only handles the reception of knob and button data from the control
+surface (and possible set up of it as well); the mapping of controls to
+parameters is handled by the knob_mapper class.
+
 4.6.1 Development
 -----------------
 
-By default, Midiedit searches for it's UI (glade) files in
+By default, Midiedit searches for its UI (glade) files in
 /usr/local/share/midiedit, however, during develpoment it is practical to keep
 all files in the development directory so that it is not necessary to run the
 'install' target every time a glade file is changed. This is accomplished by
@@ -374,14 +547,16 @@ The global Debug variable enables all printouts using dprintf(). Printouts
 using eprintf() are printed to stderr at all times, this is inteded for
 error and warning printouts.
 
-4.7 Graphic philosphy
----------------------
+4.7 Graphic philosophy
+----------------------
 
 The basic graphic philosophy when designing the Blofeld UI has been to have
 modules as horizontal boxes of parameters. A lot of boxes have two rows,
 the top row being a number of sliders, and the bottom row a number of
 combo boxes, often selecting modulation sources etc whose amount is set by
-the slider just above the combo box.
+the slider just above the combo box. To ease integration with control surfaces,
+which in most cases have controls grouped in horizontal rows of 8, modules
+should generally not have more than 8 parameters across.
 
 Vertical sliders are mostly used, as they permit more parameters to be placed
 in the horizontal direction (i.e. side by side). In some cases (Modulation
