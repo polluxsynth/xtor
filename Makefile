@@ -34,10 +34,12 @@ BIN_DIR = $(PREFIX)/bin
 UI_DIR = $(PREFIX)/share/$(PROGNAME)
 
 # For development, we keep everything in the same (development) directory
-#UI_DIR=.
+UI_DIR=.
 
-OBJS = midiedit.o dialog.o blofeld_ui.o blofeld_params.o midi.o debug.o
-INCS = midiedit.h dialog.h param.h blofeld_params.h midi.h debug.h
+OBJS = midiedit.o dialog.o blofeld_ui.o blofeld_params.o \
+       knob_mapper.o blofeld_knobs.o nocturn.o beatstep.o midi.o debug.o
+INCS = midiedit.h dialog.h param.h blofeld_params.h controller.h \
+       knob_mapper.h nocturn.h beatstep.h midi.h debug.h
 UI_FILES = midiedit.glade blofeld.glade
 DOC_FILES = README COPYING
 

@@ -30,6 +30,7 @@
 #include <gtk/gtk.h>
 #include "midiedit.h"
 #include "dialog.h"
+#include "midi.h"
 #include "param.h"
 #include "blofeld_params.h"
 #include "debug.h"
@@ -149,7 +150,7 @@ void
 on_GetDump_pressed (GtkObject *object, gpointer user_data)
 {
   dprintf("Pressed get dump, requesting buffer no %d!\n", current_buffer_no);
-  midi_connect(NULL);
+  midi_connect(SYNTH_PORT, NULL);
   blofeld_get_dump(current_buffer_no, device_number);
 }
 
@@ -158,7 +159,7 @@ void
 on_SendDump_pressed (GtkObject *object, gpointer user_data)
 {
   dprintf("Pressed send dump, sending buffer no %d!\n", current_buffer_no);
-  midi_connect(NULL);
+  midi_connect(SYNTH_PORT, NULL);
   blofeld_send_dump(current_buffer_no, device_number);
 }
 
@@ -291,6 +292,10 @@ on_Modulation_Select_changed (GtkObject *object, gpointer user_data)
   GList *container_children = gtk_container_get_children(GTK_CONTAINER(container));
 
   g_list_foreach(container_children, show_hide, &match);
+
+  /* Finally, any knob mappings related to the modulation selected must be
+   * redone to correspond with the mappings now visible. */
+  invalidate_knob_mappings(container);
 }
 
 

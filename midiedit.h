@@ -33,6 +33,8 @@ extern GtkWidget *main_window; /* Used for specifying parents, for instance */
 /* Functions */
 extern void set_title(void); /* Set main window title from patch name, etc. */
 
+extern void invalidate_knob_mappings(GtkWidget *container);
+
 #endif /* _MIDIEDIT_H_ */
 
 /*************************** End of file midiedit.h ************************/

@@ -25,6 +25,9 @@
 
 #include <poll.h>
 
+/* Logical port numbers */
+enum port_no { SYNTH_PORT = 0, CTRLR_PORT, MAX_PORTS };
+
 /* Well-known MIDI constants */
 #define SYSEX 240
 #define EOX 247
@@ -42,20 +45,27 @@ struct polls
 /* Sysex receiver type */
 typedef void (*midi_sysex_receiver)(void *buf, int len);
 
+/* Control change receiver type */
+typedef void (*midi_cc_receiver)(int chan, int controller_no, int value);
+
 /* Initialize ALSA sequencer interface, and create MIDI port */
 struct polls *midi_init_alsa(void);
 
 /* Send sysex buffer (buffer must contain complete sysex msg w/ SYSEX & EOX) */
-int midi_send_sysex(void *buf, int buflen);
+int midi_send_sysex(int port, void *buf, int buflen);
 
 /* Process any potential incoming MIDI data */
 void midi_input(void);
 
 /* Make bidirectional MIDI connection to specified remote device */
-int midi_connect(const char *remote_device);
+int midi_connect(int port, const char *remote_device);
 
 /* Register sysex receiver */
-void midi_register_sysex(int sysex_id, midi_sysex_receiver receiver, int max_len);
+void midi_register_sysex(int port, int sysex_id, midi_sysex_receiver receiver,
+                         int max_len);
+
+/* Register sysex receiver */
+void midi_register_cc(int port, midi_cc_receiver receiver);
 
 #endif /* _MIDI_H_ */
 
