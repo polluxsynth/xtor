@@ -26,6 +26,7 @@
  ****************************************************************************/
 
 #include <stdio.h>
+#include <getopt.h>
 #include <poll.h>
 #include <string.h>
 #include <gtk/gtk.h>
@@ -1519,6 +1520,14 @@ builder_add_with_path(GtkBuilder *builder, const char *ui_filename)
   gtk_builder_add_from_file(builder, filename, NULL);
 }
 
+static char *usage = 
+  "Usage: midiedit [options]\n"
+  "options:\n"
+  "-c  --controller   specify controller (default beatstep)\n"
+  "                   supported controllers are beatstep, nocturn\n"
+  "-u  --ui           specify .glade file with synth UI definitions\n"
+  "-h  --help         this list\n";
+
 /* It would be nice to have function pointers directly in list below, but
  * having a struct makes it easier to read and manage. */
 struct controller_init
@@ -1541,8 +1550,39 @@ main(int argc, char *argv[])
 {
   GtkBuilder *builder;
   struct polls *polls;
-  const char *gladename;
-  int i;
+  const char *gladename = NULL;
+  const char *controller_name = "beatstep";
+  int i, c, digit_optind = 0;
+
+  while (1) {
+    int this_option_optind = optind ? optind : 1;
+    int option_index = 0;
+    static struct option long_options[] = {
+      { "controller", required_argument, 0, 'c' },
+      { "synth_ui",   required_argument, 0, 'u' },
+      { "help",       no_argument      , 0, 'h' },
+      { 0,            0,                 0, 0 }
+    };
+
+    c = getopt_long(argc, argv, "c:u:h", long_options, &option_index);
+    if (c == -1) break;
+
+    switch (c) {
+      case 'c': controller_name = optarg; break;
+      case 'u': gladename = optarg; break;
+      case 'h': printf(usage); return 0;
+      case '?': return 1;
+      case 0:
+      default: break;
+    }
+  }
+  if (optind < argc) {
+    printf("Unrecognized option: %s\n", argv[optind]);
+    return 1;
+  }
+
+  dprintf("Options: gladename %s controller_name %s\n",
+          gladename, controller_name);
 
   debug = 0;
 
@@ -1556,9 +1596,6 @@ main(int argc, char *argv[])
 
   memset(param_handler, 0, sizeof(*param_handler));
   blofeld_init(param_handler);
-
-  char *controller_name = "beatstep"; /* default controller */
-  if (argv[1]) controller_name = argv[1];
 
   memset(controller, 0, sizeof(*controller));
 
@@ -1580,7 +1617,8 @@ main(int argc, char *argv[])
 
   /* Initialize UI */
 
-  gladename = param_handler->ui_filename;
+  if (!gladename)
+    gladename = param_handler->ui_filename;
 
   builder = gtk_builder_new();
   builder_add_with_path(builder, gladename);

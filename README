@@ -55,9 +55,10 @@ USB. Connection with the synth will be automatically established when Get is
 clicked (or G pressed). Connection with the control surface will be
 automatically established when Midiedit starts.
 
-The sole argument to the application is the name of the control surface.
-For 1.4 the choices are beatstep and nocturn, with beatstep being the default
-if no argument is given.
+By default, the control surface is assumed to be a Beatstep, connected via
+USB. Using the --controller option to the application, it is possible to
+select another control surface instead; for version 1.4 the only choices are
+beatstep and nocturn.
 
 Use arrow keys to navigate between parameters. Forward, Back,
 Page Up, Page Down, + or - change the currently selected parameter value,
