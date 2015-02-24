@@ -1,7 +1,7 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesizers
+ * xtor - GTK based editor for MIDI synthesizers
  *
- * midiedit.h - Core functionality used by synth-specific UI functions.
+ * xtor.h - Core functionality used by synth-specific UI functions.
  *
  * Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
  *
@@ -20,8 +20,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ****************************************************************************/
 
-#ifndef _MIDIEDIT_H_
-#define _MIDIEDIT_H_
+#ifndef _XTOR_H_
+#define _XTOR_H_
 
 /* Variables */
 extern int current_buffer_no; /* In effect, part number on the synth */
@@ -33,6 +33,8 @@ extern GtkWidget *main_window; /* Used for specifying parents, for instance */
 /* Functions */
 extern void set_title(void); /* Set main window title from patch name, etc. */
 
-#endif /* _MIDIEDIT_H_ */
+extern void invalidate_knob_mappings(GtkWidget *container);
 
-/*************************** End of file midiedit.h ************************/
+#endif /* _XTOR_H_ */
+
+/*************************** End of file xtor.h ***************************/

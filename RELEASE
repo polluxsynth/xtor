@@ -1,3 +1,53 @@
+Release notes for xtor (formerly midiedit) 1.4
+
+- Blofeld V1.22 now calls itself 'Blofeld' rather than 'Waldorf Blofeld' via
+  USB MIDI, so changed default synth device name accordingly.
+- Implement external controller infrastructure, using automapping concept so
+  that controller numbers for the controller do not have to be set up
+  explicitly.
+  - Conceptually a controller is a device with (at least) 8 knobs and 8 sets of
+    two buttons (inc/dec), or alternatively, two rows of 8 knobs.
+    The knobs output increment/decrement signal when turned, and the buttons
+    state change signals. There is also provision for a 'focused' control,
+    which always controlls the currently focused widget.
+    Optionally, a controller may also have four rows of 8 buttons intended as
+    hotkeys for jumping between modules and pages.
+    If the controller does not have the required number of rows of buttons,
+    then a controller-specific shift or prefix key scheme can be implemented.
+  - Support for Novation Nocturn, but only via a conversion program so that
+    midiedit gets MIDI rather than USB data.
+  - Support for Arturia Beatstep. Automatically configures the Beatstep
+    with appropriate sysex strings when starting up.
+  - Jump feature using external controller, so that midiedit can be navigated
+    through pages and modules (frames) using the external controller.
+    - For the Nocturn, any of the top row buttons functions as a shift key for
+      controller rows 1-2, and any of the bottom row buttons for rows 3-4.
+    - For the Beatstep, the pads function as jump button rows 1-2, and
+      the SHIFT key works as a prefix key for accessing rows 3-4.
+  - Controller name given as command line parameter to midiedit.
+- 'Starred' function; pressing * memorizes the current widget, pressing the
+  space bar at a later time toggles the focus between the currently focused
+  widget and the earlier memorized one.
+- Holding CTRL while changing values using keys or scroll wheel causes the
+  starred widget to be changed in tandem.
+- Restructured Blofeld Sound page so that no module is more than 8 widgets
+  wide, to make it fit with the "8 knob wide" controller concept.
+  This means that Osc Mix and Filter Pan now have their own frames (and the
+  Sound page has been rearranged somewhat).
+  - Some modules cannot practically be split. This includes the modulation
+    matrix and the effects units. For modules with more than 8 sliders,
+    if the controller in fact has more than 8 knobs, all knobs are allocated
+    to the sliders, as it would seem that would be the best use of them.
+    Conversely, if a module has no sliders, but more than 16 combo boxes
+    (i.e. the arpeggiator User Pattern), all knobs are mapped to the combo
+    boxes instead.
+- Various minor cleanups and bug fixes in the Blofeld UI file.
+- Part of the development was carried out under Debian Wheezy, whose glade
+  application cannot handle the old .glade file version used in Midiedit.
+  The .glade files have therefore been edited on a purely textual basis.
+  The plan is to migrate to a newer Glade version (Glade 3) once version 1.4
+  has been released.
+
 Release notes for midiedit 1.3
 
 - Restructured Sound page so that oscillator level/balance is in the osc

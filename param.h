@@ -1,5 +1,5 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesizers
+ * xtor - GTK based editor for MIDI synthesizers
  *
  * param.h - Interface to synth specific parameter handlers.
  *
@@ -61,6 +61,9 @@ struct param_handler {
 
   /* Called when ui wants to know what the device name parameter is called */
   const char *(*param_get_device_name_id)(void);
+
+  /* Called by main to initialize midi connection */
+  void (*param_midi_init)(struct param_handler *param_handler);
 
   int params; /* tital #params in parameter list (including bitmapped ones) */
   const char *name; /* Name of synth, to be used for window title etc */

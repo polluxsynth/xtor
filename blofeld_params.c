@@ -1,5 +1,5 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesizers
+ * xtor - GTK based editor for MIDI synthesizers
  *
  * blofeld_params.c - Parameter management for Waldorf Blofeld.
  *
@@ -200,7 +200,7 @@ struct blofeld_bitmap_param patchname = { "Name Char 1", NULL, 0, 16 };
   { "Arp Step Timing " #N ".", &threebit, NULL, &arptim ## N }, \
   { "Arp Step Length " #N ".", &threebit, NULL, &arplen ## N }
 
-/* Names of certain parameters, for interfacing with midiedit core. */
+/* Names of certain parameters, for interfacing with xtor core. */
 static char patch_name[] = "Patch Name";
 static char device_name[] = "Device Name";
 
@@ -265,16 +265,16 @@ struct blofeld_param blofeld_params[] = {
   { "reserved", NULL, NULL, NULL },
   { "Osc 3 Brilliance", &norm, NULL, NULL }, /* 48 */
   { "Osc 2 to 3 Sync", &norm, NULL, NULL },
-  { "Osc Pitch Source", &norm, NULL, NULL },
-  { "Osc Pitch Amount", &bipolar, NULL, NULL },
+  { "Osc Common Pitch Source", &norm, NULL, NULL },
+  { "Osc Common Pitch Amount", &bipolar, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
-  { "Glide", &norm, NULL, NULL },
+  { "Osc Common Glide Enable", &norm, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
-  { "Glide Mode", &norm, NULL, NULL },
-  { "Glide Rate", &norm, NULL, NULL },
+  { "Osc Common Glide Mode", &norm, NULL, NULL },
+  { "Osc Common Glide Rate", &norm, NULL, NULL },
   { "Allocation Mode", NULL, NULL, NULL },
-  { "Unison Detune", &norm, NULL, NULL },
+  { "Osc Common Unison Amount", &norm, NULL, NULL },
   { "reserved", NULL, NULL, NULL },
   { "Osc 1 Level", &norm, NULL, NULL },
   { "Osc 1 Balance", &bipolar, NULL, NULL },
@@ -563,8 +563,8 @@ struct blofeld_param blofeld_params[] = {
    * which have multiple parents and one single child, which in our case
    * is the patch name (only). */
 
-  { "Unison", &threebit, NULL, &unison },
-  { "Allocation", &onoff, NULL, &allocation },
+  { "Osc Common Unison Mode", &threebit, NULL, &unison },
+  { "Osc Common Allocation", &onoff, NULL, &allocation },
   { "Filter Envelope Mode", &envmode, NULL, &fenvmode },
   { "Filter Envelope Trig", &onoff, NULL, &fenvtrig },
   { "Amplifier Envelope Mode", &envmode, NULL, &aenvmode },
@@ -618,11 +618,11 @@ int paste_buffer[PASTE_BUFFERS][BLOFELD_PARAMS];
 int device_number = 0;
 
 /* Callback and parameter for parameter updates */
-notify_cb notify_ui;
+notify_cb notify_ui = NULL;
 void *notify_ref;
 
 /* Fint index in parameter list of parameter with a given name. */
-/* Used locally and also from midiedit core during startup to find
+/* Used locally and also from xtor core during startup to find
  * parameters corresponding to parameter widgets. */
 /* Not referenced directly, but via struct, hence 'static' */
 static int
@@ -643,7 +643,7 @@ blofeld_find_index(const char *param_name)
   return idx;
 }
 
-/* Get min, max and step sizes for parameter. Used by midiedit core
+/* Get min, max and step sizes for parameter. Used by xtor core
  * during setup. */
 /* Not referenced directly, but via struct, hence 'static' */
 int
@@ -687,7 +687,7 @@ blofeld_get_dump(int buf_no, int devno)
                            buf_no,
                            EOX };
 
-  midi_send_sysex(sndr, sizeof(sndr));
+  midi_send_sysex(SYNTH_PORT, sndr, sizeof(sndr));
 }
 
 /* Patch dump routine for sending to synth.
@@ -695,7 +695,7 @@ blofeld_get_dump(int buf_no, int devno)
 static int
 midi_send(char *buf, int size, int userdata)
 {
-  midi_send_sysex(buf, size);
+  midi_send_sysex(SYNTH_PORT, buf, size);
 
   return 0;
 }
@@ -750,7 +750,7 @@ void send_parameter_update(int parnum, int buf_no, int devno, int value)
   dprintf("Blofeld update param: parnum %d, buf %d, value %d\n",
           parnum, buf_no, value);
   if (parnum < BLOFELD_PARAMS)
-    midi_send_sysex(sndp, sizeof(sndp));
+    midi_send_sysex(SYNTH_PORT, sndp, sizeof(sndp));
 }
 
 
@@ -899,7 +899,7 @@ update_ui_int_param(struct blofeld_param *param, int buf_no, int parval)
 {
   int parnum = param - blofeld_params;
   int value = param_value_to_ui(param, parval);
-  notify_ui(parnum, buf_no, &value, notify_ref);
+  if (notify_ui) notify_ui(parnum, buf_no, &value, notify_ref);
 }
 
 /* Update string parameter in UI. (Only one we have is patch name.) */
@@ -916,7 +916,7 @@ update_ui_str_param(struct blofeld_param *param, int buf_no)
   for (i = 0; i < len; i++)
     string[i] = (unsigned char) parameter_list[parent_parnum + i];
   string[len] = '\0';
-  notify_ui(parnum, buf_no, string, notify_ref);
+  if (notify_ui) notify_ui(parnum, buf_no, string, notify_ref);
 }
 
 /* update the ui for all children of the supplied param but only if the
@@ -1177,6 +1177,18 @@ blofeld_get_device_name_id(void)
   return device_name;
 }
 
+/* Called at end of main initialization when all is set up and time to
+ * go and init MIDI. */
+static void
+blofeld_midi_init(struct param_handler *param_handler)
+{
+  midi_connect(SYNTH_PORT, param_handler->remote_midi_device);
+
+  /* Tell MIDI handler we want to receive sysex. */
+  midi_register_sysex(SYNTH_PORT, SYSEX_ID_WALDORF, blofeld_midi_sysex,
+                      BLOFELD_PARAMS + 10);
+}
+
 /* Initialize Blofeld-specific functionality */
 void
 blofeld_init(struct param_handler *param_handler)
@@ -1234,17 +1246,13 @@ blofeld_init(struct param_handler *param_handler)
     }
   }
 
-  /* Tell MIDI handler we want to receive sysex. */
-  midi_register_sysex(SYSEX_ID_WALDORF, blofeld_midi_sysex,
-                      BLOFELD_PARAMS + 10);
-
   /* Fill in param_handler struct */
 
   /* # parameters we have, including derived (e.g. "bitmapped") types */
   param_handler->params = sizeof(blofeld_params)/sizeof(blofeld_params[0]);
 
   /* Names of things */
-  param_handler->remote_midi_device = "Waldorf Blofeld";
+  param_handler->remote_midi_device = "Blofeld";
   param_handler->name = "Blofeld";
   param_handler->ui_filename = "blofeld.glade";
 
@@ -1257,6 +1265,7 @@ blofeld_init(struct param_handler *param_handler)
   param_handler->param_fetch_parameter = blofeld_fetch_parameter;
   param_handler->param_get_patch_name_id = blofeld_get_patch_name_id;
   param_handler->param_get_device_name_id = blofeld_get_device_name_id;
+  param_handler->param_midi_init = blofeld_midi_init;
 }
 
 /************************* End of file blofeld_params.c *********************/

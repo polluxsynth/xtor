@@ -1,8 +1,8 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesisers
+ * xtor - GTK based editor for MIDI synthesisers
  *
- * midiedit.c - Main program, with most of the synth-agnostic UI
- *              implementation.
+ * xtor.c - Main program, with most of the synth-agnostic UI
+ *          implementation.
  *
  * Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
  *
@@ -26,14 +26,19 @@
  ****************************************************************************/
 
 #include <stdio.h>
+#include <getopt.h>
 #include <poll.h>
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-#include "midiedit.h"
+#include "xtor.h"
 #include "dialog.h"
 #include "param.h"
 #include "blofeld_params.h"
+#include "controller.h"
+#include "knob_mapper.h"
+#include "nocturn.h"
+#include "beatstep.h"
 #include "midi.h"
 
 #include "debug.h"
@@ -48,6 +53,17 @@ GtkWidget *about_window = NULL;
 struct param_handler phandler;
 struct param_handler *param_handler = &phandler;
 
+/* MIDI controller surface */
+struct controller ctrler;
+struct controller *controller = &ctrler;
+
+/* Controller knob mapping */
+struct knob_mapper kmap;
+struct knob_mapper *knob_mapper = &kmap;
+
+/* Each adjustor represent a synth parameter, and contains a list of
+ * widgets which govern that parameter, making it possible to have
+ * the same parameter adjusted by widgets in different places. */
 struct adjustor {
   const char *id; /* name of parameter, e.g. "Filter 1 Cutoff" */
   int parnum;  /* parameter number. Redundant, but practical */
@@ -56,6 +72,16 @@ struct adjustor {
 
 /* List of all adjustors, indexed by parameter number. */
 struct adjustor **adjustors;
+
+/* A f_k_map contains a frame, representing a synth module such as
+ * Osc 1 or Filt Env, and a reference to a knob map for that frame. */
+struct f_k_map {
+  GtkFrame *frame;
+  void *knobmap;
+};
+
+/* List of all frame maps */
+GList *f_k_maps = NULL;
 
 /* used to temporarily block updates to MIDI */
 int block_updates;
@@ -70,7 +96,8 @@ int current_patch_name_max = BLOFELD_PATCH_NAME_LEN_MAX;
 /* structure for mapping keys to specific widget focus */
 struct keymap {
   const gchar *key_name; /* e.g. "s" */
-  guint keyval;          /* GDK_ code for key */
+  guint keyval;          /* GDK_ code for key_name */
+  const gchar *jump_button; /* e.g. "P1" */
   const gchar *param_name;
   GtkWidget *widget;
   int param_arg;
@@ -84,10 +111,13 @@ GList *keymaps = NULL;
 /* How the UI behaves */
 struct ui_settings {
   int scroll_focused_only;
-  int midiedit_navigation;
+  int xtor_navigation;
+  int knobs_grab_focus;
 };
 
-struct ui_settings ui_settings = { TRUE, TRUE };
+/* Enabling knobs_grab_focus causes focus flutter if more than one knob is
+ * Technically it is not a problem, but it doesn't look nice on the screen. */
+struct ui_settings ui_settings = { TRUE, TRUE, FALSE };
 
 /* Global settings in Popup menu */
 struct setting {
@@ -98,11 +128,13 @@ struct setting {
 
 struct setting settings[] = {
   { &ui_settings.scroll_focused_only, "Scrollfocus", NULL },
-  { &ui_settings.midiedit_navigation, "Navigation", NULL },
+  { &ui_settings.xtor_navigation, "Navigation", NULL },
+  { &ui_settings.knobs_grab_focus, "Knobsfocus", NULL },
   { &debug, "Debug", NULL },
   { NULL, NULL }
 };
 
+GtkWidget *ticked_widget = NULL;
 
 /* Trim spaces from end of string, returning string. */
 static char *
@@ -124,23 +156,73 @@ set_title(void)
 {
   char title[80];
 
-  sprintf(title, "Midiedit %s - %s (Part %d)",
+  sprintf(title, "Xtor %s - %s (Part %d)",
           param_handler->name, current_patch_name, current_buffer_no + 1);
 
   if (main_window && GTK_IS_WINDOW(main_window))
     gtk_window_set_title(GTK_WINDOW(main_window), title);
 }
 
+/* GCompareFunc for find_frame_in_knob_maps */
+static int
+same_frame(gconstpointer data, gconstpointer user_data)
+{
+  const struct f_k_map *f_k_map = data;
+  const GtkFrame *searched_frame = user_data;
+
+  return !(f_k_map->frame == searched_frame);
+}
+
+/* Find frame in our list of frame-knobs maps mapping given frame */
+static struct f_k_map *
+find_frame_in_f_k_maps(GList *f_k_maps, GtkFrame *frame)
+{
+  GList *found_map = g_list_find_custom(f_k_maps, frame, same_frame);
+  if (!found_map) return NULL;
+  return found_map->data;
+}
+
+
+static GtkWidget *
+get_parent_frame(GtkWidget *widget)
+{
+  dprintf("Scanning for parent for %s (%p)\n",
+           gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
+
+  while (widget && !GTK_IS_FRAME(widget)) {
+    widget = gtk_widget_get_parent(widget);
+  }
+
+  if (widget)
+    dprintf("Found %s: %s (%p)\n",
+             gtk_widget_get_name(widget),
+             gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
+
+  return widget;
+}
+
+void
+invalidate_knob_mappings(GtkWidget *widget)
+{
+  widget = get_parent_frame(widget);
+  if (!widget) return;
+
+  struct f_k_map *f_k_map = find_frame_in_f_k_maps(f_k_maps, GTK_FRAME(widget));
+  if (!f_k_map) return;
+
+  knob_mapper->invalidate(f_k_map->knobmap);
+}
+
 /* General signal handlers */
 
 void
-on_Main_Window_destroy (GtkObject *object, gpointer user_data)
+on_Main_Window_destroy(GtkObject *object, gpointer user_data)
 {
   gtk_main_quit();
 }
 
 void
-on_midi_input (gpointer data, gint fd, GdkInputCondition condition)
+on_midi_input(gpointer data, gint fd, GdkInputCondition condition)
 {
   dprintf("Received MIDI data on fd %d\n", fd);
   midi_input();
@@ -156,7 +238,7 @@ on_Device_Name_activate(GtkObject *object, gpointer user_data)
   if (!strcmp(gtk_entry_get_text(device_name_entry), ""))
     gtk_entry_set_text(device_name_entry, param_handler->remote_midi_device);
 
-  if (midi_connect(gtk_entry_get_text(device_name_entry)) < 0)
+  if (midi_connect(SYNTH_PORT, gtk_entry_get_text(device_name_entry)) < 0)
     report("Can't establish MIDI connection!", "", GTK_MESSAGE_ERROR, main_window);
 ;
 }
@@ -182,7 +264,7 @@ menu_button_event(GtkWidget *widget, GdkEventButton *event)
 }
 
 gboolean
-activate_About (GtkObject *object, gpointer user_data)
+activate_About(GtkObject *object, gpointer user_data)
 {
   dprintf("activate About: object %p is %s\n", object, gtk_widget_get_name(GTK_WIDGET(object)));
   /* Set which window to be our parant. This places the About box in the
@@ -194,7 +276,7 @@ activate_About (GtkObject *object, gpointer user_data)
 
 /* Need to have this, or the default signal handler destroys the About box */
 gboolean
-on_About_delete (GtkObject *object, gpointer user_data)
+on_About_delete(GtkObject *object, gpointer user_data)
 {
   dprintf("About deleted\n");
   gtk_widget_hide(GTK_WIDGET(object));
@@ -203,7 +285,7 @@ on_About_delete (GtkObject *object, gpointer user_data)
 
 /* Basically when Closed is pressed in About box, but also ESC or window X */
 gboolean
-on_About_response (GtkObject *object, gpointer user_data)
+on_About_response(GtkObject *object, gpointer user_data)
 {
   dprintf("About response\n");
   gtk_widget_hide(GTK_WIDGET(object));
@@ -212,7 +294,7 @@ on_About_response (GtkObject *object, gpointer user_data)
 
 /* Change underlying value when setting changed in popup menu. */
 gboolean
-on_Setting_changed (GtkObject *object, gpointer user_data)
+on_Setting_changed(GtkObject *object, gpointer user_data)
 {
   dprintf("Setting changed: object is a %s, name %s\n",
           gtk_widget_get_name(GTK_WIDGET(object)),
@@ -489,11 +571,14 @@ on_togglebutton_changed (GtkObject *object, gpointer user_data)
 /* We call this when we need to emit a 'change value' signal as a result
  * of a key press or mouse scroll event. */
 static gboolean
-change_value(GtkWidget *what, int shifted, int dir)
+change_value(GtkWidget *what, int shifted, int dir, int compensate)
 {
   GtkWidget *parent;
   int delta;
   const char *signal = NULL;
+
+  dprintf("Change value for %s:%s\n", gtk_widget_get_name(what),
+          gtk_buildable_get_name(GTK_BUILDABLE(what)));
 
   /* This takes a bit of explaining: Normally all vertical sliders are 
    * 'inverted' from Gtk's point of view, meaning that their max value is
@@ -504,8 +589,9 @@ change_value(GtkWidget *what, int shifted, int dir)
    * (For horizontal sliders, Gtk sees them as we do, so we invert the scroll
    * direction if they are inverted.)
    */
-  if (GTK_IS_VSCALE(what) && !gtk_range_get_inverted(GTK_RANGE(what)) ||
-      GTK_IS_HSCALE(what) && gtk_range_get_inverted(GTK_RANGE(what)))
+  if (compensate &&
+      (GTK_IS_VSCALE(what) && !gtk_range_get_inverted(GTK_RANGE(what)) ||
+       GTK_IS_HSCALE(what) && gtk_range_get_inverted(GTK_RANGE(what))))
     dir = -dir;
 
   if (dir == 1)
@@ -517,12 +603,18 @@ change_value(GtkWidget *what, int shifted, int dir)
     signal = "move-slider";
   if (GTK_IS_SPIN_BUTTON(what))
     signal = "change-value";
+  /* When called with a widget in focus, the focus will be on a toggle button */
   else if (GTK_IS_TOGGLE_BUTTON(what) &&
            (parent = gtk_widget_get_parent(what)) &&
            GTK_IS_COMBO_BOX(parent)) {
     what = parent;
     signal = "move-active";
-  }
+  /* When called from a controller update, we'll be called with the actual
+   * combo box widget. */
+  } else if (GTK_IS_COMBO_BOX(what))
+    signal ="move-active";
+  else if (GTK_IS_TOGGLE_BUTTON(what)) /* including check button */
+    signal = "activate";
 
   if (what && signal) {
     g_signal_emit_by_name(GTK_OBJECT(what), signal, delta);
@@ -533,13 +625,14 @@ change_value(GtkWidget *what, int shifted, int dir)
 
 
 /* Handle focus and value navigation. Apart from hotkeys and the keys
- * used to reach the popup menu, these are all the keys that Midiedit handles
+ * used to reach the popup menu, these are all the keys that Xtor handles
  * of its own accord. */
 static gboolean
 navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
 {
   GtkWidget *parent;
   int shifted = event->state & GDK_SHIFT_MASK;
+  int ctrl = event->state & GDK_CONTROL_MASK;
   int arg = -1;
 #define SET_ARG(value) if (arg < 0) arg = (value)
   GtkWidget *what = NULL;
@@ -563,12 +656,29 @@ navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
     case GDK_Forward:
     case GDK_Page_Up:
     case GDK_plus:
-      handled = change_value(focus, shifted, 1);
+      handled = change_value(focus, shifted, 1, 1);
+      if (ctrl && ticked_widget)
+        handled |= change_value(ticked_widget, shifted, 1, 1);
       break;
     case GDK_Back:
     case GDK_Page_Down:
     case GDK_minus:
-      handled = change_value(focus, shifted, -1);
+      handled = change_value(focus, shifted, -1, 1);
+      if (ctrl && ticked_widget)
+        handled |= change_value(ticked_widget, shifted, -1, 1);
+      break;
+    case GDK_apostrophe:
+      ticked_widget = GTK_WINDOW(widget)->focus_widget;
+      handled = 1;
+      break;
+    case GDK_space:
+      what = ticked_widget;
+      if (what) {
+        ticked_widget = GTK_WINDOW(widget)->focus_widget;
+        gtk_widget_grab_focus(what);
+      }
+      handled = 1;
+      break;
     default:
       break;
   }
@@ -592,8 +702,9 @@ is_parent(GtkWidget *widget, GtkWidget *parent)
 
 /* Used for searching for valid key map given key val and current focus */
 struct key_search_spec {
-  guint keyval;
-  GtkWidget *focus_widget;
+  const gchar *button_name; /* NULL for key search mode, else button string */
+  guint keyval; /* GDK_ value in key search mode */
+  GtkWidget *focus_widget; /* currently focused widget */
 };
 
 /* Used for g_list_find_custom to find key val in keymaps */
@@ -603,12 +714,20 @@ find_keymap(gconstpointer data, gconstpointer user_data)
   const struct keymap *keymap = data;
   const struct key_search_spec *search = user_data;
 
-  dprintf("Scan keymap %s: %s\n", keymap->key_name, keymap->param_name);
-  if (keymap->keyval != search->keyval)
-    return 1; /* not the key we're looking for found */
+  dprintf("Scan keymap %s: %s: %s\n", keymap->key_name, keymap->param_name,
+          keymap->jump_button);
+  if (search->button_name) { /* jump button search mode */
+    if (!keymap->jump_button || !*keymap->jump_button)
+      return 1; /* no jump button specified, or zero length */
+    if (strcmp(keymap->jump_button, search->button_name))
+      return 1; /* not this one */
+  } else { /* key search mode */
+     if (keymap->keyval != search->keyval)
+      return 1; /* not the key we're looking for */
+  }
   if (!keymap->widget)
     return 1; /* Widget not set, UI specified unknown Param or Parent */
-  dprintf("Found keyval\n");
+  dprintf("Found keymap\n");
   if (!keymap->parent) /* keymap has no parent specified; we're done */
     return 0; /* found */
   dprintf("Has parent %s\n", keymap->parent_name);
@@ -622,19 +741,16 @@ find_keymap(gconstpointer data, gconstpointer user_data)
   return !is_parent(search->focus_widget, keymap->parent); /* 0 if found */
 }
 
-/* Handle keys mapped in UI KeyMapping liststore ("hotkeys") */
+/* Handle hotkey, once it has been found in keymaps */
 static gboolean
-mapped_key(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
+hotkey(struct key_search_spec *key_search_spec)
 {
-  struct key_search_spec key_search_spec;
-  key_search_spec.keyval = event->keyval; /* event to search for in keymaps */
-  key_search_spec.focus_widget = focus; /* currently focused widget */
-
-  GList *keymap_l = g_list_find_custom(keymaps, &key_search_spec, find_keymap);
+  GList *keymap_l = g_list_find_custom(keymaps, key_search_spec, find_keymap);
   if (!keymap_l)
     return FALSE; /* can't find valid key mapping */
 
   struct keymap *keymap = keymap_l->data;
+
   dprintf("Found key map for %s: widget %s (%p)\n",
           keymap->key_name, keymap->param_name, keymap->widget);
 
@@ -660,6 +776,20 @@ mapped_key(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
 }
 
 
+/* Handle keys mapped in UI KeyMapping liststore ("hotkeys") */
+static gboolean
+mapped_key(GtkWidget *focus, GdkEventKey *event)
+{
+  struct key_search_spec key_search_spec;
+
+  key_search_spec.button_name = NULL; /* set key search mode */
+  key_search_spec.keyval = event->keyval; /* event to search for in keymaps */
+  key_search_spec.focus_widget = focus; /* currently focused widget */
+
+  return hotkey(&key_search_spec);
+}
+
+
 /* Handle all key events arriving in the main window */
 static gboolean
 key_event(GtkWidget *widget, GdkEventKey *event)
@@ -681,13 +811,30 @@ key_event(GtkWidget *widget, GdkEventKey *event)
   if (GTK_IS_ENTRY(focus) && !GTK_IS_SPIN_BUTTON(focus))
     return FALSE; /* We let GTK handle all key events for GtkEntries. */
 
-  if (ui_settings.midiedit_navigation && navigation(widget, focus, event))
+  if (ui_settings.xtor_navigation && navigation(widget, focus, event))
     return TRUE;
 
-  if (mapped_key(widget, focus, event))
+  if (mapped_key(focus, event))
     return TRUE;
 
   return FALSE; /* key not handled - defer to GTK defaults */
+}
+
+
+/* Handle jump buttons from MIDI controller */
+static void
+jump_button(int button_row, int button_no, void *ref)
+{
+  struct key_search_spec key_search_spec;
+  GtkWidget *focus = GTK_WINDOW(main_window)->focus_widget;
+  char jump_button_name[20];
+
+  sprintf(jump_button_name, "J%d%d", button_row, button_no);
+
+  key_search_spec.button_name = jump_button_name;
+  key_search_spec.focus_widget = focus; /* currently focused widget */
+
+  hotkey(&key_search_spec);
 }
 
 
@@ -697,6 +844,7 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
 {
   static int count = 0;
   int shifted = 0;
+  int ctrl = 0;
 
   /* Depending on whether ui_settings.scroll_focused_only is set,
    * we don't want to scroll the widget currently pointed to, we want
@@ -713,9 +861,9 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
           gtk_widget_get_name(focus),
           gtk_buildable_get_name(GTK_BUILDABLE(focus)));
 
-  /* If UI is set to scroll_focused_only (Midiedit default mode), always
+  /* If UI is set to scroll_focused_only (Xtor default mode), always
    * scroll the widget that is focused, regardless of where the mouse
-   * pointer is. Handy when using Midiedit's key based navigation.
+   * pointer is. Handy when using Xtor's key based navigation.
    * Otherwise, use the Gnome default of scrolling whatever the mouse
    * pointer points to. Handy when navigating using the mouse, as we
    * don't need to left-click to focus an item before scrolling. */
@@ -724,15 +872,21 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
 
   if (event->state & (GDK_SHIFT_MASK | GDK_BUTTON2_MASK))
     shifted = 1;
+  if (event->state & GDK_CONTROL_MASK)
+    ctrl = 1;
 
   switch (event->direction) {
     case GDK_SCROLL_UP:
     case GDK_SCROLL_LEFT:
-      change_value(widget, shifted, 1);
+      change_value(widget, shifted, 1, 1);
+      if (ctrl && ticked_widget)
+        change_value(ticked_widget, shifted, 1, 1);
       break;
     case GDK_SCROLL_DOWN:
     case GDK_SCROLL_RIGHT:
-      change_value(widget, shifted, -1);
+      change_value(widget, shifted, -1, 1);
+      if (ctrl && ticked_widget)
+        change_value(ticked_widget, shifted, -1, 1);
       break;
     default:
       break;
@@ -762,6 +916,139 @@ button_event(GtkWidget *widget, GdkEventButton *event)
 
   /* Nothing else to do, just swallow event. */
   return TRUE;
+}
+
+
+#if 0 /* need this ? */
+static void
+show_widget(gpointer data, gpointer user_data)
+{
+  if (!GTK_IS_WIDGET(data)) return;
+
+  GtkWidget *widget = data;
+
+  dprintf("%s: %s (%p)\n",
+          gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
+}
+#endif
+
+/* Get widget corresponding to currently turned knob */
+static GtkWidget *
+get_knob_widget(struct f_k_map *f_k_map, int control_no, int alt_control_no,
+                int row)
+{
+  dprintf("f_k_map: frame %p:%s:%s, knobmap %p\n", f_k_map->frame,
+          gtk_widget_get_name(GTK_WIDGET(f_k_map->frame)),
+          gtk_buildable_get_name(GTK_BUILDABLE(f_k_map->frame)), f_k_map->knobmap);
+
+  /* Get the knob_descriptor for the current knob (controller_number)
+   * from the knob_mapper. */
+  struct knob_descriptor *knob_descriptor = 
+    knob_mapper->knob(f_k_map->knobmap, control_no-1, alt_control_no-1, row);
+  dprintf("Knob descriptor %p\n", knob_descriptor);
+  if (!knob_descriptor) return NULL;
+
+  /* Finally, extract the widget from the knob_descriptor */
+  GtkWidget *widget = knob_descriptor->widget;
+  dprintf("Widget %p\n", widget);
+  dprintf("Control %d (alt %d) referencing %s:%s\n", control_no, alt_control_no,
+          gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)));
+
+  return widget;
+}
+
+struct focus {
+  GtkWidget *widget;
+  GtkWidget *parent_frame;
+  struct f_k_map *f_k_map;
+};
+
+/* Get parent frame and f_k_map for widget, if available */
+static struct focus *
+current_focus(GtkWidget *new_focus)
+{
+  /* Currently focused widget, parent frame and frame-knob map */
+  static struct focus focus = { 0 };
+
+  /* When focus changes, we set new focus_widget, and recalculate
+   * focus.parent_frame and focus.f_k_map. We only do this when changing
+   * focus to avoid loading the CPU with having to do it every time. */
+  if (new_focus == focus.widget)
+    goto out; /* nothing changed, so leave everything as it was */
+  focus.widget = new_focus;
+  dprintf("Focus set to %s:%s\n",
+          gtk_widget_get_name(new_focus),
+          gtk_buildable_get_name(GTK_BUILDABLE(new_focus)));
+  if (!focus.widget) { /* No focus, so nothing to edit */
+    focus.parent_frame = NULL;
+    focus.f_k_map = NULL;
+    goto out;
+  }
+  GtkWidget *new_parent_frame = get_parent_frame(focus.widget);
+  if (new_parent_frame == focus.parent_frame) /* same parent frame */
+    goto out;
+  focus.parent_frame = new_parent_frame;
+  if (!focus.parent_frame) {
+    /* No parent frame, so nothing to edit (except focused parameter) */
+    focus.f_k_map = NULL;
+    goto out;
+  }
+  focus.f_k_map = find_frame_in_f_k_maps(f_k_maps, GTK_FRAME(focus.parent_frame));
+
+out:
+  return &focus;
+}
+
+/* Handle controller changes from MIDI controller */
+/* Incrementor #0 controls the currently focused widget,
+ * Incrementor #1..8 control the leftmost adjustments in the current frame.
+ */
+static void
+controller_change(int control_no, int alt_control_no, int row, int value,
+                  void *ref)
+{
+  int dir = 1;
+  int steps;
+  GtkWidget *focus_widget = GTK_WINDOW(main_window)->focus_widget;
+
+  dprintf("Control #%d alt #%d row %d, value %d, focus %s, name %s\n",
+          control_no, alt_control_no, row, value,
+          gtk_widget_get_name(focus_widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(focus_widget)));
+
+  /* Get parent frame and f_k_map for current focus, if available */
+  struct focus *focus = current_focus(focus_widget);
+
+  int delta = value;
+
+  if (delta < 0) {
+    dir = -1;
+    delta = -delta;
+  }
+
+  GtkWidget *editing_widget;
+
+  if (control_no == 0) { /* focused parameter */
+    editing_widget = focus->widget;
+  } else { /* use map */
+    /* Parameters in current frame */
+    if (!focus->f_k_map) return; /* No f_k_map, so nothing to edit */
+    editing_widget = get_knob_widget(focus->f_k_map, control_no,
+                                     alt_control_no, row);
+
+    if (editing_widget && ui_settings.knobs_grab_focus)
+      gtk_widget_grab_focus(editing_widget);
+  }
+
+  if (!editing_widget) return;
+
+  for (steps = 0; steps < delta; steps++)
+    /* We set the compensate parameter to change_value to 0, as balance pots, which
+     * in contrast to ordinary pots are not inverted, have left upwards, and
+     * it is most natural to set left by turning knobs left. */
+    change_value(editing_widget, 0, dir, 0);
 }
 
 
@@ -838,7 +1125,6 @@ find_widget_with_id(GtkWidget *widget, const char *id)
   return result;
 }
 
-
 /* GFunc for iterating over keymaps when adding new widgets in
  * create_adjustor. */
 static void
@@ -888,6 +1174,28 @@ add_to_keymaps(GList *keymaps, GtkWidget *widget, const char *param_name)
 }
 
 
+/* Add new widget and associated adjustor to the current knobmap */
+/* Basically, each UI frame has a knobmap mapping controller knobs to widgets */
+static void *
+add_to_knobmap(void *knobmap, GtkWidget *widget)
+{
+  struct knob_descriptor *knob_description = g_new0(struct knob_descriptor, 1);
+  knob_description->widget = widget;
+  knob_description->ref = NULL; /* not used */
+  return knob_mapper->container_add_widget(knobmap, knob_description);
+}
+
+/* Add new frame / knob map mapping to our list of frame-knobs maps */
+static GList *
+add_new_f_k_map(GList *f_k_maps, GtkFrame *frame, struct f_k_map *knobmap)
+{
+ struct f_k_map *new_f_k_map = g_new0(struct f_k_map, 1);
+ new_f_k_map->frame = frame;
+ new_f_k_map->knobmap = knobmap;
+ return g_list_prepend(f_k_maps, new_f_k_map);
+}
+
+
 /* Chop trailing digits off name
  * I.e. for "LFO 1 Shape2" return "LFO 1 Shape".
  * Returned string must be g_freed. */
@@ -929,6 +1237,8 @@ create_adjustor(gpointer data, gpointer user_data)
   struct adjustor **adjustors = user_data;
   int parnum;
   static const char *patch_name = NULL;
+  static GtkFrame *current_frame = NULL;
+  static void *current_knobmap;
 
   const gchar *name = gtk_buildable_get_name(GTK_BUILDABLE(this));
   gchar *id = chop_name(name);
@@ -960,8 +1270,15 @@ create_adjustor(gpointer data, gpointer user_data)
   gtk_widget_add_events(this, GDK_BUTTON_PRESS_MASK);
   g_signal_connect(this, "button-press-event", G_CALLBACK(button_event), NULL);
 
+  /* Add it to current knobmap */
+  if (id && GTK_IS_RANGE(this) || GTK_IS_COMBO_BOX(this) || GTK_IS_TOGGLE_BUTTON(this))
+    current_knobmap = add_to_knobmap(current_knobmap, this);
+
   if (id && (parnum = param_handler->param_find_index(id)) >= 0) {
-    dprintf("has parameter\n");
+    dprintf("%s has parameter, belongs to %s\n",
+            gtk_buildable_get_name(GTK_BUILDABLE(this)),
+            current_frame ? gtk_buildable_get_name(GTK_BUILDABLE(current_frame)) :
+                            "nothing");
     struct adjustor *adjustor = adjustors[parnum];
     if (!adjustors[parnum]) {
       /* no adjustor for this parameter yet; create one */
@@ -1018,7 +1335,30 @@ create_adjustor(gpointer data, gpointer user_data)
 
   if (GTK_IS_CONTAINER(this)) {
      dprintf("It's a container\n");
+
+     if (GTK_IS_FRAME(this)) {
+       /* We expect there to be no frames within frames in our UI, as a frame
+        * constitutes a 'synth module'. If we need to change this, we need
+        * to augment this test with something, such as the buildable_name
+        * ending with "Frame" for instance. */
+       dprintf("Found %s: %s (%p)\n",
+               gtk_widget_get_name(this),
+               gtk_buildable_get_name(GTK_BUILDABLE(this)), this);
+       current_knobmap = knob_mapper->container_new(GTK_CONTAINER(this));
+       current_frame = GTK_FRAME(this);
+     }
+
      add_adjustors(gtk_container_get_children(GTK_CONTAINER(this)), adjustors);
+
+     if (GTK_IS_FRAME(this)) {
+       dprintf("Done with %s: %s (%p)\n",
+               gtk_widget_get_name(this),
+               gtk_buildable_get_name(GTK_BUILDABLE(this)), this);
+       current_knobmap = knob_mapper->container_done(current_knobmap);
+       if (current_knobmap)
+         f_k_maps = add_new_f_k_map(f_k_maps, current_frame, current_knobmap);
+       current_frame = NULL;
+     }
   }
 }
 
@@ -1098,7 +1438,7 @@ get_liststore_keymap(GtkTreeModel *model,
                      GtkTreeIter *iter,
                      gpointer user_data)
 {
-  gchar *key, *param_name, *parent_name;
+  gchar *key, *param_name, *parent_name, *jump_button;
   int keyval, param_arg, parent_arg;
   GList **keymaps = user_data;
 
@@ -1107,12 +1447,14 @@ get_liststore_keymap(GtkTreeModel *model,
                      1, &param_name,
                      2, &param_arg,
                      3, &parent_name,
-                     4, &parent_arg, -1);
+                     4, &parent_arg,
+                     5, &jump_button, -1);
   keyval = gdk_keyval_from_name(key);
   if (keyval == GDK_VoidSymbol) {
     g_free(key);
     g_free(param_name);
     g_free(parent_name);
+    g_free(jump_button);
     return FALSE;
   }
 
@@ -1136,6 +1478,7 @@ get_liststore_keymap(GtkTreeModel *model,
   struct keymap *map = g_new0(struct keymap, 1);
   map->key_name = key;
   map->keyval = keyval;
+  map->jump_button = jump_button;
   map->param_name = param_name;
   map->param_arg = param_arg;
   map->parent_name = parent_name;
@@ -1177,28 +1520,109 @@ builder_add_with_path(GtkBuilder *builder, const char *ui_filename)
   gtk_builder_add_from_file(builder, filename, NULL);
 }
 
+static char *usage = 
+  "Usage: xtor [options]\n"
+  "options:\n"
+  "-c  --controller   specify controller (default beatstep)\n"
+  "                   supported controllers are beatstep, nocturn\n"
+  "-u  --ui           specify .glade file with synth UI definitions\n"
+  "-h  --help         this list\n";
+
+/* It would be nice to have function pointers directly in list below, but
+ * having a struct makes it easier to read and manage. */
+struct controller_init
+{
+  const char *name;
+  controller_initfunc controller_init;
+};
+
+/* List of controllers we can use. */
+struct controller_init controller_initfuncs[] =
+{
+  { .name = "nocturn", .controller_init = nocturn_init },
+  { .name = "beatstep", .controller_init = beatstep_init },
+  { .name = NULL, .controller_init = NULL } /* sentinel */
+};
+
 /* Our main function */
 int
 main(int argc, char *argv[])
 {
   GtkBuilder *builder;
   struct polls *polls;
-  const char *gladename;
-  int i;
+  const char *gladename = NULL;
+  const char *controller_name = "beatstep";
+  int i, c, digit_optind = 0;
+
+  while (1) {
+    int this_option_optind = optind ? optind : 1;
+    int option_index = 0;
+    static struct option long_options[] = {
+      { "controller", required_argument, 0, 'c' },
+      { "synth_ui",   required_argument, 0, 'u' },
+      { "help",       no_argument      , 0, 'h' },
+      { 0,            0,                 0, 0 }
+    };
+
+    c = getopt_long(argc, argv, "c:u:h", long_options, &option_index);
+    if (c == -1) break;
+
+    switch (c) {
+      case 'c': controller_name = optarg; break;
+      case 'u': gladename = optarg; break;
+      case 'h': printf(usage); return 0;
+      case '?': return 1;
+      case 0:
+      default: break;
+    }
+  }
+  if (optind < argc) {
+    printf("Unrecognized option: %s\n", argv[optind]);
+    return 1;
+  }
+
+  dprintf("Options: gladename %s controller_name %s\n",
+          gladename, controller_name);
 
   debug = 0;
+
+  /* We initialize gtk early, even if we don't initialize the rest of the UI
+   * until later, because we want to grab gtk-specific arguments before
+   * processing our own. */
+
+  gtk_init(&argc, &argv);
+
+  /* Here we do a basic initialization of structures etc. */
 
   memset(param_handler, 0, sizeof(*param_handler));
   blofeld_init(param_handler);
 
-  gladename = param_handler->ui_filename;
-  if (argv[1]) gladename = argv[1];
+  memset(controller, 0, sizeof(*controller));
 
-  gtk_init (&argc, &argv);
+  /* Scan controller list for the one we want. */
+  struct controller_init *init = &controller_initfuncs[0];
+  while (init->name) {
+     if (!strcmp(init->name, controller_name)) /* found it! */
+       break;
+     init++;
+  }
+  if (!init->controller_init) {
+    eprintf("Controller %s not supported, exiting.\n", controller_name);
+    return 1;
+  }
+  init->controller_init(controller);
+
+  memset(knob_mapper, 0, sizeof(*knob_mapper));
+  blofeld_knobs_init(knob_mapper);
+
+  /* Initialize UI */
+
+  if (!gladename)
+    gladename = param_handler->ui_filename;
 
   builder = gtk_builder_new();
   builder_add_with_path(builder, gladename);
-  builder_add_with_path(builder, "midiedit.glade");
+  builder_add_with_path(builder, "xtor.glade");
 
   main_window = GTK_WIDGET(gtk_builder_get_object(builder, main_window_name));
   gtk_builder_connect_signals(builder, NULL);
@@ -1221,7 +1645,6 @@ main(int argc, char *argv[])
   g_signal_connect(main_window, "button-press-event",
                    G_CALLBACK(menu_button_event), NULL);
 
-
   setup_hotkeys(builder, "KeyMappings");
   g_signal_connect(main_window, "key-press-event", G_CALLBACK(key_event), NULL);
 
@@ -1235,6 +1658,8 @@ main(int argc, char *argv[])
 
   g_object_unref(G_OBJECT(builder));
 
+  /* Start ALSA MIDI */
+
   polls = midi_init_alsa();
   if (!polls)
     return 2;
@@ -1245,20 +1670,33 @@ main(int argc, char *argv[])
     /* gdk_input_add() returns a poll_tag which we don't care about */
     gdk_input_add(polls->pollfds[i].fd, GDK_INPUT_READ, on_midi_input, NULL);
 
+  /* UI and MIDI set up, we can now initialize UI dependent stuff. */
+
   create_adjustors_list(param_handler->params, main_window);
 
   param_handler->param_register_notify_cb(param_changed, NULL);
 
-  midi_connect(param_handler->remote_midi_device);
+  controller->controller_register_notify_cb(controller_change, NULL);
+  controller->controller_register_jump_button_cb(jump_button, NULL);
+
+  /* All is set up, we can now let everyone do their MIDI initialization. */
+
+  param_handler->param_midi_init(param_handler);
+  controller->controller_midi_init(controller);
+
+  /* Final things we haven't done before. */
 
   block_updates = 0;
 
   set_title();
-  gtk_widget_show (main_window);
+
+  /* Let's go! */
+
+  gtk_widget_show(main_window);
   gtk_main();
 
   return 0;
 }
 
-/************************** End of file midiedit.c **************************/
+/************************** End of file xtor.c **************************/
 
