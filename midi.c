@@ -1,7 +1,7 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesizers
+ * xtor - GTK based editor for MIDI synthesizers
  *
- * midi.c - MIDI subsystem for midiedit.
+ * midi.c - MIDI subsystem for xtor.
  *
  * Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
  *
@@ -76,7 +76,7 @@ midi_init_alsa(void)
     dprintf("Couldn't open ALSA sequencer: %s\n", snd_strerror(errno));
     return NULL;
   }
-  snd_seq_set_client_name(seq, "Midiedit");
+  snd_seq_set_client_name(seq, "Xtor");
 
   client = snd_seq_client_id(seq);
   if (client < 0) {
@@ -85,7 +85,7 @@ midi_init_alsa(void)
   }
   dprintf("Client address %d\n", client);
 
-  synth_port = snd_seq_create_simple_port(seq, "Midiedit synth port",
+  synth_port = snd_seq_create_simple_port(seq, "Xtor synth port",
                                           SND_SEQ_PORT_CAP_READ |
                                           SND_SEQ_PORT_CAP_WRITE |
                                           SND_SEQ_PORT_CAP_SUBS_READ |
@@ -97,7 +97,7 @@ midi_init_alsa(void)
   }
   ports[SYNTH_PORT] = synth_port;
 
-  ctrlr_port = snd_seq_create_simple_port(seq, "Midiedit controller port",
+  ctrlr_port = snd_seq_create_simple_port(seq, "Xtor controller port",
                                           SND_SEQ_PORT_CAP_READ |
                                           SND_SEQ_PORT_CAP_WRITE |
                                           SND_SEQ_PORT_CAP_SUBS_READ |

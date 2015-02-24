@@ -1,7 +1,7 @@
 #
-# Makefile for midiedit.
+# Makefile for xtor.
 #
-# midiedit - GTK based editor for MIDI synthesizers
+# xtor - GTK based editor for MIDI synthesizers
 #
 # Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
 # Portions of Makefile Copyright (C) Lars Luthman <larsl@users.sourceforge.net>
@@ -26,7 +26,7 @@
 
 RELEASE = n
 
-PROGNAME = midiedit
+PROGNAME = xtor
 
 PREFIX = /usr/local
 DOC_DIR = $(PREFIX)/share/doc/$(PROGNAME)
@@ -36,11 +36,11 @@ UI_DIR = $(PREFIX)/share/$(PROGNAME)
 # For development, we keep everything in the same (development) directory
 UI_DIR=.
 
-OBJS = midiedit.o dialog.o blofeld_ui.o blofeld_params.o \
+OBJS = xtor.o dialog.o blofeld_ui.o blofeld_params.o \
        knob_mapper.o blofeld_knobs.o nocturn.o beatstep.o midi.o debug.o
-INCS = midiedit.h dialog.h param.h blofeld_params.h controller.h \
+INCS = xtor.h dialog.h param.h blofeld_params.h controller.h \
        knob_mapper.h nocturn.h beatstep.h midi.h debug.h
-UI_FILES = midiedit.glade blofeld.glade
+UI_FILES = xtor.glade blofeld.glade
 DOC_FILES = README COPYING
 
 all: $(PROGNAME)
@@ -64,7 +64,7 @@ $(PROGNAME):
 
 endif
 
-install: $(PROGNAME) midiedit.glade blofeld.glade README COPYING
+install: $(PROGNAME) xtor.glade blofeld.glade README COPYING
 	install -d $(BIN_DIR) $(UI_DIR) $(DOC_DIR)
 	install $(PROGNAME) $(BIN_DIR)
 	install $(UI_FILES) $(UI_DIR)

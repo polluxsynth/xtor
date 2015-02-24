@@ -1,7 +1,7 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesizers
+ * xtor - GTK based editor for MIDI synthesizers
  *
- * midi.h - MIDI subsystem for midiedit.
+ * midi.h - MIDI subsystem for xtor.
  *
  * Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
  *

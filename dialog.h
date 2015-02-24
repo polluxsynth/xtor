@@ -1,5 +1,5 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesizers
+ * xtor - GTK based editor for MIDI synthesizers
  *
  * dialog.h - Convenience functions for dialog boxes.
  *

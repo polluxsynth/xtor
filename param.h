@@ -1,5 +1,5 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesizers
+ * xtor - GTK based editor for MIDI synthesizers
  *
  * param.h - Interface to synth specific parameter handlers.
  *

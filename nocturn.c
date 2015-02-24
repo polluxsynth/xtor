@@ -1,5 +1,5 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesizers
+ * xtor - GTK based editor for MIDI synthesizers
  *
  * nocturn.c - Interface for Novation Nocturn controller
  *             Assumes the controller is connected via an application

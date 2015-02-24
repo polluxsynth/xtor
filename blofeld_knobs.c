@@ -1,5 +1,5 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesizers
+ * extor - GTK based editor for MIDI synthesizers
  *
  * blofeld_knobs.c - Map Blofeld UI parameters to controller knobs.
  *

@@ -1,5 +1,5 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesizers
+ * xtor - GTK based editor for MIDI synthesizers
  *
  * blofeld_params.c - Parameter management for Waldorf Blofeld.
  *
@@ -200,7 +200,7 @@ struct blofeld_bitmap_param patchname = { "Name Char 1", NULL, 0, 16 };
   { "Arp Step Timing " #N ".", &threebit, NULL, &arptim ## N }, \
   { "Arp Step Length " #N ".", &threebit, NULL, &arplen ## N }
 
-/* Names of certain parameters, for interfacing with midiedit core. */
+/* Names of certain parameters, for interfacing with xtor core. */
 static char patch_name[] = "Patch Name";
 static char device_name[] = "Device Name";
 
@@ -622,7 +622,7 @@ notify_cb notify_ui = NULL;
 void *notify_ref;
 
 /* Fint index in parameter list of parameter with a given name. */
-/* Used locally and also from midiedit core during startup to find
+/* Used locally and also from xtor core during startup to find
  * parameters corresponding to parameter widgets. */
 /* Not referenced directly, but via struct, hence 'static' */
 static int
@@ -643,7 +643,7 @@ blofeld_find_index(const char *param_name)
   return idx;
 }
 
-/* Get min, max and step sizes for parameter. Used by midiedit core
+/* Get min, max and step sizes for parameter. Used by xtor core
  * during setup. */
 /* Not referenced directly, but via struct, hence 'static' */
 int

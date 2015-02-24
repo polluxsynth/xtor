@@ -1,5 +1,5 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesizers
+ * xtor - GTK based editor for MIDI synthesizers
  *
  * blofeld_ui.c - Blofeld-specific UI functions. In practice, signal handlers.
  *
@@ -28,7 +28,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <gtk/gtk.h>
-#include "midiedit.h"
+#include "xtor.h"
 #include "dialog.h"
 #include "midi.h"
 #include "param.h"

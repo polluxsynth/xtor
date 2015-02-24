@@ -1,8 +1,8 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesisers
+ * xtor - GTK based editor for MIDI synthesisers
  *
- * midiedit.c - Main program, with most of the synth-agnostic UI
- *              implementation.
+ * xtor.c - Main program, with most of the synth-agnostic UI
+ *          implementation.
  *
  * Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
  *
@@ -31,7 +31,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-#include "midiedit.h"
+#include "xtor.h"
 #include "dialog.h"
 #include "param.h"
 #include "blofeld_params.h"
@@ -111,7 +111,7 @@ GList *keymaps = NULL;
 /* How the UI behaves */
 struct ui_settings {
   int scroll_focused_only;
-  int midiedit_navigation;
+  int xtor_navigation;
   int knobs_grab_focus;
 };
 
@@ -128,7 +128,7 @@ struct setting {
 
 struct setting settings[] = {
   { &ui_settings.scroll_focused_only, "Scrollfocus", NULL },
-  { &ui_settings.midiedit_navigation, "Navigation", NULL },
+  { &ui_settings.xtor_navigation, "Navigation", NULL },
   { &ui_settings.knobs_grab_focus, "Knobsfocus", NULL },
   { &debug, "Debug", NULL },
   { NULL, NULL }
@@ -156,7 +156,7 @@ set_title(void)
 {
   char title[80];
 
-  sprintf(title, "Midiedit %s - %s (Part %d)",
+  sprintf(title, "Xtor %s - %s (Part %d)",
           param_handler->name, current_patch_name, current_buffer_no + 1);
 
   if (main_window && GTK_IS_WINDOW(main_window))
@@ -625,7 +625,7 @@ change_value(GtkWidget *what, int shifted, int dir, int compensate)
 
 
 /* Handle focus and value navigation. Apart from hotkeys and the keys
- * used to reach the popup menu, these are all the keys that Midiedit handles
+ * used to reach the popup menu, these are all the keys that Xtor handles
  * of its own accord. */
 static gboolean
 navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
@@ -811,7 +811,7 @@ key_event(GtkWidget *widget, GdkEventKey *event)
   if (GTK_IS_ENTRY(focus) && !GTK_IS_SPIN_BUTTON(focus))
     return FALSE; /* We let GTK handle all key events for GtkEntries. */
 
-  if (ui_settings.midiedit_navigation && navigation(widget, focus, event))
+  if (ui_settings.xtor_navigation && navigation(widget, focus, event))
     return TRUE;
 
   if (mapped_key(focus, event))
@@ -861,9 +861,9 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
           gtk_widget_get_name(focus),
           gtk_buildable_get_name(GTK_BUILDABLE(focus)));
 
-  /* If UI is set to scroll_focused_only (Midiedit default mode), always
+  /* If UI is set to scroll_focused_only (Xtor default mode), always
    * scroll the widget that is focused, regardless of where the mouse
-   * pointer is. Handy when using Midiedit's key based navigation.
+   * pointer is. Handy when using Xtor's key based navigation.
    * Otherwise, use the Gnome default of scrolling whatever the mouse
    * pointer points to. Handy when navigating using the mouse, as we
    * don't need to left-click to focus an item before scrolling. */
@@ -1521,7 +1521,7 @@ builder_add_with_path(GtkBuilder *builder, const char *ui_filename)
 }
 
 static char *usage = 
-  "Usage: midiedit [options]\n"
+  "Usage: xtor [options]\n"
   "options:\n"
   "-c  --controller   specify controller (default beatstep)\n"
   "                   supported controllers are beatstep, nocturn\n"
@@ -1622,7 +1622,7 @@ main(int argc, char *argv[])
 
   builder = gtk_builder_new();
   builder_add_with_path(builder, gladename);
-  builder_add_with_path(builder, "midiedit.glade");
+  builder_add_with_path(builder, "xtor.glade");
 
   main_window = GTK_WIDGET(gtk_builder_get_object(builder, main_window_name));
   gtk_builder_connect_signals(builder, NULL);
@@ -1698,5 +1698,5 @@ main(int argc, char *argv[])
   return 0;
 }
 
-/************************** End of file midiedit.c **************************/
+/************************** End of file xtor.c **************************/
 

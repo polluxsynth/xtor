@@ -1,5 +1,5 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesizers
+ * xtor - GTK based editor for MIDI synthesizers
  *
  * knob_mapper.h - Representation of controller's knobs
  *
@@ -35,7 +35,7 @@
 /* Description of a knob in our context. */
 struct knob_descriptor {
   GtkWidget *widget; /* Pointer to widget corresponding to this knob. */
-  void *ref; /* Ultimately a pointer to the adjustor (see midiedit.c),
+  void *ref; /* Ultimately a pointer to the adjustor (see xtor.c),
               * but as a knob mapper we don't really know that. */
 };
 

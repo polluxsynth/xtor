@@ -1,5 +1,5 @@
 /****************************************************************************
- * midiedit - GTK based editor for MIDI synthesizers
+ * extor - GTK based editor for MIDI synthesizers
  *
  * beatstep.c - Interface for Arturia Beatstep controller
  *
