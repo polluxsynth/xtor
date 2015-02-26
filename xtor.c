@@ -1479,11 +1479,10 @@ get_liststore_keymap(GtkTreeModel *model,
 #endif
 
   /* Empty parent_name string means there is no specified parent.
-   * Easier to manage if just set to NULL rather than having zero-length
-   * string.
-   */
-  if (parent_name && !parent_name[0])
-  {
+   * Easier to manage if just set to NULL.
+   * Also accept "none" as newer glade versions cause gtk to barf at empty
+   * strings. */
+  if (parent_name && (!parent_name[0] || !strcmp(parent_name, "none"))) {
     g_free(parent_name);
     parent_name = NULL;
   }
