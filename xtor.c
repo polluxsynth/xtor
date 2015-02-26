@@ -668,13 +668,13 @@ navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
         handled |= change_value(ticked_widget, shifted, -1, 1);
       break;
     case GDK_KEY_apostrophe:
-      ticked_widget = GTK_WINDOW(widget)->focus_widget;
+      ticked_widget = gtk_window_get_focus(GTK_WINDOW(widget));
       handled = 1;
       break;
     case GDK_KEY_space:
       what = ticked_widget;
       if (what) {
-        ticked_widget = GTK_WINDOW(widget)->focus_widget;
+        ticked_widget = gtk_window_get_focus(GTK_WINDOW(widget));
         gtk_widget_grab_focus(what);
       }
       handled = 1;
@@ -794,7 +794,7 @@ mapped_key(GtkWidget *focus, GdkEventKey *event)
 static gboolean
 key_event(GtkWidget *widget, GdkEventKey *event)
 {
-  GtkWidget *focus = GTK_WINDOW(widget)->focus_widget;
+  GtkWidget *focus = gtk_window_get_focus(GTK_WINDOW(widget));
 
   dprintf("Key pressed: \"%s\" (0x%08x), widget %p, focus widget %p, "
           "(main window %p)\n", gdk_keyval_name(event->keyval), event->keyval,
@@ -826,7 +826,7 @@ static void
 jump_button(int button_row, int button_no, void *ref)
 {
   struct key_search_spec key_search_spec;
-  GtkWidget *focus = GTK_WINDOW(main_window)->focus_widget;
+  GtkWidget *focus = gtk_window_get_focus(GTK_WINDOW(main_window));
   char jump_button_name[20];
 
   sprintf(jump_button_name, "J%d%d", button_row, button_no);
@@ -851,7 +851,7 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
    * to scroll the one that has focus. */
   GtkWidget *toplevel = gtk_widget_get_toplevel(widget);
   if (!toplevel) return FALSE;
-  GtkWidget *focus = GTK_WINDOW(toplevel)->focus_widget;
+  GtkWidget *focus = gtk_window_get_focus(GTK_WINDOW(toplevel));
   if (!focus) return FALSE;
 
   dprintf("scroll %d: widget is a %s, name %s, focus is a %s, name %s\n",
@@ -1011,7 +1011,7 @@ controller_change(int control_no, int alt_control_no, int row, int value,
 {
   int dir = 1;
   int steps;
-  GtkWidget *focus_widget = GTK_WINDOW(main_window)->focus_widget;
+  GtkWidget *focus_widget = gtk_window_get_focus(GTK_WINDOW(main_window));
 
   dprintf("Control #%d alt #%d row %d, value %d, focus %s, name %s\n",
           control_no, alt_control_no, row, value,

@@ -76,9 +76,11 @@ print_knob(gpointer data, gpointer user_data)
 {
   struct knob_descriptor *knob_description = data;
   GtkWidget *widget = knob_description->widget;
+  GtkAllocation allocation;
+  gtk_widget_get_allocation(widget, &allocation);
   printf("Widget %s:%s (%d,%d): %s\n",
          gtk_widget_get_name(widget), gtk_buildable_get_name(GTK_BUILDABLE(widget)),
-         widget->allocation.x, widget->allocation.y,
+         allocation.x, allocation.y,
          gtk_widget_get_visible(widget) ? "visible" : "hidden");
 }
 
