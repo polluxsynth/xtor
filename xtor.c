@@ -1462,6 +1462,11 @@ get_liststore_keymap(GtkTreeModel *model,
                      3, &parent_name,
                      4, &parent_arg,
                      5, &jump_button, -1);
+  if (!key) key = ""; /* newer glade versions cause empty gchararrays = NULL */
+  else if (!strcmp(key, "none")) { /* accept "none" instead of empty string */
+    g_free(key);
+    key = "";
+  }
   keyval = gdk_keyval_from_name(key);
   if (keyval == GDK_KEY_VoidSymbol) {
     g_free(key);
