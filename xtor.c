@@ -1570,7 +1570,7 @@ main(int argc, char *argv[])
     switch (c) {
       case 'c': controller_name = optarg; break;
       case 'u': gladename = optarg; break;
-      case 'h': printf(usage); return 0;
+      case 'h': printf("%s", usage); return 0;
       case '?': return 1;
       case 0:
       default: break;
