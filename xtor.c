@@ -640,38 +640,38 @@ navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
   gboolean handled = FALSE;
 
   switch (event->keyval) {
-    case GDK_Right:
+    case GDK_KEY_Right:
       arg = GTK_DIR_RIGHT;
-    case GDK_Left:
+    case GDK_KEY_Left:
       if (arg < 0) arg = GTK_DIR_LEFT;
-    case GDK_Up:
+    case GDK_KEY_Up:
       if (arg < 0) arg = GTK_DIR_UP;
-    case GDK_Down:
+    case GDK_KEY_Down:
       if (arg < 0) arg = GTK_DIR_DOWN;
       what = widget;
       signal = "move-focus";
       g_signal_emit_by_name(GTK_OBJECT(what), signal, arg);
       handled = TRUE;
       break;
-    case GDK_Forward:
-    case GDK_Page_Up:
-    case GDK_plus:
+    case GDK_KEY_Forward:
+    case GDK_KEY_Page_Up:
+    case GDK_KEY_plus:
       handled = change_value(focus, shifted, 1, 1);
       if (ctrl && ticked_widget)
         handled |= change_value(ticked_widget, shifted, 1, 1);
       break;
-    case GDK_Back:
-    case GDK_Page_Down:
-    case GDK_minus:
+    case GDK_KEY_Back:
+    case GDK_KEY_Page_Down:
+    case GDK_KEY_minus:
       handled = change_value(focus, shifted, -1, 1);
       if (ctrl && ticked_widget)
         handled |= change_value(ticked_widget, shifted, -1, 1);
       break;
-    case GDK_apostrophe:
+    case GDK_KEY_apostrophe:
       ticked_widget = GTK_WINDOW(widget)->focus_widget;
       handled = 1;
       break;
-    case GDK_space:
+    case GDK_KEY_space:
       what = ticked_widget;
       if (what) {
         ticked_widget = GTK_WINDOW(widget)->focus_widget;
@@ -802,8 +802,8 @@ key_event(GtkWidget *widget, GdkEventKey *event)
   dprintf("Focused widget is a %s, name %s\n",gtk_widget_get_name(focus),
           gtk_buildable_get_name(GTK_BUILDABLE(focus)));
 
-  if (event->keyval == GDK_F1 || event->keyval == GDK_F10 ||
-      event->keyval == GDK_Menu) {
+  if (event->keyval == GDK_KEY_F1 || event->keyval == GDK_KEY_F10 ||
+      event->keyval == GDK_KEY_Menu) {
     gtk_menu_popup(popup_menu, NULL, NULL, NULL, NULL, 0, event->time);
     return TRUE;
   }
@@ -1450,7 +1450,7 @@ get_liststore_keymap(GtkTreeModel *model,
                      4, &parent_arg,
                      5, &jump_button, -1);
   keyval = gdk_keyval_from_name(key);
-  if (keyval == GDK_VoidSymbol) {
+  if (keyval == GDK_KEY_VoidSymbol) {
     g_free(key);
     g_free(param_name);
     g_free(parent_name);
