@@ -1673,7 +1673,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">FMsource</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext11"/>
                                       <attributes>
@@ -1708,7 +1707,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">modsource</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext12"/>
                                       <attributes>
@@ -1743,7 +1741,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">waveshape</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext14"/>
                                       <attributes>
@@ -1797,7 +1794,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">feet</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext13"/>
                                       <attributes>
@@ -2216,7 +2212,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">FMsource</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext1"/>
                                       <attributes>
@@ -2251,7 +2246,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">modsource</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext2"/>
                                       <attributes>
@@ -2286,7 +2280,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">waveshape</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext3"/>
                                       <attributes>
@@ -2359,7 +2352,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">feet</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext4"/>
                                       <attributes>
@@ -2794,7 +2786,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">FMsource</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext5"/>
                                       <attributes>
@@ -2829,7 +2820,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">modsource</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext6"/>
                                       <attributes>
@@ -2864,7 +2854,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">waveshape3</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext7"/>
                                       <attributes>
@@ -2899,7 +2888,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">feet</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext8"/>
                                       <attributes>
@@ -3126,7 +3114,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">modsource</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext26"/>
                                       <attributes>
@@ -3182,7 +3169,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">allocmode</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext28"/>
                                           <attributes>
@@ -3268,7 +3254,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">glidemode</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext27"/>
                                           <attributes>
@@ -3623,7 +3608,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">drivecurve</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext9"/>
                                           <attributes>
@@ -3666,7 +3650,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext10"/>
                                           <attributes>
@@ -3709,7 +3692,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">FMsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext15"/>
                                           <attributes>
@@ -3754,7 +3736,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">filtertype</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext17"/>
                                           <attributes>
@@ -3771,7 +3752,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">routing</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext30"/>
                                           <attributes>
@@ -3925,7 +3905,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext16"/>
                                           <attributes>
@@ -4174,7 +4153,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">drivecurve</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext20"/>
                                       <attributes>
@@ -4283,7 +4261,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">modsource</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext21"/>
                                       <attributes>
@@ -4305,7 +4282,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">FMsource</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext22"/>
                                       <attributes>
@@ -4353,7 +4329,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">filtertype</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext19"/>
                                       <attributes>
@@ -4481,7 +4456,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext23"/>
                                           <attributes>
@@ -4750,7 +4724,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">envmode</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext24"/>
                                           <attributes>
@@ -5081,7 +5054,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">envmode</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext25"/>
                                           <attributes>
@@ -5310,7 +5282,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">modsource</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext29"/>
                                       <attributes>
@@ -5419,7 +5390,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">category</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext169"/>
                                           <attributes>
@@ -5529,7 +5499,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext170"/>
                                           <attributes>
@@ -5563,7 +5532,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext171"/>
                                           <attributes>
@@ -5582,7 +5550,6 @@
                                       <object class="GtkComboBox" id="Modulation 2 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext172"/>
                                           <attributes>
@@ -5618,7 +5585,6 @@
                                       <object class="GtkComboBox" id="Modulation 2 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext173"/>
                                           <attributes>
@@ -5639,7 +5605,6 @@
                                       <object class="GtkComboBox" id="Modulation 3 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext174"/>
                                           <attributes>
@@ -5675,7 +5640,6 @@
                                       <object class="GtkComboBox" id="Modulation 3 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext175"/>
                                           <attributes>
@@ -5696,7 +5660,6 @@
                                       <object class="GtkComboBox" id="Modulation 4 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext176"/>
                                           <attributes>
@@ -5717,7 +5680,6 @@
                                       <object class="GtkComboBox" id="Modulation 4 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext177"/>
                                           <attributes>
@@ -5753,7 +5715,6 @@
                                       <object class="GtkComboBox" id="Modulation 5 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext178"/>
                                           <attributes>
@@ -5789,7 +5750,6 @@
                                       <object class="GtkComboBox" id="Modulation 5 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext179"/>
                                           <attributes>
@@ -5810,7 +5770,6 @@
                                       <object class="GtkComboBox" id="Modulation 6 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext180"/>
                                           <attributes>
@@ -5846,7 +5805,6 @@
                                       <object class="GtkComboBox" id="Modulation 6 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext181"/>
                                           <attributes>
@@ -5867,7 +5825,6 @@
                                       <object class="GtkComboBox" id="Modulation 7 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext182"/>
                                           <attributes>
@@ -5903,7 +5860,6 @@
                                       <object class="GtkComboBox" id="Modulation 7 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext183"/>
                                           <attributes>
@@ -5924,7 +5880,6 @@
                                       <object class="GtkComboBox" id="Modulation 8 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext184"/>
                                           <attributes>
@@ -5960,7 +5915,6 @@
                                       <object class="GtkComboBox" id="Modulation 8 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext185"/>
                                           <attributes>
@@ -5981,7 +5935,6 @@
                                       <object class="GtkComboBox" id="Modulation 9 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext186"/>
                                           <attributes>
@@ -6017,7 +5970,6 @@
                                       <object class="GtkComboBox" id="Modulation 9 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext187"/>
                                           <attributes>
@@ -6038,7 +5990,6 @@
                                       <object class="GtkComboBox" id="Modulation 10 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext188"/>
                                           <attributes>
@@ -6074,7 +6025,6 @@
                                       <object class="GtkComboBox" id="Modulation 10 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext189"/>
                                           <attributes>
@@ -6095,7 +6045,6 @@
                                       <object class="GtkComboBox" id="Modulation 11 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext190"/>
                                           <attributes>
@@ -6116,7 +6065,6 @@
                                       <object class="GtkComboBox" id="Modulation 12 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext191"/>
                                           <attributes>
@@ -6137,7 +6085,6 @@
                                       <object class="GtkComboBox" id="Modulation 16 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext192"/>
                                           <attributes>
@@ -6158,7 +6105,6 @@
                                       <object class="GtkComboBox" id="Modulation 15 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext193"/>
                                           <attributes>
@@ -6179,7 +6125,6 @@
                                       <object class="GtkComboBox" id="Modulation 14 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext194"/>
                                           <attributes>
@@ -6200,7 +6145,6 @@
                                       <object class="GtkComboBox" id="Modulation 13 Source1">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext195"/>
                                           <attributes>
@@ -6311,7 +6255,6 @@
                                       <object class="GtkComboBox" id="Modulation 11 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext196"/>
                                           <attributes>
@@ -6332,7 +6275,6 @@
                                       <object class="GtkComboBox" id="Modulation 12 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext197"/>
                                           <attributes>
@@ -6353,7 +6295,6 @@
                                       <object class="GtkComboBox" id="Modulation 13 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext198"/>
                                           <attributes>
@@ -6374,7 +6315,6 @@
                                       <object class="GtkComboBox" id="Modulation 14 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext199"/>
                                           <attributes>
@@ -6395,7 +6335,6 @@
                                       <object class="GtkComboBox" id="Modulation 15 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext200"/>
                                           <attributes>
@@ -6416,7 +6355,6 @@
                                       <object class="GtkComboBox" id="Modulation 16 Destination1">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext201"/>
                                           <attributes>
@@ -6483,7 +6421,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">sixteen</property>
-                                        <property name="active">0</property>
                                         <signal name="changed" handler="on_Modulation_Select_changed" swapped="no"/>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext202"/>
@@ -6552,7 +6489,6 @@
                                       <object class="GtkComboBox" id="Modulation 1 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext203"/>
                                           <attributes>
@@ -6584,7 +6520,6 @@
                                       <object class="GtkComboBox" id="Modulation 1 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext204"/>
                                           <attributes>
@@ -6604,7 +6539,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext205"/>
                                           <attributes>
@@ -6642,7 +6576,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext206"/>
                                           <attributes>
@@ -6663,7 +6596,6 @@
                                       <object class="GtkComboBox" id="Modulation 3 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext207"/>
                                           <attributes>
@@ -6699,7 +6631,6 @@
                                       <object class="GtkComboBox" id="Modulation 3 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext208"/>
                                           <attributes>
@@ -6720,7 +6651,6 @@
                                       <object class="GtkComboBox" id="Modulation 4 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext209"/>
                                           <attributes>
@@ -6741,7 +6671,6 @@
                                       <object class="GtkComboBox" id="Modulation 4 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext210"/>
                                           <attributes>
@@ -6777,7 +6706,6 @@
                                       <object class="GtkComboBox" id="Modulation 5 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext211"/>
                                           <attributes>
@@ -6813,7 +6741,6 @@
                                       <object class="GtkComboBox" id="Modulation 5 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext212"/>
                                           <attributes>
@@ -6834,7 +6761,6 @@
                                       <object class="GtkComboBox" id="Modulation 6 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext213"/>
                                           <attributes>
@@ -6870,7 +6796,6 @@
                                       <object class="GtkComboBox" id="Modulation 6 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext214"/>
                                           <attributes>
@@ -6891,7 +6816,6 @@
                                       <object class="GtkComboBox" id="Modulation 7 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext215"/>
                                           <attributes>
@@ -6927,7 +6851,6 @@
                                       <object class="GtkComboBox" id="Modulation 7 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext216"/>
                                           <attributes>
@@ -6948,7 +6871,6 @@
                                       <object class="GtkComboBox" id="Modulation 8 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext217"/>
                                           <attributes>
@@ -6984,7 +6906,6 @@
                                       <object class="GtkComboBox" id="Modulation 8 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext218"/>
                                           <attributes>
@@ -7005,7 +6926,6 @@
                                       <object class="GtkComboBox" id="Modulation 9 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext219"/>
                                           <attributes>
@@ -7041,7 +6961,6 @@
                                       <object class="GtkComboBox" id="Modulation 9 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext220"/>
                                           <attributes>
@@ -7062,7 +6981,6 @@
                                       <object class="GtkComboBox" id="Modulation 10 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext221"/>
                                           <attributes>
@@ -7098,7 +7016,6 @@
                                       <object class="GtkComboBox" id="Modulation 10 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext222"/>
                                           <attributes>
@@ -7119,7 +7036,6 @@
                                       <object class="GtkComboBox" id="Modulation 11 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext223"/>
                                           <attributes>
@@ -7140,7 +7056,6 @@
                                       <object class="GtkComboBox" id="Modulation 12 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext224"/>
                                           <attributes>
@@ -7161,7 +7076,6 @@
                                       <object class="GtkComboBox" id="Modulation 16 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext225"/>
                                           <attributes>
@@ -7182,7 +7096,6 @@
                                       <object class="GtkComboBox" id="Modulation 15 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext226"/>
                                           <attributes>
@@ -7203,7 +7116,6 @@
                                       <object class="GtkComboBox" id="Modulation 14 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext227"/>
                                           <attributes>
@@ -7224,7 +7136,6 @@
                                       <object class="GtkComboBox" id="Modulation 13 Source2">
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext228"/>
                                           <attributes>
@@ -7335,7 +7246,6 @@
                                       <object class="GtkComboBox" id="Modulation 11 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext229"/>
                                           <attributes>
@@ -7356,7 +7266,6 @@
                                       <object class="GtkComboBox" id="Modulation 12 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext230"/>
                                           <attributes>
@@ -7377,7 +7286,6 @@
                                       <object class="GtkComboBox" id="Modulation 13 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext231"/>
                                           <attributes>
@@ -7398,7 +7306,6 @@
                                       <object class="GtkComboBox" id="Modulation 14 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext232"/>
                                           <attributes>
@@ -7419,7 +7326,6 @@
                                       <object class="GtkComboBox" id="Modulation 15 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext233"/>
                                           <attributes>
@@ -7440,7 +7346,6 @@
                                       <object class="GtkComboBox" id="Modulation 16 Destination2">
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext234"/>
                                           <attributes>
@@ -7507,7 +7412,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">sixteen</property>
-                                        <property name="active">1</property>
                                         <signal name="changed" handler="on_Modulation_Select_changed" swapped="no"/>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext235"/>
@@ -8127,7 +8031,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">lfoclock</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext159"/>
                                           <attributes>
@@ -8179,7 +8082,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">lfoshape</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext18"/>
                                           <attributes>
@@ -8475,7 +8377,6 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="model">envmode</property>
-                                            <property name="active">0</property>
                                             <child>
                                               <object class="GtkCellRendererText" id="cellrenderertext35"/>
                                               <attributes>
@@ -8807,7 +8708,6 @@
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <property name="model">envmode</property>
-                                            <property name="active">0</property>
                                             <child>
                                               <object class="GtkCellRendererText" id="cellrenderertext36"/>
                                               <attributes>
@@ -8943,7 +8843,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext94"/>
                                           <attributes>
@@ -8961,7 +8860,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modop</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext95"/>
                                           <attributes>
@@ -8981,7 +8879,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">bsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext96"/>
                                           <attributes>
@@ -9012,7 +8909,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext37"/>
                                           <attributes>
@@ -9032,7 +8928,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext38"/>
                                           <attributes>
@@ -9052,7 +8947,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext39"/>
                                           <attributes>
@@ -9072,7 +8966,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">bsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext40"/>
                                           <attributes>
@@ -9094,7 +8987,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">bsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext41"/>
                                           <attributes>
@@ -9116,7 +9008,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">bsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext42"/>
                                           <attributes>
@@ -9138,7 +9029,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modop</property>
-                                        <property name="active">0</property>
                                         <property name="add_tearoffs">True</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext43"/>
@@ -9161,7 +9051,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modop</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext44"/>
                                           <attributes>
@@ -9183,7 +9072,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modop</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext45"/>
                                           <attributes>
@@ -9532,7 +9420,6 @@
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="model">envmode</property>
-                                                <property name="active">0</property>
                                                 <child>
                                                   <object class="GtkCellRendererText" id="cellrenderertext34"/>
                                                   <attributes>
@@ -9886,7 +9773,6 @@
                                                 <property name="visible">True</property>
                                                 <property name="can_focus">False</property>
                                                 <property name="model">envmode</property>
-                                                <property name="active">0</property>
                                                 <child>
                                                   <object class="GtkCellRendererText" id="cellrenderertext33"/>
                                                   <attributes>
@@ -10214,7 +10100,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">lfoclock</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext31"/>
                                           <attributes>
@@ -10266,7 +10151,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">lfoshape</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext32"/>
                                           <attributes>
@@ -10552,7 +10436,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">lfoclock</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext160"/>
                                           <attributes>
@@ -10604,7 +10487,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">lfoshape</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext161"/>
                                           <attributes>
@@ -10787,7 +10669,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext62"/>
                                           <attributes>
@@ -10821,7 +10702,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext63"/>
                                           <attributes>
@@ -10854,7 +10734,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext64"/>
                                           <attributes>
@@ -10892,7 +10771,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext65"/>
                                           <attributes>
@@ -10927,7 +10805,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext66"/>
                                           <attributes>
@@ -10965,7 +10842,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext67"/>
                                           <attributes>
@@ -11000,7 +10876,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext68"/>
                                           <attributes>
@@ -11022,7 +10897,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext69"/>
                                           <attributes>
@@ -11073,7 +10947,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext70"/>
                                           <attributes>
@@ -11111,7 +10984,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext71"/>
                                           <attributes>
@@ -11146,7 +11018,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext72"/>
                                           <attributes>
@@ -11184,7 +11055,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext73"/>
                                           <attributes>
@@ -11219,7 +11089,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext74"/>
                                           <attributes>
@@ -11257,7 +11126,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext75"/>
                                           <attributes>
@@ -11279,7 +11147,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext76"/>
                                           <attributes>
@@ -11330,7 +11197,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext77"/>
                                           <attributes>
@@ -11365,7 +11231,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext78"/>
                                           <attributes>
@@ -11403,7 +11268,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext79"/>
                                           <attributes>
@@ -11438,7 +11302,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext80"/>
                                           <attributes>
@@ -11476,7 +11339,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext81"/>
                                           <attributes>
@@ -11498,7 +11360,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext82"/>
                                           <attributes>
@@ -11598,7 +11459,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext83"/>
                                           <attributes>
@@ -11620,7 +11480,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext84"/>
                                           <attributes>
@@ -11642,7 +11501,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext85"/>
                                           <attributes>
@@ -11664,7 +11522,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext86"/>
                                           <attributes>
@@ -11686,7 +11543,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">modsource</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext87"/>
                                           <attributes>
@@ -11804,7 +11660,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext88"/>
                                           <attributes>
@@ -11826,7 +11681,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext89"/>
                                           <attributes>
@@ -11848,7 +11702,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext90"/>
                                           <attributes>
@@ -11870,7 +11723,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext91"/>
                                           <attributes>
@@ -11892,7 +11744,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext92"/>
                                           <attributes>
@@ -11914,7 +11765,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">moddest</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext93"/>
                                           <attributes>
@@ -12185,7 +12035,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext47"/>
                                       <attributes>
@@ -12207,7 +12056,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext48"/>
                                       <attributes>
@@ -12229,7 +12077,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext49"/>
                                       <attributes>
@@ -12251,7 +12098,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext46"/>
                                       <attributes>
@@ -12451,7 +12297,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext61"/>
                                       <attributes>
@@ -12473,7 +12318,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext60"/>
                                       <attributes>
@@ -12495,7 +12339,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext59"/>
                                       <attributes>
@@ -12517,7 +12360,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext58"/>
                                       <attributes>
@@ -12539,7 +12381,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext57"/>
                                       <attributes>
@@ -12561,7 +12402,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext56"/>
                                       <attributes>
@@ -12583,7 +12423,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext55"/>
                                       <attributes>
@@ -12605,7 +12444,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext54"/>
                                       <attributes>
@@ -12627,7 +12465,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext53"/>
                                       <attributes>
@@ -12649,7 +12486,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext52"/>
                                       <attributes>
@@ -12671,7 +12507,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext51"/>
                                       <attributes>
@@ -12693,7 +12528,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext50"/>
                                       <attributes>
@@ -12950,7 +12784,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpstep</property>
-                                    <property name="active">0</property>
                                     <signal name="changed" handler="on_all_changed" swapped="no"/>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext97"/>
@@ -12988,7 +12821,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext98"/>
                                       <attributes>
@@ -13010,7 +12842,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext99"/>
                                       <attributes>
@@ -13032,7 +12863,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext100"/>
                                       <attributes>
@@ -13054,7 +12884,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext101"/>
                                       <attributes>
@@ -13076,7 +12905,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext102"/>
                                       <attributes>
@@ -13098,7 +12926,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext103"/>
                                       <attributes>
@@ -13120,7 +12947,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext104"/>
                                       <attributes>
@@ -13142,7 +12968,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext105"/>
                                       <attributes>
@@ -13164,7 +12989,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext106"/>
                                       <attributes>
@@ -13186,7 +13010,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext107"/>
                                       <attributes>
@@ -13208,7 +13031,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext108"/>
                                       <attributes>
@@ -13230,7 +13052,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext109"/>
                                       <attributes>
@@ -13252,7 +13073,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext110"/>
                                       <attributes>
@@ -13274,7 +13094,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext111"/>
                                       <attributes>
@@ -13296,7 +13115,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext112"/>
                                       <attributes>
@@ -13318,7 +13136,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext113"/>
                                       <attributes>
@@ -13340,7 +13157,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpacc</property>
-                                    <property name="active">0</property>
                                     <signal name="changed" handler="on_all_changed" swapped="no"/>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext114"/>
@@ -13363,7 +13179,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext115"/>
                                       <attributes>
@@ -13385,7 +13200,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext116"/>
                                       <attributes>
@@ -13407,7 +13221,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext117"/>
                                       <attributes>
@@ -13429,7 +13242,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext118"/>
                                       <attributes>
@@ -13451,7 +13263,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext119"/>
                                       <attributes>
@@ -13473,7 +13284,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext120"/>
                                       <attributes>
@@ -13495,7 +13305,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext121"/>
                                       <attributes>
@@ -13517,7 +13326,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext122"/>
                                       <attributes>
@@ -13539,7 +13347,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext123"/>
                                       <attributes>
@@ -13561,7 +13368,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext124"/>
                                       <attributes>
@@ -13583,7 +13389,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext125"/>
                                       <attributes>
@@ -13605,7 +13410,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext126"/>
                                       <attributes>
@@ -13627,7 +13431,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext127"/>
                                       <attributes>
@@ -13649,7 +13452,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext128"/>
                                       <attributes>
@@ -13671,7 +13473,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext129"/>
                                       <attributes>
@@ -13693,7 +13494,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext130"/>
                                       <attributes>
@@ -13715,7 +13515,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arptim</property>
-                                    <property name="active">0</property>
                                     <signal name="changed" handler="on_all_changed" swapped="no"/>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext131"/>
@@ -13834,7 +13633,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext132"/>
                                       <attributes>
@@ -13856,7 +13654,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext133"/>
                                       <attributes>
@@ -13878,7 +13675,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext134"/>
                                       <attributes>
@@ -13900,7 +13696,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext135"/>
                                       <attributes>
@@ -13922,7 +13717,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext136"/>
                                       <attributes>
@@ -13944,7 +13738,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext137"/>
                                       <attributes>
@@ -13966,7 +13759,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext138"/>
                                       <attributes>
@@ -13988,7 +13780,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext139"/>
                                       <attributes>
@@ -14010,7 +13801,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext140"/>
                                       <attributes>
@@ -14032,7 +13822,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext141"/>
                                       <attributes>
@@ -14054,7 +13843,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext142"/>
                                       <attributes>
@@ -14076,7 +13864,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext143"/>
                                       <attributes>
@@ -14098,7 +13885,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext144"/>
                                       <attributes>
@@ -14120,7 +13906,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext145"/>
                                       <attributes>
@@ -14142,7 +13927,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext146"/>
                                       <attributes>
@@ -14164,7 +13948,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext147"/>
                                       <attributes>
@@ -14186,7 +13969,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsteplen</property>
-                                    <property name="active">0</property>
                                     <signal name="changed" handler="on_all_changed" swapped="no"/>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext148"/>
@@ -14871,7 +14653,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arppat</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext150"/>
                                       <attributes>
@@ -14891,7 +14672,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">sixteen</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext154"/>
                                       <attributes>
@@ -14976,7 +14756,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpoct</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext151"/>
                                       <attributes>
@@ -14996,7 +14775,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpdir</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext152"/>
                                       <attributes>
@@ -15016,7 +14794,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpsortord</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext153"/>
                                       <attributes>
@@ -15036,7 +14813,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">onoff</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext155"/>
                                       <attributes>
@@ -15056,7 +14832,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpclock</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext156"/>
                                       <attributes>
@@ -15076,7 +14851,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arplength</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext157"/>
                                       <attributes>
@@ -15166,7 +14940,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpvel</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext158"/>
                                       <attributes>
@@ -15309,7 +15082,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">arpmode</property>
-                                    <property name="active">0</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="cellrenderertext149"/>
                                       <attributes>
@@ -15692,7 +15464,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">fx1type</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext162"/>
                                           <attributes>
@@ -16226,7 +15997,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">fxdrive</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext163"/>
                                           <attributes>
@@ -16246,7 +16016,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">polarity</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext164"/>
                                           <attributes>
@@ -16695,7 +16464,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">fx2type</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext165"/>
                                           <attributes>
@@ -17547,7 +17315,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">fxlength</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext168"/>
                                           <attributes>
@@ -17567,7 +17334,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">fxdrive</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext166"/>
                                           <attributes>
@@ -17618,7 +17384,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">polarity</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext167"/>
                                           <attributes>
@@ -18050,7 +17815,6 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="model">category</property>
-                                        <property name="active">0</property>
                                         <child>
                                           <object class="GtkCellRendererText" id="cellrenderertext236"/>
                                           <attributes>
