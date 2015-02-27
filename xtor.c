@@ -1631,7 +1631,7 @@ main(int argc, char *argv[])
    * popup_menu not being a menu when we try to open it.
    * Perhaps it's because the menu is not a finished widget but just
    * a description? */
-  g_object_ref(G_WIDGET(popup_menu));
+  g_object_ref(popup_menu);
 
   about_window = GTK_WIDGET(gtk_builder_get_object(builder, "About"));
 
@@ -1653,7 +1653,7 @@ main(int argc, char *argv[])
   if (device_name_widget)
     gtk_entry_set_text(device_name_widget, param_handler->remote_midi_device);
 
-  g_object_unref(G_WIDGET(builder));
+  g_object_unref(builder);
 
   /* Start ALSA MIDI */
 
