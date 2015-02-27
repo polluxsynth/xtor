@@ -53,8 +53,8 @@ file_send(char *buf, int len, int fd)
 /* Handlers for various Blofeld-specific parts of the UI */
 
 /* When Patch Save pressed: save patch to file */
-void
-on_Patch_Save_pressed (GtkWidget *widget, gpointer user_data)
+gboolean
+on_Patch_Save_pressed(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
   char *filename = NULL;
   int res;
@@ -86,6 +86,8 @@ on_Patch_Save_pressed (GtkWidget *widget, gpointer user_data)
 out:
   gtk_widget_destroy (dialog);
   g_free (filename);
+
+  return FALSE;
 }
 
 
@@ -104,8 +106,8 @@ static int safe_read(int fd, char *buf, int len)
 }
 
 /* When Patch Load pressed: load patch from file */
-void
-on_Patch_Load_pressed (GtkWidget *widget, gpointer user_data)
+gboolean
+on_Patch_Load_pressed(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
   char *filename = NULL;
   int res;
@@ -142,31 +144,37 @@ on_Patch_Load_pressed (GtkWidget *widget, gpointer user_data)
 out:
   gtk_widget_destroy (dialog);
   g_free (filename);
+
+  return FALSE;
 }
 
 /* When Get Dump (or G) pressed, request dump from Blofeld.
  * Note that we don't actually wait for the dump to be received here. */
-void
-on_GetDump_pressed (GtkWidget *widget, gpointer user_data)
+gboolean
+on_GetDump_pressed(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
   dprintf("Pressed get dump, requesting buffer no %d!\n", current_buffer_no);
   midi_connect(SYNTH_PORT, NULL);
   blofeld_get_dump(current_buffer_no, device_number);
+
+  return FALSE; /* let ui continue to press event (i.e. show button pressed) */
 }
 
 /* When Send Dump pressed, send patch dump to Blofeld. */
-void
-on_SendDump_pressed (GtkWidget *widget, gpointer user_data)
+gboolean
+on_SendDump_pressed(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
   dprintf("Pressed send dump, sending buffer no %d!\n", current_buffer_no);
   midi_connect(SYNTH_PORT, NULL);
   blofeld_send_dump(current_buffer_no, device_number);
+
+  return FALSE;
 }
 
 /* When user presses any one of the 16 Buffer radio buttons:
  * set buffer number and request patch dump from Blofeld. */
-void
-on_Buffer_pressed (GtkWidget *widget, gpointer user_data)
+gboolean
+on_Buffer_pressed(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
   const char *id = gtk_buildable_get_name(GTK_BUILDABLE(widget));
   int buffer_no;
@@ -179,36 +187,46 @@ on_Buffer_pressed (GtkWidget *widget, gpointer user_data)
             buffer_no, current_buffer_no);
     blofeld_get_dump(current_buffer_no, device_number);
   }
+
+  return FALSE;
 }
 
 /* When Patch Copy pressed, copy all parameters to paste buffer */
-void
-on_Patch_Copy_pressed (GtkWidget *widget, gpointer user_data)
+gboolean
+on_Patch_Copy_pressed(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
   blofeld_copy_to_paste(PARNOS_ALL, current_buffer_no, 0);
+
+  return FALSE;
 }
 
 /* When Patch Paste pressed, copy all parameters from paste buffer */
-void
-on_Patch_Paste_pressed (GtkWidget *widget, gpointer user_data)
+gboolean
+on_Patch_Paste_pressed(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
   blofeld_copy_from_paste(PARNOS_ALL, current_buffer_no, 0);
+
+  return FALSE;
 }
 
 /* When Arp Copy pressed, copy all arpeggiator parameters to arpeggiator
  * paste buffer */
-void
-on_Copy_Arp_pressed (GtkWidget *widget, gpointer user_data)
+gboolean
+on_Copy_Arp_pressed(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
   blofeld_copy_to_paste(PARNOS_ARPEGGIATOR, current_buffer_no, 1);
+
+  return FALSE;
 }
 
 /* When Arp Paste pressed, copy all arpeggiator parameters from arpeggiator
  * paste buffer */
-void
-on_Paste_Arp_pressed (GtkWidget *widget, gpointer user_data)
+gboolean
+on_Paste_Arp_pressed(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
   blofeld_copy_from_paste(PARNOS_ARPEGGIATOR, current_buffer_no, 1);
+
+  return FALSE;
 }
 
 
@@ -244,8 +262,8 @@ show_hide(gpointer data, gpointer user_data)
 }
 
 /* When Modulation Select changed, show relevant modulation routing */
-void
-on_Modulation_Select_changed (GtkWidget *widget, gpointer user_data)
+gboolean
+on_Modulation_Select_changed(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
   struct match match;
   const char *id = gtk_buildable_get_name(GTK_BUILDABLE(widget));
@@ -296,6 +314,8 @@ on_Modulation_Select_changed (GtkWidget *widget, gpointer user_data)
   /* Finally, any knob mappings related to the modulation selected must be
    * redone to correspond with the mappings now visible. */
   invalidate_knob_mappings(container);
+
+  return FALSE;
 }
 
 

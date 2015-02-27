@@ -764,7 +764,15 @@ hotkey(struct key_search_spec *key_search_spec)
   }
 
   if (GTK_IS_BUTTON(keymap->widget)) {
-    gtk_button_pressed(GTK_BUTTON(keymap->widget));
+    /* We need to pass both an event and a return pointer, as that is
+     * what the "button-press-event" signal requires. In paricular, if we
+     * don't pass a valid return value pointer, we get "static type
+     * `GtkButton' unreferenced too often" when closing the application,
+     * if the signal has been emitted here while it was running. */
+    GdkEventButton event = { .type = GDK_BUTTON_PRESS, .state = 0 };
+    static gboolean unused_but_needed_return_value;
+    g_signal_emit_by_name(GTK_BUTTON(keymap->widget), "button-press-event",
+                          &event, &unused_but_needed_return_value);
     return TRUE;
   }
 
@@ -894,14 +902,20 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
 }
 
 
-/* Handle all mouse button events arriving in slider widgets */
+/* Handle all mouse button events */
 static gboolean
 button_event(GtkWidget *widget, GdkEventButton *event)
 {
   static int count = 0;
   dprintf("mouse button %d: %d, state %d, widget is a %s, name %s\n", ++count,
-          event->button, event->state, gtk_widget_get_name(widget),
+          event ? event->button : -1, event ? event->state : -1,
+          gtk_widget_get_name(widget),
           gtk_buildable_get_name(GTK_BUILDABLE(widget)));
+
+  /* We can end up with event == NULL if we emitted the signal ourselves
+   * using g_signal_emit_by_name. We don't need to process it further though. */
+  if (!event)
+    return TRUE;
 
   /* What we want to is stop the default action of jumping to the pointed-to
    * value when the middle button is pressed or released, so get out of
