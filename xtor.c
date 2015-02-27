@@ -221,11 +221,13 @@ on_Main_Window_destroy(GtkWidget *widget, gpointer user_data)
   gtk_main_quit();
 }
 
-void
-on_midi_input(gpointer data, gint fd, GdkInputCondition condition)
+gboolean
+on_midi_input(GIOChannel *source, GIOCondition condition, gpointer data)
 {
-  dprintf("Received MIDI data on fd %d\n", fd);
+  dprintf("Received MIDI data on fd %d\n", g_io_channel_unix_get_fd(source));
   midi_input();
+
+  return TRUE; /* don't remove event source */
 }
 
 void
@@ -1663,9 +1665,11 @@ main(int argc, char *argv[])
 
   /* Normally we'd only expect one fd here, but just in case we got > 1 */
   dprintf("Midi poll fds: %d\n", polls->npfd);
-  for (i = 0; i < polls->npfd; i++)
-    /* gdk_input_add() returns a poll_tag which we don't care about */
-    gdk_input_add(polls->pollfds[i].fd, GDK_INPUT_READ, on_midi_input, NULL);
+  for (i = 0; i < polls->npfd; i++) {
+    GIOChannel *giochan = g_io_channel_unix_new(polls->pollfds[i].fd);
+    /* g_io_add_watch() returns an event source id which we don't care about */
+    g_io_add_watch(giochan, G_IO_IN, on_midi_input, NULL);
+  }
 
   /* UI and MIDI set up, we can now initialize UI dependent stuff. */
 
