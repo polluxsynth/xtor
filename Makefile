@@ -48,11 +48,11 @@ all: $(PROGNAME)
 ifneq ($(RELEASE),y)
 
 %.o: %.c $(INCS) Makefile
-	gcc $(CFLAGS) -ansi -Werror -c -o $@ $< `pkg-config --cflags libglade-2.0 gmodule-2.0 alsa` -DUI_DIR=\"$(UI_DIR)\" -g -O2
+	gcc $(CFLAGS) -ansi -Werror -c -o $@ $< `pkg-config --cflags gtk+-3.0 gmodule-2.0 alsa` -DUI_DIR=\"$(UI_DIR)\" -g -O2
 
 $(PROGNAME): $(OBJS)
 	@echo $(OBJS)
-	gcc -ansi -Werror -o $@ $^ `pkg-config --libs libglade-2.0 gmodule-2.0 alsa`
+	gcc -ansi -Werror -o $@ $^ `pkg-config --libs gtk+-3.0 gmodule-2.0 alsa`
 
 clean:
 	rm -f $(PROGNAME) $(OBJS) *~
