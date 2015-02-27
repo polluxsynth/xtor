@@ -54,7 +54,7 @@ file_send(char *buf, int len, int fd)
 
 /* When Patch Save pressed: save patch to file */
 void
-on_Patch_Save_pressed (GtkObject *object, gpointer user_data)
+on_Patch_Save_pressed (GtkWidget *widget, gpointer user_data)
 {
   char *filename = NULL;
   int res;
@@ -105,7 +105,7 @@ static int safe_read(int fd, char *buf, int len)
 
 /* When Patch Load pressed: load patch from file */
 void
-on_Patch_Load_pressed (GtkObject *object, gpointer user_data)
+on_Patch_Load_pressed (GtkWidget *widget, gpointer user_data)
 {
   char *filename = NULL;
   int res;
@@ -147,7 +147,7 @@ out:
 /* When Get Dump (or G) pressed, request dump from Blofeld.
  * Note that we don't actually wait for the dump to be received here. */
 void
-on_GetDump_pressed (GtkObject *object, gpointer user_data)
+on_GetDump_pressed (GtkWidget *widget, gpointer user_data)
 {
   dprintf("Pressed get dump, requesting buffer no %d!\n", current_buffer_no);
   midi_connect(SYNTH_PORT, NULL);
@@ -156,7 +156,7 @@ on_GetDump_pressed (GtkObject *object, gpointer user_data)
 
 /* When Send Dump pressed, send patch dump to Blofeld. */
 void
-on_SendDump_pressed (GtkObject *object, gpointer user_data)
+on_SendDump_pressed (GtkWidget *widget, gpointer user_data)
 {
   dprintf("Pressed send dump, sending buffer no %d!\n", current_buffer_no);
   midi_connect(SYNTH_PORT, NULL);
@@ -166,9 +166,9 @@ on_SendDump_pressed (GtkObject *object, gpointer user_data)
 /* When user presses any one of the 16 Buffer radio buttons:
  * set buffer number and request patch dump from Blofeld. */
 void
-on_Buffer_pressed (GtkObject *object, gpointer user_data)
+on_Buffer_pressed (GtkWidget *widget, gpointer user_data)
 {
-  const char *id = gtk_buildable_get_name(GTK_BUILDABLE(object));
+  const char *id = gtk_buildable_get_name(GTK_BUILDABLE(widget));
   int buffer_no;
 
   if (sscanf(id, "Buffer %d", &buffer_no) == 1 &&
@@ -183,14 +183,14 @@ on_Buffer_pressed (GtkObject *object, gpointer user_data)
 
 /* When Patch Copy pressed, copy all parameters to paste buffer */
 void
-on_Patch_Copy_pressed (GtkObject *object, gpointer user_data)
+on_Patch_Copy_pressed (GtkWidget *widget, gpointer user_data)
 {
   blofeld_copy_to_paste(PARNOS_ALL, current_buffer_no, 0);
 }
 
 /* When Patch Paste pressed, copy all parameters from paste buffer */
 void
-on_Patch_Paste_pressed (GtkObject *object, gpointer user_data)
+on_Patch_Paste_pressed (GtkWidget *widget, gpointer user_data)
 {
   blofeld_copy_from_paste(PARNOS_ALL, current_buffer_no, 0);
 }
@@ -198,7 +198,7 @@ on_Patch_Paste_pressed (GtkObject *object, gpointer user_data)
 /* When Arp Copy pressed, copy all arpeggiator parameters to arpeggiator
  * paste buffer */
 void
-on_Copy_Arp_pressed (GtkObject *object, gpointer user_data)
+on_Copy_Arp_pressed (GtkWidget *widget, gpointer user_data)
 {
   blofeld_copy_to_paste(PARNOS_ARPEGGIATOR, current_buffer_no, 1);
 }
@@ -206,7 +206,7 @@ on_Copy_Arp_pressed (GtkObject *object, gpointer user_data)
 /* When Arp Paste pressed, copy all arpeggiator parameters from arpeggiator
  * paste buffer */
 void
-on_Paste_Arp_pressed (GtkObject *object, gpointer user_data)
+on_Paste_Arp_pressed (GtkWidget *widget, gpointer user_data)
 {
   blofeld_copy_from_paste(PARNOS_ARPEGGIATOR, current_buffer_no, 1);
 }
@@ -245,13 +245,13 @@ show_hide(gpointer data, gpointer user_data)
 
 /* When Modulation Select changed, show relevant modulation routing */
 void
-on_Modulation_Select_changed (GtkObject *object, gpointer user_data)
+on_Modulation_Select_changed (GtkWidget *widget, gpointer user_data)
 {
   struct match match;
-  const char *id = gtk_buildable_get_name(GTK_BUILDABLE(object));
+  const char *id = gtk_buildable_get_name(GTK_BUILDABLE(widget));
   if (!id) return;
-  if (!GTK_IS_COMBO_BOX(object)) return;
-  int select = gtk_combo_box_get_active(GTK_COMBO_BOX(object));
+  if (!GTK_IS_COMBO_BOX(widget)) return;
+  int select = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
   /* Now mangle parameter name (= widget id) to something matchable */
   /* The name of our widget is something like "Modulation Select", whereas
@@ -288,7 +288,7 @@ on_Modulation_Select_changed (GtkObject *object, gpointer user_data)
    * find. However, since we have two modulation routings, we couldn't go
    * that high in the object hierarchy, or we would show/hide the routings
    * for both modulation boxes. */
-  GtkWidget *container = gtk_widget_get_parent(GTK_WIDGET(object));
+  GtkWidget *container = gtk_widget_get_parent(GTK_WIDGET(widget));
   GList *container_children = gtk_container_get_children(GTK_CONTAINER(container));
 
   g_list_foreach(container_children, show_hide, &match);
@@ -333,11 +333,11 @@ set_value(gpointer data, gpointer user_data)
 /* When parameters in 'All' column in arpeggiator changed, update the whole
  * row with the same value. */
 void
-on_all_changed (GtkObject *object, gpointer user_data)
+on_all_changed (GtkWidget *widget, gpointer user_data)
 {
   struct all_updater all_updater;
 
-  const char *id = gtk_buildable_get_name(GTK_BUILDABLE(object));
+  const char *id = gtk_buildable_get_name(GTK_BUILDABLE(widget));
   if (!id) return;
 
   /* Now mangle parameter name (= widget id) to something matchable */
@@ -352,10 +352,10 @@ on_all_changed (GtkObject *object, gpointer user_data)
   all_updater.format = format;
 
   /* Get value of the All parameter */
-  if (GTK_IS_COMBO_BOX(object))
-    all_updater.value = gtk_combo_box_get_active(GTK_COMBO_BOX(object));
-  else if (GTK_IS_TOGGLE_BUTTON(object))
-    all_updater.value = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(object));
+  if (GTK_IS_COMBO_BOX(widget))
+    all_updater.value = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+  else if (GTK_IS_TOGGLE_BUTTON(widget))
+    all_updater.value = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
   /* Add other widget types as needed */
 
   /* Now update all children of the parent container */
@@ -364,7 +364,7 @@ on_all_changed (GtkObject *object, gpointer user_data)
    * step widgets are in the same box; on a more global scale we'd have
    * to start at the top window, and recursively scan every container we
    * find. */
-  GtkWidget *container = gtk_widget_get_parent(GTK_WIDGET(object));
+  GtkWidget *container = gtk_widget_get_parent(widget);
   GList *container_children = gtk_container_get_children(GTK_CONTAINER(container));
 
   g_list_foreach(container_children, set_value, &all_updater);
@@ -372,10 +372,10 @@ on_all_changed (GtkObject *object, gpointer user_data)
 
 /* When device number spin box changed */
 void
-on_Device_Number_changed (GtkObject *object, gpointer user_data)
+on_Device_Number_changed (GtkWidget *widget, gpointer user_data)
 {
-  if (!GTK_IS_SPIN_BUTTON(object)) return;
-  device_number = gtk_spin_button_get_value(GTK_SPIN_BUTTON(object));
+  if (!GTK_IS_SPIN_BUTTON(widget)) return;
+  device_number = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 
   dprintf("User set device number to %d\n", device_number);
 }

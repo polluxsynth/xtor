@@ -216,7 +216,7 @@ invalidate_knob_mappings(GtkWidget *widget)
 /* General signal handlers */
 
 void
-on_Main_Window_destroy(GtkObject *object, gpointer user_data)
+on_Main_Window_destroy(GtkWidget *widget, gpointer user_data)
 {
   gtk_main_quit();
 }
@@ -229,10 +229,10 @@ on_midi_input(gpointer data, gint fd, GdkInputCondition condition)
 }
 
 void
-on_Device_Name_activate(GtkObject *object, gpointer user_data)
+on_Device_Name_activate(GtkWidget *widget, gpointer user_data)
 {
-  if (!GTK_IS_ENTRY(object)) return;
-  GtkEntry *device_name_entry = GTK_ENTRY(object);
+  if (!GTK_IS_ENTRY(widget)) return;
+  GtkEntry *device_name_entry = GTK_ENTRY(widget);
 
   /* If user says empty string, go back to parameter handler's default */
   if (!strcmp(gtk_entry_get_text(device_name_entry), ""))
@@ -264,9 +264,9 @@ menu_button_event(GtkWidget *widget, GdkEventButton *event)
 }
 
 gboolean
-activate_About(GtkObject *object, gpointer user_data)
+activate_About(GtkWidget *widget, gpointer user_data)
 {
-  dprintf("activate About: object %p is %s\n", object, gtk_widget_get_name(GTK_WIDGET(object)));
+  dprintf("activate About: widget %p is %s\n", widget, gtk_widget_get_name(GTK_WIDGET(widget)));
   /* Set which window to be our parant. This places the About box in the
    * middle of the main window which looks nice. */
   gtk_window_set_transient_for(GTK_WINDOW(about_window), GTK_WINDOW(main_window));
@@ -276,41 +276,38 @@ activate_About(GtkObject *object, gpointer user_data)
 
 /* Need to have this, or the default signal handler destroys the About box */
 gboolean
-on_About_delete(GtkObject *object, gpointer user_data)
+on_About_delete(GtkWidget *widget, gpointer user_data)
 {
   dprintf("About deleted\n");
-  gtk_widget_hide(GTK_WIDGET(object));
+  gtk_widget_hide(widget);
   return TRUE;
 }
 
 /* Basically when Closed is pressed in About box, but also ESC or window X */
 gboolean
-on_About_response(GtkObject *object, gpointer user_data)
+on_About_response(GtkWidget *widget, gpointer user_data)
 {
   dprintf("About response\n");
-  gtk_widget_hide(GTK_WIDGET(object));
+  gtk_widget_hide(widget);
   return TRUE;
 }
 
 /* Change underlying value when setting changed in popup menu. */
 gboolean
-on_Setting_changed(GtkObject *object, gpointer user_data)
+on_Setting_changed(GtkWidget *widget, gpointer user_data)
 {
-  dprintf("Setting changed: object is a %s, name %s\n",
-          gtk_widget_get_name(GTK_WIDGET(object)),
-          gtk_buildable_get_name(GTK_BUILDABLE(object)));
+  dprintf("Setting changed: widget is a %s, name %s\n",
+          gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)));
 
-  if (!GTK_IS_WIDGET(object)) return;
-
-  GtkWidget *widget = GTK_WIDGET(object);
   struct setting *setting = settings;
 
   /* Scan our settings for one with a matching widget pointer */
   while (setting->valueptr) {
     if (widget == setting->widget) {
-      if (GTK_IS_CHECK_MENU_ITEM(object)) {
+      if (GTK_IS_CHECK_MENU_ITEM(widget)) {
         *setting->valueptr =
-          gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(object));
+          gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
         dprintf("Setting %s to %d\n", setting->name, *setting->valueptr);
       }
       break;
@@ -435,9 +432,9 @@ update_parameter(struct adjustor *adjustor, const void *valptr,
 /* Handlers called when widgets change value. */
 
 void
-on_patch_name_changed(GtkObject *object, gpointer user_data)
+on_patch_name_changed(GtkWidget *widget, gpointer user_data)
 {
-  GtkEntry *gtkentry = GTK_ENTRY (object);
+  GtkEntry *gtkentry = GTK_ENTRY(widget);
 
   if (gtkentry) {
     const char *stringptr = gtk_entry_get_text(gtkentry);
@@ -450,9 +447,9 @@ on_patch_name_changed(GtkObject *object, gpointer user_data)
 
 
 void
-on_entry_changed(GtkObject *object, gpointer user_data)
+on_entry_changed(GtkWidget *widget, gpointer user_data)
 {
-  GtkEntry *gtkentry = GTK_ENTRY (object);
+  GtkEntry *gtkentry = GTK_ENTRY(widget);
   struct adjustor *adjustor = user_data;
   const char *stringptr;
 
@@ -465,7 +462,7 @@ on_entry_changed(GtkObject *object, gpointer user_data)
             gtkentry, gtk_buildable_get_name(GTK_BUILDABLE(gtkentry)),
             stringptr, adjustor->parnum);
     /* Set our global patch name if respective widget and update title */
-    update_parameter(adjustor, stringptr, GTK_WIDGET(object));
+    update_parameter(adjustor, stringptr, widget);
   }
 }
 
@@ -474,10 +471,10 @@ on_entry_changed(GtkObject *object, gpointer user_data)
 /* Handle the increment/decrement as we see fit, then return TRUE so Gtk
  * knows we've handled it. */
 gboolean
-on_change_value(GtkObject *object, GtkScrollType scrolltype,
+on_change_value(GtkWidget *widget, GtkScrollType scrolltype,
                 gdouble dvalue, gpointer user_data)
 {
-  GtkRange *gtkrange = GTK_RANGE (object);
+  GtkRange *gtkrange = GTK_RANGE(widget);
 
   if (gtkrange) {
     struct adjustor *adjustor = user_data;
@@ -512,9 +509,9 @@ on_change_value(GtkObject *object, GtkScrollType scrolltype,
 
 /* Called when the value of a GtkRange has been changed. */
 void
-on_value_changed (GtkObject *object, gpointer user_data)
+on_value_changed (GtkWidget *widget, gpointer user_data)
 {
-  GtkRange *gtkrange = GTK_RANGE (object);
+  GtkRange *gtkrange = GTK_RANGE(widget);
   struct adjustor *adjustor = user_data;
   int value;
 
@@ -526,14 +523,14 @@ on_value_changed (GtkObject *object, gpointer user_data)
             gtkrange, gtk_buildable_get_name(GTK_BUILDABLE(gtkrange)),
             (int) gtk_range_get_value(gtkrange), adjustor->parnum);
     value = (int) gtk_range_get_value(gtkrange);
-    update_parameter(adjustor, &value, GTK_WIDGET(object));
+    update_parameter(adjustor, &value, widget);
   }
 }
 
 void
-on_combobox_changed (GtkObject *object, gpointer user_data)
+on_combobox_changed (GtkWidget *widget, gpointer user_data)
 {
-  GtkComboBox *cb = GTK_COMBO_BOX (object);
+  GtkComboBox *cb = GTK_COMBO_BOX(widget);
   struct adjustor *adjustor = user_data;
   int value;
 
@@ -545,14 +542,14 @@ on_combobox_changed (GtkObject *object, gpointer user_data)
             cb, gtk_buildable_get_name(GTK_BUILDABLE(cb)),
             gtk_combo_box_get_active(cb), adjustor->parnum);
     value = (int) gtk_combo_box_get_active(cb);
-    update_parameter(adjustor, &value, GTK_WIDGET(object));
+    update_parameter(adjustor, &value, widget);
   }
 }
 
 void
-on_togglebutton_changed (GtkObject *object, gpointer user_data)
+on_togglebutton_changed (GtkWidget *widget, gpointer user_data)
 {
-  GtkToggleButton *tb = GTK_TOGGLE_BUTTON (object);
+  GtkToggleButton *tb = GTK_TOGGLE_BUTTON(widget);
   struct adjustor *adjustor = user_data;
   int value;
 
@@ -564,7 +561,7 @@ on_togglebutton_changed (GtkObject *object, gpointer user_data)
             tb, gtk_buildable_get_name(GTK_BUILDABLE(tb)),
             gtk_toggle_button_get_active(tb), adjustor->parnum);
     value = gtk_toggle_button_get_active(tb);
-    update_parameter(adjustor, &value, GTK_WIDGET(object));
+    update_parameter(adjustor, &value, widget);
   }
 }
 
@@ -617,7 +614,7 @@ change_value(GtkWidget *what, int shifted, int dir, int compensate)
     signal = "activate";
 
   if (what && signal) {
-    g_signal_emit_by_name(GTK_OBJECT(what), signal, delta);
+    g_signal_emit_by_name(what, signal, delta);
     return TRUE;
   }
   return FALSE;
@@ -650,7 +647,7 @@ navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
       if (arg < 0) arg = GTK_DIR_DOWN;
       what = widget;
       signal = "move-focus";
-      g_signal_emit_by_name(GTK_OBJECT(what), signal, arg);
+      g_signal_emit_by_name(what, signal, arg);
       handled = TRUE;
       break;
     case GDK_KEY_Forward:
@@ -1634,7 +1631,7 @@ main(int argc, char *argv[])
    * popup_menu not being a menu when we try to open it.
    * Perhaps it's because the menu is not a finished widget but just
    * a description? */
-  g_object_ref(G_OBJECT(popup_menu));
+  g_object_ref(G_WIDGET(popup_menu));
 
   about_window = GTK_WIDGET(gtk_builder_get_object(builder, "About"));
 
@@ -1656,7 +1653,7 @@ main(int argc, char *argv[])
   if (device_name_widget)
     gtk_entry_set_text(device_name_widget, param_handler->remote_midi_device);
 
-  g_object_unref(G_OBJECT(builder));
+  g_object_unref(G_WIDGET(builder));
 
   /* Start ALSA MIDI */
 
