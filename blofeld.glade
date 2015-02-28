@@ -18077,7 +18077,7 @@
 	<col id="5" translatable="no">J37</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">Modulation Select 2</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18090,7 +18090,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modulation Select 1 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
@@ -18098,7 +18098,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modulation Select 2 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">f</col>
@@ -18109,7 +18109,7 @@
 	<col id="5" translatable="no">J15</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">Filter 2 Cutoff</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18122,7 +18122,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Filter 1 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
@@ -18130,7 +18130,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Filter 2 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">p</col>
@@ -18141,7 +18141,7 @@
 	<col id="5" translatable="no">J25</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">Filter 2 Pan</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18154,7 +18154,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Filter 2 Pan Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18162,7 +18162,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Filter 1 Pan Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
@@ -18170,7 +18170,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 2 Level</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
@@ -18178,7 +18178,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 3 Level</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
@@ -18186,7 +18186,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 2 Balance</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
@@ -18194,7 +18194,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 3 Balance</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18202,7 +18202,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 3 Level</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18210,7 +18210,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 1 Level</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18218,7 +18218,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 3 Balance</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18226,7 +18226,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 1 Balance</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
@@ -18234,7 +18234,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 1 Level</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
@@ -18242,7 +18242,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 2 Level</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
@@ -18250,7 +18250,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 1 Balance</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
@@ -18258,7 +18258,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 2 Balance</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">o</col>
@@ -18269,7 +18269,7 @@
 	<col id="5" translatable="no">J11</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">Osc 2 Semitone</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18277,7 +18277,7 @@
 	<col id="5" translatable="no">J12</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">Osc 3 Semitone</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18290,7 +18290,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 2 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
@@ -18298,7 +18298,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 3 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18306,7 +18306,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 1 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18314,7 +18314,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 3 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
@@ -18322,7 +18322,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 1 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
@@ -18330,7 +18330,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Osc 2 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">n</col>
@@ -18365,7 +18365,7 @@
 	<col id="5" translatable="no">J21</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">Osc 2 Level</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18373,7 +18373,7 @@
 	<col id="5" translatable="no">J22</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">Osc 3 Level</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18386,7 +18386,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Filter Envelope Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
@@ -18394,7 +18394,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Amplifier Envelope Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">e</col>
@@ -18405,7 +18405,7 @@
 	<col id="5" translatable="no">J17</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">Amplifier Envelope Attack</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18418,7 +18418,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Amplifier Envelope Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18426,10 +18426,10 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Filter Envelope Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">Amplifier Volume</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18445,7 +18445,7 @@
 	<col id="5" translatable="no">J11</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">LFO 2 Speed</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18453,7 +18453,7 @@
 	<col id="5" translatable="no">J12</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">LFO 3 Speed</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18466,7 +18466,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">LFO 2 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
@@ -18474,7 +18474,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">LFO 3 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18482,7 +18482,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">LFO 1 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18490,7 +18490,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">LFO 3 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
@@ -18498,7 +18498,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">LFO 1 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
@@ -18506,7 +18506,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">LFO 2 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">e</col>
@@ -18517,7 +18517,7 @@
 	<col id="5" translatable="no">J21</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">Amplifier Envelope Attack1</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18525,7 +18525,7 @@
 	<col id="5" translatable="no">J22</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">Envelope 3 Attack</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18533,7 +18533,7 @@
 	<col id="5" translatable="no">J23</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">Envelope 4 Attack</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18546,7 +18546,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Amplifier Envelope Frame m</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
@@ -18554,7 +18554,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Envelope 3 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
@@ -18562,7 +18562,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Envelope 4 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18570,7 +18570,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Filter Envelope Frame m</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18578,7 +18578,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Envelope 3 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18586,7 +18586,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Envelope 4 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
@@ -18594,7 +18594,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Filter Envelope Frame m</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
@@ -18602,7 +18602,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Amplifier Envelope Frame m</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
@@ -18610,7 +18610,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Envelope 4 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">4</col>
@@ -18618,7 +18618,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Filter Envelope Frame m</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">4</col>
@@ -18626,7 +18626,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Amplifier Envelope Frame m</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">4</col>
@@ -18634,7 +18634,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Envelope 3 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">o</col>
@@ -18650,7 +18650,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modifiers Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18658,7 +18658,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modifiers Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
@@ -18666,7 +18666,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modifiers Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">4</col>
@@ -18674,7 +18674,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modifiers Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">m</col>
@@ -18690,7 +18690,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modulation Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18698,7 +18698,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modulation Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
@@ -18706,7 +18706,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modulation Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">4</col>
@@ -18714,7 +18714,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modulation Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">5</col>
@@ -18722,7 +18722,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modulation Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">6</col>
@@ -18730,7 +18730,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modulation Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">7</col>
@@ -18738,7 +18738,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modulation Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">8</col>
@@ -18746,7 +18746,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modulation Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">9</col>
@@ -18754,7 +18754,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modulation Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">0</col>
@@ -18762,7 +18762,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Modulation Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">a</col>
@@ -18786,7 +18786,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">User Pattern Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18794,7 +18794,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">User Pattern Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">3</col>
@@ -18802,7 +18802,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">User Pattern Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">4</col>
@@ -18810,7 +18810,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">User Pattern Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">5</col>
@@ -18818,7 +18818,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">User Pattern Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">6</col>
@@ -18826,7 +18826,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">User Pattern Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">7</col>
@@ -18834,7 +18834,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">User Pattern Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">8</col>
@@ -18842,7 +18842,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">User Pattern Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">9</col>
@@ -18850,7 +18850,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">User Pattern Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">0</col>
@@ -18858,7 +18858,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">User Pattern Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">e</col>
@@ -18869,7 +18869,7 @@
 	<col id="5" translatable="no">J13</col>
       </row>
       <row>
-        <col id="0" translatable="yes"></col>
+        <col id="0" translatable="yes">none</col>
         <col id="1" translatable="yes">Effect 2 Type</col>
         <col id="2">-1</col>
         <col id="3" translatable="yes">Main Notebook</col>
@@ -18882,7 +18882,7 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Effect 2 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
@@ -18890,13 +18890,13 @@
         <col id="2">-1</col>
         <col id="3" translatable="yes">Effect 1 Frame</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
       <row>
         <col id="0" translatable="yes">s</col>
         <col id="1" translatable="yes">Main Notebook</col>
         <col id="2">0</col>
-        <col id="3" translatable="yes"></col>
+        <col id="3" translatable="yes">none</col>
         <col id="4">-1</col>
 	<col id="5" translatable="no">J41</col>
       </row>
@@ -18904,7 +18904,7 @@
         <col id="0" translatable="yes">m</col>
         <col id="1" translatable="yes">Main Notebook</col>
         <col id="2">1</col>
-        <col id="3" translatable="yes"></col>
+        <col id="3" translatable="yes">none</col>
         <col id="4">-1</col>
 	<col id="5" translatable="no">J42</col>
       </row>
@@ -18912,7 +18912,7 @@
         <col id="0" translatable="yes">a</col>
         <col id="1" translatable="yes">Main Notebook</col>
         <col id="2">2</col>
-        <col id="3" translatable="yes"></col>
+        <col id="3" translatable="yes">none</col>
         <col id="4">-1</col>
 	<col id="5" translatable="no">J43</col>
       </row>
@@ -18920,7 +18920,7 @@
         <col id="0" translatable="yes">t</col>
         <col id="1" translatable="yes">Main Notebook</col>
         <col id="2">3</col>
-        <col id="3" translatable="yes"></col>
+        <col id="3" translatable="yes">none</col>
         <col id="4">-1</col>
 	<col id="5" translatable="no">J44</col>
       </row>
@@ -18928,9 +18928,9 @@
         <col id="0" translatable="yes">g</col>
         <col id="1" translatable="yes">Get Dump</col>
         <col id="2">-1</col>
-        <col id="3" translatable="yes"></col>
+        <col id="3" translatable="yes">none</col>
         <col id="4">-1</col>
-	<col id="5" translatable="no"></col>
+	<col id="5" translatable="no">none</col>
       </row>
     </data>
   </object>
