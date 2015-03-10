@@ -76,10 +76,12 @@ print_knob(gpointer data, gpointer user_data)
 {
   struct knob_descriptor *knob_description = data;
   GtkWidget *widget = knob_description->widget;
+  GtkAllocation allocation;
+  gtk_widget_get_allocation(widget, &allocation);
   printf("Widget %s:%s (%d,%d): %s\n",
          gtk_widget_get_name(widget), gtk_buildable_get_name(GTK_BUILDABLE(widget)),
-         widget->allocation.x, widget->allocation.y,
-         GTK_WIDGET_VISIBLE(widget) ? "visible" : "hidden");
+         allocation.x, allocation.y,
+         gtk_widget_get_visible(widget) ? "visible" : "hidden");
 }
 
 static void
@@ -103,7 +105,7 @@ add_if_active(gpointer data, gpointer user_data)
   struct knob_descriptor *knob_descriptor = data;
   GList **active_list = user_data;
 
-  if (GTK_WIDGET_VISIBLE(knob_descriptor->widget))
+  if (gtk_widget_get_visible(knob_descriptor->widget))
     *active_list = g_list_prepend(*active_list, knob_descriptor);
 }
 

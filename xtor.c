@@ -216,23 +216,25 @@ invalidate_knob_mappings(GtkWidget *widget)
 /* General signal handlers */
 
 void
-on_Main_Window_destroy(GtkObject *object, gpointer user_data)
+on_Main_Window_destroy(GtkWidget *widget, gpointer user_data)
 {
   gtk_main_quit();
 }
 
-void
-on_midi_input(gpointer data, gint fd, GdkInputCondition condition)
+gboolean
+on_midi_input(GIOChannel *source, GIOCondition condition, gpointer data)
 {
-  dprintf("Received MIDI data on fd %d\n", fd);
+  dprintf("Received MIDI data on fd %d\n", g_io_channel_unix_get_fd(source));
   midi_input();
+
+  return TRUE; /* don't remove event source */
 }
 
 void
-on_Device_Name_activate(GtkObject *object, gpointer user_data)
+on_Device_Name_activate(GtkWidget *widget, gpointer user_data)
 {
-  if (!GTK_IS_ENTRY(object)) return;
-  GtkEntry *device_name_entry = GTK_ENTRY(object);
+  if (!GTK_IS_ENTRY(widget)) return;
+  GtkEntry *device_name_entry = GTK_ENTRY(widget);
 
   /* If user says empty string, go back to parameter handler's default */
   if (!strcmp(gtk_entry_get_text(device_name_entry), ""))
@@ -264,9 +266,9 @@ menu_button_event(GtkWidget *widget, GdkEventButton *event)
 }
 
 gboolean
-activate_About(GtkObject *object, gpointer user_data)
+activate_About(GtkWidget *widget, gpointer user_data)
 {
-  dprintf("activate About: object %p is %s\n", object, gtk_widget_get_name(GTK_WIDGET(object)));
+  dprintf("activate About: widget %p is %s\n", widget, gtk_widget_get_name(GTK_WIDGET(widget)));
   /* Set which window to be our parant. This places the About box in the
    * middle of the main window which looks nice. */
   gtk_window_set_transient_for(GTK_WINDOW(about_window), GTK_WINDOW(main_window));
@@ -276,41 +278,38 @@ activate_About(GtkObject *object, gpointer user_data)
 
 /* Need to have this, or the default signal handler destroys the About box */
 gboolean
-on_About_delete(GtkObject *object, gpointer user_data)
+on_About_delete(GtkWidget *widget, gpointer user_data)
 {
   dprintf("About deleted\n");
-  gtk_widget_hide(GTK_WIDGET(object));
+  gtk_widget_hide(widget);
   return TRUE;
 }
 
 /* Basically when Closed is pressed in About box, but also ESC or window X */
 gboolean
-on_About_response(GtkObject *object, gpointer user_data)
+on_About_response(GtkWidget *widget, gpointer user_data)
 {
   dprintf("About response\n");
-  gtk_widget_hide(GTK_WIDGET(object));
+  gtk_widget_hide(widget);
   return TRUE;
 }
 
 /* Change underlying value when setting changed in popup menu. */
 gboolean
-on_Setting_changed(GtkObject *object, gpointer user_data)
+on_Setting_changed(GtkWidget *widget, gpointer user_data)
 {
-  dprintf("Setting changed: object is a %s, name %s\n",
-          gtk_widget_get_name(GTK_WIDGET(object)),
-          gtk_buildable_get_name(GTK_BUILDABLE(object)));
+  dprintf("Setting changed: widget is a %s, name %s\n",
+          gtk_widget_get_name(widget),
+          gtk_buildable_get_name(GTK_BUILDABLE(widget)));
 
-  if (!GTK_IS_WIDGET(object)) return;
-
-  GtkWidget *widget = GTK_WIDGET(object);
   struct setting *setting = settings;
 
   /* Scan our settings for one with a matching widget pointer */
   while (setting->valueptr) {
     if (widget == setting->widget) {
-      if (GTK_IS_CHECK_MENU_ITEM(object)) {
+      if (GTK_IS_CHECK_MENU_ITEM(widget)) {
         *setting->valueptr =
-          gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(object));
+          gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
         dprintf("Setting %s to %d\n", setting->name, *setting->valueptr);
       }
       break;
@@ -435,9 +434,9 @@ update_parameter(struct adjustor *adjustor, const void *valptr,
 /* Handlers called when widgets change value. */
 
 void
-on_patch_name_changed(GtkObject *object, gpointer user_data)
+on_patch_name_changed(GtkWidget *widget, gpointer user_data)
 {
-  GtkEntry *gtkentry = GTK_ENTRY (object);
+  GtkEntry *gtkentry = GTK_ENTRY(widget);
 
   if (gtkentry) {
     const char *stringptr = gtk_entry_get_text(gtkentry);
@@ -450,9 +449,9 @@ on_patch_name_changed(GtkObject *object, gpointer user_data)
 
 
 void
-on_entry_changed(GtkObject *object, gpointer user_data)
+on_entry_changed(GtkWidget *widget, gpointer user_data)
 {
-  GtkEntry *gtkentry = GTK_ENTRY (object);
+  GtkEntry *gtkentry = GTK_ENTRY(widget);
   struct adjustor *adjustor = user_data;
   const char *stringptr;
 
@@ -465,7 +464,7 @@ on_entry_changed(GtkObject *object, gpointer user_data)
             gtkentry, gtk_buildable_get_name(GTK_BUILDABLE(gtkentry)),
             stringptr, adjustor->parnum);
     /* Set our global patch name if respective widget and update title */
-    update_parameter(adjustor, stringptr, GTK_WIDGET(object));
+    update_parameter(adjustor, stringptr, widget);
   }
 }
 
@@ -474,10 +473,10 @@ on_entry_changed(GtkObject *object, gpointer user_data)
 /* Handle the increment/decrement as we see fit, then return TRUE so Gtk
  * knows we've handled it. */
 gboolean
-on_change_value(GtkObject *object, GtkScrollType scrolltype,
+on_change_value(GtkWidget *widget, GtkScrollType scrolltype,
                 gdouble dvalue, gpointer user_data)
 {
-  GtkRange *gtkrange = GTK_RANGE (object);
+  GtkRange *gtkrange = GTK_RANGE(widget);
 
   if (gtkrange) {
     struct adjustor *adjustor = user_data;
@@ -512,9 +511,9 @@ on_change_value(GtkObject *object, GtkScrollType scrolltype,
 
 /* Called when the value of a GtkRange has been changed. */
 void
-on_value_changed (GtkObject *object, gpointer user_data)
+on_value_changed (GtkWidget *widget, gpointer user_data)
 {
-  GtkRange *gtkrange = GTK_RANGE (object);
+  GtkRange *gtkrange = GTK_RANGE(widget);
   struct adjustor *adjustor = user_data;
   int value;
 
@@ -526,14 +525,14 @@ on_value_changed (GtkObject *object, gpointer user_data)
             gtkrange, gtk_buildable_get_name(GTK_BUILDABLE(gtkrange)),
             (int) gtk_range_get_value(gtkrange), adjustor->parnum);
     value = (int) gtk_range_get_value(gtkrange);
-    update_parameter(adjustor, &value, GTK_WIDGET(object));
+    update_parameter(adjustor, &value, widget);
   }
 }
 
 void
-on_combobox_changed (GtkObject *object, gpointer user_data)
+on_combobox_changed (GtkWidget *widget, gpointer user_data)
 {
-  GtkComboBox *cb = GTK_COMBO_BOX (object);
+  GtkComboBox *cb = GTK_COMBO_BOX(widget);
   struct adjustor *adjustor = user_data;
   int value;
 
@@ -545,14 +544,14 @@ on_combobox_changed (GtkObject *object, gpointer user_data)
             cb, gtk_buildable_get_name(GTK_BUILDABLE(cb)),
             gtk_combo_box_get_active(cb), adjustor->parnum);
     value = (int) gtk_combo_box_get_active(cb);
-    update_parameter(adjustor, &value, GTK_WIDGET(object));
+    update_parameter(adjustor, &value, widget);
   }
 }
 
 void
-on_togglebutton_changed (GtkObject *object, gpointer user_data)
+on_togglebutton_changed (GtkWidget *widget, gpointer user_data)
 {
-  GtkToggleButton *tb = GTK_TOGGLE_BUTTON (object);
+  GtkToggleButton *tb = GTK_TOGGLE_BUTTON(widget);
   struct adjustor *adjustor = user_data;
   int value;
 
@@ -564,7 +563,7 @@ on_togglebutton_changed (GtkObject *object, gpointer user_data)
             tb, gtk_buildable_get_name(GTK_BUILDABLE(tb)),
             gtk_toggle_button_get_active(tb), adjustor->parnum);
     value = gtk_toggle_button_get_active(tb);
-    update_parameter(adjustor, &value, GTK_WIDGET(object));
+    update_parameter(adjustor, &value, widget);
   }
 }
 
@@ -617,7 +616,7 @@ change_value(GtkWidget *what, int shifted, int dir, int compensate)
     signal = "activate";
 
   if (what && signal) {
-    g_signal_emit_by_name(GTK_OBJECT(what), signal, delta);
+    g_signal_emit_by_name(what, signal, delta);
     return TRUE;
   }
   return FALSE;
@@ -640,41 +639,41 @@ navigation(GtkWidget *widget, GtkWidget *focus, GdkEventKey *event)
   gboolean handled = FALSE;
 
   switch (event->keyval) {
-    case GDK_Right:
+    case GDK_KEY_Right:
       arg = GTK_DIR_RIGHT;
-    case GDK_Left:
+    case GDK_KEY_Left:
       if (arg < 0) arg = GTK_DIR_LEFT;
-    case GDK_Up:
+    case GDK_KEY_Up:
       if (arg < 0) arg = GTK_DIR_UP;
-    case GDK_Down:
+    case GDK_KEY_Down:
       if (arg < 0) arg = GTK_DIR_DOWN;
       what = widget;
       signal = "move-focus";
-      g_signal_emit_by_name(GTK_OBJECT(what), signal, arg);
+      g_signal_emit_by_name(what, signal, arg);
       handled = TRUE;
       break;
-    case GDK_Forward:
-    case GDK_Page_Up:
-    case GDK_plus:
+    case GDK_KEY_Forward:
+    case GDK_KEY_Page_Up:
+    case GDK_KEY_plus:
       handled = change_value(focus, shifted, 1, 1);
       if (ctrl && ticked_widget)
         handled |= change_value(ticked_widget, shifted, 1, 1);
       break;
-    case GDK_Back:
-    case GDK_Page_Down:
-    case GDK_minus:
+    case GDK_KEY_Back:
+    case GDK_KEY_Page_Down:
+    case GDK_KEY_minus:
       handled = change_value(focus, shifted, -1, 1);
       if (ctrl && ticked_widget)
         handled |= change_value(ticked_widget, shifted, -1, 1);
       break;
-    case GDK_apostrophe:
-      ticked_widget = GTK_WINDOW(widget)->focus_widget;
+    case GDK_KEY_apostrophe:
+      ticked_widget = gtk_window_get_focus(GTK_WINDOW(widget));
       handled = 1;
       break;
-    case GDK_space:
+    case GDK_KEY_space:
       what = ticked_widget;
       if (what) {
-        ticked_widget = GTK_WINDOW(widget)->focus_widget;
+        ticked_widget = gtk_window_get_focus(GTK_WINDOW(widget));
         gtk_widget_grab_focus(what);
       }
       handled = 1;
@@ -765,7 +764,15 @@ hotkey(struct key_search_spec *key_search_spec)
   }
 
   if (GTK_IS_BUTTON(keymap->widget)) {
-    gtk_button_pressed(GTK_BUTTON(keymap->widget));
+    /* We need to pass both an event and a return pointer, as that is
+     * what the "button-press-event" signal requires. In paricular, if we
+     * don't pass a valid return value pointer, we get "static type
+     * `GtkButton' unreferenced too often" when closing the application,
+     * if the signal has been emitted here while it was running. */
+    GdkEventButton event = { .type = GDK_BUTTON_PRESS, .state = 0 };
+    static gboolean unused_but_needed_return_value;
+    g_signal_emit_by_name(GTK_BUTTON(keymap->widget), "button-press-event",
+                          &event, &unused_but_needed_return_value);
     return TRUE;
   }
 
@@ -794,7 +801,7 @@ mapped_key(GtkWidget *focus, GdkEventKey *event)
 static gboolean
 key_event(GtkWidget *widget, GdkEventKey *event)
 {
-  GtkWidget *focus = GTK_WINDOW(widget)->focus_widget;
+  GtkWidget *focus = gtk_window_get_focus(GTK_WINDOW(widget));
 
   dprintf("Key pressed: \"%s\" (0x%08x), widget %p, focus widget %p, "
           "(main window %p)\n", gdk_keyval_name(event->keyval), event->keyval,
@@ -802,8 +809,8 @@ key_event(GtkWidget *widget, GdkEventKey *event)
   dprintf("Focused widget is a %s, name %s\n",gtk_widget_get_name(focus),
           gtk_buildable_get_name(GTK_BUILDABLE(focus)));
 
-  if (event->keyval == GDK_F1 || event->keyval == GDK_F10 ||
-      event->keyval == GDK_Menu) {
+  if (event->keyval == GDK_KEY_F1 || event->keyval == GDK_KEY_F10 ||
+      event->keyval == GDK_KEY_Menu) {
     gtk_menu_popup(popup_menu, NULL, NULL, NULL, NULL, 0, event->time);
     return TRUE;
   }
@@ -826,7 +833,7 @@ static void
 jump_button(int button_row, int button_no, void *ref)
 {
   struct key_search_spec key_search_spec;
-  GtkWidget *focus = GTK_WINDOW(main_window)->focus_widget;
+  GtkWidget *focus = gtk_window_get_focus(GTK_WINDOW(main_window));
   char jump_button_name[20];
 
   sprintf(jump_button_name, "J%d%d", button_row, button_no);
@@ -851,7 +858,7 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
    * to scroll the one that has focus. */
   GtkWidget *toplevel = gtk_widget_get_toplevel(widget);
   if (!toplevel) return FALSE;
-  GtkWidget *focus = GTK_WINDOW(toplevel)->focus_widget;
+  GtkWidget *focus = gtk_window_get_focus(GTK_WINDOW(toplevel));
   if (!focus) return FALSE;
 
   dprintf("scroll %d: widget is a %s, name %s, focus is a %s, name %s\n",
@@ -895,14 +902,20 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
 }
 
 
-/* Handle all mouse button events arriving in slider widgets */
+/* Handle all mouse button events */
 static gboolean
 button_event(GtkWidget *widget, GdkEventButton *event)
 {
   static int count = 0;
   dprintf("mouse button %d: %d, state %d, widget is a %s, name %s\n", ++count,
-          event->button, event->state, gtk_widget_get_name(widget),
+          event ? event->button : -1, event ? event->state : -1,
+          gtk_widget_get_name(widget),
           gtk_buildable_get_name(GTK_BUILDABLE(widget)));
+
+  /* We can end up with event == NULL if we emitted the signal ourselves
+   * using g_signal_emit_by_name. We don't need to process it further though. */
+  if (!event)
+    return TRUE;
 
   /* What we want to is stop the default action of jumping to the pointed-to
    * value when the middle button is pressed or released, so get out of
@@ -1011,7 +1024,7 @@ controller_change(int control_no, int alt_control_no, int row, int value,
 {
   int dir = 1;
   int steps;
-  GtkWidget *focus_widget = GTK_WINDOW(main_window)->focus_widget;
+  GtkWidget *focus_widget = gtk_window_get_focus(GTK_WINDOW(main_window));
 
   dprintf("Control #%d alt #%d row %d, value %d, focus %s, name %s\n",
           control_no, alt_control_no, row, value,
@@ -1449,8 +1462,13 @@ get_liststore_keymap(GtkTreeModel *model,
                      3, &parent_name,
                      4, &parent_arg,
                      5, &jump_button, -1);
+  if (!key) key = ""; /* newer glade versions cause empty gchararrays = NULL */
+  else if (!strcmp(key, "none")) { /* accept "none" instead of empty string */
+    g_free(key);
+    key = "";
+  }
   keyval = gdk_keyval_from_name(key);
-  if (keyval == GDK_VoidSymbol) {
+  if (keyval == GDK_KEY_VoidSymbol) {
     g_free(key);
     g_free(param_name);
     g_free(parent_name);
@@ -1466,11 +1484,10 @@ get_liststore_keymap(GtkTreeModel *model,
 #endif
 
   /* Empty parent_name string means there is no specified parent.
-   * Easier to manage if just set to NULL rather than having zero-length
-   * string.
-   */
-  if (parent_name && !parent_name[0])
-  {
+   * Easier to manage if just set to NULL.
+   * Also accept "none" as newer glade versions cause gtk to barf at empty
+   * strings. */
+  if (parent_name && (!parent_name[0] || !strcmp(parent_name, "none"))) {
     g_free(parent_name);
     parent_name = NULL;
   }
@@ -1634,7 +1651,7 @@ main(int argc, char *argv[])
    * popup_menu not being a menu when we try to open it.
    * Perhaps it's because the menu is not a finished widget but just
    * a description? */
-  g_object_ref(G_OBJECT(popup_menu));
+  g_object_ref(popup_menu);
 
   about_window = GTK_WIDGET(gtk_builder_get_object(builder, "About"));
 
@@ -1656,7 +1673,7 @@ main(int argc, char *argv[])
   if (device_name_widget)
     gtk_entry_set_text(device_name_widget, param_handler->remote_midi_device);
 
-  g_object_unref(G_OBJECT(builder));
+  g_object_unref(builder);
 
   /* Start ALSA MIDI */
 
@@ -1666,9 +1683,11 @@ main(int argc, char *argv[])
 
   /* Normally we'd only expect one fd here, but just in case we got > 1 */
   dprintf("Midi poll fds: %d\n", polls->npfd);
-  for (i = 0; i < polls->npfd; i++)
-    /* gdk_input_add() returns a poll_tag which we don't care about */
-    gdk_input_add(polls->pollfds[i].fd, GDK_INPUT_READ, on_midi_input, NULL);
+  for (i = 0; i < polls->npfd; i++) {
+    GIOChannel *giochan = g_io_channel_unix_new(polls->pollfds[i].fd);
+    /* g_io_add_watch() returns an event source id which we don't care about */
+    g_io_add_watch(giochan, G_IO_IN, on_midi_input, NULL);
+  }
 
   /* UI and MIDI set up, we can now initialize UI dependent stuff. */
 
