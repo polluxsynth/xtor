@@ -88,7 +88,7 @@ static int incrementor_acceleration = 10;
 static int
 accelerate(int knob, int value)
 {
-  static knob_accumulator[NOCTURN_CC_INCREMENTORS + 1] = { 0 };
+  static int knob_accumulator[NOCTURN_CC_INCREMENTORS + 1] = { 0 };
 
   dprintf("Accellerate knob %d:%d\n", knob, value);
   if (value & 64) value = value - 128; /* sign extend */
