@@ -1131,7 +1131,7 @@ blofeld_register_notify_cb(notify_cb cb, void *ref)
 }
 
 /* Copy selected parameters to selected paste buffer */
-void *
+void
 blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf)
 {
   if (paste_buf >= PASTE_BUFFERS) return;
@@ -1144,7 +1144,7 @@ blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf)
 }
 
 /* Copy selected parameters from selected paste buffer */
-void *
+void
 blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_buf)
 {
   int parnum;
