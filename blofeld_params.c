@@ -814,7 +814,7 @@ update_int_param(struct blofeld_param *param,
 
   /* Update parameter list, then send to Blofeld */
   parameter_list[parnum] = parval;
-  send_parameter_update(parnum, buf_no, 0, parval);
+  send_parameter_update(parnum, buf_no, device_number, parval);
 }
 
 /* Update string parameter and send to Blofeld */
@@ -845,7 +845,7 @@ update_str_param(struct blofeld_param *param, int parnum,
      * but the gain would be much less. */
     if (parameter_list[parnum] != ch) {
       parameter_list[parnum] = ch;
-      send_parameter_update(parnum, buf_no, 0, ch);
+      send_parameter_update(parnum, buf_no, device_number, ch);
     }
     parnum++;
   }
@@ -1157,7 +1157,7 @@ blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_buf)
     /* Only send updates for parameters that differ */
     if (paste_buffer[paste_buf][parnum] != parameter_list[parnum]) {
       update_ui(parnum, buf_no, paste_buffer[paste_buf][parnum]);
-      send_parameter_update(parnum, buf_no, 0, parameter_list[parnum]);
+      send_parameter_update(parnum, buf_no, device_number, parameter_list[parnum]);
     }
   }
 }
