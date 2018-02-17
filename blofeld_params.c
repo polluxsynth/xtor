@@ -203,6 +203,7 @@ struct blofeld_bitmap_param patchname = { "Name Char 1", NULL, 0, 16 };
 /* Names of certain parameters, for interfacing with xtor core. */
 static char patch_name[] = "Patch Name";
 static char device_name[] = "Device Name";
+static char device_number_name[] = "Device ID";
 
 /* The Parameter Definition List */
 /* Note: Owing to the design of the UI, in order to have the same parameter
@@ -813,7 +814,7 @@ update_int_param(struct blofeld_param *param,
 
   /* Update parameter list, then send to Blofeld */
   parameter_list[parnum] = parval;
-  send_parameter_update(parnum, buf_no, 0, parval);
+  send_parameter_update(parnum, buf_no, device_number, parval);
 }
 
 /* Update string parameter and send to Blofeld */
@@ -844,7 +845,7 @@ update_str_param(struct blofeld_param *param, int parnum,
      * but the gain would be much less. */
     if (parameter_list[parnum] != ch) {
       parameter_list[parnum] = ch;
-      send_parameter_update(parnum, buf_no, 0, ch);
+      send_parameter_update(parnum, buf_no, device_number, ch);
     }
     parnum++;
   }
@@ -1156,7 +1157,7 @@ blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_buf)
     /* Only send updates for parameters that differ */
     if (paste_buffer[paste_buf][parnum] != parameter_list[parnum]) {
       update_ui(parnum, buf_no, paste_buffer[paste_buf][parnum]);
-      send_parameter_update(parnum, buf_no, 0, parameter_list[parnum]);
+      send_parameter_update(parnum, buf_no, device_number, parameter_list[parnum]);
     }
   }
 }
@@ -1175,6 +1176,14 @@ static const char *
 blofeld_get_device_name_id(void)
 {
   return device_name;
+}
+
+/* Called when ui wants to know what the device number  parameter is called */
+/* Not referenced directly, but via struct, hence 'static' */
+static const char *
+blofeld_get_device_number_id(void)
+{
+  return device_number_name;
 }
 
 /* Called at end of main initialization when all is set up and time to
@@ -1252,7 +1261,8 @@ blofeld_init(struct param_handler *param_handler)
   param_handler->params = sizeof(blofeld_params)/sizeof(blofeld_params[0]);
 
   /* Names of things */
-  param_handler->remote_midi_device = "Blofeld";
+  param_handler->remote_midi_device = "Blofeld"; /* Default name */
+  param_handler->remote_midi_device_number = 0; /* Default device ID */
   param_handler->name = "Blofeld";
   param_handler->ui_filename = "blofeld.glade";
 
@@ -1265,6 +1275,7 @@ blofeld_init(struct param_handler *param_handler)
   param_handler->param_fetch_parameter = blofeld_fetch_parameter;
   param_handler->param_get_patch_name_id = blofeld_get_patch_name_id;
   param_handler->param_get_device_name_id = blofeld_get_device_name_id;
+  param_handler->param_get_device_number_id = blofeld_get_device_number_id;
   param_handler->param_midi_init = blofeld_midi_init;
 }
 
