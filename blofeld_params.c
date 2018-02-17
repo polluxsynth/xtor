@@ -747,7 +747,7 @@ void send_parameter_update(int parnum, int buf_no, int devno, int value)
                            value,
                            EOX };
 
-  dprintf("Blofeld update param: parnum %d, buf %d, value %d\n",
+  xprintf("Blofeld update param: parnum %d, buf %d, value %d\n",
           parnum, buf_no, value);
   if (parnum < BLOFELD_PARAMS)
     midi_send_sysex(SYNTH_PORT, sndp, sizeof(sndp));
@@ -928,7 +928,7 @@ update_ui_int_param_children(struct blofeld_param *param,
 {
   struct blofeld_param *child = param->child;
   if (!child) return; /* We shouldn't be called in this case, but .. */
-  dprintf("Updating ui for children of %s, mask %d\n", param->name, mask);
+  xprintf("Updating ui for children of %s, mask %d\n", param->name, mask);
   /* Children of same parent are always grouped together. Parent points
    * to first child, so we just keep examining children until we find one
    * with a different parent.
@@ -937,7 +937,7 @@ update_ui_int_param_children(struct blofeld_param *param,
     int bitmask = child->bm_param->bitmask;
     int bitshift = child->bm_param->bitshift;
     if ((bitmask & mask) && child != excepted_child) {
-      dprintf("Updating child %s: bitmask %d mask %d\n",
+      xprintf("Updating child %s: bitmask %d mask %d\n",
               param->name, bitmask, mask);
       update_ui_int_param(child, buf_no, (value & bitmask) >> bitshift);
     }
@@ -955,7 +955,7 @@ update_ui(int parnum, int buf_no, int value)
 
   struct blofeld_param *param = &blofeld_params[parnum];
 
-  dprintf("Blofeld update ui: parno %d, buf %d, value %d\n",
+  xprintf("Blofeld update ui: parno %d, buf %d, value %d\n",
           parnum, buf_no, value);
 
   parameter_list[parnum] = value;
@@ -1089,7 +1089,7 @@ blofeld_midi_sysex(void *buffer, int len)
 {
   unsigned char *buf = buffer;
 
-  dprintf("Blofeld received sysex, len %d\n", len);
+  xprintf("Blofeld received sysex, len %d\n", len);
   if (len <= IDE || buf[IDE] != EQUIPMENT_ID_BLOFELD) return;
   switch (buf[IDM]) {
     case SNDP: update_ui(MIDI_2BYTE(buf[HH], buf[PP]), buf[LL], buf[XX]);
@@ -1112,7 +1112,7 @@ blofeld_file_sysex(void *buffer, int len)
 {
   unsigned char *buf = buffer;
 
-  dprintf("Blofeld read sound dump from file\n");
+  xprintf("Blofeld read sound dump from file\n");
   if (len <= IDE || buf[IDE] != EQUIPMENT_ID_BLOFELD || buf[IDM] != SNDD)
     return -1;
   receive_sndd(buf);
@@ -1131,7 +1131,7 @@ blofeld_register_notify_cb(notify_cb cb, void *ref)
 }
 
 /* Copy selected parameters to selected paste buffer */
-void *
+void
 blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf)
 {
   if (paste_buf >= PASTE_BUFFERS) return;
@@ -1144,7 +1144,7 @@ blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf)
 }
 
 /* Copy selected parameters from selected paste buffer */
-void *
+void
 blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_buf)
 {
   int parnum;
@@ -1215,7 +1215,7 @@ blofeld_init(struct param_handler *param_handler)
 
     int parent_parno = blofeld_find_index(bm_param->parent_param_name);
     if (parent_parno < 0) {
-      dprintf("Invalid bitmap param %s\n", bm_param->parent_param_name);
+      xprintf("Invalid bitmap param %s\n", bm_param->parent_param_name);
       continue;
     }
     struct blofeld_param *parent_param = &blofeld_params[parent_parno];
@@ -1223,7 +1223,7 @@ blofeld_init(struct param_handler *param_handler)
     /* Put link to parent in bitmap parameter */
     bm_param->parent_param = parent_param;
 
-    dprintf("Param %s has parent %s\n", param->name, parent_param->name);
+    xprintf("Param %s has parent %s\n", param->name, parent_param->name);
 
     /* Put link to first child in parent. The 'limits' member of
      * combined parameters must always be initialized to NULL, fairly
@@ -1239,7 +1239,7 @@ blofeld_init(struct param_handler *param_handler)
     while (params--) {
       if (!parent_param->child) {
         parent_param->child = param;
-        dprintf("Param %s has first child %s\n",
+        xprintf("Param %s has first child %s\n",
                 parent_param->name, param->bm_param->parent_param->child->name);
       }
       parent_param++; /* next parent */

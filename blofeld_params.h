@@ -53,10 +53,10 @@ int blofeld_xfer_dump(int parlist, int dev_no, send_func sender, int userdata);
 int blofeld_file_sysex(void *buffer, int len);
 
 /* Copy selected parameters to selected paste buffer */
-void *blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf);
+void blofeld_copy_to_paste(int par_from, int par_to, int buf_no, int paste_buf);
 
 /* Copy selected parameters from selected paste buffer and update ui */
-void *blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_buf);
+void blofeld_copy_from_paste(int par_from, int par_to, int buf_no, int paste_buf);
 
 #endif /* _BLOFELD_PARAMS_H_ */
 

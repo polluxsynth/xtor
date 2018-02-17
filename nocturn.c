@@ -88,9 +88,9 @@ static int incrementor_acceleration = 10;
 static int
 accelerate(int knob, int value)
 {
-  static knob_accumulator[NOCTURN_CC_INCREMENTORS + 1] = { 0 };
+  static int knob_accumulator[NOCTURN_CC_INCREMENTORS + 1] = { 0 };
 
-  dprintf("Accellerate knob %d:%d\n", knob, value);
+  xprintf("Accellerate knob %d:%d\n", knob, value);
   if (value & 64) value = value - 128; /* sign extend */
   if (value > 1 || value < -1) value *= incrementor_acceleration;
   knob_accumulator[knob] += value;
@@ -118,7 +118,7 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
       shift_state |= 1 << (controller_no - INCREMENT_CC_BUTTON(0));
     } else
       shift_state &= ~(1 << (controller_no - INCREMENT_CC_BUTTON(0)));
-      dprintf("shift state %04x shifted %\n", shift_state, shifted);
+      xprintf("shift state %04x shifted %\n", shift_state, shifted);
   }
 
   /* 'Increment' buttons = top row */
