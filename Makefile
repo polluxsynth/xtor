@@ -48,7 +48,7 @@ all: $(PROGNAME)
 ifneq ($(RELEASE),y)
 
 %.o: %.c $(INCS) Makefile
-	gcc $(CFLAGS) -ansi -Werror -c -o $@ $< `pkg-config --cflags libglade-2.0 gmodule-2.0 alsa` -DUI_DIR=\"$(UI_DIR)\" -g -O2
+	gcc $(CFLAGS) -Werror -c -o $@ $< `pkg-config --cflags libglade-2.0 gmodule-2.0 alsa` -DUI_DIR=\"$(UI_DIR)\" -g -O2
 
 $(PROGNAME): $(OBJS)
 	@echo $(OBJS)
