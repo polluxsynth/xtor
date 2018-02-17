@@ -390,14 +390,4 @@ on_all_changed (GtkWidget *widget, gpointer user_data)
   g_list_foreach(container_children, set_value, &all_updater);
 }
 
-/* When device number spin box changed */
-void
-on_Device_Number_changed (GtkWidget *widget, gpointer user_data)
-{
-  if (!GTK_IS_SPIN_BUTTON(widget)) return;
-  device_number = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
-
-  xprintf("User set device number to %d\n", device_number);
-}
-
 /*************************** End of file blofeld_ui.c ***********************/
