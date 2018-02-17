@@ -267,8 +267,8 @@ on_Modulation_Select_changed(GtkWidget *widget, GdkEvent *event, gpointer user_d
 {
   struct match match;
   const char *id = gtk_buildable_get_name(GTK_BUILDABLE(widget));
-  if (!id) return;
-  if (!GTK_IS_COMBO_BOX(widget)) return;
+  if (!id) return FALSE;
+  if (!GTK_IS_COMBO_BOX(widget)) return FALSE;
   int select = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
   /* Now mangle parameter name (= widget id) to something matchable */
@@ -289,8 +289,8 @@ on_Modulation_Select_changed(GtkWidget *widget, GdkEvent *event, gpointer user_d
   char *find = prefix;
   while (*find && *find++ != ' ')
     ;
-  if (!*find) return; /* end of string found before end of first word,
-                         or no suffix, i.e. id is just "Modulation " */
+  if (!*find) return FALSE; /* end of string found before end of first word,
+                               or no suffix, i.e. id is just "Modulation " */
   *find = '\0'; /* terminate it: we now have "Modulation " */
 
   match.prefix = prefix;
