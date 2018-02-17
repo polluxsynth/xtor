@@ -37,6 +37,7 @@
 #include "blofeld_params.h"
 #include "controller.h"
 #include "knob_mapper.h"
+#include "blofeld_knobs.h"
 #include "nocturn.h"
 #include "beatstep.h"
 #include "midi.h"
