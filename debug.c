@@ -30,7 +30,7 @@ int debug = 0;
 /* Used for outputting debug info. DEBUG needs to be set compile time, and
  * global 'debug' run time. */
 #ifdef DEBUG
-int dprintf(const char *fmt, ...)
+int xprintf(const char *fmt, ...)
 {
   if (!debug) return 0;
 

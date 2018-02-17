@@ -28,9 +28,9 @@
 
 /* Debug printouts, conditional on DEBUG && debug */
 #ifdef DEBUG
-int dprintf(const char *fmt, ...);
+int xprintf(const char *fmt, ...);
 #else
-#define dprintf(...)
+#define xprintf(...)
 #endif
 
 /* Error/warning printouts, active at all times. */

@@ -161,7 +161,7 @@ beatstep_cc_receiver(int chan, int controller_no, int value)
 {
   static int shifted = 0; /* set to shift_state when shift = start ? pressed  */
   int knob = -1, alt_knob = -1, jump_button = -1;
-  dprintf("Got CC(ch %d) %d:%d\n", chan, controller_no, value);
+  xprintf("Got CC(ch %d) %d:%d\n", chan, controller_no, value);
 
   /* Volume dial */
   if (controller_no == BEATSTEP_VOLUME_DIAL)

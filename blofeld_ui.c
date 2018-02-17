@@ -153,7 +153,7 @@ out:
 gboolean
 on_GetDump_pressed(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
-  dprintf("Pressed get dump, requesting buffer no %d!\n", current_buffer_no);
+  xprintf("Pressed get dump, requesting buffer no %d!\n", current_buffer_no);
   midi_connect(SYNTH_PORT, NULL);
   blofeld_get_dump(current_buffer_no, device_number);
 
@@ -164,7 +164,7 @@ on_GetDump_pressed(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 gboolean
 on_SendDump_pressed(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
-  dprintf("Pressed send dump, sending buffer no %d!\n", current_buffer_no);
+  xprintf("Pressed send dump, sending buffer no %d!\n", current_buffer_no);
   midi_connect(SYNTH_PORT, NULL);
   blofeld_send_dump(current_buffer_no, device_number);
 
@@ -183,7 +183,7 @@ on_Buffer_pressed(GtkWidget *widget, GdkEvent *event, gpointer user_data)
       buffer_no > 0 && buffer_no <= 16) {
     current_buffer_no = buffer_no - 1;
     set_title();
-    dprintf("Selected buffer #%d = buf %d, requesting dump\n",
+    xprintf("Selected buffer #%d = buf %d, requesting dump\n",
             buffer_no, current_buffer_no);
     blofeld_get_dump(current_buffer_no, device_number);
   }
@@ -397,7 +397,7 @@ on_Device_Number_changed (GtkWidget *widget, gpointer user_data)
   if (!GTK_IS_SPIN_BUTTON(widget)) return;
   device_number = gtk_spin_button_get_value(GTK_SPIN_BUTTON(widget));
 
-  dprintf("User set device number to %d\n", device_number);
+  xprintf("User set device number to %d\n", device_number);
 }
 
 /*************************** End of file blofeld_ui.c ***********************/

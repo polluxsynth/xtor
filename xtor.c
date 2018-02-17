@@ -35,9 +35,9 @@
 #include "dialog.h"
 #include "param.h"
 #include "blofeld_params.h"
+#include "blofeld_knobs.h"
 #include "controller.h"
 #include "knob_mapper.h"
-#include "blofeld_knobs.h"
 #include "nocturn.h"
 #include "beatstep.h"
 #include "midi.h"
@@ -187,7 +187,7 @@ find_frame_in_f_k_maps(GList *f_k_maps, GtkFrame *frame)
 static GtkWidget *
 get_parent_frame(GtkWidget *widget)
 {
-  dprintf("Scanning for parent for %s (%p)\n",
+  xprintf("Scanning for parent for %s (%p)\n",
            gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
 
   while (widget && !GTK_IS_FRAME(widget)) {
@@ -195,7 +195,7 @@ get_parent_frame(GtkWidget *widget)
   }
 
   if (widget)
-    dprintf("Found %s: %s (%p)\n",
+    xprintf("Found %s: %s (%p)\n",
              gtk_widget_get_name(widget),
              gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
 
@@ -225,7 +225,7 @@ on_Main_Window_destroy(GtkWidget *widget, gpointer user_data)
 gboolean
 on_midi_input(GIOChannel *source, GIOCondition condition, gpointer data)
 {
-  dprintf("Received MIDI data on fd %d\n", g_io_channel_unix_get_fd(source));
+  xprintf("Received MIDI data on fd %d\n", g_io_channel_unix_get_fd(source));
   midi_input();
 
   return TRUE; /* don't remove event source */
@@ -254,7 +254,7 @@ static gboolean
 menu_button_event(GtkWidget *widget, GdkEventButton *event)
 {
   static int count = 0;
-  dprintf("mouse button %d: %d, state %d, widget is a %s, name %s\n", ++count,
+  xprintf("mouse button %d: %d, state %d, widget is a %s, name %s\n", ++count,
           event->button, event->state, gtk_widget_get_name(widget),
           gtk_buildable_get_name(GTK_BUILDABLE(widget)));
 
@@ -269,7 +269,7 @@ menu_button_event(GtkWidget *widget, GdkEventButton *event)
 gboolean
 activate_About(GtkWidget *widget, gpointer user_data)
 {
-  dprintf("activate About: widget %p is %s\n", widget, gtk_widget_get_name(GTK_WIDGET(widget)));
+  xprintf("activate About: widget %p is %s\n", widget, gtk_widget_get_name(GTK_WIDGET(widget)));
   /* Set which window to be our parant. This places the About box in the
    * middle of the main window which looks nice. */
   gtk_window_set_transient_for(GTK_WINDOW(about_window), GTK_WINDOW(main_window));
@@ -281,7 +281,7 @@ activate_About(GtkWidget *widget, gpointer user_data)
 gboolean
 on_About_delete(GtkWidget *widget, gpointer user_data)
 {
-  dprintf("About deleted\n");
+  xprintf("About deleted\n");
   gtk_widget_hide(widget);
   return TRUE;
 }
@@ -290,7 +290,7 @@ on_About_delete(GtkWidget *widget, gpointer user_data)
 gboolean
 on_About_response(GtkWidget *widget, gpointer user_data)
 {
-  dprintf("About response\n");
+  xprintf("About response\n");
   gtk_widget_hide(widget);
   return TRUE;
 }
@@ -299,7 +299,7 @@ on_About_response(GtkWidget *widget, gpointer user_data)
 gboolean
 on_Setting_changed(GtkWidget *widget, gpointer user_data)
 {
-  dprintf("Setting changed: widget is a %s, name %s\n",
+  xprintf("Setting changed: widget is a %s, name %s\n",
           gtk_widget_get_name(widget),
           gtk_buildable_get_name(GTK_BUILDABLE(widget)));
 
@@ -311,7 +311,7 @@ on_Setting_changed(GtkWidget *widget, gpointer user_data)
       if (GTK_IS_CHECK_MENU_ITEM(widget)) {
         *setting->valueptr =
           gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
-        dprintf("Setting %s to %d\n", setting->name, *setting->valueptr);
+        xprintf("Setting %s to %d\n", setting->name, *setting->valueptr);
       }
       break;
     }
@@ -332,11 +332,11 @@ assign_setting(gpointer data, gpointer user_data)
   if (!GTK_IS_CHECK_MENU_ITEM(data)) return;
   GtkCheckMenuItem *menuitem = data;
   const char *name = gtk_buildable_get_name(GTK_BUILDABLE(menuitem));
-  dprintf("Scanning settings for %s\n", name);
+  xprintf("Scanning settings for %s\n", name);
 
   while (setting->valueptr) {
     if (!strcmp(name, setting->name)) {
-      dprintf("Found it!\n");
+      xprintf("Found it!\n");
       setting->widget = GTK_WIDGET(menuitem);
       gtk_check_menu_item_set_active(menuitem, *setting->valueptr);
       return;
@@ -461,7 +461,7 @@ on_entry_changed(GtkWidget *widget, gpointer user_data)
 
   if (gtkentry) {
     stringptr = gtk_entry_get_text(gtkentry);
-    dprintf("Entry %p: name %s, value \"%s\", parnum %d\n",
+    xprintf("Entry %p: name %s, value \"%s\", parnum %d\n",
             gtkentry, gtk_buildable_get_name(GTK_BUILDABLE(gtkentry)),
             stringptr, adjustor->parnum);
     /* Set our global patch name if respective widget and update title */
@@ -485,7 +485,7 @@ on_change_value(GtkWidget *widget, GtkScrollType scrolltype,
     int old_value = (int) gtk_range_get_value(gtkrange);
     int delta = 0;
 
-    dprintf("Change %s, new value %d, old value %d, scrolltype %d, parnum %d\n",
+    xprintf("Change %s, new value %d, old value %d, scrolltype %d, parnum %d\n",
             gtk_buildable_get_name(GTK_BUILDABLE(gtkrange)),
             new_value, old_value, scrolltype, adjustor->parnum);
 
@@ -522,7 +522,7 @@ on_value_changed (GtkWidget *widget, gpointer user_data)
     return;
 
   if (gtkrange) {
-    dprintf("Range %p: name %s, value %d, parnum %d\n",
+    xprintf("Range %p: name %s, value %d, parnum %d\n",
             gtkrange, gtk_buildable_get_name(GTK_BUILDABLE(gtkrange)),
             (int) gtk_range_get_value(gtkrange), adjustor->parnum);
     value = (int) gtk_range_get_value(gtkrange);
@@ -541,7 +541,7 @@ on_combobox_changed (GtkWidget *widget, gpointer user_data)
     return;
 
   if (cb) {
-    dprintf("Combobox %p: name %s, value %d, parnum %d\n",
+    xprintf("Combobox %p: name %s, value %d, parnum %d\n",
             cb, gtk_buildable_get_name(GTK_BUILDABLE(cb)),
             gtk_combo_box_get_active(cb), adjustor->parnum);
     value = (int) gtk_combo_box_get_active(cb);
@@ -560,7 +560,7 @@ on_togglebutton_changed (GtkWidget *widget, gpointer user_data)
     return;
 
   if (tb) {
-    dprintf("Togglebutton %p: name %s, value %d, parnum %d\n",
+    xprintf("Togglebutton %p: name %s, value %d, parnum %d\n",
             tb, gtk_buildable_get_name(GTK_BUILDABLE(tb)),
             gtk_toggle_button_get_active(tb), adjustor->parnum);
     value = gtk_toggle_button_get_active(tb);
@@ -577,7 +577,7 @@ change_value(GtkWidget *what, int shifted, int dir, int compensate)
   int delta;
   const char *signal = NULL;
 
-  dprintf("Change value for %s:%s\n", gtk_widget_get_name(what),
+  xprintf("Change value for %s:%s\n", gtk_widget_get_name(what),
           gtk_buildable_get_name(GTK_BUILDABLE(what)));
 
   /* This takes a bit of explaining: Normally all vertical sliders are 
@@ -691,7 +691,7 @@ static int
 is_parent(GtkWidget *widget, GtkWidget *parent)
 {
   do {
-    dprintf("Scanning %s (%p), looking for %s (%p)\n",
+    xprintf("Scanning %s (%p), looking for %s (%p)\n",
             gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget,
             gtk_buildable_get_name(GTK_BUILDABLE(parent)), parent);
     if (widget == parent)
@@ -714,7 +714,7 @@ find_keymap(gconstpointer data, gconstpointer user_data)
   const struct keymap *keymap = data;
   const struct key_search_spec *search = user_data;
 
-  dprintf("Scan keymap %s: %s: %s\n", keymap->key_name, keymap->param_name,
+  xprintf("Scan keymap %s: %s: %s\n", keymap->key_name, keymap->param_name,
           keymap->jump_button);
   if (search->button_name) { /* jump button search mode */
     if (!keymap->jump_button || !*keymap->jump_button)
@@ -727,15 +727,15 @@ find_keymap(gconstpointer data, gconstpointer user_data)
   }
   if (!keymap->widget)
     return 1; /* Widget not set, UI specified unknown Param or Parent */
-  dprintf("Found keymap\n");
+  xprintf("Found keymap\n");
   if (!keymap->parent) /* keymap has no parent specified; we're done */
     return 0; /* found */
-  dprintf("Has parent %s\n", keymap->parent_name);
+  xprintf("Has parent %s\n", keymap->parent_name);
   /* If parent is a notebook, then check for the relevant notebook page. */
   if (GTK_IS_NOTEBOOK(keymap->parent))
     return gtk_notebook_get_current_page(GTK_NOTEBOOK(keymap->parent)) !=
            keymap->parent_arg; /* 0 if on correct page */
-  dprintf("Parent is not a notebook\n");
+  xprintf("Parent is not a notebook\n");
   /* Otherwise check if the currently focused widget has the same parent
    * as the parameter specified in the keymap. */
   return !is_parent(search->focus_widget, keymap->parent); /* 0 if found */
@@ -751,14 +751,14 @@ hotkey(struct key_search_spec *key_search_spec)
 
   struct keymap *keymap = keymap_l->data;
 
-  dprintf("Found key map for %s: widget %s (%p)\n",
+  xprintf("Found key map for %s: widget %s (%p)\n",
           keymap->key_name, keymap->param_name, keymap->widget);
 
   if (!keymap->widget) /* Could happen if ParamName not found */
     return FALSE;
 
   if (GTK_IS_NOTEBOOK(keymap->widget)) {
-    dprintf("Setting notebook page to %d\n", keymap->param_arg);
+    xprintf("Setting notebook page to %d\n", keymap->param_arg);
     gtk_notebook_set_current_page(GTK_NOTEBOOK(keymap->widget),
                                   keymap->param_arg);
     return TRUE;
@@ -804,10 +804,10 @@ key_event(GtkWidget *widget, GdkEventKey *event)
 {
   GtkWidget *focus = gtk_window_get_focus(GTK_WINDOW(widget));
 
-  dprintf("Key pressed: \"%s\" (0x%08x), widget %p, focus widget %p, "
+  xprintf("Key pressed: \"%s\" (0x%08x), widget %p, focus widget %p, "
           "(main window %p)\n", gdk_keyval_name(event->keyval), event->keyval,
           widget, focus, main_window);
-  dprintf("Focused widget is a %s, name %s\n",gtk_widget_get_name(focus),
+  xprintf("Focused widget is a %s, name %s\n",gtk_widget_get_name(focus),
           gtk_buildable_get_name(GTK_BUILDABLE(focus)));
 
   if (event->keyval == GDK_KEY_F1 || event->keyval == GDK_KEY_F10 ||
@@ -862,7 +862,7 @@ scroll_event(GtkWidget *widget, GdkEventScroll *event)
   GtkWidget *focus = gtk_window_get_focus(GTK_WINDOW(toplevel));
   if (!focus) return FALSE;
 
-  dprintf("scroll %d: widget is a %s, name %s, focus is a %s, name %s\n",
+  xprintf("scroll %d: widget is a %s, name %s, focus is a %s, name %s\n",
           ++count,
           gtk_widget_get_name(widget),
           gtk_buildable_get_name(GTK_BUILDABLE(widget)),
@@ -908,7 +908,7 @@ static gboolean
 button_event(GtkWidget *widget, GdkEventButton *event)
 {
   static int count = 0;
-  dprintf("mouse button %d: %d, state %d, widget is a %s, name %s\n", ++count,
+  xprintf("mouse button %d: %d, state %d, widget is a %s, name %s\n", ++count,
           event ? event->button : -1, event ? event->state : -1,
           gtk_widget_get_name(widget),
           gtk_buildable_get_name(GTK_BUILDABLE(widget)));
@@ -941,7 +941,7 @@ show_widget(gpointer data, gpointer user_data)
 
   GtkWidget *widget = data;
 
-  dprintf("%s: %s (%p)\n",
+  xprintf("%s: %s (%p)\n",
           gtk_widget_get_name(widget),
           gtk_buildable_get_name(GTK_BUILDABLE(widget)), widget);
 }
@@ -952,7 +952,7 @@ static GtkWidget *
 get_knob_widget(struct f_k_map *f_k_map, int control_no, int alt_control_no,
                 int row)
 {
-  dprintf("f_k_map: frame %p:%s:%s, knobmap %p\n", f_k_map->frame,
+  xprintf("f_k_map: frame %p:%s:%s, knobmap %p\n", f_k_map->frame,
           gtk_widget_get_name(GTK_WIDGET(f_k_map->frame)),
           gtk_buildable_get_name(GTK_BUILDABLE(f_k_map->frame)), f_k_map->knobmap);
 
@@ -960,13 +960,13 @@ get_knob_widget(struct f_k_map *f_k_map, int control_no, int alt_control_no,
    * from the knob_mapper. */
   struct knob_descriptor *knob_descriptor = 
     knob_mapper->knob(f_k_map->knobmap, control_no-1, alt_control_no-1, row);
-  dprintf("Knob descriptor %p\n", knob_descriptor);
+  xprintf("Knob descriptor %p\n", knob_descriptor);
   if (!knob_descriptor) return NULL;
 
   /* Finally, extract the widget from the knob_descriptor */
   GtkWidget *widget = knob_descriptor->widget;
-  dprintf("Widget %p\n", widget);
-  dprintf("Control %d (alt %d) referencing %s:%s\n", control_no, alt_control_no,
+  xprintf("Widget %p\n", widget);
+  xprintf("Control %d (alt %d) referencing %s:%s\n", control_no, alt_control_no,
           gtk_widget_get_name(widget),
           gtk_buildable_get_name(GTK_BUILDABLE(widget)));
 
@@ -992,7 +992,7 @@ current_focus(GtkWidget *new_focus)
   if (new_focus == focus.widget)
     goto out; /* nothing changed, so leave everything as it was */
   focus.widget = new_focus;
-  dprintf("Focus set to %s:%s\n",
+  xprintf("Focus set to %s:%s\n",
           gtk_widget_get_name(new_focus),
           gtk_buildable_get_name(GTK_BUILDABLE(new_focus)));
   if (!focus.widget) { /* No focus, so nothing to edit */
@@ -1027,7 +1027,7 @@ controller_change(int control_no, int alt_control_no, int row, int value,
   int steps;
   GtkWidget *focus_widget = gtk_window_get_focus(GTK_WINDOW(main_window));
 
-  dprintf("Control #%d alt #%d row %d, value %d, focus %s, name %s\n",
+  xprintf("Control #%d alt #%d row %d, value %d, focus %s, name %s\n",
           control_no, alt_control_no, row, value,
           gtk_widget_get_name(focus_widget),
           gtk_buildable_get_name(GTK_BUILDABLE(focus_widget)));
@@ -1129,12 +1129,12 @@ find_widget_with_id(GtkWidget *widget, const char *id)
   GtkWidget *result = NULL;
   struct find_widget_data find_widget_data;
 
-  dprintf("Searching for widget with id %s\n", id);
+  xprintf("Searching for widget with id %s\n", id);
   find_widget_data.id = id;
   find_widget_data.result.ptr = &result;
   find_widget_id(widget, &find_widget_data);
   if (result)
-    dprintf("Found it!\n");
+    xprintf("Found it!\n");
 
   return result;
 }
@@ -1168,7 +1168,7 @@ add_to_keymap(gpointer data, gpointer user_data)
     if (!keymap->parent_name || parent) { /* no parent specified; or, found */
       keymap->widget = keymap_add->widget;
       keymap->parent = parent;
-      dprintf("Mapped key %s to widget %s (%p) arg %d parent %s (%p) arg %d\n",
+      xprintf("Mapped key %s to widget %s (%p) arg %d parent %s (%p) arg %d\n",
               keymap->key_name, keymap->param_name, keymap->widget,
               keymap->param_arg, keymap->parent_name, keymap->parent,
               keymap->parent_arg);
@@ -1257,7 +1257,7 @@ create_adjustor(gpointer data, gpointer user_data)
   const gchar *name = gtk_buildable_get_name(GTK_BUILDABLE(this));
   gchar *id = chop_name(name);
 
-  dprintf("Widget: %s, name %s id %s\n", gtk_widget_get_name(this),
+  xprintf("Widget: %s, name %s id %s\n", gtk_widget_get_name(this),
           name ? name : "none", id ? id : "none");
 
   /* Scan keymaps, add widget if found */
@@ -1289,7 +1289,7 @@ create_adjustor(gpointer data, gpointer user_data)
     current_knobmap = add_to_knobmap(current_knobmap, this);
 
   if (id && (parnum = param_handler->param_find_index(id)) >= 0) {
-    dprintf("%s has parameter, belongs to %s\n",
+    xprintf("%s has parameter, belongs to %s\n",
             gtk_buildable_get_name(GTK_BUILDABLE(this)),
             current_frame ? gtk_buildable_get_name(GTK_BUILDABLE(current_frame)) :
                             "nothing");
@@ -1348,14 +1348,14 @@ create_adjustor(gpointer data, gpointer user_data)
   g_free(id);
 
   if (GTK_IS_CONTAINER(this)) {
-     dprintf("It's a container\n");
+     xprintf("It's a container\n");
 
      if (GTK_IS_FRAME(this)) {
        /* We expect there to be no frames within frames in our UI, as a frame
         * constitutes a 'synth module'. If we need to change this, we need
         * to augment this test with something, such as the buildable_name
         * ending with "Frame" for instance. */
-       dprintf("Found %s: %s (%p)\n",
+       xprintf("Found %s: %s (%p)\n",
                gtk_widget_get_name(this),
                gtk_buildable_get_name(GTK_BUILDABLE(this)), this);
        current_knobmap = knob_mapper->container_new(GTK_CONTAINER(this));
@@ -1365,7 +1365,7 @@ create_adjustor(gpointer data, gpointer user_data)
      add_adjustors(gtk_container_get_children(GTK_CONTAINER(this)), adjustors);
 
      if (GTK_IS_FRAME(this)) {
-       dprintf("Done with %s: %s (%p)\n",
+       xprintf("Done with %s: %s (%p)\n",
                gtk_widget_get_name(this),
                gtk_buildable_get_name(GTK_BUILDABLE(this)), this);
        current_knobmap = knob_mapper->container_done(current_knobmap);
@@ -1393,25 +1393,25 @@ void display_adjustor(gpointer data, gpointer user_data)
 
   if (GTK_IS_RANGE(adj)) {
     GtkRange *range = GTK_RANGE (adj);
-    dprintf("Slider %p: name %s, value %d\n",
+    xprintf("Slider %p: name %s, value %d\n",
             range, gtk_buildable_get_name(GTK_BUILDABLE(range)),
             (int) gtk_range_get_value(range));
   }
   else if (GTK_IS_COMBO_BOX(adj)) {
     GtkComboBox *cb = GTK_COMBO_BOX (adj);
-    dprintf("Combobox %p: name %s, value %d\n",
+    xprintf("Combobox %p: name %s, value %d\n",
             cb, gtk_buildable_get_name(GTK_BUILDABLE(cb)),
             gtk_combo_box_get_active(cb));
   }
   else if (GTK_IS_TOGGLE_BUTTON(adj)) {
     GtkToggleButton *tb = GTK_TOGGLE_BUTTON (adj);
-    dprintf("Togglebutton %p: name %s, value %d\n",
+    xprintf("Togglebutton %p: name %s, value %d\n",
             tb, gtk_buildable_get_name(GTK_BUILDABLE(tb)),
             gtk_toggle_button_get_active(tb));
   }
   else if (GTK_IS_ENTRY(adj)) {
     GtkEntry *e = GTK_ENTRY (adj);
-    dprintf("Entry %p: name %s, value \"%s\"\n",
+    xprintf("Entry %p: name %s, value \"%s\"\n",
             e, gtk_buildable_get_name(GTK_BUILDABLE(e)),
             gtk_entry_get_text(e));
   }
@@ -1479,7 +1479,7 @@ get_liststore_keymap(GtkTreeModel *model,
 
 #ifdef DEBUG
   gchar *tree_path_str = gtk_tree_path_to_string(path);
-  dprintf("Keymap row: %s: key %s mapping %s, arg %d, parent %s, arg %d\n",
+  xprintf("Keymap row: %s: key %s mapping %s, arg %d, parent %s, arg %d\n",
           tree_path_str, key, param_name, param_arg, parent_name, parent_arg);
   g_free(tree_path_str);
 #endif
@@ -1516,7 +1516,7 @@ setup_hotkeys(GtkBuilder *builder, const gchar *store_name)
 
   store = GTK_LIST_STORE(gtk_builder_get_object(builder, "KeyMappings"));
   if (!store) {
-    dprintf("Can't find key mappings in UI file!\n");
+    xprintf("Can't find key mappings in UI file!\n");
     return;
   }
 
@@ -1599,7 +1599,7 @@ main(int argc, char *argv[])
     return 1;
   }
 
-  dprintf("Options: gladename %s controller_name %s\n",
+  xprintf("Options: gladename %s controller_name %s\n",
           gladename, controller_name);
 
   debug = 0;
@@ -1683,7 +1683,7 @@ main(int argc, char *argv[])
     return 2;
 
   /* Normally we'd only expect one fd here, but just in case we got > 1 */
-  dprintf("Midi poll fds: %d\n", polls->npfd);
+  xprintf("Midi poll fds: %d\n", polls->npfd);
   for (i = 0; i < polls->npfd; i++) {
     GIOChannel *giochan = g_io_channel_unix_new(polls->pollfds[i].fd);
     /* g_io_add_watch() returns an event source id which we don't care about */
