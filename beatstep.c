@@ -1,5 +1,5 @@
 /****************************************************************************
- * extor - GTK based editor for MIDI synthesizers
+ * xtor - GTK based editor for MIDI synthesizers
  *
  * beatstep.c - Interface for Arturia Beatstep controller
  *
@@ -21,6 +21,7 @@
  ****************************************************************************/
 
 #include <stdio.h>
+#include <sys/select.h>
 #include "midi.h"
 #include "controller.h"
 #include "beatstep.h"
@@ -71,10 +72,11 @@ beatstep_send_sysex(int request, int function, int control, int value)
    * for the Beatstep or if has something to do with the MIDI (and/or USB)
    * stack in Linux. In the latter case, one would think that there would be
    * some form of functionality to check that it was ok to send more data,
-   * but I haven't found any such functin.
+   * but I haven't found any such function.
    * Empirically, 100us seems to be enough, but we put in a larger delay to
    * be on the safe side. */
-  usleep(1000);
+  struct timeval onems = { .tv_sec = 0, .tv_usec = 1000 /* 1ms */ };
+  (void) select(0, NULL, NULL, NULL, &onems);
 }
 
 #define beatstep_send_setting(function, control, value) \
@@ -159,7 +161,7 @@ beatstep_cc_receiver(int chan, int controller_no, int value)
 {
   static int shifted = 0; /* set to shift_state when shift = start ? pressed  */
   int knob = -1, alt_knob = -1, jump_button = -1;
-  dprintf("Got CC(ch %d) %d:%d\n", chan, controller_no, value);
+  xprintf("Got CC(ch %d) %d:%d\n", chan, controller_no, value);
 
   /* Volume dial */
   if (controller_no == BEATSTEP_VOLUME_DIAL)

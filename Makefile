@@ -33,8 +33,8 @@ DOC_DIR = $(PREFIX)/share/doc/$(PROGNAME)
 BIN_DIR = $(PREFIX)/bin
 UI_DIR = $(PREFIX)/share/$(PROGNAME)
 
-# For development, we keep everything in the same (development) directory
-UI_DIR=.
+# For development, we can keep everything in the same (development) directory
+#UI_DIR=.
 
 OBJS = xtor.o dialog.o blofeld_ui.o blofeld_params.o \
        knob_mapper.o blofeld_knobs.o nocturn.o beatstep.o midi.o debug.o
@@ -48,7 +48,7 @@ all: $(PROGNAME)
 ifneq ($(RELEASE),y)
 
 %.o: %.c $(INCS) Makefile
-	gcc -ansi -Werror -c -o $@ $< `pkg-config --cflags libglade-2.0 gmodule-2.0 alsa` -DUI_DIR=\"$(UI_DIR)\" -g -O2
+	gcc $(CFLAGS) -Werror -c -o $@ $< `pkg-config --cflags libglade-2.0 gmodule-2.0 alsa` -DUI_DIR=\"$(UI_DIR)\" -g -O2
 
 $(PROGNAME): $(OBJS)
 	@echo $(OBJS)

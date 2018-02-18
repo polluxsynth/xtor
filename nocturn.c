@@ -88,9 +88,9 @@ static int incrementor_acceleration = 10;
 static int
 accelerate(int knob, int value)
 {
-  static knob_accumulator[NOCTURN_CC_INCREMENTORS + 1] = { 0 };
+  static int knob_accumulator[NOCTURN_CC_INCREMENTORS + 1] = { 0 };
 
-  dprintf("Accellerate knob %d:%d\n", knob, value);
+  xprintf("Accellerate knob %d:%d\n", knob, value);
   if (value & 64) value = value - 128; /* sign extend */
   if (value > 1 || value < -1) value *= incrementor_acceleration;
   knob_accumulator[knob] += value;
@@ -118,15 +118,15 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
       shift_state |= 1 << (controller_no - INCREMENT_CC_BUTTON(0));
     } else
       shift_state &= ~(1 << (controller_no - INCREMENT_CC_BUTTON(0)));
-      dprintf("shift state %04x shifted %\n", shift_state, shifted);
+      xprintf("shift state %04x shifted %\n", shift_state, shifted);
   }
 
   /* 'Increment' buttons = top row */
   if (controller_no >= INCREMENT_CC_BUTTON(0) &&
       controller_no < INCREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE)) {
     if (!value && !shifted) { /* inc/dec when button released, so we can handle shifts */
-      if (notify_ui) notify_ui(controller_no - INCREMENT_CC_BUTTON(0) + 1,
-                               INCREMENTOR_ROW, -1, 1, notify_ref);
+      if (notify_ui) notify_ui(controller_no - INCREMENT_CC_BUTTON(0) + 1, -1,
+                               INCREMENTOR_ROW, 1, notify_ref);
     } else if (value && shifted) { /* jump when button pressed, for faster response */
       shifted_button = controller_no - INCREMENT_CC_BUTTON(0);
       shifted_row = TOP_BUTTON_ROW;
@@ -135,8 +135,8 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
   } else if (controller_no >= DECREMENT_CC_BUTTON(0) &&
              controller_no < DECREMENT_CC_BUTTON(NOCTURN_BUTTON_GROUP_SIZE)) {
     if (!value && !shifted) { /* inc/dec when button released, so we can handle shifts */
-      if (notify_ui) notify_ui(controller_no - DECREMENT_CC_BUTTON(0) + 1,
-                               INCREMENTOR_ROW, -1, -1, notify_ref);
+      if (notify_ui) notify_ui(controller_no - DECREMENT_CC_BUTTON(0) + 1, -1,
+                               INCREMENTOR_ROW, -1, notify_ref);
     } else if (value && shifted) { /* jump when button pressed, for faster response */
       shifted_button = controller_no - DECREMENT_CC_BUTTON(0);
       shifted_row = BOTTOM_BUTTON_ROW;
@@ -153,7 +153,7 @@ nocturn_cc_receiver(int chan, int controller_no, int value)
   /* Handle events percolated from above */
   if (knob >= 0) { /* knob turned */
     if (notify_ui)
-      notify_ui(knob, KNOB_ROW, accelerate(knob, value), -1, notify_ref);
+      notify_ui(knob, -1, KNOB_ROW, accelerate(knob, value), notify_ref);
   } else if (shifted_button >= 0) { /* button pressed while shift pressed => jump */
     if (jump_button_ui)
       /* Bottom row shift is intended mainly for page jumps, which are to be

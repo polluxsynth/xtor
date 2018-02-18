@@ -73,17 +73,17 @@ midi_init_alsa(void)
   int i;
 
   if (snd_seq_open(&seq, "default", SND_SEQ_OPEN_DUPLEX, 0) < 0) {
-    dprintf("Couldn't open ALSA sequencer: %s\n", snd_strerror(errno));
+    xprintf("Couldn't open ALSA sequencer: %s\n", snd_strerror(errno));
     return NULL;
   }
   snd_seq_set_client_name(seq, "Xtor");
 
   client = snd_seq_client_id(seq);
   if (client < 0) {
-    dprintf("Can't get client_id: %d\n", client);
+    xprintf("Can't get client_id: %d\n", client);
     return NULL;
   }
-  dprintf("Client address %d\n", client);
+  xprintf("Client address %d\n", client);
 
   synth_port = snd_seq_create_simple_port(seq, "Xtor synth port",
                                           SND_SEQ_PORT_CAP_READ |
@@ -92,7 +92,7 @@ midi_init_alsa(void)
                                           SND_SEQ_PORT_CAP_SUBS_WRITE,
                                           SND_SEQ_PORT_TYPE_APPLICATION);
   if (synth_port < 0) {
-    dprintf("Couldn't create synth port: %s\n", snd_strerror(errno));
+    xprintf("Couldn't create synth port: %s\n", snd_strerror(errno));
     return NULL;
   }
   ports[SYNTH_PORT] = synth_port;
@@ -104,7 +104,7 @@ midi_init_alsa(void)
                                           SND_SEQ_PORT_CAP_SUBS_WRITE,
                                           SND_SEQ_PORT_TYPE_APPLICATION);
   if (ctrlr_port < 0) {
-    dprintf("Couldn't create controller port: %s\n", snd_strerror(errno));
+    xprintf("Couldn't create controller port: %s\n", snd_strerror(errno));
     return NULL;
   }
   ports[CTRLR_PORT] = ctrlr_port;
@@ -127,12 +127,12 @@ static int
 subscribe(snd_seq_port_subscribe_t *sub)
 {
   if (snd_seq_get_port_subscription(seq, sub) == 0) {
-    dprintf("Connection between editor and device already established\n");
+    xprintf("Connection between editor and device already established\n");
     return 0;
   }
 
   if (snd_seq_subscribe_port(seq, sub) < 0) {
-    dprintf("Couldn't estabilsh connection between editor and device\n");
+    xprintf("Couldn't estabilsh connection between editor and device\n");
     return -1;
   }
 
@@ -159,7 +159,7 @@ midi_connect(int port, const char *remote_device)
     /* Set to "" if first call does not intitialize it to remote_device */
     saved_remote_device[port] = "";
 
-  dprintf("Client address %d:%d\n", client, port);
+  xprintf("Client address %d:%d\n", client, port);
 
   snd_seq_port_subscribe_alloca(&sub);
 
@@ -169,7 +169,7 @@ midi_connect(int port, const char *remote_device)
 
   /* Other devices address */
   if (snd_seq_parse_address(seq, &remote_addr, saved_remote_device[port]) < 0) {
-    dprintf("Can't locate destination device %s\n", saved_remote_device[port]);
+    xprintf("Can't locate destination device %s\n", saved_remote_device[port]);
     return -1;
   }
 
@@ -231,8 +231,8 @@ static void sysex_in(snd_seq_event_t *ev)
   {
     int i;
     for (i = 0; i < ev->data.ext.len; i++)
-      dprintf("%d ", data[i]);
-    dprintf("\n");
+      xprintf("%d ", data[i]);
+    xprintf("\n");
   }
 #endif
 
@@ -272,18 +272,18 @@ midi_input(void)
   while (1)
   {
     midi_status = snd_seq_event_input(seq, &ev);
-    dprintf("MIDI input status : %d\n", midi_status);
+    xprintf("MIDI input status : %d\n", midi_status);
     if (midi_status < 0)
       break;
     evlen = snd_seq_event_length(ev);
-    dprintf("MIDI event length %d\n", evlen);
+    xprintf("MIDI event length %d\n", evlen);
     switch (ev->type) {
       case SND_SEQ_EVENT_SYSEX:
-        dprintf("Sysex: length %d\n", ev->data.ext.len);
+        xprintf("Sysex: length %d\n", ev->data.ext.len);
         sysex_in(ev);
         break;
       case SND_SEQ_EVENT_CONTROLLER:
-        dprintf("CC: dest cli:port %d:%d, ch %d, param %d, val %d\n", 
+        xprintf("CC: dest cli:port %d:%d, ch %d, param %d, val %d\n", 
                 ev->dest.client, ev->dest.port, ev->data.control.channel + 1,
                 ev->data.control.param, ev->data.control.value);
         int port = myport(ev->dest.port);
