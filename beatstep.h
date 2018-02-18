@@ -1,5 +1,5 @@
 /****************************************************************************
- * extor - GTK based editor for MIDI synthesizers
+ * xtor - GTK based editor for MIDI synthesizers
  *
  * beatstep.h - Definitions for Arturia Beatstep
  *
