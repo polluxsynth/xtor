@@ -12,8 +12,7 @@ computer, although Xtor is not intended to be a fully fledged librarian
 application.
 
 A control surface is also supported for more hands-on editing. As of version
-1.4, Xtor supports the Arturia Beatstep and the Novation Nocturn. The
-latter however requires a separate application to map the Nocturn to MIDI.
+1.4, Xtor supports the Arturia Beatstep and the Novation Nocturn.
 
 1. Background
 -------------
@@ -475,13 +474,14 @@ momentarily before pressing the pad.
 4.6.2 Nocturn
 -------------
 
-The Nocturn does not per se register itself as a MIDI USB device. In order
-for Xtor to recognize the Nocturn, a special application must be run
-which converts the Nocturn USB data to MIDI. As it turns out, the actual data
-sent from the Nocturn is actually MIDI (or very similar) and consists of
-various control change messages, some with control change numbers that would
-not be used in orderinary MIDI communication (for instance 127, which is
-one of the mode messages).
+The Nocturn does not per se register itself as a MIDI USB device. Since a
+while back, the Linux kernel contains built-in support for the Nocturn
+nevertheless; prior to that, a special application had to be run which
+converted the Nocturn USB data to MIDI. As it turns out, the actual data sent
+from the Nocturn is actually MIDI and consists of various control change
+messages, some with control change numbers that would not be used in
+orderinary MIDI communication (for instance 127, which is one of the mode
+messages).
 
 The 16 buttons on the Nocturn are mapped as two rows of increment and
 decrement buttons, respectively. Normally the buttons are mapped to the

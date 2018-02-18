@@ -14,3 +14,7 @@ a 64-bit Debian Wheezy system.
 
 See the README file for user and developer documentation, also including
 a Quick Start guide for impatient users.
+
+Please note that contrary to older entries in the release notes, Linux now
+contains support for the Novation Nocturn, so no separate application is needed
+to use it with xtor.
