@@ -52,7 +52,7 @@ ifneq ($(RELEASE),y)
 
 $(PROGNAME): $(OBJS)
 	@echo $(OBJS)
-	gcc -ansi -Werror -o $@ $^ `pkg-config --libs libglade-2.0 gmodule-2.0 alsa`
+	gcc -Werror -o $@ $^ `pkg-config --libs libglade-2.0 gmodule-2.0 alsa`
 
 clean:
 	rm -f $(PROGNAME) $(OBJS) *~
