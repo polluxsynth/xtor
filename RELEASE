@@ -1,3 +1,16 @@
+Release notes for xtor 1.5
+
+- Fixed a long-time annoying bug in that the device number is blank at
+  startup even though the value is actually 0.
+- Found and fixed another bug whereas the device number was actually not
+  used for parameter updates, always being set to 0 in that case, only for
+  bulk transfers.
+- Got a report that -ansi causes build failures because there are system header
+  files that apparently are not ANSI compatible. -std=c99 works better, but
+  has warnings. So fixed the code and Makefile so that we don't specify
+  any specific standard which should be the most portable, while still
+  retaining -Werror to catch unexpected warnings.
+
 Release notes for xtor (formerly midiedit) 1.4
 
 - Blofeld V1.22 now calls itself 'Blofeld' rather than 'Waldorf Blofeld' via

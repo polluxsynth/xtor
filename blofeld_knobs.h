@@ -1,7 +1,7 @@
 /****************************************************************************
  * xtor - GTK based editor for MIDI synthesizers
  *
- * debug.h - debug printout definitions
+ * blofeld_knobs.h - Map Blofeld UI parameters to controller knobs.
  *
  * Copyright (C) 2014  Ricard Wanderlof <ricard2013@butoba.net>
  *
@@ -20,25 +20,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ****************************************************************************/
 
-#ifndef _DEBUG_H_
-#define _DEBUG_H_
+#ifndef BLOFELD_KNOBS_H_
+#define BLOFELD_KNOBS_H_
 
-/* Undef this if we want to disable all potential debug printouts. */
-#define DEBUG
+#include "knob_mapper.h"
 
-/* Debug printouts, conditional on DEBUG && debug */
-#ifdef DEBUG
-int xprintf(const char *fmt, ...);
-#else
-#define xprintf(...)
-#endif
+/* Initialize knob mapper. */
+void blofeld_knobs_init(struct knob_mapper *knob_mapper);
 
-/* Error/warning printouts, active at all times. */
-#define eprintf(...) fprintf(stderr, __VA_ARGS__)
+#endif /* BLOFELD_KNOBS_H_ */
 
-/* Global debug enable/disable */
-int debug;
-
-#endif /* _DEBUG_H_ */
-
-/***************************** End of file debug.h **************************/
+/********************** End of file blofeld_knobs.h **************************/
