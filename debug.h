@@ -37,7 +37,7 @@ int xprintf(const char *fmt, ...);
 #define eprintf(...) fprintf(stderr, __VA_ARGS__)
 
 /* Global debug enable/disable */
-int debug;
+extern int debug;
 
 #endif /* _DEBUG_H_ */
 
