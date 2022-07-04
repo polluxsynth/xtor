@@ -1,0 +1,148 @@
+TODO list for xtor (previously midiedit)
+
+- Values shown for certain parameters (with large parameter spans) are
+  not the same as on Blofeld.
+  - Really only affects keytrack.
+  - FIXED, altough increments are set to 1 as I couldn't get them to 
+    be the same as in Blofeld. One solution would be to handle move-slider
+    signal in blofeld_ui, converting the displayed value to 0..127, adding
+    the delta, and then reconverting it to the UI value. Need the source
+    for Gtk for this. Don't know how much needs reimplementation.
+    - Or perhaps we could do this with just capturing existing signals?
+  - FINALLY FIXED: Increments use same steps as actual Blofeld.
+
+- Using the mouse to set values of certain parameters (with large parameter
+  spans) results in different values than using keyboard +/-.
+  - FIXED: Same fix as for previous point: currently set increments to 1.
+
+- Would be nice if using the scoll wheel / mouse would result in _all_
+  values of a parameter being hit, not just what happens to map to a
+  change in graphics.
+  - FIXED. Scroll wheel now hits all values.
+  - Also always update the parameter in focus, rather than the (default)
+    one nearest the mouse pointer.
+    - Configurable in a new ui_param struct.
+      - Configurable via popup menu. FIXED.
+
+- Sysex checksum verify.
+  - Probably not really needed over USB.
+  - FIXED.
+
+- SEND function for sending buffer to Blofeld.
+  - Button on screen or key.
+    - FIXED. Screen only, to avoid mistakingly sending things.
+  - Potentially disruptive if a new sound has been dialed up on the Blofeld
+    which will be overwritten.
+  - Put under Config tab?
+    - FIXED.
+
+- Save/Load sysex to/from file.
+  - Put under Config tab.
+  - FIXED.
+
+- Paste buffer for entire sounds.
+  - Put under Config tab?
+    - FIXED.
+
+- About box.
+  - FIXED. In Popup menu.
+
+- Setup function: Blofeld device id.
+  - Put under Config (currently Settings) tab.
+    - FIXED.
+- Setup function: MIDI device name (default "Waldorf Blofeld")
+  - Put under Config tab.
+  - Accept name ("Waldorf Blofeld") or client:port tuple.
+    - Underlying snd_*_parse function already does this.
+  - FIXED.
+- Setup function: Key mappings: default or native (i.e. GTK defaults,
+  or using arrow keys for nav and xf86forw/back for +/-).
+  - FIXED. In Popup menu.
+- Setup function: When scroll wheel moved, update focused parameter,
+  viz. parameter nearest mouse pointer.
+  FIXED. In Popup menu.
+
+- Use deep copy for Popup to avoid having to keep whole builder struct
+  in memory.
+  - FIXED, but done by doing a ref count bump for the menu instead.
+
+- Put 'Midiedit' name in title bar too.
+  - FIXED.
+
+- Clean up Makefile.
+  - FIXED. 
+    - install target needs to be tested though.
+      - First, application must be able to handle installation at $PREFIX.
+      - FIXED.
+    - FIXED.
+
+- Clean up function header style.
+  - FIXED.
+
+- Add more comments to uncommented functions?
+  - FIXED. All functions now have comments at the beginning, except some
+    that have a common comment, such as the on_* signal handlers for a certain
+    class of signal or widget.
+
+- Bug for Arpegiator tempo: with mouse can drag full range 40..300, but
+  with scroll/inc/dec can only go up to 127.
+  - FIXED, but needs more work as the value is sometimes displayed incorrectly
+    on the Blofeld. (possibly when clicking with the mouse and the value
+    jumps a large step?)
+    - The incorrect display is actually a problem with the Blofeld, and it
+      isn't limited to the Arpeggiator speed:
+      Occasionally a parameter update will not be displayed correctly, however
+      upon retrieving a patch dump from the edit buffer of the Blofeld it is
+      apparant that the correct value has been sent to and received by
+      the Blofeld. Holding the OSC button, displaying the Semitone value,
+      and changing the correponding parameter in midiedit causees this to
+      happen often. Releasing and pressing the OSC button again reveals that
+      the Blofeld in fact has received the correct parameter value as it is
+      shown correctly the second time.
+      The only workaround could be for midiedit not to send to many parameter
+      updates per unit of time, as it may be that the Blofeld UI gets choked on
+      the amount of data and drops a ui update request internally. On the other 
+      hand, haven't tested if it would help if the data rate were lowered,
+      so it would be an experiment at best.
+      Perhaps not too much of an issue as most users would not be watching the
+      Blofeld while updating the same parameter in midiedit.
+
+- When using scroll wheel, pan widgets go the wrong way.
+  - FIXED.
+
+- Part selection only works with mouse clicks, not when moving radio button
+  with arrow keys, or even when enter pressed afterwards. Not even G (Get)
+  key seems to fetch the indicated part after movement.
+  - FIXED. Enter needs to be pressed.
+    - Added 'activate' in the signal list, not just 'pressed' as before.
+    - Tried 'clicked' which would also activate as a result of chanhing buffer
+      with navigation keys, however, when clicking, got a signal for the
+      old value first, then the new, resulting in two dump requests for
+      the old and new buffer, respectively.
+
+- Show/hide effects parameters depending on mode.
+  - Somehow indicate that Effect 2 settings are only valid for part 1 ?
+    - Note though that the effect level is still valid for all parts.
+
+- Remove param_, controller_, etc prefix from function call names.
+
+- Better jump button communication than string (enum for type, int for number)
+  - FIXED.
+
+- Need to make controller init nicer, suggestion: callback in beatstep.c
+  for initializing h/w, call controller_init() from midiedit, controller then
+  calls callback.
+  - FIXED.
+
+- Choose controller from command line or automatic.
+  - FIXED, from command line.
+
+- Beatstep/knob mapper: implement 'alt knobs' mode, so that if mapper sees
+  that there are more than 8 incrementors, it can map all of them to
+  continuous controls if there are more than 8 continuous controls in a
+  module. Would work nicely for the mod matrix, and effects.
+  - FIXED. Fx 2 working a bit oddly though.
+  - Also map all knobs to buttons if there are no sliders in module. FIXED.
+
+- Beatstep: Turn LEDs on permanently when page jumping. (note on/off?)
+  - What about when focus changed, send message to controller?
